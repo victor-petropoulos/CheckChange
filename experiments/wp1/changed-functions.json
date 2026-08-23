@@ -1,0 +1,32 @@
+[
+  {
+    "file": "src/math.ts",
+    "method": "add",
+    "lineStart": 1,
+    "lineEnd": 17,
+    "cc": 7,
+    "crap": 7.06721536351166,
+    "coverage": 88.88888888888889,
+    "coverageKind": "stmt",
+    "analyzerStatus": "failed",
+    "source": {
+      "tool": "@barney-media/crap-typescript",
+      "version": "0.5.0"
+    }
+  },
+  {
+    "file": "src/math.ts",
+    "method": "times",
+    "lineStart": 19,
+    "lineEnd": 31,
+    "cc": 5,
+    "crap": 5,
+    "coverage": 100,
+    "coverageKind": "stmt",
+    "analyzerStatus": "passed",
+    "source": {
+      "tool": "@barney-media/crap-typescript",
+      "version": "0.5.0"
+    }
+  }
+]

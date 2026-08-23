@@ -1,0 +1,7 @@
+diff --git a/src/math.ts b/src/math.ts
+index ab62824..e938084 100644
+--- a/src/math.ts
++++ b/src/math.ts
+@@ -19 +19 @@ export function add(a: number, b: number): number {
+-export function multiply(a: number, b: number): number {
++export function times(a: number, b: number): number {

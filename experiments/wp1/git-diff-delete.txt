@@ -1,0 +1,11 @@
+diff --git a/src/math.ts b/src/math.ts
+index a676885..fcd8101 100644
+--- a/src/math.ts
++++ b/src/math.ts
+@@ -33,6 +32,0 @@ export function times(a: number, b: number): number {
+-export function halve(x: number): number {
+-  if (x % 2 !== 0) {
+-    return Math.floor(x / 2);
+-  }
+-  return x / 2;
+-}
