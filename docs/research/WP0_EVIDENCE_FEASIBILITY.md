@@ -31,7 +31,7 @@ Stable, machine-readable, sufficient. Full field map with citations: `notes/sche
 - Function identifier = bare name + project-relative `src` path + exact line span.
 - CRAP value derivable from captured fields (cc²·(1−cov/100)+cc verified against emitted value).
 - Default threshold 6.0, overridable via `--threshold`; meaningful exit codes 0/1/2 (threshold breach = 2); human message on stderr, pure JSON on stdout.
-Evidence: `raw/crap-full.json`, `raw/crap-full.exit.txt`, `raw/crap-full.stderr.txt`.
+Evidence: `raw/crap-full.json`, `raw/crap-full.exit.txt` (stale mis-capture, superseded by `raw/exit-code-verification.txt`: verified exit 2), `raw/crap-full.stderr.txt`.
 
 ### Step 0.3 — Coverage
 crap-typescript drives the project's own test runner and emits per-function statement coverage directly in its JSON (`cov`, `covKind:"stmt"`). Direct coverage-output parsing would duplicate data the tool already provides → **defer ingestion** (simplest option per plan §5 Step 0.3). Unavailable coverage is explicit, never silent: `{cov:null, covKind:"N/A", status:"skipped"}`. Evidence: `raw/crap-nocov.json`.

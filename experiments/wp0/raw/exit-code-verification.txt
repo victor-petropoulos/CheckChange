@@ -1,0 +1,31 @@
+Exit-code verification record — 2026-08-23
+
+DISCREPANCY FOUND DURING WP0 SELF-AUDIT:
+
+raw/crap-full.exit.txt contains a bare "0". This is a STALE/INCORRECT capture
+(originating from an earlier subagent run with inconsistent capture style).
+It does NOT match the tool's documented behavior or observed reality.
+
+VERIFIED TRUTH (fresh re-run on fixture working tree, same analysis state as
+the crap-full.json capture — add() at cc=7 exceeds default threshold 6):
+
+    $ npx crap-typescript --format json   # stdout discarded for this check
+    actual_exit=2
+
+Consistent corroborating artifacts captured independently:
+    raw/crap-changed-dirty.exit.txt => exit=2
+    raw/crap-rename.exit.txt        => exit=2
+    raw/crap-add-helper.exit.txt    => exit=2
+    raw/crap-delete.exit.txt        => exit=2
+    raw/crap-full.stderr.txt        => "CRAP threshold exceeded: 7.1 > 6.0"
+
+CONCLUSION: any full/default-threshold analysis of this fixture exits 2
+(threshold exceeded), per CLI contract (0=ok, 1=error, 2=threshold).
+
+NOTE ON CAPTURE STYLE INCONSISTENCY (low severity): some .exit.txt files use
+"exit=N" format, others bare "N". The bare-N files were written by earlier
+subagent attempts. Treat "exit=N" files as canonical style going forward.
+
+The original raw/crap-full.exit.txt is retained unmodified per the
+"raw outputs are never edited after capture" policy; this file supersedes it
+as the authoritative exit-code evidence for the full-run case.

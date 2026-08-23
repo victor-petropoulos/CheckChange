@@ -38,7 +38,7 @@ Evidence: `raw/crap-full.json` (add: crap 7.06721536351166, cc 7, cov 88.8888888
 - CRAP: `crap` float; matches CRAP formula cc²·(1−cov/100)+cc (add: 7²·(1−0.8889)+7 ≈ 7.067 ✓ computed from captured fields).
 - Threshold/result: top-level `status` + per-method `status`; default threshold **6.0**, overridable `--threshold <number>`. Method status "failed" ⇔ crap > threshold.
 - Errors: threshold breach prints human-readable line to STDERR ("CRAP threshold exceeded: 7.1 > 6.0", `raw/crap-full.stderr.txt`) while STDOUT stays pure machine-readable JSON. Separation clean.
-- Exit codes (from --help): 0 success/no breaches · 1 argument/IO/parse error · **2 threshold exceeded**. Observed: full run exit 2 (`raw/crap-full.exit.txt`).
+- Exit codes (from --help): 0 success/no breaches · 1 argument/IO/parse error · **2 threshold exceeded**. Observed: full run exit 2 — see `raw/exit-code-verification.txt` (original `crap-full.exit.txt` was a stale mis-capture showing bare `0`; superseded by fresh verified re-run, corroborated by four other threshold-exceeding captures).
 
 ## Unavailable-coverage representation (experiment A1)
 
