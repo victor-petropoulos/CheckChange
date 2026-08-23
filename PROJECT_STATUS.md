@@ -12,3 +12,5 @@ Primary principle:
 > This project consumes analysis. It does not perform analysis.
 
 Immediate next step: validate the minimum TypeScript evidence path using existing tools before building generalized architecture.
+
+Current activity: WP0 evidence feasibility spike executing per .opencode/plans/20260823-wp0-evidence-feasibility-spike.md.
