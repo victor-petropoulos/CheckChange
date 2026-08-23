@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "threshold": 6,
+  "methods": [
+    {
+      "status": "skipped",
+      "crap": null,
+      "cc": 2,
+      "cov": null,
+      "covKind": "N/A",
+      "method": "orphan",
+      "src": "src/orphan.ts",
+      "lineStart": 1,
+      "lineEnd": 4
+    }
+  ]
+}

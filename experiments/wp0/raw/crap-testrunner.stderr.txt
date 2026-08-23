@@ -1,0 +1,1 @@
+--test-runner requires one of: auto, vitest, jest

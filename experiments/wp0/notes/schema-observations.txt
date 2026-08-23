@@ -1,0 +1,7 @@
+Function identifier: consists of "method" (string), "src" (file path), "lineStart" and "lineEnd" (numbers). Example from crap-full.json: method="add", src="src/math.ts", lineStart=1, lineEnd=17.
+Path representation: "src" field gives the file path relative to the project root. Example from crap-full.json: "src": "src/math.ts".
+Complexity field: "cc" (number) represents cyclomatic complexity. Example from crap-full.json: for method "add", cc=7.
+Coverage field: "cov" (number) and "covKind" (string) indicating coverage type. Example from crap-full.json: for method "add", cov=88.88888888888889, covKind="stmt".
+CRAP field: "crap" (number) represents the CRAP score. Example from crap-full.json: for method "add", crap=7.06721536351166.
+Threshold/result fields: top-level "threshold" (number) is the CRAP threshold; top-level "status" ("passed"/"failed") indicates if any method exceeds threshold. Each method has "status" ("passed"/"failed") indicating if the method CRAP is below threshold. Example from crap-full.json: threshold=6, status="failed"; method "add" has status="failed", method "multiply" has status="passed".
+Error shapes: the tool may output error messages to stderr. Example from crap-full.stderr.txt: "CRAP threshold exceeded: 7.1 > 6.0".

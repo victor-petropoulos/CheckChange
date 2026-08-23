@@ -1,0 +1,39 @@
+{
+  "status": "failed",
+  "threshold": 6,
+  "methods": [
+    {
+      "status": "failed",
+      "crap": 7.06721536351166,
+      "cc": 7,
+      "cov": 88.88888888888889,
+      "covKind": "stmt",
+      "method": "add",
+      "src": "src/math.ts",
+      "lineStart": 1,
+      "lineEnd": 17
+    },
+    {
+      "status": "passed",
+      "crap": 5,
+      "cc": 5,
+      "cov": 100,
+      "covKind": "stmt",
+      "method": "times",
+      "src": "src/math.ts",
+      "lineStart": 19,
+      "lineEnd": 31
+    },
+    {
+      "status": "skipped",
+      "crap": null,
+      "cc": 2,
+      "cov": null,
+      "covKind": "N/A",
+      "method": "halve",
+      "src": "src/math.ts",
+      "lineStart": 33,
+      "lineEnd": 38
+    }
+  ]
+}

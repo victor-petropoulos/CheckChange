@@ -1,0 +1,6 @@
+node_modules/
+coverage/
+.vite/
+dist/
+*.log
+package-lock.json

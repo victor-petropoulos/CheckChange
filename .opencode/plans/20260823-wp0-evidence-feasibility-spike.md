@@ -1,7 +1,7 @@
 ---
 task: "WP0 — Evidence Feasibility Spike (per docs/implementation/UGLY_PROTOTYPE_OPENCODE_PROJECT_PLAN.md §5)"
 created: 2026-08-23T02:00:00+10:00
-approved: false
+approved: true
 tasks:
   - id: "1"
     description: |

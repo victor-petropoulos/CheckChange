@@ -1,0 +1,39 @@
+crap-typescript
+
+Usage:
+  crap-typescript [--help]
+  crap-typescript [--changed] [--exclude <glob>] [--exclude-path-regex <regex>] [--exclude-generated-marker <marker>] [--use-default-exclusions[=true|false]] [--package-manager <tool>] [--test-runner <runner>] [--format <format>] [--agent] [--failures-only[=true|false]] [--omit-redundancy[=true|false]] [--output <path>] [--junit-report <path>] [--threshold <number>]
+  crap-typescript [--exclude <glob>] [--exclude-path-regex <regex>] [--exclude-generated-marker <marker>] [--use-default-exclusions[=true|false]] [--package-manager <tool>] [--test-runner <runner>] [--format <format>] [--agent] [--failures-only[=true|false]] [--omit-redundancy[=true|false]] [--output <path>] [--junit-report <path>] [--threshold <number>] <path ...>
+
+Options:
+  --help                     Print usage to stdout
+  --changed                  Analyze changed TypeScript files under src/
+  --exclude <glob>           Exclude source paths by project-relative glob; repeatable
+  --exclude-path-regex <regex>
+                             Exclude source paths by project-relative regex; repeatable
+  --exclude-generated-marker <marker>
+                             Exclude files with a leading generated-header marker; repeatable
+  --use-default-exclusions[=true|false]
+                             Enable generated-code defaults (default: true)
+  --package-manager <tool>   Force auto, npm, pnpm, yarn, bun
+  --test-runner <runner>     Force auto, vitest, or jest
+  --format <format>          Emit toon, json, text, junit, none (default: toon)
+  --agent                    Default primary output to --format toon --failures-only --omit-redundancy
+  --failures-only[=true|false]
+                             Emit failed methods only in the primary report
+  --omit-redundancy[=true|false]
+                             Omit redundant per-method status in the primary report
+  --output <path>            Write the primary report to a file instead of stdout
+  --junit-report <path>      Also write a full JUnit XML report for CI test-report UIs
+  --threshold <number>       Override the CRAP threshold (default: 6.0)
+
+Behavior:
+  (no args)                  Analyze all TypeScript files under any nested src/ tree
+  <file ...>                 Analyze explicit TypeScript files
+  <directory ...>            Analyze TypeScript files under each directory's nested src/ tree
+
+Exit codes:
+  0                          Success; help requested or analysis completed without threshold failures
+  1                          Error; invalid arguments, IO failure, parse failure, or report write failure
+  2                          Threshold exceeded; at least one method has CRAP greater than the threshold
+
