@@ -1,16 +1,14 @@
 # Project Status
 
-Version: v0.2 direction reset  
-Phase: deliberately ugly prototype planning  
-Production code: none  
-Engram dependency: none  
-LLM dependency: none  
-Cloud dependency: none  
+Version: v0.4 WP1 package
 
-Primary principle:
+WP0: COMPLETE  
+WP0 decision: **GO WITH CONSTRAINTS**
 
-> This project consumes analysis. It does not perform analysis.
+Current phase: first executable vertical slice
 
-Immediate next step: validate the minimum TypeScript evidence path using existing tools before building generalized architecture.
+Current assignment:
 
-Current activity: WP0 evidence feasibility spike executing per .opencode/plans/20260823-wp0-evidence-feasibility-spike.md.
+> Git diff + full crap-typescript JSON → changed-function JSON
+
+Rules, gates, broader evidence correlation, LLMs, and Engram integration remain deferred.

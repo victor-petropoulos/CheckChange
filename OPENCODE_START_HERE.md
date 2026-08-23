@@ -1,32 +1,42 @@
 # OpenCode Start Here
 
-Read these documents before making changes:
+WP0 is complete.
+
+Decision: **GO WITH CONSTRAINTS**
+
+Read:
 
 1. `README.md`
-2. `docs/00_PROJECT_INDEX.md`
+2. `docs/research/WP0_EVIDENCE_FEASIBILITY.md`
 3. `docs/implementation/UGLY_PROTOTYPE_OPENCODE_PROJECT_PLAN.md`
+4. `docs/implementation/WP1_CHANGED_FUNCTION_VERTICAL_SLICE.md`
 
-## First Assignment
+## Current Assignment
 
-Execute **WP0 — Evidence Feasibility Spike only** from the implementation plan.
+Execute **WP1 only**:
 
-Do not scaffold the production application.
-Do not proceed to WP1.
-Do not build generalized abstractions.
-Do not implement source-code analysis.
+```text
+Git diff -U0 against explicit base
++
+full crap-typescript JSON
+↓
+changed-function JSON
+```
 
-Preserve raw tool outputs and create:
+Do not implement rules or generalized abstractions.
 
-`docs/research/WP0_EVIDENCE_FEASIBILITY.md`
+Do not parse TypeScript source.
 
-End that report with exactly one recommendation:
+Do not proceed to WP2.
+
+Create:
+
+`docs/research/WP1_VERTICAL_SLICE_RESULTS.md`
+
+End with exactly one:
 
 - `GO`
 - `GO WITH CONSTRAINTS`
 - `STOP`
 
-The recommendation must be supported by evidence from the spike.
-
-## Governing Principle
-
-> This project consumes analysis. It does not perform analysis.
+Then stop for human review.
