@@ -1,0 +1,40 @@
+---
+description: Review work at unit boundaries with Engram before committing
+alwaysApply: true
+---
+
+# Engram Review Gate
+
+Priority: review work at unit boundaries, not just before commit, so findings
+land before large amounts of work are built on top.
+
+1. Before coding, call `review_plan` with the plan. Resolve findings, then code.
+2. Code in units (completed feature, complete file, green test run).
+3. At each unit boundary call `review_delta` with `task`. Server computes the
+   delta since the last review — do not reconstruct diffs manually.
+4. Before every commit call `review_changes` on the full staged diff as the
+   architecture backstop.
+5. Evaluate findings using the Finding Evaluation Protocol:
+   - Read the full finding (evidence + confidence + severity)
+   - Verify evidence in the code
+   - Decide: accept | modify | reject
+   - Call `explain_finding` if uncertain (requires sessionId from the review call)
+   - Report action via `report_review_action`
+6. Review failure (timeout, error): log warning, commit anyway — never block.
+
+### Edge cases
+
+- `review_delta` returns `no_delta` → nothing changed since last review, continue.
+- Empty diff (no changes) → no review needed, commit directly
+- Can't resolve a finding → add `engram-review: unfixed <finding>` as git trailer
+- Fix introduces new code → re-stage, re-review the delta only
+
+### Finding Evaluation Protocol
+
+Apply the following to every finding before taking any action.
+
+1. **Read the full finding** — All seven fields: `finding`, `evidence`, `risk`, `recommendation`, `confidence`, `severity`, `category`. Do not skip `evidence` and `confidence`.
+2. **Verify the evidence** — Evidence references a file:line? Read that location. Quotes a diff line? Confirm the meaning. Describes a pattern? Check sibling files. Wrong evidence = unreliable finding.
+3. **Assess confidence + severity** — Confidence ≥ 0.9: investigate seriously. 0.7–0.89: likely correct, verify before acting. 0.5–0.69: speculative, strongly consider rejecting unless independently verified. < 0.5: suggestion, not an action item. **Severity measures impact if correct, not confidence it is correct.**
+4. **Decide action** — `accept` (apply fix), `modify` (real problem, different fix), or `reject` (false positive). Report via `report_review_action`.
+5. **When uncertain, call `explain_finding(findingId)`** — ID is `sessionId:index`, sessionId from the review call. Returns the finding's structured fields for focused evaluation.
