@@ -107,3 +107,11 @@ For development with OpenCode, also read the repository-root `OPENCODE_START_HER
 - `implementation/WP4R.2_EXPLICIT_COVERAGE_PATH_IMPLEMENTATION.md` — **current task**
 - `implementation/WP4R.2_EXECUTION_PLAYBOOK.md` — execution procedure
 - `implementation/WP4R_RERUN_AFTER_PATH_PREVIEW.md` — future validation only
+
+
+## WP4R.2 Real Artifact Verification — Current
+
+- `research/WP4R.2_IMPLEMENTATION_RESULTS.md`
+- `research/WP4R.2_DECISION_SUMMARY.md`
+- `implementation/WP4R.2_REAL_ARTIFACT_VERIFICATION.md` — **current task**
+- `implementation/WP4R.2_REAL_ARTIFACT_EXECUTION_PLAYBOOK.md`

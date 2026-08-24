@@ -1,32 +1,19 @@
 # Project Status
 
-Version: v1.5 WP4R.2 explicit Istanbul coverage path
+Version: v1.6 WP4R.2 real-artifact verification
 
-WP4R: INCONCLUSIVE — coverage contract blocked evaluation  
-WP4R.1: COMPLETE — explicit path strongly supported  
-WP4R.1a: COMPLETE — V8 JSON CONFIRMED  
-WP4R.2: CURRENT  
+WP4R.2: IMPLEMENTED — READY WITH CONSTRAINTS  
+Real-artifact verification: CURRENT  
 WP4R usefulness rerun: BLOCKED
 
-## Current Implementation Goal
-
-Add:
+Current goal:
 
 ```text
---coverage-file <path>
+h3/Hono real coverage artifact
+-> --coverage-file
+-> real changed function
+-> numeric coverage
+-> numeric CRAP
 ```
 
-while preserving the default:
-
-```text
-coverage/coverage-final.json
-```
-
-## Architectural Boundary
-
-The caller generates coverage.
-
-The prototype only consumes an explicitly supplied or default Istanbul JSON
-artifact.
-
-No test execution or coverage generation is authorized.
+Production is frozen.

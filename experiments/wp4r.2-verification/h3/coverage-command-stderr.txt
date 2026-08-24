@@ -1,0 +1,28 @@
+(node:15065) [UNDICI-FETCH-patch] Warning: Using `patch` is highly likely to result in a `405 Method Not Allowed`. `PATCH` is much more likely to succeed.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:15082) [UNDICI-FETCH-patch] Warning: Using `patch` is highly likely to result in a `405 Method Not Allowed`. `PATCH` is much more likely to succeed.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[h3] CORS: `credentials: true` with wildcard `exposeHeaders` has no effect. Browsers treat `*` literally on credentialed requests — list the headers explicitly.
+[h3] CORS: `credentials: true` with wildcard `exposeHeaders` has no effect. Browsers treat `*` literally on credentialed requests — list the headers explicitly.
+[h3] rules: `cors` rule resolved to `credentials: true` with a wildcard origin after merge — dropping `credentials` (an `Access-Control-Allow-Origin: *` + credentials response is rejected by browsers). Set an explicit `origin` allowlist on the more specific rule.
+(node:15108) [UNDICI-FETCH-patch] Warning: Using `patch` is highly likely to result in a `405 Method Not Allowed`. `PATCH` is much more likely to succeed.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:15120) [UNDICI-FETCH-patch] Warning: Using `patch` is highly likely to result in a `405 Method Not Allowed`. `PATCH` is much more likely to succeed.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Test Files 2 failed | 70 passed | 1 skipped (73)
+Tests 2 failed | 2724 passed | 65 skipped (2791)
+Type Errors no errors
+Start at 16:04:56
+Duration 7.03s
+
+FAIL test/body-limit.test.ts > body limit > node > maps an oversized body in a JSON-RPC handler to 413 (not a parse error) (node)
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+    ❯ test/_setup.ts:212:12
+    ❯ test/body-limit.test.ts:57:3
+    ❯ run test/_setup.ts:28:5
+    ❯ test/_setup.ts:35:7
+
+FAIL test/utils.test.ts > utils > node > getRequestFingerprint > uses the request ip when no x-forwarded-for header set (node)
+AssertionError: expected '::ffff:127.0.0.1' to match /^0\.0\.0\.0|::1$/
+    ❯ test/utils.test.ts:602:34

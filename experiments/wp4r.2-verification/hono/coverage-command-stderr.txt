@@ -1,0 +1,28 @@
+[stderr] options are not supported yet
+[stderr] options are not supported yet, except onError
+[stderr] Error: Could not load script: "http://localhost/invalid.js"
+[stderr] Error: Not implemented: window.alert
+[stderr] Error processing request: TypeError: Cannot read properties of undefined (reading 'from')
+[stderr] TypeError: Do not know how to serialize a BigInt
+[stderr] Error: failed to fetch JWKS from http://localhost/.well-known/404-jwks.json
+[stderr] invalid JWKS response. "keys" field is missing
+[stderr] invalid JWKS response. "keys" field is not an array
+[stderr] Error processing request: TypeError: Headers.set: "a"a" is an invalid header name
+[stderr] Error processing request: TypeError: Headers.append: "a"a" is an invalid header name
+[stderr] Promise returned by `expect(actual).rejects.toThrow()` was not awaited
+[stderr] Error in querystring detector: Error: Simulated error
+[stderr] Failed to cache language: Error: Invalid cookie name
+[stderr] Invalid slug: h-hero-section!
+[stderr] Invalid slug: h-hero-section?
+[stderr] Invalid slug: name!
+[stderr] Invalid slug: 1hero
+[stderr] Invalid slug: none
+[stderr] RangeError: init["status"] must be in the range of 200 to 599
+[stderr] options are not supported yet
+[stderr] options are not supported yet, except onError
+[stderr] Error: Could not load script: "http://localhost/invalid.js"
+[stderr] Error: Not implemented: window.alert
+[stderr] Error: boom
+[stderr] Promise returned by `expect(actual).rejects.toThrow()` was not awaited
+
+(Test framework warnings/errors, no test failures — all 147 test files passed)

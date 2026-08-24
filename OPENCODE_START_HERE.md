@@ -1,51 +1,26 @@
 # OpenCode Start Here
 
-## Current Status
+WP4R.1a: COMPLETE — V8 JSON CONFIRMED  
+WP4R.2: IMPLEMENTED — AUTOMATED TESTS PASS  
+WP4R.2 real-artifact verification: **CURRENT**  
+WP4R usefulness rerun: BLOCKED
 
-WP4R: INCONCLUSIVE — COVERAGE CONTRACT BLOCKED EVALUATION  
-WP4R.1: COMPLETE — EXPLICIT PATH STRONGLY SUPPORTED  
-WP4R.1a: COMPLETE — **V8 JSON CONFIRMED**  
-WP4R.2: **CURRENT — EXPLICIT ISTANBUL PATH**  
-WP4R rerun: BLOCKED
+Read:
 
-## Read First
+1. `docs/research/WP4R.2_IMPLEMENTATION_RESULTS.md`
+2. `docs/research/WP4R.2_DECISION_SUMMARY.md`
+3. `docs/implementation/WP4R.2_REAL_ARTIFACT_VERIFICATION.md`
+4. `docs/implementation/WP4R.2_REAL_ARTIFACT_EXECUTION_PLAYBOOK.md`
 
-1. `docs/research/WP4R.1a_V8_REPORTER_RESOLUTION_RESULTS.md`
-2. `docs/research/WP4R.1a_DECISION_SUMMARY.md`
-3. `docs/implementation/WP4R.2_EXPLICIT_COVERAGE_PATH_IMPLEMENTATION.md`
-4. `docs/implementation/WP4R.2_EXECUTION_PLAYBOOK.md`
+Execute verification only. Do not change production code.
 
-## Current Assignment
-
-Execute **WP4R.2 only**.
-
-Add one optional CLI input:
+For both h3 and Hono prove:
 
 ```text
---coverage-file <path>
+real artifact consumed
+changedFunctions > 0
+numeric coverage
+numeric CRAP
 ```
 
-The prototype must consume the exact caller-supplied Istanbul JSON path.
-
-Do not run tests, generate coverage, discover artifacts, parse LCOV, or configure
-Vitest/Jest inside the prototype.
-
-Retain the default:
-
-```text
-coverage/coverage-final.json
-```
-
-when the flag is omitted.
-
-Create:
-
-`docs/research/WP4R.2_IMPLEMENTATION_RESULTS.md`
-
-End with exactly one:
-
-- `READY FOR WP4R RERUN`
-- `READY WITH CONSTRAINTS`
-- `STOP`
-
-Then stop for human review.
+Create `docs/research/WP4R.2_REAL_ARTIFACT_VERIFICATION_RESULTS.md`, end with exactly one authorized verdict, then stop.

@@ -1,0 +1,27 @@
+ RUN v4.1.11 /private/tmp/wp4r-repos/hono
+      Coverage enabled with v8
+
+✓ jsx-runtime-default src/jsx/dom/server.test.tsx (16 tests) 29ms
+✓ jsx-runtime-default src/jsx/dom/client.test.tsx (8 tests) 60ms
+✓ jsx-runtime-default src/jsx/dom/hooks/index.test.tsx (5 tests) 64ms
+...
+✓ main src/router/trie-router/router.test.ts (98 tests) 13ms
+✓ main src/router/smart-router/router.test.ts (98 tests) 19ms
+✓ main build/remove-private-fields.test.ts (1 test) 6ms
+✓ node index.test.ts (14 tests) 72ms
+✓ workerd index.test.ts (5 tests) 377ms
+✓ main src/middleware/logger/index.test.ts (15 tests) 2026ms
+✓ main src/middleware/timeout/index.test.ts (4 tests) 4223ms
+
+Test Files 147 passed (147)
+Tests 4931 passed | 44 skipped (4975)
+Start at 16:08:48
+Duration 8.04s
+
+Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   97.09 |    93.63 |   96.63 |   97.09 |                   
+ src/utils/cookie.ts|   96.61 |     95.6 |     100 |   96.55 | 182,188,192,196   
+...
