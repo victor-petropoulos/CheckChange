@@ -1,0 +1,320 @@
+[90mstderr[2m | src/jsx/dom/server.test.tsx[2m > [22m[2mrenderToString[2m > [22m[2mShould omit options
+[22m[39moptions are not supported yet
+
+[90mstderr[2m | src/jsx/dom/server.test.tsx[2m > [22m[2mrenderToReadableStream[2m > [22m[2mShould omit options, except onError
+[22m[39moptions are not supported yet, except onError
+
+[90mstderr[2m | src/jsx/dom/server.test.tsx[2m > [22m[2mrenderToString[2m > [22m[2mShould omit options
+[22m[39moptions are not supported yet
+
+[90mstderr[2m | src/jsx/dom/server.test.tsx[2m > [22m[2mrenderToReadableStream[2m > [22m[2mShould omit options, except onError
+[22m[39moptions are not supported yet, except onError
+
+[90mstderr[2m | src/jsx/dom/intrinsic-element/components.test.tsx[2m > [22m[2mintrinsic element[2m > [22m[2mdocument metadata[2m > [22m[2mscript element[2m > [22m[2mshould be fired onError event
+[22m[39mError: Could not load script: "http://localhost/invalid.js"
+    at QueueItem.onErrorWrapped [as onError] (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/resources/per-document-resource-loader.js:38:19)
+    at AsyncResourceQueue._check (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/resources/async-resource-queue.js:37:22)
+    at /private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/resources/async-resource-queue.js:94:20 Invalid URL
+
+[90mstderr[2m | src/jsx/dom/intrinsic-element/components.test.tsx[2m > [22m[2mintrinsic element[2m > [22m[2mdocument metadata[2m > [22m[2mscript element[2m > [22m[2mshould be inserted into body if has no props
+[22m[39mError: Not implemented: window.alert
+    at module.exports (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:9:17)
+    at /private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/Window.js:897:7
+    at about:blank:1:1
+    at Script.runInContext (node:vm:149:12)
+    at Object.runInContext (node:vm:301:6)
+    at processJavaScript (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js:238:10)
+    at HTMLScriptElementImpl._innerEval (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js:173:5)
+    at /private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js:114:12
+    at ResourceQueue.push (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/resources/resource-queue.js:53:16)
+    at HTMLScriptElementImpl._fetchInternalScript (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js:113:21) [90mundefined[39m
+
+[90mstderr[2m | src/jsx/dom/intrinsic-element/components.test.tsx[2m > [22m[2mintrinsic element[2m > [22m[2mdocument metadata[2m > [22m[2mscript element[2m > [22m[2mshould be fired onError event
+[22m[39mError: Could not load script: "http://localhost/invalid.js"
+    at QueueItem.onErrorWrapped [as onError] (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/resources/per-document-resource-loader.js:38:19)
+    at AsyncResourceQueue._check (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/resources/async-resource-queue.js:37:22)
+    at /private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/resources/async-resource-queue.js:94:20 Invalid URL
+
+[90mstderr[2m | src/jsx/dom/intrinsic-element/components.test.tsx[2m > [22m[2mintrinsic element[2m > [22m[2mdocument metadata[2m > [22m[2mscript element[2m > [22m[2mshould be inserted into body if has no props
+[22m[39mError: Not implemented: window.alert
+    at module.exports (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:9:17)
+    at /private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/Window.js:897:7
+    at about:blank:1:1
+    at Script.runInContext (node:vm:149:12)
+    at Object.runInContext (node:vm:301:6)
+    at processJavaScript (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js:238:10)
+    at HTMLScriptElementImpl._innerEval (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js:173:5)
+    at /private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js:114:12
+    at ResourceQueue.push (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/resources/resource-queue.js:53:16)
+    at HTMLScriptElementImpl._fetchInternalScript (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js:113:21) [90mundefined[39m
+
+[90mstderr[2m | index.test.ts[2m > [22m[2mstreamHandle function[2m > [22m[2mShould streamHandle a GET request and return a 200 response (LambdaFunctionUrlEvent)
+[22m[39mError processing request: TypeError: Cannot read properties of undefined (reading 'from')
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/aws-lambda/handler.ts:178:55
+    at [90m/private/tmp/wp4r1-hono/[39mruntime-tests/lambda/mock.ts:28:5
+    at [90m/private/tmp/wp4r1-hono/[39mruntime-tests/lambda/index.test.ts:971:5
+    at [90mfile:///private/tmp/wp4r1-hono/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:1903:20
+
+[90mstderr[2m | index.test.ts[2m > [22m[2mstreamHandle function[2m > [22m[2mShould handle a GET request for an SSE stream and return the correct chunks
+[22m[39mError processing request: TypeError: Cannot read properties of undefined (reading 'from')
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/aws-lambda/handler.ts:178:55
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at [90m/private/tmp/wp4r1-hono/[39mruntime-tests/lambda/mock.ts:28:5
+    at [90m/private/tmp/wp4r1-hono/[39mruntime-tests/lambda/index.test.ts:1016:5
+    at [90mfile:///private/tmp/wp4r1-hono/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:1903:20
+
+[90mstderr[2m | src/jsx/dom/intrinsic-element/components.test.tsx[2m > [22m[2mintrinsic element[2m > [22m[2mdocument metadata[2m > [22m[2mscript element[2m > [22m[2mshould be fired onError event
+[22m[39mError: Could not load script: "http://localhost/invalid.js"
+    at QueueItem.onErrorWrapped [as onError] (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/resources/per-document-resource-loader.js:38:19)
+    at AsyncResourceQueue._check (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/resources/async-resource-queue.js:37:22)
+    at /private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/resources/async-resource-queue.js:94:20 Invalid URL
+
+[90mstderr[2m | src/jsx/dom/intrinsic-element/components.test.tsx[2m > [22m[2mintrinsic element[2m > [22m[2mdocument metadata[2m > [22m[2mscript element[2m > [22m[2mshould be inserted into body if has no props
+[22m[39mError: Not implemented: window.alert
+    at module.exports (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:9:17)
+    at /private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/Window.js:897:7
+    at about:blank:1:1
+    at Script.runInContext (node:vm:149:12)
+    at Object.runInContext (node:vm:301:6)
+    at processJavaScript (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js:238:10)
+    at HTMLScriptElementImpl._innerEval (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js:173:5)
+    at /private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js:114:12
+    at ResourceQueue.push (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/browser/resources/resource-queue.js:53:16)
+    at HTMLScriptElementImpl._fetchInternalScript (/private/tmp/wp4r1-hono/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js:113:21) [90mundefined[39m
+
+[90mstderr[2m | src/hono.test.ts[2m > [22m[2mMiddleware[2m > [22m[2mBasic[2m > [22m[2minternal server error
+[22m[39mError: Error!
+    at [90m/private/tmp/wp4r1-hono/[39msrc/hono.test.ts:1099:13
+    at dispatch [90m(/private/tmp/wp4r1-hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/compose.ts:51:46
+    at [90m/private/tmp/wp4r1-hono/[39msrc/hono.test.ts:1056:13
+    at dispatch [90m(/private/tmp/wp4r1-hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/compose.ts:51:46
+    at [90m/private/tmp/wp4r1-hono/[39msrc/hono.test.ts:1051:13
+    at dispatch [90m(/private/tmp/wp4r1-hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/compose.ts:23:12
+    at [90m/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:455:31
+
+[90mstderr[2m | src/hono.test.ts[2m > [22m[2mError handling in middleware[2m > [22m[2mShould handle the error in middleware
+[22m[39mError: Error message
+    at [90m/private/tmp/wp4r1-hono/[39msrc/hono.test.ts:1595:11
+    at dispatch [90m(/private/tmp/wp4r1-hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/compose.ts:51:46
+    at [90m/private/tmp/wp4r1-hono/[39msrc/hono.test.ts:1576:11
+    at dispatch [90m(/private/tmp/wp4r1-hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/compose.ts:23:12
+    at [90m/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:455:31
+    at Hono.#dispatch [90m(/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:466:6[90m)[39m
+    at Hono.fetch [90m(/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:485:17[90m)[39m
+    at Hono.request [90m(/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:510:17[90m)[39m
+
+[90mstderr[2m | src/hono.test.ts[2m > [22m[2mError handling in middleware[2m > [22m[2mShould handle the error in middleware - async
+[22m[39mError: Error message
+    at [90m/private/tmp/wp4r1-hono/[39msrc/hono.test.ts:1599:11
+    at dispatch [90m(/private/tmp/wp4r1-hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/compose.ts:51:46
+    at [90m/private/tmp/wp4r1-hono/[39msrc/hono.test.ts:1584:11
+    at dispatch [90m(/private/tmp/wp4r1-hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/compose.ts:23:12
+    at [90m/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:455:31
+    at Hono.#dispatch [90m(/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:466:6[90m)[39m
+    at Hono.fetch [90m(/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:485:17[90m)[39m
+    at Hono.request [90m(/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:510:17[90m)[39m
+
+[90mstderr[2m | src/middleware/jwk/index.test.ts[2m > [22m[2mJWK[2m > [22m[2mCredentials in header[2m > [22m[2mShould return a server error if options.jwks_uri returns a 404
+[22m[39mError: failed to fetch JWKS from http://localhost/.well-known/404-jwks.json
+    at Object.verifyWithJwks [90m(/private/tmp/wp4r1-hono/[39msrc/utils/jwt/jwt.ts:233:13[90m)[39m
+    at jwk [90m(/private/tmp/wp4r1-hono/[39msrc/middleware/jwk/jwk.ts:144:17[90m)[39m
+    at dispatch [90m(/private/tmp/wp4r1-hono/[39msrc/compose.ts:51:17[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:455:25
+    at [90m/private/tmp/wp4r1-hono/[39msrc/middleware/jwk/index.test.ts:244:19
+    at [90mfile:///private/tmp/wp4r1-hono/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:1903:20
+
+[90mstderr[2m | src/middleware/jwk/index.test.ts[2m > [22m[2mJWK[2m > [22m[2mCredentials in header[2m > [22m[2mShould return a server error if the remotely fetched keys from options.jwks_uri are missing
+[22m[39mError: invalid JWKS response. "keys" field is missing
+    at Object.verifyWithJwks [90m(/private/tmp/wp4r1-hono/[39msrc/utils/jwt/jwt.ts:237:13[90m)[39m
+    at jwk [90m(/private/tmp/wp4r1-hono/[39msrc/middleware/jwk/jwk.ts:144:17[90m)[39m
+    at dispatch [90m(/private/tmp/wp4r1-hono/[39msrc/compose.ts:51:17[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:455:25
+    at [90m/private/tmp/wp4r1-hono/[39msrc/middleware/jwk/index.test.ts:253:19
+    at [90mfile:///private/tmp/wp4r1-hono/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:1903:20
+
+[90mstderr[2m | src/middleware/jwk/index.test.ts[2m > [22m[2mJWK[2m > [22m[2mCredentials in header[2m > [22m[2mShould return a server error if the remotely fetched keys from options.jwks_uri are malformed
+[22m[39mError: invalid JWKS response. "keys" field is not an array
+    at Object.verifyWithJwks [90m(/private/tmp/wp4r1-hono/[39msrc/utils/jwt/jwt.ts:240:13[90m)[39m
+    at jwk [90m(/private/tmp/wp4r1-hono/[39msrc/middleware/jwk/jwk.ts:144:17[90m)[39m
+    at dispatch [90m(/private/tmp/wp4r1-hono/[39msrc/compose.ts:51:17[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:455:25
+    at [90m/private/tmp/wp4r1-hono/[39msrc/middleware/jwk/index.test.ts:262:19
+    at [90mfile:///private/tmp/wp4r1-hono/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:1903:20
+
+[90mstderr[2m | src/client/client.test.ts[2m > [22m[2mBasic - JSON[2m > [22m[2mShould get an error response
+[22m[39mTypeError: Do not know how to serialize a BigInt
+    at JSON.stringify (<anonymous>)
+    at HttpResponse.json [90m(file:///private/tmp/wp4r1-hono/[39mnode_modules/[4mmsw[24m/lib/core/HttpResponse.mjs:57:31[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/client/client.test.ts:103:27
+    at [90mfile:///private/tmp/wp4r1-hono/[39mnode_modules/[4mmsw[24m/lib/core/handlers/RequestHandler.mjs:191:26
+    at HttpHandler.run [90m(file:///private/tmp/wp4r1-hono/[39mnode_modules/[4mmsw[24m/lib/core/handlers/RequestHandler.mjs:157:35[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at executeHandlers [90m(file:///private/tmp/wp4r1-hono/[39mnode_modules/[4mmsw[24m/lib/core/utils/executeHandlers.mjs:11:14[90m)[39m
+    at until [90m(file:///private/tmp/wp4r1-hono/[39mnode_modules/[4muntil-async[24m/lib/index.js:14:17[90m)[39m
+    at InterceptorHttpNetworkFrame.resolve [90m(file:///private/tmp/wp4r1-hono/[39mnode_modules/[4mmsw[24m/lib/core/experimental/frames/http-frame.mjs:81:41[90m)[39m
+    at Emitter.<anonymous> [90m(file:///private/tmp/wp4r1-hono/[39mnode_modules/[4mmsw[24m/lib/core/experimental/define-network.mjs:80:11[90m)[39m
+[MSW] Encountered an unhandled exception during the handler lookup for "GET http://localhost/bigint". Please see the original error above.
+
+[90mstderr[2m | src/client/client.test.ts[2m > [22m[2mRedirect response - only types[2m > [22m[2mShould infer response type correctly
+[22m[39mTypeError: Failed to parse URL from /
+[90m    at HttpResponse.redirect (node:internal/deps/undici/undici:11603:17)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/client/client.test.ts:1719:27
+[90m    ... 6 lines matching cause stack trace ...[39m
+    at Emitter.<anonymous> [90m(file:///private/tmp/wp4r1-hono/[39mnode_modules/[4mmsw[24m/lib/core/experimental/define-network.mjs:80:11[90m)[39m
+    at Emitter.emitAsPromise [90m(file:///private/tmp/wp4r1-hono/[39mnode_modules/[4mrettime[24m/build/index.mjs:177:24[90m)[39m {
+  [cause]: TypeError: Invalid URL
+  [90m    at new URL (node:internal/url:840:25)[39m
+  [90m    at HttpResponse.redirect (node:internal/deps/undici/undici:11601:23)[39m
+      at [90m/private/tmp/wp4r1-hono/[39msrc/client/client.test.ts:1719:27
+      at [90mfile:///private/tmp/wp4r1-hono/[39mnode_modules/[4mmsw[24m/lib/core/handlers/RequestHandler.mjs:191:26
+      at HttpHandler.run [90m(file:///private/tmp/wp4r1-hono/[39mnode_modules/[4mmsw[24m/lib/core/handlers/RequestHandler.mjs:157:35[90m)[39m
+  [90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+      at executeHandlers [90m(file:///private/tmp/wp4r1-hono/[39mnode_modules/[4mmsw[24m/lib/core/utils/executeHandlers.mjs:11:14[90m)[39m
+      at until [90m(file:///private/tmp/wp4r1-hono/[39mnode_modules/[4muntil-async[24m/lib/index.js:14:17[90m)[39m
+      at InterceptorHttpNetworkFrame.resolve [90m(file:///private/tmp/wp4r1-hono/[39mnode_modules/[4mmsw[24m/lib/core/experimental/frames/http-frame.mjs:81:41[90m)[39m
+      at Emitter.<anonymous> [90m(file:///private/tmp/wp4r1-hono/[39mnode_modules/[4mmsw[24m/lib/core/experimental/define-network.mjs:80:11[90m)[39m {
+    code: [32m'ERR_INVALID_URL'[39m,
+    input: [32m'/'[39m
+  }
+}
+[MSW] Encountered an unhandled exception during the handler lookup for "GET http://localhost/". Please see the original error above.
+
+[90mstderr[2m | src/client/utils.test.ts[2m > [22m[2mparseResponse[2m > [22m[2mshould throw error matching snapshots
+[22m[39m[MSW] Warning: intercepted a request without a matching request handler:
+
+  • GET http://localhost/noRoute
+
+If you still wish to intercept this unhandled request, please create a request handler for it.
+Read more: https://mswjs.io/docs/http/intercepting-requests
+
+[90mstderr[2m | src/adapter/aws-lambda/handler.test.ts[2m > [22m[2mhandle[2m > [22m[2mShould return 400 when request contains invalid header names (v2)
+[22m[39mError processing request: TypeError: Headers.set: "a"a" is an invalid header name.
+[90m    at Object.webidl.errors.exception (node:internal/deps/undici/undici:4859:14)[39m
+[90m    at Object.webidl.errors.invalidArgument (node:internal/deps/undici/undici:4870:28)[39m
+[90m    at _Headers.set (node:internal/deps/undici/undici:11437:31)[39m
+    at EventV2Processor.getHeaders [90m(/private/tmp/wp4r1-hono/[39msrc/adapter/aws-lambda/handler.ts:433:19[90m)[39m
+    at EventV2Processor.createRequest [90m(/private/tmp/wp4r1-hono/[39msrc/adapter/aws-lambda/handler.ts:325:26[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/aws-lambda/handler.ts:257:23
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/aws-lambda/handler.test.ts:464:26
+    at [90mfile:///private/tmp/wp4r1-hono/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///private/tmp/wp4r1-hono/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///private/tmp/wp4r1-hono/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:2326:20
+
+[90mstderr[2m | src/adapter/aws-lambda/handler.test.ts[2m > [22m[2mhandle[2m > [22m[2mShould return 400 when request contains invalid header names (v1)
+[22m[39mError processing request: TypeError: Headers.append: "a"a" is an invalid header name.
+[90m    at Object.webidl.errors.exception (node:internal/deps/undici/undici:4859:14)[39m
+[90m    at Object.webidl.errors.invalidArgument (node:internal/deps/undici/undici:4870:28)[39m
+[90m    at appendHeader (node:internal/deps/undici/undici:11124:29)[39m
+[90m    at _Headers.append (node:internal/deps/undici/undici:11375:16)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/aws-lambda/handler.ts:480:41
+    at Array.forEach (<anonymous>)
+    at EventV1Processor.getHeaders [90m(/private/tmp/wp4r1-hono/[39msrc/adapter/aws-lambda/handler.ts:480:18[90m)[39m
+    at EventV1Processor.createRequest [90m(/private/tmp/wp4r1-hono/[39msrc/adapter/aws-lambda/handler.ts:325:26[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/aws-lambda/handler.ts:257:23
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/aws-lambda/handler.test.ts:541:26
+
+[90mstderr[2m | src/jsx/dom/server.test.tsx[2m > [22m[2mrenderToString[2m > [22m[2mShould omit options
+[22m[39moptions are not supported yet
+
+[90mstderr[2m | src/jsx/dom/server.test.tsx[2m > [22m[2mrenderToReadableStream[2m > [22m[2mShould omit options, except onError
+[22m[39moptions are not supported yet, except onError
+
+[90mstderr[2m | src/helper/css/index.test.tsx[2m > [22m[2mCSS Helper[2m > [22m[2mclassNameSlug[2m > [22m[2mShould fall back to different hash values for labels with special characters
+[22m[39mInvalid slug: h-hero-section!
+Invalid slug: h-hero-section?
+
+[90mstderr[2m | src/helper/css/index.test.tsx[2m > [22m[2mCSS Helper[2m > [22m[2mclassNameSlug[2m > [22m[2mShould fall back to hash when classNameSlug returns invalid characters
+[22m[39mInvalid slug: name!
+
+[90mstderr[2m | src/helper/css/index.test.tsx[2m > [22m[2mCSS Helper[2m > [22m[2mclassNameSlug[2m > [22m[2mShould fall back to hash when classNameSlug starts with a number
+[22m[39mInvalid slug: 1hero
+
+[90mstderr[2m | src/helper/css/index.test.tsx[2m > [22m[2mCSS Helper[2m > [22m[2mclassNameSlug[2m > [22m[2mShould fall back to hash when keyframes name is a reserved keyword
+[22m[39mInvalid slug: none
+
+[90mstderr[2m | src/request.test.ts[2m > [22m[2mBody methods with caching[2m > [22m[2mreq.parseBody()[2m > [22m[2mshould not break body methods after parseBody() with non-form content-type[2m > [22m[2mformData()
+[22m[39mPromise returned by `expect(actual).rejects.toThrow()` was not awaited. Vitest currently auto-awaits hanging assertions at the end of the test, but this will cause the test to fail in the next Vitest major. Please remember to await the assertion.
+    at /private/tmp/wp4r1-hono/src/request.test.ts:457:31
+
+[90mstderr[2m | src/middleware/language/index.test.ts[2m > [22m[2mlanguageDetector[2m > [22m[2mDebug Mode[2m > [22m[2mshould log errors in debug mode
+[22m[39mError in querystring detector: Error: Simulated error
+    at [90m/private/tmp/wp4r1-hono/[39msrc/middleware/language/index.test.ts:437:15
+    at detectFromQuery [90m(file:///private/tmp/wp4r1-hono/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:332:34[90m)[39m
+    at detectLanguage [90m(/private/tmp/wp4r1-hono/[39msrc/middleware/language/language.ts:245:22[90m)[39m
+    at languageDetector [90m(/private/tmp/wp4r1-hono/[39msrc/middleware/language/language.ts:305:18[90m)[39m
+    at dispatch [90m(/private/tmp/wp4r1-hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/compose.ts:23:12
+    at [90m/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:455:31
+    at Hono.#dispatch [90m(/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:466:6[90m)[39m
+    at Hono.fetch [90m(/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:485:17[90m)[39m
+    at Hono.request [90m(/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:510:17[90m)[39m
+
+[90mstderr[2m | src/middleware/language/index.test.ts[2m > [22m[2mlanguageDetector[2m > [22m[2mDebug Mode[2m > [22m[2mshould handle cookie cache errors in debug mode
+[22m[39mFailed to cache language: Error: Invalid cookie name
+    at _serialize [90m(/private/tmp/wp4r1-hono/[39msrc/utils/cookie.ts:175:11[90m)[39m
+    at serialize [90m(/private/tmp/wp4r1-hono/[39msrc/utils/cookie.ts:267:10[90m)[39m
+    at generateCookie [90m(/private/tmp/wp4r1-hono/[39msrc/helper/cookie/index.ts:94:14[90m)[39m
+    at setCookie [90m(/private/tmp/wp4r1-hono/[39msrc/helper/cookie/index.ts:100:18[90m)[39m
+    at cacheLanguage [90m(/private/tmp/wp4r1-hono/[39msrc/middleware/language/language.ts:227:5[90m)[39m
+    at detectLanguage [90m(/private/tmp/wp4r1-hono/[39msrc/middleware/language/language.ts:263:5[90m)[39m
+    at languageDetector [90m(/private/tmp/wp4r1-hono/[39msrc/middleware/language/language.ts:305:18[90m)[39m
+    at dispatch [90m(/private/tmp/wp4r1-hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/compose.ts:23:12
+    at [90m/private/tmp/wp4r1-hono/[39msrc/hono-base.ts:455:31
+
+[90mstderr[2m | src/adapter/cloudflare-workers/websocket.test.ts[2m > [22m[2mupgradeWebSocket middleware[2m > [22m[2mShould receive message and readyState is valid
+[22m[39mRangeError: init["status"] must be in the range of 200 to 599, inclusive.
+[90m    at initializeResponse (node:internal/deps/undici/undici:11875:15)[39m
+[90m    at new Response (node:internal/deps/undici/undici:11633:9)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/cloudflare-workers/websocket.ts:48:10
+    at Array.upgradeWebSocket [90m(/private/tmp/wp4r1-hono/[39msrc/helper/websocket/index.ts:123:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/cloudflare-workers/websocket.test.ts:32:5
+
+[90mstderr[2m | src/adapter/cloudflare-workers/websocket.test.ts[2m > [22m[2mupgradeWebSocket middleware[2m > [22m[2mShould call onClose when close event fires
+[22m[39mRangeError: init["status"] must be in the range of 200 to 599, inclusive.
+[90m    at initializeResponse (node:internal/deps/undici/undici:11875:15)[39m
+[90m    at new Response (node:internal/deps/undici/undici:11633:9)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/cloudflare-workers/websocket.ts:48:10
+    at Array.upgradeWebSocket [90m(/private/tmp/wp4r1-hono/[39msrc/helper/websocket/index.ts:123:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/cloudflare-workers/websocket.test.ts:72:5
+
+[90mstderr[2m | src/adapter/cloudflare-workers/websocket.test.ts[2m > [22m[2mupgradeWebSocket middleware[2m > [22m[2mShould call onError when error event fires
+[22m[39mRangeError: init["status"] must be in the range of 200 to 599, inclusive.
+[90m    at initializeResponse (node:internal/deps/undici/undici:11875:15)[39m
+[90m    at new Response (node:internal/deps/undici/undici:11633:9)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/cloudflare-workers/websocket.ts:48:10
+    at Array.upgradeWebSocket [90m(/private/tmp/wp4r1-hono/[39msrc/helper/websocket/index.ts:123:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/cloudflare-workers/websocket.test.ts:95:5
+
+[90mstderr[2m | src/adapter/cloudflare-workers/websocket.test.ts[2m > [22m[2mupgradeWebSocket middleware[2m > [22m[2mShould call server.send when ws.send is called
+[22m[39mRangeError: init["status"] must be in the range of 200 to 599, inclusive.
+[90m    at initializeResponse (node:internal/deps/undici/undici:11875:15)[39m
+[90m    at new Response (node:internal/deps/undici/undici:11633:9)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/cloudflare-workers/websocket.ts:48:10
+    at Array.upgradeWebSocket [90m(/private/tmp/wp4r1-hono/[39msrc/helper/websocket/index.ts:123:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/cloudflare-workers/websocket.test.ts:120:5
+
+[90mstderr[2m | src/adapter/cloudflare-workers/websocket.test.ts[2m > [22m[2mupgradeWebSocket middleware[2m > [22m[2mShould call server.close when ws.close is called
+[22m[39mRangeError: init["status"] must be in the range of 200 to 599, inclusive.
+[90m    at initializeResponse (node:internal/deps/undici/undici:11875:15)[39m
+[90m    at new Response (node:internal/deps/undici/undici:11633:9)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/cloudflare-workers/websocket.ts:48:10
+    at Array.upgradeWebSocket [90m(/private/tmp/wp4r1-hono/[39msrc/helper/websocket/index.ts:123:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/adapter/cloudflare-workers/websocket.test.ts:149:5
+
+[90mstderr[2m | src/helper/websocket/index.test.ts[2m > [22m[2mdefineWebSocketHelper[2m > [22m[2mWhen upgrading failed and use it in handler, it should throw error
+[22m[39mPromise returned by `expect(actual).rejects.toThrow()` was not awaited. Vitest currently auto-awaits hanging assertions at the end of the test, but this will cause the test to fail in the next Vitest major. Please remember to await the assertion.
+    at /private/tmp/wp4r1-hono/src/helper/websocket/index.test.ts:54:42
+

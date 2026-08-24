@@ -1,0 +1,310 @@
+[33mTesting types with tsc and vue-tsc is an experimental feature.
+Breaking changes might not follow SemVer, please pin Vitest's version when using it.[39m
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.11 [39m[90m/private/tmp/wp4r1-h3[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+(node:46181) [UNDICI-FETCH-patch] Warning: Using `patch` is highly likely to result in a `405 Method Not Allowed`. `PATCH` is much more likely to succeed.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m test/unit/encoding.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 284[2mms[22m[39m
+ [32m✓[39m test/rules/treeshake.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 237[2mms[22m[39m
+ [32m✓[39m test/body.test.ts [2m([22m[2m54 tests[22m[2m)[22m[32m 204[2mms[22m[39m
+ [32m✓[39m test/static.test.ts [2m([22m[2m52 tests[22m[2m)[22m[32m 214[2mms[22m[39m
+ [32m✓[39m test/app.test.ts [2m([22m[2m76 tests[22m[2m | [22m[33m8 skipped[39m[2m)[22m[32m 243[2mms[22m[39m
+ [32m✓[39m test/json-rpc.test.ts [2m([22m[2m98 tests[22m[2m)[22m[32m 258[2mms[22m[39m
+ [32m✓[39m test/router.test.ts [2m([22m[2m82 tests[22m[2m)[22m[32m 274[2mms[22m[39m
+ [32m✓[39m test/cookies.test.ts [2m([22m[2m116 tests[22m[2m)[22m[32m 292[2mms[22m[39m
+ [31m❯[39m test/utils.test.ts [2m([22m[2m184 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m2 skipped[39m[2m)[22m[33m 401[2mms[22m[39m
+         [32m✓[39m can return html response (web)[32m 7[2mms[22m[39m
+         [32m✓[39m escapes interpolated values in tagged template (web)[32m 0[2mms[22m[39m
+         [32m✓[39m passes raw() values through unescaped (web)[32m 0[2mms[22m[39m
+         [32m✓[39m does not treat duck-typed objects as raw values (web)[32m 0[2mms[22m[39m
+         [32m✓[39m does not accept forged raw() markers via the global symbol registry (web)[32m 0[2mms[22m[39m
+         [32m✓[39m escapes plain string usage and warns once (web)[32m 1[2mms[22m[39m
+         [32m✓[39m does not warn for plain strings without special characters (web)[32m 0[2mms[22m[39m
+         [32m✓[39m can redirect URLs (web)[32m 0[2mms[22m[39m
+         [32m✓[39m escapes special characters in HTML body (web)[32m 0[2mms[22m[39m
+         [32m✓[39m redirects to referer pathname when same origin (web)[32m 0[2mms[22m[39m
+         [32m✓[39m strips query string from referer by default (web)[32m 0[2mms[22m[39m
+         [32m✓[39m preserves query string with allowQuery (web)[32m 0[2mms[22m[39m
+         [32m✓[39m uses fallback when referer is cross-origin (web)[32m 0[2mms[22m[39m
+         [32m✓[39m uses fallback when no referer (web)[32m 0[2mms[22m[39m
+         [32m✓[39m defaults fallback to / (web)[32m 0[2mms[22m[39m
+         [32m✓[39m prevents open redirect via protocol-relative path in referer (web)[32m 0[2mms[22m[39m
+         [32m✓[39m uses fallback when referer is invalid URL (web)[32m 0[2mms[22m[39m
+         [32m✓[39m can prefix routes (web)[32m 0[2mms[22m[39m
+         [32m✓[39m does nothing when not provided a base (web)[32m 0[2mms[22m[39m
+         [32m✓[39m collapses leading slashes after stripping base (web)[32m 0[2mms[22m[39m
+         [32m✓[39m can parse query params (web)[32m 1[2mms[22m[39m
+         [32m✓[39m can get method (web)[32m 0[2mms[22m[39m
+         [32m✓[39m returns host header value (web)[32m 2[2mms[22m[39m
+         [32m✓[39m uses x-forwarded-host when enabled (web)[32m 0[2mms[22m[39m
+         [32m✓[39m uses first value from x-forwarded-host with multiple entries (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost/foo?bar=baz") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost\\foo") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost//foo") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost//foo//bar") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost//foo\\bar\\") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost///foo") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost\\\\foo") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost\\/foo") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost/\\foo") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://example.com/test") (web)[32m 7[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost:8080/test") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-host clears port for plain host (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-host preserves explicit port (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-host with IPv6 clears port (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-host with IPv6 and port preserves port (web)[32m 0[2mms[22m[39m
+         [32m✓[39m ignores malformed x-forwarded-host and keeps the real authority (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-host clears the port when only the port differs (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-host with an invalid port drops the real port (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-proto: "https" (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-proto comma list uses first entry (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-proto comma list with spaces uses first entry trimmed (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-for (web)[32m 0[2mms[22m[39m
+         [32m✓[39m ports (web)[32m 0[2mms[22m[39m
+         [32m✓[39m ipv6 (web)[32m 0[2mms[22m[39m
+         [32m✓[39m multiple ips (web)[32m 0[2mms[22m[39m
+         [32m✓[39m returns an hash (web)[32m 6[2mms[22m[39m
+         [32m✓[39m supports stronger hash algorithms (web)[32m 2[2mms[22m[39m
+         [32m✓[39m returns the same hash every time for same request (web)[32m 1[2mms[22m[39m
+         [32m✓[39m returns null when all detections impossible (web)[32m 0[2mms[22m[39m
+         [32m✓[39m can use path/method (web)[32m 0[2mms[22m[39m
+         [32m✓[39m uses user agent when available (web)[32m 0[2mms[22m[39m
+         [32m✓[39m keeps an empty slot for undeterminable components (web)[32m 0[2mms[22m[39m
+         [32m✓[39m escapes the component separator (web)[32m 0[2mms[22m[39m
+         [32m✓[39m uses x-forwarded-for ip when header set (web)[32m 0[2mms[22m[39m
+         [32m✓[39m uses the request ip when no x-forwarded-for header set (web)[32m 0[2mms[22m[39m
+         [32m✓[39m only allow head and post (web)[32m 5[2mms[22m[39m
+         [32m✓[39m sets Allow header with multiple expected methods (web)[32m 0[2mms[22m[39m
+         [32m✓[39m allows a PATCH assertion for a request spelled PATCH (web)[32m 0[2mms[22m[39m
+         [32m✓[39m allows a PATCH assertion for a request spelled patch (web)[32m 0[2mms[22m[39m
+         [32m✓[39m allows a PATCH assertion for a request spelled PaTcH (web)[32m 0[2mms[22m[39m
+         [32m✓[39m still rejects a genuinely different method (web)[32m 1[2mms[22m[39m
+         [32m✓[39m matches a QUERY expectation for a request spelled QUERY (web)[32m 0[2mms[22m[39m
+         [32m✓[39m matches a QUERY expectation for a request spelled query (web)[32m 0[2mms[22m[39m
+         [32m✓[39m matches a QUERY expectation for a request spelled QuErY (web)[32m 0[2mms[22m[39m
+         [32m✓[39m matches a lowercase method within a list of expected methods (web)[32m 0[2mms[22m[39m
+         [32m✓[39m allows an unnormalized `head` token when allowHead is set (web)[32m 0[2mms[22m[39m
+         [32m✓[39m does not match a different method (web)[32m 0[2mms[22m[39m
+         [32m✓[39m sets Link header as fallback when native early hints not available (web)[32m 0[2mms[22m[39m
+         [32m✓[39m does not set an empty Link header for falsy link values (fallback) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m resolves promptly instead of hanging with empty hints (#1383) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m resolves promptly when the link hint value is empty (web)[32m 0[2mms[22m[39m
+         [32m✓[39m resolves when only a capital-cased Link key is provided (web)[32m 0[2mms[22m[39m
+         [32m✓[39m merges both link and Link keys without dropping values (web)[32m 0[2mms[22m[39m
+         [32m✓[39m can handle cache headers (web)[32m 3[2mms[22m[39m
+         [32m✓[39m can handle cache headers with etag (web)[32m 1[2mms[22m[39m
+         [32m✓[39m can handle cache headers with if-none-match (web)[32m 0[2mms[22m[39m
+         [32m✓[39m can handle cache headers with if-modified-since (web)[32m 0[2mms[22m[39m
+         [32m✓[39m returns 304 when if-none-match is a comma-separated list containing the etag (web)[32m 0[2mms[22m[39m
+         [32m✓[39m handles modifiedTime with milliseconds correctly (web)[32m 0[2mms[22m[39m
+         [32m✓[39m does not force `public` when explicit cacheControls are provided (#1442, #1453) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m keeps `public` when explicit cacheControls do not set visibility (#1454) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m omits `s-maxage` when `no-store` is set (#1454) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m treats an empty `if-none-match` as absent so `if-modified-since` still applies (#1454) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m ignores if-modified-since when if-none-match is present (RFC 9110 §13.1.3, #1453) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m matches etag using weak comparison and wildcard (#1453) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m detects `private` when bundled into a single cacheControls entry (#1454) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m matches a quoted etag whose value contains a comma (#1454) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m can return html response (node)[32m 65[2mms[22m[39m
+         [32m✓[39m escapes interpolated values in tagged template (node)[32m 5[2mms[22m[39m
+         [32m✓[39m passes raw() values through unescaped (node)[32m 3[2mms[22m[39m
+         [32m✓[39m does not treat duck-typed objects as raw values (node)[32m 5[2mms[22m[39m
+         [32m✓[39m does not accept forged raw() markers via the global symbol registry (node)[32m 2[2mms[22m[39m
+         [32m✓[39m escapes plain string usage and warns once (node)[32m 3[2mms[22m[39m
+         [32m✓[39m does not warn for plain strings without special characters (node)[32m 3[2mms[22m[39m
+         [32m✓[39m can redirect URLs (node)[32m 1[2mms[22m[39m
+         [32m✓[39m escapes special characters in HTML body (node)[32m 5[2mms[22m[39m
+         [32m✓[39m redirects to referer pathname when same origin (node)[32m 4[2mms[22m[39m
+         [32m✓[39m strips query string from referer by default (node)[32m 3[2mms[22m[39m
+         [32m✓[39m preserves query string with allowQuery (node)[32m 4[2mms[22m[39m
+         [32m✓[39m uses fallback when referer is cross-origin (node)[32m 5[2mms[22m[39m
+         [32m✓[39m uses fallback when no referer (node)[32m 3[2mms[22m[39m
+         [32m✓[39m defaults fallback to / (node)[32m 1[2mms[22m[39m
+         [32m✓[39m prevents open redirect via protocol-relative path in referer (node)[32m 1[2mms[22m[39m
+         [32m✓[39m uses fallback when referer is invalid URL (node)[32m 1[2mms[22m[39m
+         [32m✓[39m can prefix routes (node)[32m 3[2mms[22m[39m
+         [32m✓[39m does nothing when not provided a base (node)[32m 3[2mms[22m[39m
+         [32m✓[39m collapses leading slashes after stripping base (node)[32m 2[2mms[22m[39m
+         [32m✓[39m can parse query params (node)[32m 2[2mms[22m[39m
+         [32m✓[39m can get method (node)[32m 3[2mms[22m[39m
+         [32m✓[39m returns host header value (node)[32m 2[2mms[22m[39m
+         [32m✓[39m uses x-forwarded-host when enabled (node)[32m 3[2mms[22m[39m
+         [32m✓[39m uses first value from x-forwarded-host with multiple entries (node)[32m 3[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost/foo?bar=baz") (node)[32m 1[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost\\foo") (node)[32m 3[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost//foo") (node)[32m 3[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost//foo//bar") (node)[32m 2[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost//foo\\bar\\") (node)[32m 3[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost///foo") (node)[32m 3[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost\\\\foo") (node)[32m 3[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost\\/foo") (node)[32m 3[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost/\\foo") (node)[32m 2[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://example.com/test") (node)[32m 3[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost:8080/test") (node)[32m 1[2mms[22m[39m
+         [32m✓[39m x-forwarded-host clears port for plain host (node)[32m 4[2mms[22m[39m
+         [32m✓[39m x-forwarded-host preserves explicit port (node)[32m 3[2mms[22m[39m
+         [32m✓[39m x-forwarded-host with IPv6 clears port (node)[32m 2[2mms[22m[39m
+         [32m✓[39m x-forwarded-host with IPv6 and port preserves port (node)[32m 2[2mms[22m[39m
+         [32m✓[39m ignores malformed x-forwarded-host and keeps the real authority (node)[32m 11[2mms[22m[39m
+         [32m✓[39m x-forwarded-host clears the port when only the port differs (node)[32m 1[2mms[22m[39m
+         [32m✓[39m x-forwarded-host with an invalid port drops the real port (node)[32m 1[2mms[22m[39m
+         [32m✓[39m x-forwarded-proto: "https" (node)[32m 4[2mms[22m[39m
+         [32m✓[39m x-forwarded-proto comma list uses first entry (node)[32m 3[2mms[22m[39m
+         [32m✓[39m x-forwarded-proto comma list with spaces uses first entry trimmed (node)[32m 3[2mms[22m[39m
+         [32m✓[39m x-forwarded-for (node)[32m 2[2mms[22m[39m
+         [32m✓[39m ports (node)[32m 3[2mms[22m[39m
+         [32m✓[39m ipv6 (node)[32m 3[2mms[22m[39m
+         [32m✓[39m multiple ips (node)[32m 3[2mms[22m[39m
+         [32m✓[39m returns an hash (node)[32m 3[2mms[22m[39m
+         [32m✓[39m supports stronger hash algorithms (node)[32m 3[2mms[22m[39m
+         [32m✓[39m returns the same hash every time for same request (node)[32m 7[2mms[22m[39m
+         [32m✓[39m returns null when all detections impossible (node)[32m 3[2mms[22m[39m
+         [32m✓[39m can use path/method (node)[32m 3[2mms[22m[39m
+         [32m✓[39m uses user agent when available (node)[32m 2[2mms[22m[39m
+         [32m✓[39m keeps an empty slot for undeterminable components (node)[32m 3[2mms[22m[39m
+         [32m✓[39m escapes the component separator (node)[32m 3[2mms[22m[39m
+         [32m✓[39m uses x-forwarded-for ip when header set (node)[32m 3[2mms[22m[39m
+[31m         [31m×[31m uses the request ip when no x-forwarded-for header set (node)[39m[32m 4[2mms[22m[39m
+         [32m✓[39m only allow head and post (node)[32m 9[2mms[22m[39m
+         [32m✓[39m sets Allow header with multiple expected methods (node)[32m 3[2mms[22m[39m
+         [32m✓[39m allows a PATCH assertion for a request spelled PATCH (node)[32m 0[2mms[22m[39m
+         [32m✓[39m allows a PATCH assertion for a request spelled patch (node)[32m 0[2mms[22m[39m
+         [32m✓[39m allows a PATCH assertion for a request spelled PaTcH (node)[32m 0[2mms[22m[39m
+         [32m✓[39m still rejects a genuinely different method (node)[32m 1[2mms[22m[39m
+         [32m✓[39m matches a QUERY expectation for a request spelled QUERY (node)[32m 0[2mms[22m[39m
+         [32m✓[39m matches a QUERY expectation for a request spelled query (node)[32m 0[2mms[22m[39m
+         [32m✓[39m matches a QUERY expectation for a request spelled QuErY (node)[32m 0[2mms[22m[39m
+         [32m✓[39m matches a lowercase method within a list of expected methods (node)[32m 0[2mms[22m[39m
+         [32m✓[39m allows an unnormalized `head` token when allowHead is set (node)[32m 1[2mms[22m[39m
+         [32m✓[39m does not match a different method (node)[32m 1[2mms[22m[39m
+         [2m[90m↓[39m[22m sets Link header as fallback when native early hints not available (node)
+         [2m[90m↓[39m[22m does not set an empty Link header for falsy link values (fallback) (node)
+         [32m✓[39m resolves promptly instead of hanging with empty hints (#1383) (node)[32m 4[2mms[22m[39m
+         [32m✓[39m resolves promptly when the link hint value is empty (node)[32m 6[2mms[22m[39m
+         [32m✓[39m resolves when only a capital-cased Link key is provided (node)[32m 4[2mms[22m[39m
+         [32m✓[39m merges both link and Link keys without dropping values (node)[32m 3[2mms[22m[39m
+         [32m✓[39m can handle cache headers (node)[32m 3[2mms[22m[39m
+         [32m✓[39m can handle cache headers with etag (node)[32m 3[2mms[22m[39m
+         [32m✓[39m can handle cache headers with if-none-match (node)[32m 3[2mms[22m[39m
+         [32m✓[39m can handle cache headers with if-modified-since (node)[32m 5[2mms[22m[39m
+         [32m✓[39m returns 304 when if-none-match is a comma-separated list containing the etag (node)[32m 4[2mms[22m[39m
+         [32m✓[39m handles modifiedTime with milliseconds correctly (node)[32m 5[2mms[22m[39m
+         [32m✓[39m does not force `public` when explicit cacheControls are provided (#1442, #1453) (node)[32m 3[2mms[22m[39m
+         [32m✓[39m keeps `public` when explicit cacheControls do not set visibility (#1454) (node)[32m 3[2mms[22m[39m
+         [32m✓[39m omits `s-maxage` when `no-store` is set (#1454) (node)[32m 6[2mms[22m[39m
+         [32m✓[39m treats an empty `if-none-match` as absent so `if-modified-since` still applies (#1454) (node)[32m 4[2mms[22m[39m
+         [32m✓[39m ignores if-modified-since when if-none-match is present (RFC 9110 §13.1.3, #1453) (node)[32m 3[2mms[22m[39m
+         [32m✓[39m matches etag using weak comparison and wildcard (#1453) (node)[32m 8[2mms[22m[39m
+         [32m✓[39m detects `private` when bundled into a single cacheControls entry (#1454) (node)[32m 3[2mms[22m[39m
+         [32m✓[39m matches a quoted etag whose value contains a comma (#1454) (node)[32m 3[2mms[22m[39m
+ [32m✓[39m test/security.test.ts [2m([22m[2m195 tests[22m[2m)[22m[33m 426[2mms[22m[39m
+ [32m✓[39m test/dispose.test.ts [2m([22m[2m24 tests[22m[2m | [22m[33m3 skipped[39m[2m)[22m[33m 470[2mms[22m[39m
+       [33m[2m✓[22m[39m fires when the client disconnects while the handler is still running (node) [33m 306[2mms[22m[39m
+ [32m✓[39m test/tracing.test.ts [2m([22m[2m52 tests[22m[2m)[22m[33m 486[2mms[22m[39m
+ [32m✓[39m test/validate.test.ts [2m([22m[2m40 tests[22m[2m)[22m[32m 129[2mms[22m[39m
+ [32m✓[39m test/unit/iron-crypto.test.ts [2m([22m[2m37 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[32m 157[2mms[22m[39m
+ [32m✓[39m test/unit/path.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 142[2mms[22m[39m
+ [32m✓[39m test/mount.test.ts [2m([22m[2m40 tests[22m[2m)[22m[32m 143[2mms[22m[39m
+ [32m✓[39m test/sse.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 178[2mms[22m[39m
+ [32m✓[39m test/proxy.test.ts [2m([22m[2m152 tests[22m[2m | [22m[33m25 skipped[39m[2m)[22m[33m 634[2mms[22m[39m
+ [32m✓[39m test/errors.test.ts [2m([22m[2m50 tests[22m[2m)[22m[32m 189[2mms[22m[39m
+ [32m✓[39m test/iterable.test.ts [2m([22m[2m38 tests[22m[2m)[22m[32m 108[2mms[22m[39m
+(node:46204) [UNDICI-FETCH-patch] Warning: Using `patch` is highly likely to result in a `405 Method Not Allowed`. `PATCH` is much more likely to succeed.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m test/bench/bundle.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+ [32m✓[39m test/middleware.test.ts [2m([22m[2m54 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[32m 202[2mms[22m[39m
+ [32m✓[39m test/status.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 91[2mms[22m[39m
+ [32m✓[39m test/hooks.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 97[2mms[22m[39m
+ [32m✓[39m test/unit/package.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 175[2mms[22m[39m
+ [32m✓[39m test/rules/scope.test.ts [2m([22m[2m42 tests[22m[2m)[22m[32m 77[2mms[22m[39m
+ [32m✓[39m test/query.test.ts [2m([22m[2m38 tests[22m[2m)[22m[32m 133[2mms[22m[39m
+ [32m✓[39m test/lazy.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+ [32m✓[39m test/event.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 75[2mms[22m[39m
+ [32m✓[39m test/body-limit.test.ts [2m([22m[2m14 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[32m 89[2mms[22m[39m
+ [32m✓[39m test/happydom.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 123[2mms[22m[39m
+ [32m✓[39m test/stream.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 97[2mms[22m[39m
+[90mstderr[2m | test/rules/rules.test.ts[2m > [22m[2mcors rule[2m > [22m[2mreflects an allowlisted origin and honors credentials
+[22m[39m[h3] CORS: `credentials: true` with wildcard `exposeHeaders` has no effect. Browsers treat `*` literally on credentialed requests — list the headers explicitly.
+
+[90mstderr[2m | test/rules/rules.test.ts[2m > [22m[2mcors rule[2m > [22m[2mdrops credentials when a merge re-forms wildcard-origin + credentials
+[22m[39m[h3] rules: `cors` rule resolved to `credentials: true` with a wildcard origin after merge — dropping `credentials` (an `Access-Control-Allow-Origin: *` + credentials response is rejected by browsers). Set an explicit `origin` allowlist on the more specific rule.
+
+ [32m✓[39m test/unit/sse.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+[90mstderr[2m | test/rules/cache.test.ts[2m > [22m[2mcache rule (ocache-backed, h3/rules/cache)[2m > [22m[2mnever bakes reflected CORS headers into the shared cache (cors + swr)
+[22m[39m[h3] CORS: `credentials: true` with wildcard `exposeHeaders` has no effect. Browsers treat `*` literally on credentialed requests — list the headers explicitly.
+
+(node:46222) [UNDICI-FETCH-patch] Warning: Using `patch` is highly likely to result in a `405 Method Not Allowed`. `PATCH` is much more likely to succeed.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m test/rules/cache.test.ts [2m([22m[2m44 tests[22m[2m)[22m[32m 61[2mms[22m[39m
+ [32m✓[39m test/rules/rules.test.ts [2m([22m[2m72 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+ [32m✓[39m test/rules/compiler.test.ts [2m([22m[2m79 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m test/rules/match.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m test/rules/encoding.test.ts [2m([22m[2m47 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m test/unit/body-limit.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m test/integrations.test.ts [2m([22m[2m22 tests[22m[2m | [22m[33m6 skipped[39m[2m)[22m[32m 109[2mms[22m[39m
+ [32m✓[39m test/session.test.ts [2m([22m[2m44 tests[22m[2m)[22m[33m 1374[2mms[22m[39m
+ [32m✓[39m test/unit/route-normalize.test.ts [2m([22m[2m123 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m test/unit/route-matcher.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m test/rules/premerge.test.ts [2m([22m[2m124 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m test/unit/timing.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m test/rules/normalize.test.ts [2m([22m[2m61 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m test/unit/query.test.ts [2m([22m[2m83 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+(node:46231) [UNDICI-FETCH-patch] Warning: Using `patch` is highly likely to result in a `405 Method Not Allowed`. `PATCH` is much more likely to succeed.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m test/rules/merge.test.ts [2m([22m[2m44 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m test/rules/middleware.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m test/route.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m test/json-rpc-ws.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m test/rules/memoize.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m test/handler.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m test/unit/cors.test.ts [2m([22m[2m50 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m test/unit/event.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m test/unit/iterable.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/ws.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m test/unit/cookie-perf.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m test/unit/cookie-validation.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m test/unit/auth.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/unit/meta.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m test/unit/mime.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/unit/proxy.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/unit/request.test.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m test/unit/sanitize.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/unit/middleware.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m test/bench/bench.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [2m[90m↓[39m[22m test/dist.test.ts [2m([22m[2m18 tests[22m[2m | [22m[33m18 skipped[39m[2m)[22m
+ [32m✓[39m test/unit/h3.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/auth.test.ts [2m([22m[2m48 tests[22m[2m)[22m[33m 1903[2mms[22m[39m
+ [32m✓[39m [44m[1m TS [22m[49m test/rules/compiler.test-d.ts [2m([22m[2m0 test[22m[2m)[22m
+ [32m✓[39m [44m[1m TS [22m[49m test/rules/types.test-d.ts [2m([22m[2m0 test[22m[2m)[22m
+ [32m✓[39m [44m[1m TS [22m[49m test/unit/types.test-d.ts [2m([22m[2m21 tests[22m[2m)[22m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m test/utils.test.ts[2m > [22mutils[2m > [22mnode[2m > [22mgetRequestFingerprint[2m > [22muses the request ip when no x-forwarded-for header set (node)
+[31m[1mAssertionError[22m: expected '::ffff:127.0.0.1' to match /^0\.0\.0\.0|::1$/[39m
+
+[32m- Expected:[39m
+/^0\.0\.0\.0|::1$/
+
+[31m+ Received:[39m
+"::ffff:127.0.0.1"
+
+[36m [2m❯[22m test/utils.test.ts:[2m602:34[22m[39m
+    [90m600|[39m
+    [90m601|[39m       [35mif[39m (t[33m.[39mtarget [33m!==[39m [32m"web"[39m) {
+    [90m602|[39m         [34mexpect[39m([35mawait[39m res[33m.[39m[34mtext[39m())[33m.[39m[34mtoMatch[39m([36m/^0\.0\.0\.0|::1$/[39m)[33m;[39m
+    [90m   |[39m                                  [31m^[39m
+    [90m603|[39m       }
+    [90m604|[39m     })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m71 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (73)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2732 passed[39m[22m[2m | [22m[33m65 skipped[39m[90m (2798)[39m
+[2mType Errors [22m [2mno errors[22m
+[2m   Start at [22m 12:00:11
+[2m   Duration [22m 2.85s[2m (transform 4.12s, setup 0ms, import 12.56s, tests 10.74s, environment 5ms, typecheck 186ms)[22m
+

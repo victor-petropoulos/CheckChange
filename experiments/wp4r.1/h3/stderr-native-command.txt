@@ -1,0 +1,144 @@
+$ pnpm lint && pnpm typecheck && vitest --run --coverage
+$ oxlint . && oxfmt --check .
+$ tsc --noEmit
+[33mTesting types with tsc and vue-tsc is an experimental feature.
+Breaking changes might not follow SemVer, please pin Vitest's version when using it.[39m
+(node:45259) [UNDICI-FETCH-patch] Warning: Using `patch` is highly likely to result in a `405 Method Not Allowed`. `PATCH` is much more likely to succeed.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:45277) [UNDICI-FETCH-patch] Warning: Using `patch` is highly likely to result in a `405 Method Not Allowed`. `PATCH` is much more likely to succeed.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[90mstderr[2m | test/rules/rules.test.ts[2m > [22m[2mcors rule[2m > [22m[2mreflects an allowlisted origin and honors credentials
+[22m[39m[h3] CORS: `credentials: true` with wildcard `exposeHeaders` has no effect. Browsers treat `*` literally on credentialed requests — list the headers explicitly.
+
+[90mstderr[2m | test/rules/rules.test.ts[2m > [22m[2mcors rule[2m > [22m[2mdrops credentials when a merge re-forms wildcard-origin + credentials
+[22m[39m[h3] rules: `cors` rule resolved to `credentials: true` with a wildcard origin after merge — dropping `credentials` (an `Access-Control-Allow-Origin: *` + credentials response is rejected by browsers). Set an explicit `origin` allowlist on the more specific rule.
+
+[90mstderr[2m | test/rules/cache.test.ts[2m > [22m[2mcache rule (ocache-backed, h3/rules/cache)[2m > [22m[2mnever bakes reflected CORS headers into the shared cache (cors + swr)
+[22m[39m[h3] CORS: `credentials: true` with wildcard `exposeHeaders` has no effect. Browsers treat `*` literally on credentialed requests — list the headers explicitly.
+
+(node:45300) [UNDICI-FETCH-patch] Warning: Using `patch` is highly likely to result in a `405 Method Not Allowed`. `PATCH` is much more likely to succeed.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:45311) [UNDICI-FETCH-patch] Warning: Using `patch` is highly likely to result in a `405 Method Not Allowed`. `PATCH` is much more likely to succeed.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 27 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mdecodes an unreserved escape, leaving req.url and the query alone (node)
+[31m[1mAssertionError[22m: expected 401 to be 200 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 200[39m
+[31m+ 401[39m
+
+[36m [2m❯[22m test/security.test.ts:[2m132:24[22m[39m
+    [90m130|[39m   it("decodes an unreserved escape, leaving req.url and the query alon…
+    [90m131|[39m     [35mconst[39m res [33m=[39m [35mawait[39m ctx[33m.[39m[34mfetch[39m([32m"/a/%61?x=%61&y=1"[39m)[33m;[39m
+    [90m132|[39m     [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m200[39m)[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m133|[39m     [34mexpect[39m([35mawait[39m res[33m.[39m[34mjson[39m())[33m.[39m[34mtoEqual[39m({
+    [90m134|[39m       path[33m:[39m [32m"/a/a"[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/27]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mnever reintroduces a dot segment (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mis a fixed point: the canonical form dispatches unchanged (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mcanonicalizes /a%21b to /a!b (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mcanonicalizes /a%27b to /a'b (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mcanonicalizes /a%28b%29c to /a(b)c (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mcanonicalizes /a%2Ab to /a*b (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mcanonicalizes /a%5Bb%5Dc to /a[b]c (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mcanonicalizes /a%7Cb to /a|b (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mcanonicalizes /%40handle to /@handle (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mcanonicalizes /users/me%3Adelete to /users/me:delete (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mcanonicalizes /a%24b to /a$b (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mcanonicalizes /a%26b to /a&b (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mcanonicalizes /a%2Bb to /a+b (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mcanonicalizes /a%2Cb to /a,b (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mcanonicalizes /a%3Bb to /a;b (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mcanonicalizes /a%3Db to /a=b (node)
+[31m[1mSyntaxError[22m: Unexpected end of JSON input[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/27]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mserves /a%2Fb unchanged (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mserves /a%5Cb unchanged (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mserves /a%20b unchanged (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mserves /caf%C3%A9 unchanged (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mserves /a%2541 unchanged (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mserves /a%09b unchanged (node)
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mserves /a%5Eb unchanged (node)
+[31m[1mAssertionError[22m: expected 401 to be 200 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 200[39m
+[31m+ 401[39m
+
+[36m [2m❯[22m test/security.test.ts:[2m158:26[22m[39m
+    [90m156|[39m     [34mit[39m([32m`serves [39m[36m${[39mpath[36m}[39m[32m unchanged`[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m157|[39m       [35mconst[39m res [33m=[39m [35mawait[39m ctx[33m.[39m[34mfetch[39m(path)[33m;[39m
+    [90m158|[39m       [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m200[39m)[33m;[39m
+    [90m   |[39m                          [31m^[39m
+    [90m159|[39m       [34mexpect[39m([35mawait[39m res[33m.[39m[34mjson[39m())[33m.[39m[34mtoMatchObject[39m({ path[33m,[39m reqPath[33m:[39m path })[33m;[39m
+    [90m160|[39m     })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/27]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mmatches routes and middleware on the canonical path (node)
+[31m[1mAssertionError[22m: expected 401 to be 200 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 200[39m
+[31m+ 401[39m
+
+[36m [2m❯[22m test/security.test.ts:[2m200:24[22m[39m
+    [90m198|[39m       .get("/api/admin/:action", (event) => event.context.params!.acti…
+    [90m199|[39m     [35mconst[39m res [33m=[39m [35mawait[39m ctx[33m.[39m[34mfetch[39m([32m"/api/%61dmin/users"[39m)[33m;[39m
+    [90m200|[39m     [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m200[39m)[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m201|[39m     [34mexpect[39m([35mawait[39m res[33m.[39m[34mtext[39m())[33m.[39m[34mtoBe[39m([32m"users"[39m)[33m;[39m
+    [90m202|[39m     [34mexpect[39m(guarded)[33m.[39m[34mtoBe[39m([32m"/api/admin/users"[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/27]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m test/security.test.ts[2m > [22msecurity: pathname canonicalization[2m > [22mnode[2m > [22mhands a mounted fetch handler the canonical path (node)
+[31m[1mAssertionError[22m: expected '' to be '/admin' // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- /admin[39m
+
+[36m [2m❯[22m test/security.test.ts:[2m208:30[22m[39m
+    [90m206|[39m     ctx.app.mount("/api", (req) => new Response(new URL(req.url).pathn…
+    [90m207|[39m     [35mconst[39m res [33m=[39m [35mawait[39m ctx[33m.[39m[34mfetch[39m([32m"/%61pi/%61dmin"[39m)[33m;[39m
+    [90m208|[39m     [34mexpect[39m([35mawait[39m res[33m.[39m[34mtext[39m())[33m.[39m[34mtoBe[39m([32m"/admin"[39m)[33m;[39m
+    [90m   |[39m                              [31m^[39m
+    [90m209|[39m   })[33m;[39m
+    [90m210|[39m })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/27]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m test/utils.test.ts[2m > [22mutils[2m > [22mnode[2m > [22mgetRequestFingerprint[2m > [22muses the request ip when no x-forwarded-for header set (node)
+[31m[1mAssertionError[22m: expected '::ffff:127.0.0.1' to match /^0\.0\.0\.0|::1$/[39m
+
+[32m- Expected:[39m
+/^0\.0\.0\.0|::1$/
+
+[31m+ Received:[39m
+"::ffff:127.0.0.1"
+
+[36m [2m❯[22m test/utils.test.ts:[2m602:34[22m[39m
+    [90m600|[39m
+    [90m601|[39m       [35mif[39m (t[33m.[39mtarget [33m!==[39m [32m"web"[39m) {
+    [90m602|[39m         [34mexpect[39m([35mawait[39m res[33m.[39m[34mtext[39m())[33m.[39m[34mtoMatch[39m([36m/^0\.0\.0\.0|::1$/[39m)[33m;[39m
+    [90m   |[39m                                  [31m^[39m
+    [90m603|[39m       }
+    [90m604|[39m     })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/27]⎯[22m[39m
+

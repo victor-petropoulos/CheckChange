@@ -1,0 +1,41 @@
+[33mTesting types with tsc and vue-tsc is an experimental feature.
+Breaking changes might not follow SemVer, please pin Vitest's version when using it.[39m
+(node:44301) [UNDICI-FETCH-patch] Warning: Using `patch` is highly likely to result in a `405 Method Not Allowed`. `PATCH` is much more likely to succeed.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:44319) [UNDICI-FETCH-patch] Warning: Using `patch` is highly likely to result in a `405 Method Not Allowed`. `PATCH` is much more likely to succeed.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[90mstderr[2m | test/rules/rules.test.ts[2m > [22m[2mcors rule[2m > [22m[2mreflects an allowlisted origin and honors credentials
+[22m[39m[h3] CORS: `credentials: true` with wildcard `exposeHeaders` has no effect. Browsers treat `*` literally on credentialed requests — list the headers explicitly.
+
+[90mstderr[2m | test/rules/rules.test.ts[2m > [22m[2mcors rule[2m > [22m[2mdrops credentials when a merge re-forms wildcard-origin + credentials
+[22m[39m[h3] rules: `cors` rule resolved to `credentials: true` with a wildcard origin after merge — dropping `credentials` (an `Access-Control-Allow-Origin: *` + credentials response is rejected by browsers). Set an explicit `origin` allowlist on the more specific rule.
+
+(node:44344) [UNDICI-FETCH-patch] Warning: Using `patch` is highly likely to result in a `405 Method Not Allowed`. `PATCH` is much more likely to succeed.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[90mstderr[2m | test/rules/cache.test.ts[2m > [22m[2mcache rule (ocache-backed, h3/rules/cache)[2m > [22m[2mnever bakes reflected CORS headers into the shared cache (cors + swr)
+[22m[39m[h3] CORS: `credentials: true` with wildcard `exposeHeaders` has no effect. Browsers treat `*` literally on credentialed requests — list the headers explicitly.
+
+(node:44357) [UNDICI-FETCH-patch] Warning: Using `patch` is highly likely to result in a `405 Method Not Allowed`. `PATCH` is much more likely to succeed.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m test/utils.test.ts[2m > [22mutils[2m > [22mnode[2m > [22mgetRequestFingerprint[2m > [22muses the request ip when no x-forwarded-for header set (node)
+[31m[1mAssertionError[22m: expected '::ffff:127.0.0.1' to match /^0\.0\.0\.0|::1$/[39m
+
+[32m- Expected:[39m
+/^0\.0\.0\.0|::1$/
+
+[31m+ Received:[39m
+"::ffff:127.0.0.1"
+
+[36m [2m❯[22m test/utils.test.ts:[2m602:34[22m[39m
+    [90m600|[39m
+    [90m601|[39m       [35mif[39m (t[33m.[39mtarget [33m!==[39m [32m"web"[39m) {
+    [90m602|[39m         [34mexpect[39m([35mawait[39m res[33m.[39m[34mtext[39m())[33m.[39m[34mtoMatch[39m([36m/^0\.0\.0\.0|::1$/[39m)[33m;[39m
+    [90m   |[39m                                  [31m^[39m
+    [90m603|[39m       }
+    [90m604|[39m     })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

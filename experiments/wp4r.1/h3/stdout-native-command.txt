@@ -1,0 +1,471 @@
+Found 0 warnings and 0 errors.
+Finished in 17ms on 198 files with 95 rules using 16 threads.
+Checking formatting...
+
+All matched files use the correct format.
+Finished in 521ms on 259 files using 16 threads.
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.11 [39m[90m/private/tmp/wp4r1-h3[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+ [32m✓[39m test/unit/encoding.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 277[2mms[22m[39m
+ [32m✓[39m test/rules/treeshake.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 233[2mms[22m[39m
+ [32m✓[39m test/body.test.ts [2m([22m[2m54 tests[22m[2m)[22m[32m 226[2mms[22m[39m
+ [32m✓[39m test/static.test.ts [2m([22m[2m52 tests[22m[2m)[22m[32m 229[2mms[22m[39m
+ [32m✓[39m test/app.test.ts [2m([22m[2m76 tests[22m[2m | [22m[33m8 skipped[39m[2m)[22m[32m 280[2mms[22m[39m
+ [32m✓[39m test/cookies.test.ts [2m([22m[2m116 tests[22m[2m)[22m[32m 289[2mms[22m[39m
+ [32m✓[39m test/router.test.ts [2m([22m[2m82 tests[22m[2m)[22m[32m 299[2mms[22m[39m
+ [32m✓[39m test/json-rpc.test.ts [2m([22m[2m98 tests[22m[2m)[22m[33m 304[2mms[22m[39m
+ [31m❯[39m test/utils.test.ts [2m([22m[2m184 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m2 skipped[39m[2m)[22m[33m 423[2mms[22m[39m
+         [32m✓[39m can return html response (web)[32m 11[2mms[22m[39m
+         [32m✓[39m escapes interpolated values in tagged template (web)[32m 1[2mms[22m[39m
+         [32m✓[39m passes raw() values through unescaped (web)[32m 1[2mms[22m[39m
+         [32m✓[39m does not treat duck-typed objects as raw values (web)[32m 0[2mms[22m[39m
+         [32m✓[39m does not accept forged raw() markers via the global symbol registry (web)[32m 0[2mms[22m[39m
+         [32m✓[39m escapes plain string usage and warns once (web)[32m 1[2mms[22m[39m
+         [32m✓[39m does not warn for plain strings without special characters (web)[32m 0[2mms[22m[39m
+         [32m✓[39m can redirect URLs (web)[32m 1[2mms[22m[39m
+         [32m✓[39m escapes special characters in HTML body (web)[32m 0[2mms[22m[39m
+         [32m✓[39m redirects to referer pathname when same origin (web)[32m 0[2mms[22m[39m
+         [32m✓[39m strips query string from referer by default (web)[32m 0[2mms[22m[39m
+         [32m✓[39m preserves query string with allowQuery (web)[32m 0[2mms[22m[39m
+         [32m✓[39m uses fallback when referer is cross-origin (web)[32m 0[2mms[22m[39m
+         [32m✓[39m uses fallback when no referer (web)[32m 0[2mms[22m[39m
+         [32m✓[39m defaults fallback to / (web)[32m 0[2mms[22m[39m
+         [32m✓[39m prevents open redirect via protocol-relative path in referer (web)[32m 1[2mms[22m[39m
+         [32m✓[39m uses fallback when referer is invalid URL (web)[32m 11[2mms[22m[39m
+         [32m✓[39m can prefix routes (web)[32m 1[2mms[22m[39m
+         [32m✓[39m does nothing when not provided a base (web)[32m 0[2mms[22m[39m
+         [32m✓[39m collapses leading slashes after stripping base (web)[32m 0[2mms[22m[39m
+         [32m✓[39m can parse query params (web)[32m 1[2mms[22m[39m
+         [32m✓[39m can get method (web)[32m 1[2mms[22m[39m
+         [32m✓[39m returns host header value (web)[32m 1[2mms[22m[39m
+         [32m✓[39m uses x-forwarded-host when enabled (web)[32m 0[2mms[22m[39m
+         [32m✓[39m uses first value from x-forwarded-host with multiple entries (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost/foo?bar=baz") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost\\foo") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost//foo") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost//foo//bar") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost//foo\\bar\\") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost///foo") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost\\\\foo") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost\\/foo") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost/\\foo") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://example.com/test") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost:8080/test") (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-host clears port for plain host (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-host preserves explicit port (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-host with IPv6 clears port (web)[32m 5[2mms[22m[39m
+         [32m✓[39m x-forwarded-host with IPv6 and port preserves port (web)[32m 0[2mms[22m[39m
+         [32m✓[39m ignores malformed x-forwarded-host and keeps the real authority (web)[32m 1[2mms[22m[39m
+         [32m✓[39m x-forwarded-host clears the port when only the port differs (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-host with an invalid port drops the real port (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-proto: "https" (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-proto comma list uses first entry (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-proto comma list with spaces uses first entry trimmed (web)[32m 0[2mms[22m[39m
+         [32m✓[39m x-forwarded-for (web)[32m 0[2mms[22m[39m
+         [32m✓[39m ports (web)[32m 0[2mms[22m[39m
+         [32m✓[39m ipv6 (web)[32m 0[2mms[22m[39m
+         [32m✓[39m multiple ips (web)[32m 0[2mms[22m[39m
+         [32m✓[39m returns an hash (web)[32m 6[2mms[22m[39m
+         [32m✓[39m supports stronger hash algorithms (web)[32m 3[2mms[22m[39m
+         [32m✓[39m returns the same hash every time for same request (web)[32m 1[2mms[22m[39m
+         [32m✓[39m returns null when all detections impossible (web)[32m 0[2mms[22m[39m
+         [32m✓[39m can use path/method (web)[32m 0[2mms[22m[39m
+         [32m✓[39m uses user agent when available (web)[32m 0[2mms[22m[39m
+         [32m✓[39m keeps an empty slot for undeterminable components (web)[32m 0[2mms[22m[39m
+         [32m✓[39m escapes the component separator (web)[32m 0[2mms[22m[39m
+         [32m✓[39m uses x-forwarded-for ip when header set (web)[32m 0[2mms[22m[39m
+         [32m✓[39m uses the request ip when no x-forwarded-for header set (web)[32m 0[2mms[22m[39m
+         [32m✓[39m only allow head and post (web)[32m 5[2mms[22m[39m
+         [32m✓[39m sets Allow header with multiple expected methods (web)[32m 0[2mms[22m[39m
+         [32m✓[39m allows a PATCH assertion for a request spelled PATCH (web)[32m 0[2mms[22m[39m
+         [32m✓[39m allows a PATCH assertion for a request spelled patch (web)[32m 0[2mms[22m[39m
+         [32m✓[39m allows a PATCH assertion for a request spelled PaTcH (web)[32m 0[2mms[22m[39m
+         [32m✓[39m still rejects a genuinely different method (web)[32m 0[2mms[22m[39m
+         [32m✓[39m matches a QUERY expectation for a request spelled QUERY (web)[32m 32[2mms[22m[39m
+         [32m✓[39m matches a QUERY expectation for a request spelled query (web)[32m 2[2mms[22m[39m
+         [32m✓[39m matches a QUERY expectation for a request spelled QuErY (web)[32m 1[2mms[22m[39m
+         [32m✓[39m matches a lowercase method within a list of expected methods (web)[32m 1[2mms[22m[39m
+         [32m✓[39m allows an unnormalized `head` token when allowHead is set (web)[32m 0[2mms[22m[39m
+         [32m✓[39m does not match a different method (web)[32m 0[2mms[22m[39m
+         [32m✓[39m sets Link header as fallback when native early hints not available (web)[32m 1[2mms[22m[39m
+         [32m✓[39m does not set an empty Link header for falsy link values (fallback) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m resolves promptly instead of hanging with empty hints (#1383) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m resolves promptly when the link hint value is empty (web)[32m 0[2mms[22m[39m
+         [32m✓[39m resolves when only a capital-cased Link key is provided (web)[32m 0[2mms[22m[39m
+         [32m✓[39m merges both link and Link keys without dropping values (web)[32m 0[2mms[22m[39m
+         [32m✓[39m can handle cache headers (web)[32m 19[2mms[22m[39m
+         [32m✓[39m can handle cache headers with etag (web)[32m 1[2mms[22m[39m
+         [32m✓[39m can handle cache headers with if-none-match (web)[32m 0[2mms[22m[39m
+         [32m✓[39m can handle cache headers with if-modified-since (web)[32m 0[2mms[22m[39m
+         [32m✓[39m returns 304 when if-none-match is a comma-separated list containing the etag (web)[32m 0[2mms[22m[39m
+         [32m✓[39m handles modifiedTime with milliseconds correctly (web)[32m 0[2mms[22m[39m
+         [32m✓[39m does not force `public` when explicit cacheControls are provided (#1442, #1453) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m keeps `public` when explicit cacheControls do not set visibility (#1454) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m omits `s-maxage` when `no-store` is set (#1454) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m treats an empty `if-none-match` as absent so `if-modified-since` still applies (#1454) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m ignores if-modified-since when if-none-match is present (RFC 9110 §13.1.3, #1453) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m matches etag using weak comparison and wildcard (#1453) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m detects `private` when bundled into a single cacheControls entry (#1454) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m matches a quoted etag whose value contains a comma (#1454) (web)[32m 0[2mms[22m[39m
+         [32m✓[39m can return html response (node)[32m 24[2mms[22m[39m
+         [32m✓[39m escapes interpolated values in tagged template (node)[32m 4[2mms[22m[39m
+         [32m✓[39m passes raw() values through unescaped (node)[32m 3[2mms[22m[39m
+         [32m✓[39m does not treat duck-typed objects as raw values (node)[32m 3[2mms[22m[39m
+         [32m✓[39m does not accept forged raw() markers via the global symbol registry (node)[32m 4[2mms[22m[39m
+         [32m✓[39m escapes plain string usage and warns once (node)[32m 5[2mms[22m[39m
+         [32m✓[39m does not warn for plain strings without special characters (node)[32m 1[2mms[22m[39m
+         [32m✓[39m can redirect URLs (node)[32m 3[2mms[22m[39m
+         [32m✓[39m escapes special characters in HTML body (node)[32m 3[2mms[22m[39m
+         [32m✓[39m redirects to referer pathname when same origin (node)[32m 3[2mms[22m[39m
+         [32m✓[39m strips query string from referer by default (node)[32m 3[2mms[22m[39m
+         [32m✓[39m preserves query string with allowQuery (node)[32m 3[2mms[22m[39m
+         [32m✓[39m uses fallback when referer is cross-origin (node)[32m 3[2mms[22m[39m
+         [32m✓[39m uses fallback when no referer (node)[32m 3[2mms[22m[39m
+         [32m✓[39m defaults fallback to / (node)[32m 3[2mms[22m[39m
+         [32m✓[39m prevents open redirect via protocol-relative path in referer (node)[32m 3[2mms[22m[39m
+         [32m✓[39m uses fallback when referer is invalid URL (node)[32m 2[2mms[22m[39m
+         [32m✓[39m can prefix routes (node)[32m 2[2mms[22m[39m
+         [32m✓[39m does nothing when not provided a base (node)[32m 3[2mms[22m[39m
+         [32m✓[39m collapses leading slashes after stripping base (node)[32m 3[2mms[22m[39m
+         [32m✓[39m can parse query params (node)[32m 3[2mms[22m[39m
+         [32m✓[39m can get method (node)[32m 5[2mms[22m[39m
+         [32m✓[39m returns host header value (node)[32m 3[2mms[22m[39m
+         [32m✓[39m uses x-forwarded-host when enabled (node)[32m 4[2mms[22m[39m
+         [32m✓[39m uses first value from x-forwarded-host with multiple entries (node)[32m 3[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost/foo?bar=baz") (node)[32m 2[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost\\foo") (node)[32m 2[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost//foo") (node)[32m 3[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost//foo//bar") (node)[32m 2[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost//foo\\bar\\") (node)[32m 6[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost///foo") (node)[32m 3[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost\\\\foo") (node)[32m 3[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost\\/foo") (node)[32m 3[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost/\\foo") (node)[32m 2[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://example.com/test") (node)[32m 3[2mms[22m[39m
+         [32m✓[39m getRequestURL("http://localhost:8080/test") (node)[32m 3[2mms[22m[39m
+         [32m✓[39m x-forwarded-host clears port for plain host (node)[32m 1[2mms[22m[39m
+         [32m✓[39m x-forwarded-host preserves explicit port (node)[32m 3[2mms[22m[39m
+         [32m✓[39m x-forwarded-host with IPv6 clears port (node)[32m 3[2mms[22m[39m
+         [32m✓[39m x-forwarded-host with IPv6 and port preserves port (node)[32m 2[2mms[22m[39m
+         [32m✓[39m ignores malformed x-forwarded-host and keeps the real authority (node)[32m 11[2mms[22m[39m
+         [32m✓[39m x-forwarded-host clears the port when only the port differs (node)[32m 2[2mms[22m[39m
+         [32m✓[39m x-forwarded-host with an invalid port drops the real port (node)[32m 2[2mms[22m[39m
+         [32m✓[39m x-forwarded-proto: "https" (node)[32m 4[2mms[22m[39m
+         [32m✓[39m x-forwarded-proto comma list uses first entry (node)[32m 3[2mms[22m[39m
+         [32m✓[39m x-forwarded-proto comma list with spaces uses first entry trimmed (node)[32m 3[2mms[22m[39m
+         [32m✓[39m x-forwarded-for (node)[32m 3[2mms[22m[39m
+         [32m✓[39m ports (node)[32m 3[2mms[22m[39m
+         [32m✓[39m ipv6 (node)[32m 3[2mms[22m[39m
+         [32m✓[39m multiple ips (node)[32m 3[2mms[22m[39m
+         [32m✓[39m returns an hash (node)[32m 2[2mms[22m[39m
+         [32m✓[39m supports stronger hash algorithms (node)[32m 2[2mms[22m[39m
+         [32m✓[39m returns the same hash every time for same request (node)[32m 7[2mms[22m[39m
+         [32m✓[39m returns null when all detections impossible (node)[32m 3[2mms[22m[39m
+         [32m✓[39m can use path/method (node)[32m 2[2mms[22m[39m
+         [32m✓[39m uses user agent when available (node)[32m 3[2mms[22m[39m
+         [32m✓[39m keeps an empty slot for undeterminable components (node)[32m 3[2mms[22m[39m
+         [32m✓[39m escapes the component separator (node)[32m 4[2mms[22m[39m
+         [32m✓[39m uses x-forwarded-for ip when header set (node)[32m 4[2mms[22m[39m
+[31m         [31m×[31m uses the request ip when no x-forwarded-for header set (node)[39m[32m 5[2mms[22m[39m
+         [32m✓[39m only allow head and post (node)[32m 9[2mms[22m[39m
+         [32m✓[39m sets Allow header with multiple expected methods (node)[32m 2[2mms[22m[39m
+         [32m✓[39m allows a PATCH assertion for a request spelled PATCH (node)[32m 1[2mms[22m[39m
+         [32m✓[39m allows a PATCH assertion for a request spelled patch (node)[32m 0[2mms[22m[39m
+         [32m✓[39m allows a PATCH assertion for a request spelled PaTcH (node)[32m 0[2mms[22m[39m
+         [32m✓[39m still rejects a genuinely different method (node)[32m 1[2mms[22m[39m
+         [32m✓[39m matches a QUERY expectation for a request spelled QUERY (node)[32m 1[2mms[22m[39m
+         [32m✓[39m matches a QUERY expectation for a request spelled query (node)[32m 0[2mms[22m[39m
+         [32m✓[39m matches a QUERY expectation for a request spelled QuErY (node)[32m 0[2mms[22m[39m
+         [32m✓[39m matches a lowercase method within a list of expected methods (node)[32m 0[2mms[22m[39m
+         [32m✓[39m allows an unnormalized `head` token when allowHead is set (node)[32m 0[2mms[22m[39m
+         [32m✓[39m does not match a different method (node)[32m 0[2mms[22m[39m
+         [2m[90m↓[39m[22m sets Link header as fallback when native early hints not available (node)
+         [2m[90m↓[39m[22m does not set an empty Link header for falsy link values (fallback) (node)
+         [32m✓[39m resolves promptly instead of hanging with empty hints (#1383) (node)[32m 3[2mms[22m[39m
+         [32m✓[39m resolves promptly when the link hint value is empty (node)[32m 4[2mms[22m[39m
+         [32m✓[39m resolves when only a capital-cased Link key is provided (node)[32m 4[2mms[22m[39m
+         [32m✓[39m merges both link and Link keys without dropping values (node)[32m 3[2mms[22m[39m
+         [32m✓[39m can handle cache headers (node)[32m 3[2mms[22m[39m
+         [32m✓[39m can handle cache headers with etag (node)[32m 3[2mms[22m[39m
+         [32m✓[39m can handle cache headers with if-none-match (node)[32m 3[2mms[22m[39m
+         [32m✓[39m can handle cache headers with if-modified-since (node)[32m 2[2mms[22m[39m
+         [32m✓[39m returns 304 when if-none-match is a comma-separated list containing the etag (node)[32m 2[2mms[22m[39m
+         [32m✓[39m handles modifiedTime with milliseconds correctly (node)[32m 4[2mms[22m[39m
+         [32m✓[39m does not force `public` when explicit cacheControls are provided (#1442, #1453) (node)[32m 3[2mms[22m[39m
+         [32m✓[39m keeps `public` when explicit cacheControls do not set visibility (#1454) (node)[32m 3[2mms[22m[39m
+         [32m✓[39m omits `s-maxage` when `no-store` is set (#1454) (node)[32m 2[2mms[22m[39m
+         [32m✓[39m treats an empty `if-none-match` as absent so `if-modified-since` still applies (#1454) (node)[32m 4[2mms[22m[39m
+         [32m✓[39m ignores if-modified-since when if-none-match is present (RFC 9110 §13.1.3, #1453) (node)[32m 4[2mms[22m[39m
+         [32m✓[39m matches etag using weak comparison and wildcard (#1453) (node)[32m 6[2mms[22m[39m
+         [32m✓[39m detects `private` when bundled into a single cacheControls entry (#1454) (node)[32m 4[2mms[22m[39m
+         [32m✓[39m matches a quoted etag whose value contains a comma (#1454) (node)[32m 3[2mms[22m[39m
+ [31m❯[39m test/security.test.ts [2m([22m[2m195 tests[22m[2m | [22m[31m26 failed[39m[2m)[22m[33m 436[2mms[22m[39m
+       [32m✓[39m blocks unauthenticated access to /api/admin/users (web)[32m 4[2mms[22m[39m
+       [32m✓[39m allows authenticated access to /api/admin/users (web)[32m 6[2mms[22m[39m
+       [32m✓[39m allows access to public endpoint (web)[32m 0[2mms[22m[39m
+       [32m✓[39m should NOT bypass auth via /api/%61dmin/users (web)[32m 0[2mms[22m[39m
+       [32m✓[39m should NOT bypass auth via /api/admi%6e/users (web)[32m 0[2mms[22m[39m
+       [32m✓[39m should NOT bypass auth via /%61pi/admin/users (web)[32m 0[2mms[22m[39m
+       [32m✓[39m blocks unauthenticated access to /api/admin/users (node)[32m 25[2mms[22m[39m
+       [32m✓[39m allows authenticated access to /api/admin/users (node)[32m 7[2mms[22m[39m
+       [32m✓[39m allows access to public endpoint (node)[32m 2[2mms[22m[39m
+       [32m✓[39m should NOT bypass auth via /api/%61dmin/users (node)[32m 3[2mms[22m[39m
+       [32m✓[39m should NOT bypass auth via /api/admi%6e/users (node)[32m 3[2mms[22m[39m
+       [32m✓[39m should NOT bypass auth via /%61pi/admin/users (node)[32m 1[2mms[22m[39m
+       [32m✓[39m blocks /api/admin/users without auth (web)[32m 0[2mms[22m[39m
+       [32m✓[39m should NOT bypass auth with wildcard via /api/%61dmin/users (web)[32m 0[2mms[22m[39m
+       [32m✓[39m double-encoded /api/%2561dmin/users is a distinct path (not an admin bypass) (web)[32m 0[2mms[22m[39m
+       [32m✓[39m blocks /api/admin/users without auth (node)[32m 5[2mms[22m[39m
+       [32m✓[39m should NOT bypass auth with wildcard via /api/%61dmin/users (node)[32m 5[2mms[22m[39m
+       [32m✓[39m double-encoded /api/%2561dmin/users is a distinct path (not an admin bypass) (node)[32m 3[2mms[22m[39m
+       [32m✓[39m returns 400 for /foo% without throwing (web)[32m 4[2mms[22m[39m
+       [32m✓[39m returns 400 for /%ZZ without throwing (web)[32m 1[2mms[22m[39m
+       [32m✓[39m returns 400 for /bar%2 without throwing (web)[32m 1[2mms[22m[39m
+       [32m✓[39m returns 400 for /% without throwing (web)[32m 1[2mms[22m[39m
+       [32m✓[39m does not bypass the auth guard via a malformed segment (web)[32m 1[2mms[22m[39m
+       [32m✓[39m returns 400 for /foo% without throwing (node)[32m 2[2mms[22m[39m
+       [32m✓[39m returns 400 for /%ZZ without throwing (node)[32m 3[2mms[22m[39m
+       [32m✓[39m returns 400 for /bar%2 without throwing (node)[32m 2[2mms[22m[39m
+       [32m✓[39m returns 400 for /% without throwing (node)[32m 3[2mms[22m[39m
+       [32m✓[39m does not bypass the auth guard via a malformed segment (node)[32m 3[2mms[22m[39m
+       [32m✓[39m decodes an unreserved escape, leaving req.url and the query alone (web)[32m 1[2mms[22m[39m
+       [32m✓[39m never reintroduces a dot segment (web)[32m 1[2mms[22m[39m
+       [32m✓[39m is a fixed point: the canonical form dispatches unchanged (web)[32m 0[2mms[22m[39m
+       [32m✓[39m serves /a%2Fb unchanged (web)[32m 1[2mms[22m[39m
+       [32m✓[39m serves /a%5Cb unchanged (web)[32m 0[2mms[22m[39m
+       [32m✓[39m serves /a%20b unchanged (web)[32m 0[2mms[22m[39m
+       [32m✓[39m serves /caf%C3%A9 unchanged (web)[32m 0[2mms[22m[39m
+       [32m✓[39m serves /a%2541 unchanged (web)[32m 0[2mms[22m[39m
+       [32m✓[39m serves /a%09b unchanged (web)[32m 0[2mms[22m[39m
+       [32m✓[39m serves /a%5Eb unchanged (web)[32m 0[2mms[22m[39m
+       [32m✓[39m canonicalizes /a%21b to /a!b (web)[32m 0[2mms[22m[39m
+       [32m✓[39m canonicalizes /a%27b to /a'b (web)[32m 0[2mms[22m[39m
+       [32m✓[39m canonicalizes /a%28b%29c to /a(b)c (web)[32m 0[2mms[22m[39m
+       [32m✓[39m canonicalizes /a%2Ab to /a*b (web)[32m 0[2mms[22m[39m
+       [32m✓[39m canonicalizes /a%5Bb%5Dc to /a[b]c (web)[32m 0[2mms[22m[39m
+       [32m✓[39m canonicalizes /a%7Cb to /a|b (web)[32m 0[2mms[22m[39m
+       [32m✓[39m canonicalizes /%40handle to /@handle (web)[32m 0[2mms[22m[39m
+       [32m✓[39m canonicalizes /users/me%3Adelete to /users/me:delete (web)[32m 0[2mms[22m[39m
+       [32m✓[39m canonicalizes /a%24b to /a$b (web)[32m 0[2mms[22m[39m
+       [32m✓[39m canonicalizes /a%26b to /a&b (web)[32m 0[2mms[22m[39m
+       [32m✓[39m canonicalizes /a%2Bb to /a+b (web)[32m 0[2mms[22m[39m
+       [32m✓[39m canonicalizes /a%2Cb to /a,b (web)[32m 0[2mms[22m[39m
+       [32m✓[39m canonicalizes /a%3Bb to /a;b (web)[32m 0[2mms[22m[39m
+       [32m✓[39m canonicalizes /a%3Db to /a=b (web)[32m 0[2mms[22m[39m
+       [32m✓[39m matches routes and middleware on the canonical path (web)[32m 0[2mms[22m[39m
+       [32m✓[39m hands a mounted fetch handler the canonical path (web)[32m 0[2mms[22m[39m
+[31m       [31m×[31m decodes an unreserved escape, leaving req.url and the query alone (node)[39m[32m 10[2mms[22m[39m
+[31m       [31m×[31m never reintroduces a dot segment (node)[39m[32m 6[2mms[22m[39m
+[31m       [31m×[31m is a fixed point: the canonical form dispatches unchanged (node)[39m[32m 6[2mms[22m[39m
+[31m       [31m×[31m serves /a%2Fb unchanged (node)[39m[32m 8[2mms[22m[39m
+[31m       [31m×[31m serves /a%5Cb unchanged (node)[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m serves /a%20b unchanged (node)[39m[32m 4[2mms[22m[39m
+[31m       [31m×[31m serves /caf%C3%A9 unchanged (node)[39m[32m 4[2mms[22m[39m
+[31m       [31m×[31m serves /a%2541 unchanged (node)[39m[32m 4[2mms[22m[39m
+[31m       [31m×[31m serves /a%09b unchanged (node)[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m serves /a%5Eb unchanged (node)[39m[32m 5[2mms[22m[39m
+[31m       [31m×[31m canonicalizes /a%21b to /a!b (node)[39m[32m 5[2mms[22m[39m
+[31m       [31m×[31m canonicalizes /a%27b to /a'b (node)[39m[32m 8[2mms[22m[39m
+[31m       [31m×[31m canonicalizes /a%28b%29c to /a(b)c (node)[39m[32m 4[2mms[22m[39m
+[31m       [31m×[31m canonicalizes /a%2Ab to /a*b (node)[39m[32m 4[2mms[22m[39m
+[31m       [31m×[31m canonicalizes /a%5Bb%5Dc to /a[b]c (node)[39m[32m 4[2mms[22m[39m
+[31m       [31m×[31m canonicalizes /a%7Cb to /a|b (node)[39m[32m 4[2mms[22m[39m
+[31m       [31m×[31m canonicalizes /%40handle to /@handle (node)[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m canonicalizes /users/me%3Adelete to /users/me:delete (node)[39m[32m 5[2mms[22m[39m
+[31m       [31m×[31m canonicalizes /a%24b to /a$b (node)[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m canonicalizes /a%26b to /a&b (node)[39m[32m 4[2mms[22m[39m
+[31m       [31m×[31m canonicalizes /a%2Bb to /a+b (node)[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m canonicalizes /a%2Cb to /a,b (node)[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m canonicalizes /a%3Bb to /a;b (node)[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m canonicalizes /a%3Db to /a=b (node)[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m matches routes and middleware on the canonical path (node)[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m hands a mounted fetch handler the canonical path (node)[39m[32m 3[2mms[22m[39m
+     [32m✓[39m leaves the leading slash run untouched[32m 0[2mms[22m[39m
+     [32m✓[39m blocks the guarded path itself[32m 0[2mms[22m[39m
+     [32m✓[39m does not serve //private/secret.txt[32m 0[2mms[22m[39m
+     [32m✓[39m does not serve ///private/secret.txt[32m 0[2mms[22m[39m
+     [32m✓[39m does not serve /\private/secret.txt[32m 0[2mms[22m[39m
+     [32m✓[39m does not serve /\\private/secret.txt[32m 0[2mms[22m[39m
+     [32m✓[39m does not serve //\private/secret.txt[32m 0[2mms[22m[39m
+     [32m✓[39m falls through instead of 404 when `fallthrough` is set[32m 0[2mms[22m[39m
+     [32m✓[39m still serves an interior empty segment the guard does match[32m 0[2mms[22m[39m
+       [32m✓[39m blocks the guarded path itself (web)[32m 1[2mms[22m[39m
+       [32m✓[39m does not serve /pub/%252e%252e/private/secret.txt (web)[32m 4[2mms[22m[39m
+       [32m✓[39m does not serve /pub/%25252e%25252e/private/secret.txt (web)[32m 1[2mms[22m[39m
+       [32m✓[39m does not serve /pub/.%252e/private/secret.txt (web)[32m 0[2mms[22m[39m
+       [32m✓[39m does not serve /pub/%252e./private/secret.txt (web)[32m 0[2mms[22m[39m
+       [32m✓[39m does not serve /%252e/private/secret.txt (web)[32m 0[2mms[22m[39m
+       [32m✓[39m falls through instead of 404 when `fallthrough` is set (web)[32m 0[2mms[22m[39m
+       [32m✓[39m still serves a nested escape that is not a whole dot segment (web)[32m 0[2mms[22m[39m
+       [32m✓[39m blocks the guarded path itself (node)[32m 2[2mms[22m[39m
+       [32m✓[39m does not serve /pub/%252e%252e/private/secret.txt (node)[32m 2[2mms[22m[39m
+       [32m✓[39m does not serve /pub/%25252e%25252e/private/secret.txt (node)[32m 3[2mms[22m[39m
+       [32m✓[39m does not serve /pub/.%252e/private/secret.txt (node)[32m 7[2mms[22m[39m
+       [32m✓[39m does not serve /pub/%252e./private/secret.txt (node)[32m 3[2mms[22m[39m
+       [32m✓[39m does not serve /%252e/private/secret.txt (node)[32m 3[2mms[22m[39m
+       [32m✓[39m falls through instead of 404 when `fallthrough` is set (node)[32m 3[2mms[22m[39m
+       [32m✓[39m still serves a nested escape that is not a whole dot segment (node)[32m 3[2mms[22m[39m
+     [32m✓[39m applies to a standalone handler.fetch()[32m 0[2mms[22m[39m
+     [32m✓[39m applies to mockEvent()[32m 0[2mms[22m[39m
+       [32m✓[39m blocks /a%21b behind a /a!b/** guard (web)[32m 0[2mms[22m[39m
+       [32m✓[39m blocks /a%27b behind a /a'b/** guard (web)[32m 0[2mms[22m[39m
+       [32m✓[39m blocks /a%2Ab behind a /a*b/** guard (web)[32m 1[2mms[22m[39m
+       [32m✓[39m blocks /a%5B0%5D behind a /a[0]/** guard (web)[32m 0[2mms[22m[39m
+       [32m✓[39m blocks /a%7Cb behind a /a|b/** guard (web)[32m 0[2mms[22m[39m
+       [32m✓[39m blocks /%61dmin behind a /%61dmin/** guard (web)[32m 0[2mms[22m[39m
+       [32m✓[39m blocks /a%21b behind a /a!b/** guard (node)[32m 2[2mms[22m[39m
+       [32m✓[39m blocks /a%27b behind a /a'b/** guard (node)[32m 2[2mms[22m[39m
+       [32m✓[39m blocks /a%2Ab behind a /a*b/** guard (node)[32m 2[2mms[22m[39m
+       [32m✓[39m blocks /a%5B0%5D behind a /a[0]/** guard (node)[32m 3[2mms[22m[39m
+       [32m✓[39m blocks /a%7Cb behind a /a|b/** guard (node)[32m 2[2mms[22m[39m
+       [32m✓[39m blocks /%61dmin behind a /%61dmin/** guard (node)[32m 3[2mms[22m[39m
+       [32m✓[39m blocks /%40admin behind a /@admin/** guard (web)[32m 1[2mms[22m[39m
+       [32m✓[39m blocks /users/me%3Adelete behind a /users/me:delete/** guard (web)[32m 0[2mms[22m[39m
+       [32m✓[39m blocks /a%24b behind a /a$b/** guard (web)[32m 0[2mms[22m[39m
+       [32m✓[39m blocks /a%26b behind a /a&b/** guard (web)[32m 0[2mms[22m[39m
+       [32m✓[39m blocks /a%2Bb behind a /a+b/** guard (web)[32m 0[2mms[22m[39m
+       [32m✓[39m blocks /a%2Cb behind a /a,b/** guard (web)[32m 0[2mms[22m[39m
+       [32m✓[39m blocks /a%3Bb behind a /a;b/** guard (web)[32m 0[2mms[22m[39m
+       [32m✓[39m blocks /a%3Db behind a /a=b/** guard (web)[32m 0[2mms[22m[39m
+       [32m✓[39m blocks /%40admin behind a /@admin/** guard (node)[32m 5[2mms[22m[39m
+       [32m✓[39m blocks /users/me%3Adelete behind a /users/me:delete/** guard (node)[32m 5[2mms[22m[39m
+       [32m✓[39m blocks /a%24b behind a /a$b/** guard (node)[32m 6[2mms[22m[39m
+       [32m✓[39m blocks /a%26b behind a /a&b/** guard (node)[32m 5[2mms[22m[39m
+       [32m✓[39m blocks /a%2Bb behind a /a+b/** guard (node)[32m 3[2mms[22m[39m
+       [32m✓[39m blocks /a%2Cb behind a /a,b/** guard (node)[32m 5[2mms[22m[39m
+       [32m✓[39m blocks /a%3Bb behind a /a;b/** guard (node)[32m 4[2mms[22m[39m
+       [32m✓[39m blocks /a%3Db behind a /a=b/** guard (node)[32m 5[2mms[22m[39m
+     [32m✓[39m rejects malformed URLs with 400 by default[32m 0[2mms[22m[39m
+     [32m✓[39m passes malformed URLs through with the raw pathname when enabled[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.statusText "OK\r\nX-Inj: pwned" (web)[32m 1[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse statusText "OK\r\nX-Inj: pwned" (web)[32m 1[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.statusText "OK\nX-Inj: pwned" (web)[32m 1[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse statusText "OK\nX-Inj: pwned" (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.statusText "OK\rX-Inj: pwned" (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse statusText "OK\rX-Inj: pwned" (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.statusText "OK\u0000pwned" (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse statusText "OK\u0000pwned" (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.statusText "Café" (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse statusText "Café" (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.statusText "I am a teapot" (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse statusText "I am a teapot" (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.status 99 (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse status 99 (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.status 600 (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse status 600 (web)[32m 1[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.status 200.5 (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse status 200.5 (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.status null (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse status null (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.status "418" (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse status "418" (web)[32m 1[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.status "abc" (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse status "abc" (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.status 201 (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse status 201 (web)[32m 0[2mms[22m[39m
+       [32m✓[39m keeps an empty statusText empty (web)[32m 0[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.statusText "OK\r\nX-Inj: pwned" (node)[32m 2[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse statusText "OK\r\nX-Inj: pwned" (node)[32m 2[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.statusText "OK\nX-Inj: pwned" (node)[32m 4[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse statusText "OK\nX-Inj: pwned" (node)[32m 3[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.statusText "OK\rX-Inj: pwned" (node)[32m 3[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse statusText "OK\rX-Inj: pwned" (node)[32m 4[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.statusText "OK\u0000pwned" (node)[32m 3[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse statusText "OK\u0000pwned" (node)[32m 3[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.statusText "Café" (node)[32m 4[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse statusText "Café" (node)[32m 3[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.statusText "I am a teapot" (node)[32m 4[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse statusText "I am a teapot" (node)[32m 3[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.status 99 (node)[32m 3[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse status 99 (node)[32m 3[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.status 600 (node)[32m 3[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse status 600 (node)[32m 3[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.status 200.5 (node)[32m 3[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse status 200.5 (node)[32m 4[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.status null (node)[32m 5[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse status null (node)[32m 2[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.status "418" (node)[32m 4[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse status "418" (node)[32m 4[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.status "abc" (node)[32m 3[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse status "abc" (node)[32m 3[2mms[22m[39m
+       [32m✓[39m sanitizes event.res.status 201 (node)[32m 3[2mms[22m[39m
+       [32m✓[39m sanitizes HTTPResponse status 201 (node)[32m 4[2mms[22m[39m
+       [32m✓[39m keeps an empty statusText empty (node)[32m 2[2mms[22m[39m
+       [32m✓[39m serializes a verbatim echoed body as JSON (web)[32m 1[2mms[22m[39m
+       [32m✓[39m serializes a spread echoed body as JSON (web)[32m 0[2mms[22m[39m
+       [32m✓[39m serializes a verbatim echoed body as JSON (node)[32m 8[2mms[22m[39m
+       [32m✓[39m serializes a spread echoed body as JSON (node)[32m 2[2mms[22m[39m
+ [32m✓[39m test/dispose.test.ts [2m([22m[2m24 tests[22m[2m | [22m[33m3 skipped[39m[2m)[22m[33m 456[2mms[22m[39m
+       [33m[2m✓[22m[39m fires when the client disconnects while the handler is still running (node) [33m 303[2mms[22m[39m
+ [32m✓[39m test/tracing.test.ts [2m([22m[2m52 tests[22m[2m)[22m[33m 470[2mms[22m[39m
+ [32m✓[39m test/middleware.test.ts [2m([22m[2m54 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[32m 155[2mms[22m[39m
+ [32m✓[39m test/unit/path.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 156[2mms[22m[39m
+ [32m✓[39m test/unit/package.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 125[2mms[22m[39m
+ [32m✓[39m test/errors.test.ts [2m([22m[2m50 tests[22m[2m)[22m[32m 167[2mms[22m[39m
+ [32m✓[39m test/unit/iron-crypto.test.ts [2m([22m[2m37 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[32m 164[2mms[22m[39m
+ [32m✓[39m test/proxy.test.ts [2m([22m[2m152 tests[22m[2m | [22m[33m25 skipped[39m[2m)[22m[33m 632[2mms[22m[39m
+ [32m✓[39m test/sse.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 173[2mms[22m[39m
+ [32m✓[39m test/validate.test.ts [2m([22m[2m40 tests[22m[2m)[22m[32m 193[2mms[22m[39m
+ [32m✓[39m test/rules/scope.test.ts [2m([22m[2m42 tests[22m[2m)[22m[32m 92[2mms[22m[39m
+ [32m✓[39m test/stream.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 96[2mms[22m[39m
+ [32m✓[39m test/iterable.test.ts [2m([22m[2m38 tests[22m[2m)[22m[32m 152[2mms[22m[39m
+ [32m✓[39m test/query.test.ts [2m([22m[2m38 tests[22m[2m)[22m[32m 128[2mms[22m[39m
+ [32m✓[39m test/mount.test.ts [2m([22m[2m40 tests[22m[2m)[22m[32m 164[2mms[22m[39m
+ [32m✓[39m test/event.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 93[2mms[22m[39m
+ [32m✓[39m test/body-limit.test.ts [2m([22m[2m14 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[32m 94[2mms[22m[39m
+ [32m✓[39m test/bench/bundle.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 113[2mms[22m[39m
+ [32m✓[39m test/integrations.test.ts [2m([22m[2m22 tests[22m[2m | [22m[33m6 skipped[39m[2m)[22m[32m 118[2mms[22m[39m
+ [32m✓[39m test/hooks.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 133[2mms[22m[39m
+ [32m✓[39m test/status.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 146[2mms[22m[39m
+ [32m✓[39m test/lazy.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 74[2mms[22m[39m
+ [32m✓[39m test/unit/route-matcher.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m test/unit/sse.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m test/unit/timing.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m test/rules/encoding.test.ts [2m([22m[2m47 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m test/rules/cache.test.ts [2m([22m[2m44 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+ [32m✓[39m test/rules/rules.test.ts [2m([22m[2m72 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m test/rules/compiler.test.ts [2m([22m[2m79 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m test/happydom.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 132[2mms[22m[39m
+ [32m✓[39m test/rules/match.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m test/rules/premerge.test.ts [2m([22m[2m124 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m test/handler.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m test/unit/query.test.ts [2m([22m[2m83 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m test/rules/middleware.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m test/session.test.ts [2m([22m[2m44 tests[22m[2m)[22m[33m 1475[2mms[22m[39m
+ [32m✓[39m test/rules/merge.test.ts [2m([22m[2m44 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m test/unit/route-normalize.test.ts [2m([22m[2m123 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m test/unit/meta.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/unit/body-limit.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m test/rules/normalize.test.ts [2m([22m[2m61 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m test/ws.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m test/unit/event.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m test/route.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m test/unit/cors.test.ts [2m([22m[2m50 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m test/rules/memoize.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m test/json-rpc-ws.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m test/unit/cookie-perf.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/unit/middleware.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m test/unit/auth.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/unit/iterable.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m test/unit/cookie-validation.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m test/unit/proxy.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [2m[90m↓[39m[22m test/dist.test.ts [2m([22m[2m18 tests[22m[2m | [22m[33m18 skipped[39m[2m)[22m
+ [32m✓[39m test/unit/mime.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/unit/sanitize.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m test/unit/request.test.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m test/unit/h3.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m test/bench/bench.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m test/auth.test.ts [2m([22m[2m48 tests[22m[2m)[22m[33m 1860[2mms[22m[39m
+ [32m✓[39m [44m[1m TS [22m[49m test/rules/compiler.test-d.ts [2m([22m[2m0 test[22m[2m)[22m
+ [32m✓[39m [44m[1m TS [22m[49m test/rules/types.test-d.ts [2m([22m[2m0 test[22m[2m)[22m
+ [32m✓[39m [44m[1m TS [22m[49m test/unit/types.test-d.ts [2m([22m[2m21 tests[22m[2m)[22m
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m70 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (73)[39m
+[2m      Tests [22m [1m[31m27 failed[39m[22m[2m | [22m[1m[32m2706 passed[39m[22m[2m | [22m[33m65 skipped[39m[90m (2798)[39m
+[2mType Errors [22m [2mno errors[22m
+[2m   Start at [22m 11:59:22
+[2m   Duration [22m 2.70s[2m (transform 4.28s, setup 0ms, import 12.25s, tests 11.23s, environment 5ms, typecheck 142ms)[22m
+
+[ELIFECYCLE] Test failed. See above for more details.

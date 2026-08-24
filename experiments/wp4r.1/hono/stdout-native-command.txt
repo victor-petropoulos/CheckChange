@@ -1,0 +1,623 @@
+
+> hono@4.13.4 coverage
+> vitest --run --coverage
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.11 [39m[90m/private/tmp/wp4r1-hono[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+ [32m✓[39m [30m[45m jsx-runtime-default [49m[39m src/jsx/dom/server.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m [30m[45m jsx-runtime-default [49m[39m src/jsx/dom/client.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 77[2mms[22m[39m
+ [32m✓[39m [30m[45m jsx-runtime-default [49m[39m src/jsx/dom/hooks/index.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 79[2mms[22m[39m
+ [32m✓[39m [30m[45m jsx-runtime-default [49m[39m src/jsx/dom/context.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[32m 96[2mms[22m[39m
+ [32m✓[39m [30m[43m jsx-runtime-dom [49m[39m src/jsx/dom/hooks/index.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 90[2mms[22m[39m
+ [32m✓[39m [30m[45m jsx-runtime-default [49m[39m src/jsx/dom/components.test.tsx [2m([22m[2m22 tests[22m[2m)[22m[32m 179[2mms[22m[39m
+ [32m✓[39m [30m[45m jsx-runtime-default [49m[39m src/jsx/dom/css.test.tsx [2m([22m[2m29 tests[22m[2m | [22m[33m3 skipped[39m[2m)[22m[32m 160[2mms[22m[39m
+ [32m✓[39m [30m[43m jsx-runtime-dom [49m[39m src/jsx/dom/components.test.tsx [2m([22m[2m22 tests[22m[2m)[22m[32m 194[2mms[22m[39m
+ [32m✓[39m [30m[45m jsx-runtime-default [49m[39m src/jsx/hooks/dom.test.tsx [2m([22m[2m27 tests[22m[2m)[22m[33m 305[2mms[22m[39m
+ [32m✓[39m [30m[43m jsx-runtime-dom [49m[39m src/jsx/hooks/dom.test.tsx [2m([22m[2m27 tests[22m[2m)[22m[33m 327[2mms[22m[39m
+ [32m✓[39m [30m[43m jsx-runtime-dom [49m[39m src/jsx/dom/server.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m [30m[42m fastly [49m[39m index.test.ts [2m([22m[2m6 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[45m jsx-runtime-default [49m[39m src/jsx/dom/intrinsic-element/components.test.tsx [2m([22m[2m60 tests[22m[2m)[22m[33m 426[2mms[22m[39m
+ [32m✓[39m [30m[43m jsx-runtime-dom [49m[39m src/jsx/dom/intrinsic-element/components.test.tsx [2m([22m[2m60 tests[22m[2m)[22m[33m 409[2mms[22m[39m
+ [32m✓[39m [30m[43m jsx-runtime-dom [49m[39m src/jsx/dom/client.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m [30m[43m jsx-runtime-dom [49m[39m src/jsx/dom/context.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[32m 82[2mms[22m[39m
+ [32m✓[39m [30m[43m jsx-runtime-dom [49m[39m src/jsx/dom/css.test.tsx [2m([22m[2m29 tests[22m[2m | [22m[33m3 skipped[39m[2m)[22m[32m 117[2mms[22m[39m
+ [32m✓[39m [30m[43m lambda [49m[39m stream.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 17[2mms[22m[39m
+[90mstdout[2m | index.test.ts[2m > [22m[2mstreamHandle function[2m > [22m[2mShould streamHandle a GET request and return a 200 response (LambdaFunctionUrlEvent)
+[22m[39mWriting chunk: Internal Server Error
+Finalizing stream.
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mstreamHandle function[2m > [22m[2mShould streamHandle a GET request and return a 200 response (LambdaFunctionUrlEvent)
+[22m[39mStream has finished
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mstreamHandle function[2m > [22m[2mShould handle a GET request for an SSE stream and return the correct chunks
+[22m[39mWriting chunk: Internal Server Error
+Finalizing stream.
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mstreamHandle function[2m > [22m[2mShould handle a GET request for an SSE stream and return the correct chunks
+[22m[39mStream has finished
+
+ [32m✓[39m [30m[43m lambda [49m[39m index.test.ts [2m([22m[2m34 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+ [32m✓[39m [30m[42m lambda-edge [49m[39m index.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m [30m[45m jsx-runtime-default [49m[39m src/jsx/dom/index.test.tsx [2m([22m[2m282 tests[22m[2m)[22m[33m 1026[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/context-isolation.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 442[2mms[22m[39m
+[90mstdout[2m | src/jsx/streaming.test.tsx[2m > [22m[2mStreaming[2m > [22m[2mreject()
+[22m[39m[90mundefined[39m
+
+ [32m✓[39m [30m[43m jsx-runtime-dom [49m[39m src/jsx/dom/index.test.tsx [2m([22m[2m282 tests[22m[2m)[22m[33m 1044[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/helper/streaming/sse.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[32m 168[2mms[22m[39m
+[90mstdout[2m | src/jsx/streaming.test.tsx[2m > [22m[2mStreaming[2m > [22m[2mpops buildDataStack when a deferred re-render rejects
+[22m[39mError: boom
+    at Content [90m(/private/tmp/wp4r1-hono/[39msrc/jsx/streaming.test.tsx:1078:13[90m)[39m
+    at JSXFunctionNode.toStringToBuffer [90m(/private/tmp/wp4r1-hono/[39msrc/jsx/base.ts:293:40[90m)[39m
+    at render [90m(/private/tmp/wp4r1-hono/[39msrc/jsx/base.ts:199:12[90m)[39m
+    at runWithRenderContext [90m(/private/tmp/wp4r1-hono/[39msrc/jsx/context.ts:164:12[90m)[39m
+    at JSXFunctionNode.toString [90m(/private/tmp/wp4r1-hono/[39msrc/jsx/base.ts:206:12[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/jsx/components.ts:18:65
+    at Array.map (<anonymous>)
+    at childrenToString [90m(/private/tmp/wp4r1-hono/[39msrc/jsx/components.ts:18:8[90m)[39m
+    at [90m/private/tmp/wp4r1-hono/[39msrc/jsx/streaming.ts:76:20
+    at [90m/private/tmp/wp4r1-hono/[39msrc/jsx/context.ts:137:22
+
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/hooks/dom.test.tsx [2m([22m[2m27 tests[22m[2m)[22m[32m 249[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/streaming.test.tsx [2m([22m[2m33 tests[22m[2m)[22m[33m 415[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/dom/components.test.tsx [2m([22m[2m22 tests[22m[2m)[22m[32m 145[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/concurrent.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 158[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/dom/intrinsic-element/components.test.tsx [2m([22m[2m60 tests[22m[2m)[22m[33m 321[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/components.test.tsx [2m([22m[2m34 tests[22m[2m)[22m[32m 248[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/index.test.tsx [2m([22m[2m266 tests[22m[2m)[22m[32m 130[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/compress/index.test.ts [2m([22m[2m45 tests[22m[2m)[22m[33m 687[2mms[22m[39m
+       [33m[2m✓[22m[39m should compress streaming responses written in multiple chunks [33m 583[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/jwk/index.test.ts [2m([22m[2m57 tests[22m[2m)[22m[32m 122[2mms[22m[39m
+[90mstdout[2m | src/helper/ssg/ssg.test.tsx[2m > [22m[2mtoSSG function[2m > [22m[2mshould execute additional processing using afterGenerateHook
+[22m[39mstatic/index.html
+static/about.html
+static/about/some.txt
+static/bravo.html
+static/Charlie.html
+static/post/1.html
+static/post/2.html
+static/user/1.html
+static/user/2.html
+static/user/3.html
+
+[90mstdout[2m | src/hono.test.ts[2m > [22m[2mMiddleware[2m > [22m[2mBasic[2m > [22m[2mlogging and custom header
+[22m[39mGET : http://localhost/hello
+
+[90mstdout[2m | src/hono.test.ts[2m > [22m[2mMiddleware[2m > [22m[2mBasic[2m > [22m[2mlogging and custom header with named param
+[22m[39mGET : http://localhost/hello/message
+
+[90mstdout[2m | src/hono.test.ts[2m > [22m[2mMiddleware[2m > [22m[2mBasic[2m > [22m[2mshould return correct the content-type header
+[22m[39mGET : http://localhost/json
+
+[90mstdout[2m | src/hono.test.ts[2m > [22m[2mMiddleware[2m > [22m[2mBasic[2m > [22m[2mnot found
+[22m[39mGET : http://localhost/foo
+
+[90mstdout[2m | src/hono.test.ts[2m > [22m[2mMiddleware[2m > [22m[2mBasic[2m > [22m[2minternal server error
+[22m[39mGET : http://localhost/error
+
+[90mstdout[2m | src/hono.test.ts[2m > [22m[2mMiddleware[2m > [22m[2mBasic[2m > [22m[2minternal server error
+[22m[39mInternal Server Error
+
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/timing/index.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 124[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/csrf/index.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 118[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/dom/css.test.tsx [2m([22m[2m29 tests[22m[2m | [22m[33m3 skipped[39m[2m)[22m[32m 115[2mms[22m[39m
+[90mstdout[2m | src/helper/ssg/ssg.test.tsx[2m > [22m[2mtoSSG function[2m > [22m[2mshould handle asynchronous afterGenerateHook correctly
+[22m[39mGenerated 10 files.
+
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/bearer-auth/index.test.ts [2m([22m[2m50 tests[22m[2m)[22m[32m 118[2mms[22m[39m
+[90mstdout[2m | src/helper/ssg/ssg.test.tsx[2m > [22m[2mCombined Generate hooks - AfterGenerateHook[2m > [22m[2mshould execute combined AfterGenerateHooks affecting the result
+[22m[39mGeneration completed with status: [33mtrue[39m
+
+ [32m✓[39m [30m[45m main [49m[39m src/hono.test.ts [2m([22m[2m211 tests[22m[2m)[22m[32m 108[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/helper/ssg/ssg.test.tsx [2m([22m[2m44 tests[22m[2m)[22m[32m 139[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/accept.test.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 133[2mms[22m[39m
+[90mstdout[2m | src/middleware/cache/index.test.ts[2m > [22m[2mCache Middleware[2m > [22m[2mShould not be enabled if caches is not defined
+[22m[39mCache Middleware is not enabled because caches is not defined.
+
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/etag/index.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 82[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/dom/context.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[32m 117[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/cache/index.test.ts [2m([22m[2m151 tests[22m[2m)[22m[32m 97[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/jwt/jwt.test.ts [2m([22m[2m88 tests[22m[2m)[22m[33m 1186[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/dom/hooks/index.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 87[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/dom/index.test.tsx [2m([22m[2m282 tests[22m[2m)[22m[33m 1031[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/cookie.test.ts [2m([22m[2m47 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/color.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/jwt/index.test.ts [2m([22m[2m44 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/basic-auth/index.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/url.test.ts [2m([22m[2m34 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/validator/validator.test.ts [2m([22m[2m56 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+[90mstdout[2m | src/middleware/language/index.test.ts[2m > [22m[2mlanguageDetector[2m > [22m[2mDebug Mode[2m > [22m[2mshould log debug information when enabled
+[22m[39mLanguage detected from querystring: fr
+
+[90mstdout[2m | src/middleware/language/index.test.ts[2m > [22m[2mlanguageDetector[2m > [22m[2mDebug Mode[2m > [22m[2mshould handle cookie cache errors in debug mode
+[22m[39mLanguage detected from querystring: fr
+
+ [32m✓[39m [30m[45m main [49m[39m src/helper/cookie/index.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/language/index.test.ts [2m([22m[2m34 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/client/utils.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 58[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/jsx-renderer/index.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/body.test.ts [2m([22m[2m39 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/client/client.test.ts [2m([22m[2m118 tests[22m[2m)[22m[32m 91[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/dom/client.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 105[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/lambda-edge/handler.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/helper/proxy/index.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/aws-lambda/handler.test.ts [2m([22m[2m38 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/helper/accepts/accepts.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/cloudflare-workers/websocket.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/aws-lambda/conninfo.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/method-not-allowed/index.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/secure-headers/index.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/serve-static/index.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/dom/server.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/cloudflare-workers/conninfo.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/types.test.ts [2m([22m[2m120 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/helper/css/index.test.tsx [2m([22m[2m54 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/helper/factory/index.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+[90mstdout[2m | src/router/reg-exp-router/prepared-router.test.ts[2m > [22m[2mPreparedRegExpRouter[2m > [22m[2mCommon[2m > [22m[2mComplex[2m > [22m[2mParameter with {.*} regexp
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/reg-exp-router/prepared-router.test.ts[2m > [22m[2mPreparedRegExpRouter[2m > [22m[2mCommon[2m > [22m[2mDuplicate param name[2m > [22m[2mparent
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/reg-exp-router/prepared-router.test.ts[2m > [22m[2mPreparedRegExpRouter[2m > [22m[2mCommon[2m > [22m[2mDuplicate param name[2m > [22m[2mchild
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/reg-exp-router/prepared-router.test.ts[2m > [22m[2mPreparedRegExpRouter[2m > [22m[2mCommon[2m > [22m[2mIncluding slashes[2m > [22m[2mGET /js/main.js
+[22m[39mSkip: This route can not be added with `:label` to PreparedRegExpRouter. This is ambiguous
+
+[90mstdout[2m | src/router/reg-exp-router/prepared-router.test.ts[2m > [22m[2mPreparedRegExpRouter[2m > [22m[2mCommon[2m > [22m[2mCapture complex multiple directories[2m > [22m[2mGET /part1/middle-b/latest
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/reg-exp-router/prepared-router.test.ts[2m > [22m[2mPreparedRegExpRouter[2m > [22m[2mCommon[2m > [22m[2mCapture complex multiple directories[2m > [22m[2mGET /part1/middle-b/end-c/latest
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/reg-exp-router/prepared-router.test.ts[2m > [22m[2mPreparedRegExpRouter[2m > [22m[2mCommon[2m > [22m[2mCapture Group[2m > [22m[2mComplex capturing group[2m > [22m[2mGET request
+[22m[39mSkip: UnsupportedPath
+
+ [32m✓[39m [30m[45m main [49m[39m src/router/reg-exp-router/prepared-router.test.ts [2m([22m[2m105 tests[22m[2m | [22m[33m7 skipped[39m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/helper/testing/index.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+[90mstdout[2m | src/router/pattern-router/router.test.ts[2m > [22m[2mPattern[2m > [22m[2mCommon[2m > [22m[2mDuplicate param name[2m > [22m[2mself
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/pattern-router/router.test.ts[2m > [22m[2mPattern[2m > [22m[2mCommon[2m > [22m[2mTrailing slash[2m > [22m[2mGET /book/
+[22m[39mSkip: PatternRouter allows trailing slashes
+
+ [32m✓[39m [30m[45m main [49m[39m src/router/pattern-router/router.test.ts [2m([22m[2m100 tests[22m[2m | [22m[33m2 skipped[39m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/deno/websocket.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/buffer.test.ts [2m([22m[2m12 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/cloudflare-pages/handler.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/netlify/conninfo.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/method-override/index.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/cors/index.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/pretty-json/index.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/helper/websocket/index.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/client/types.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/context-storage/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/request-id/index.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/combine/index.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/cloudflare-workers/serve-static.test.ts [2m([22m[2m16 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/lambda-edge/conninfo.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 16[2mms[22m[39m
+[90mstdout[2m | src/router/reg-exp-router/router.test.ts[2m > [22m[2mRegExpRouter[2m > [22m[2mCommon[2m > [22m[2mComplex[2m > [22m[2mParameter with {.*} regexp
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/reg-exp-router/router.test.ts[2m > [22m[2mRegExpRouter[2m > [22m[2mCommon[2m > [22m[2mDuplicate param name[2m > [22m[2mparent
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/reg-exp-router/router.test.ts[2m > [22m[2mRegExpRouter[2m > [22m[2mCommon[2m > [22m[2mDuplicate param name[2m > [22m[2mchild
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/reg-exp-router/router.test.ts[2m > [22m[2mRegExpRouter[2m > [22m[2mCommon[2m > [22m[2mIncluding slashes[2m > [22m[2mGET /js/main.js
+[22m[39mSkip: This route can not be added with `:label` to RegExpRouter. This is ambiguous
+
+[90mstdout[2m | src/router/reg-exp-router/router.test.ts[2m > [22m[2mRegExpRouter[2m > [22m[2mCommon[2m > [22m[2mCapture complex multiple directories[2m > [22m[2mGET /part1/middle-b/latest
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/reg-exp-router/router.test.ts[2m > [22m[2mRegExpRouter[2m > [22m[2mCommon[2m > [22m[2mCapture complex multiple directories[2m > [22m[2mGET /part1/middle-b/end-c/latest
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/reg-exp-router/router.test.ts[2m > [22m[2mRegExpRouter[2m > [22m[2mCommon[2m > [22m[2mCapture Group[2m > [22m[2mComplex capturing group[2m > [22m[2mGET request
+[22m[39mSkip: UnsupportedPath
+
+ [32m✓[39m [30m[45m main [49m[39m src/router/reg-exp-router/router.test.ts [2m([22m[2m120 tests[22m[2m | [22m[33m7 skipped[39m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/powered-by/index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/vercel/handler.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/request.test.ts [2m([22m[2m44 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/trailing-slash/index.test.ts [2m([22m[2m36 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/body-limit/index.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/router/smart-router/router.test.ts [2m([22m[2m98 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/ip-restriction/index.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/bun/conninfo.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/logger/index.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 2033[2mms[22m[39m
+     [33m[2m✓[22m[39m Time in seconds [33m 1001[2mms[22m[39m
+     [33m[2m✓[22m[39m Time in seconds [33m 1003[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/basic-auth.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/jsx-runtime.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/stream.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/bun/websocket.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/utils.test.ts [2m([22m[2m160 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/http-exception.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/bun/server.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/cloudflare-pages/conninfo.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/deno/conninfo.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/helper/route/index.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/context.test.ts [2m([22m[2m59 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/service-worker/handler.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/helper/ssg/plugins.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/etag/digest.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/router/trie-router/router.test.ts [2m([22m[2m98 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/compose.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/vercel/conninfo.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/helper/streaming/stream.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/router/trie-router/node.test.ts [2m([22m[2m88 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+[90mstdout[2m | src/router/linear-router/router.test.ts[2m > [22m[2mLinearRouter[2m > [22m[2mCommon[2m > [22m[2mComplex[2m > [22m[2mParameter with {.*} regexp
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/linear-router/router.test.ts[2m > [22m[2mLinearRouter[2m > [22m[2mCommon[2m > [22m[2mMulti match[2m > [22m[2m`params` per a handler[2m > [22m[2mGET /entry/123/show
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/linear-router/router.test.ts[2m > [22m[2mLinearRouter[2m > [22m[2mCommon[2m > [22m[2mTrailing wildcard after a label[2m > [22m[2mGET /abc
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/linear-router/router.test.ts[2m > [22m[2mLinearRouter[2m > [22m[2mCommon[2m > [22m[2mTrailing wildcard after a label[2m > [22m[2mGET /abc/sub
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/linear-router/router.test.ts[2m > [22m[2mLinearRouter[2m > [22m[2mCommon[2m > [22m[2mTrailing wildcard after a pattern label[2m > [22m[2mGET /abc
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/linear-router/router.test.ts[2m > [22m[2mLinearRouter[2m > [22m[2mCommon[2m > [22m[2mTrailing wildcard after a pattern label[2m > [22m[2mGET /reverse/abc in reverse registration order
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/linear-router/router.test.ts[2m > [22m[2mLinearRouter[2m > [22m[2mCommon[2m > [22m[2mTrailing wildcard after a pattern label[2m > [22m[2mPOST /all/abc with ALL middleware
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/linear-router/router.test.ts[2m > [22m[2mLinearRouter[2m > [22m[2mCommon[2m > [22m[2mTrailing wildcard after a pattern label[2m > [22m[2mGET /posts/2024/comments with nested braces
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/linear-router/router.test.ts[2m > [22m[2mLinearRouter[2m > [22m[2mCommon[2m > [22m[2mTrailing wildcard after a pattern label[2m > [22m[2mGET /files/foo/detail with regexp meta characters
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/linear-router/router.test.ts[2m > [22m[2mLinearRouter[2m > [22m[2mCommon[2m > [22m[2mTrailing wildcard after a pattern label[2m > [22m[2mGET /user/123/profile with the default pattern
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/linear-router/router.test.ts[2m > [22m[2mLinearRouter[2m > [22m[2mCommon[2m > [22m[2mTrailing wildcard after a pattern label[2m > [22m[2mGET /user/123/profile with the default pattern in reverse registration order
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/linear-router/router.test.ts[2m > [22m[2mLinearRouter[2m > [22m[2mCommon[2m > [22m[2mCapture regex pattern has trailing wildcard[2m > [22m[2mGET /foo/bar/file.html
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/linear-router/router.test.ts[2m > [22m[2mLinearRouter[2m > [22m[2mCommon[2m > [22m[2mCapture regex param with trailing wildcard on empty remainder[2m > [22m[2mGET /123
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/linear-router/router.test.ts[2m > [22m[2mLinearRouter[2m > [22m[2mCommon[2m > [22m[2mCapture regex param with trailing wildcard and sibling route[2m > [22m[2mGET /regex-abc/123/ghi
+[22m[39mSkip: UnsupportedPath
+
+[90mstdout[2m | src/router/linear-router/router.test.ts[2m > [22m[2mLinearRouter[2m > [22m[2mCommon[2m > [22m[2mTrailing slash[2m > [22m[2mGET /book/
+[22m[39mSkip: LinearRouter allows trailing slashes
+
+ [32m✓[39m [30m[45m main [49m[39m src/router/linear-router/router.test.ts [2m([22m[2m101 tests[22m[2m | [22m[33m15 skipped[39m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m build/remove-private-fields.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/jwt/jwa.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/crypto.test.ts [2m([22m[2m5 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/filepath.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/intrinsic-element/components.test.tsx [2m([22m[2m40 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/helper/streaming/text.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/hooks/string.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/types.test.ts [2m([22m[2m39 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/encode.test.ts [2m([22m[2m44 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/ipaddr.test.ts [2m([22m[2m41 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/children.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/helper/html/index.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/validator/utils.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/mime.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/helper/ssg/utils.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/jsx/base.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/helper/dev/index.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m build/validate-exports.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/serve-static/path.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/preset/quick.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/helper/adapter/index.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/utils/html.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/preset/tiny.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/adapter/cloudflare-workers/utils.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[43m node [49m[39m index.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 76[2mms[22m[39m
+[90mstdout[2m | index.test.ts[2m > [22m[2mworkerd
+[22m[39mYour Worker has access to the following bindings:
+Binding                Resource                  Mode
+env.NAME ("Hono")      Environment Variable      local
+
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mworkerd
+[22m[39m⎔ Starting local server...
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mworkerd
+[22m[39m[wrangler:info] Ready on http://127.0.0.1:60196
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mworkerd[2m > [22m[2mShould return 200 response with the runtime key
+[22m[39m[wrangler:info] GET / 200 OK (13ms)
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mworkerd[2m > [22m[2mShould return 200 response with the environment variable
+[22m[39m[wrangler:info] GET /env 200 OK (1ms)
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mworkerd[2m > [22m[2mShould return 200 response with the true message
+[22m[39m[wrangler:info] GET /color 200 OK (2ms)
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mworkerd
+[22m[39m⎔ Shutting down local server...
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mworkerd with WebSocket[2m > [22m[2mShould handle the WebSocket connection correctly
+[22m[39m⎔ Starting local server...
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mworkerd with WebSocket[2m > [22m[2mShould handle the WebSocket connection correctly
+[22m[39m[wrangler:info] Ready on http://127.0.0.1:60222
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mworkerd with WebSocket[2m > [22m[2mShould handle the WebSocket connection correctly
+[22m[39m[wrangler:info] GET /ws 101 Switching Protocols (27ms)
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mworkerd with WebSocket[2m > [22m[2mShould handle the WebSocket connection correctly
+[22m[39m⎔ Shutting down local server...
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mworkerd with NO_COLOR
+[22m[39mYour Worker has access to the following bindings:
+Binding                  Resource                  Mode
+env.NO_COLOR (true)      Environment Variable      local
+
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mworkerd with NO_COLOR
+[22m[39m⎔ Starting local server...
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mworkerd with NO_COLOR[2m > [22m[2mShould return 200 response with the false message
+[22m[39m[wrangler:info] Ready on http://127.0.0.1:60242
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mworkerd with NO_COLOR[2m > [22m[2mShould return 200 response with the false message
+[22m[39m[wrangler:info] GET /color 200 OK (23ms)
+
+[90mstdout[2m | index.test.ts[2m > [22m[2mworkerd with NO_COLOR
+[22m[39m⎔ Shutting down local server...
+
+ [32m✓[39m [30m[45m workerd [49m[39m index.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 506[2mms[22m[39m
+ [32m✓[39m [30m[45m main [49m[39m src/middleware/timeout/index.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 4235[2mms[22m[39m
+     [33m[2m✓[22m[39m Should trigger default timeout exception [33m 1026[2mms[22m[39m
+     [33m[2m✓[22m[39m Should apply custom exception with function [33m 1103[2mms[22m[39m
+     [33m[2m✓[22m[39m Error timeout with custom status code and message [33m 1201[2mms[22m[39m
+     [33m[2m✓[22m[39m No Timeout should pass [33m 902[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m147 passed[39m[22m[90m (147)[39m
+[2m      Tests [22m [1m[32m4934 passed[39m[22m[2m | [22m[33m44 skipped[39m[90m (4978)[39m
+[2m   Start at [22m 12:12:32
+[2m   Duration [22m 6.35s[2m (transform 9.21s, setup 227ms, import 22.21s, tests 20.58s, environment 11ms)[22m
+
+[34m % [39m[2mCoverage report from [22m[33mv8[39m
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   97.09 |    93.63 |   96.63 |   97.09 |                   
+ build             |   68.29 |    77.77 |   72.72 |   68.29 |                   
+  ...ate-fields.ts |   47.82 |     62.5 |   57.14 |   47.82 | 6-24,40           
+  ...te-exports.ts |   94.44 |       90 |     100 |   94.44 | 24                
+ src               |     100 |    99.43 |     100 |     100 |                   
+  compose.ts       |     100 |      100 |     100 |     100 |                   
+  context.ts       |     100 |      100 |     100 |     100 |                   
+  hono-base.ts     |     100 |      100 |     100 |     100 |                   
+  hono.ts          |     100 |      100 |     100 |     100 |                   
+  ...-exception.ts |     100 |      100 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  request.ts       |     100 |    96.42 |     100 |     100 | 115               
+  router.ts        |     100 |      100 |     100 |     100 |                   
+ ...ter/aws-lambda |      96 |    81.88 |   93.22 |   95.93 |                   
+  conninfo.ts      |     100 |      100 |     100 |     100 |                   
+  handler.ts       |   95.76 |    80.34 |    93.1 |   95.69 | ...93-394,562-568 
+ src/adapter/bun   |   97.29 |    84.61 |     100 |   97.22 |                   
+  conninfo.ts      |      90 |       90 |     100 |      90 | 20                
+  server.ts        |     100 |      100 |     100 |     100 |                   
+  websocket.ts     |     100 |    78.57 |     100 |     100 | 79-97             
+ ...oudflare-pages |     100 |      100 |     100 |     100 |                   
+  conninfo.ts      |     100 |      100 |     100 |     100 |                   
+  handler.ts       |     100 |      100 |     100 |     100 |                   
+ ...dflare-workers |      92 |    80.64 |   92.85 |    91.3 |                   
+  conninfo.ts      |     100 |      100 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  ...tic-module.ts |      50 |      100 |       0 |      50 | 9                 
+  serve-static.ts  |     100 |       60 |     100 |     100 | 30-32             
+  utils.ts         |   83.33 |    81.25 |     100 |   83.33 | 27,34,47          
+  websocket.ts     |     100 |       90 |     100 |     100 | 30                
+ src/adapter/deno  |   72.72 |    83.33 |      40 |   83.33 |                   
+  conninfo.ts      |     100 |      100 |     100 |     100 |                   
+  websocket.ts     |   68.42 |    83.33 |   33.33 |      80 | 21,27-30          
+ ...er/lambda-edge |     100 |    94.59 |     100 |     100 |                   
+  conninfo.ts      |     100 |      100 |     100 |     100 |                   
+  handler.ts       |     100 |    94.59 |     100 |     100 | 152,170           
+ ...dapter/netlify |     100 |      100 |     100 |     100 |                   
+  conninfo.ts      |     100 |      100 |     100 |     100 |                   
+ ...service-worker |     100 |      100 |     100 |     100 |                   
+  handler.ts       |     100 |      100 |     100 |     100 |                   
+ ...adapter/vercel |     100 |      100 |     100 |     100 |                   
+  conninfo.ts      |     100 |      100 |     100 |     100 |                   
+  handler.ts       |     100 |      100 |     100 |     100 |                   
+ src/client        |   99.45 |    95.27 |   95.83 |   99.44 |                   
+  client.ts        |   99.14 |    93.47 |   91.66 |   99.13 | 246               
+  ...ult-please.ts |     100 |      100 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  utils.ts         |     100 |      100 |     100 |     100 |                   
+ ...helper/accepts |     100 |      100 |     100 |     100 |                   
+  accepts.ts       |     100 |      100 |     100 |     100 |                   
+ ...helper/adapter |   67.74 |    66.66 |      40 |   67.74 |                   
+  index.ts         |   67.74 |    66.66 |      40 |   67.74 | 26,28-37,69,78-83 
+ src/helper/cookie |   96.42 |    92.85 |     100 |   96.42 |                   
+  index.ts         |   96.42 |    92.85 |     100 |   96.42 | 63,71             
+ src/helper/css    |      99 |    97.11 |     100 |   98.94 |                   
+  common.ts        |   99.19 |    97.33 |     100 |   99.13 | 161               
+  index.ts         |   98.68 |    96.55 |     100 |   98.66 | 121               
+ src/helper/dev    |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...helper/factory |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ src/helper/html   |   96.55 |       92 |     100 |      96 |                   
+  index.ts         |   96.55 |       92 |     100 |      96 | 46                
+ src/helper/proxy  |     100 |    96.42 |     100 |     100 |                   
+  index.ts         |     100 |    96.42 |     100 |     100 | 64                
+ src/helper/route  |     100 |    95.45 |     100 |     100 |                   
+  index.ts         |     100 |    95.45 |     100 |     100 | 128               
+ src/helper/ssg    |   97.18 |     88.8 |     100 |   97.14 |                   
+  middleware.ts    |      92 |     87.5 |     100 |    91.3 | 20,69             
+  plugins.ts       |     100 |      100 |     100 |     100 |                   
+  ssg.ts           |   96.98 |       86 |     100 |   96.96 | ...22,143,166,291 
+  utils.ts         |     100 |      100 |     100 |     100 |                   
+ ...lper/streaming |   96.87 |    82.85 |     100 |   96.82 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  sse.ts           |   96.96 |    88.88 |     100 |   96.96 | 64                
+  stream.ts        |   94.44 |       80 |     100 |   94.44 | 37                
+  text.ts          |     100 |      100 |     100 |     100 |                   
+  utils.ts         |     100 |    71.42 |     100 |     100 | 7                 
+ ...helper/testing |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...lper/websocket |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ src/jsx           |   96.05 |    92.85 |   98.19 |   96.23 |                   
+  base.ts          |   97.19 |    92.05 |     100 |   97.09 | ...16,378,384,394 
+  children.ts      |     100 |      100 |     100 |     100 |                   
+  components.ts    |   95.45 |    89.23 |   96.42 |   96.07 | 23-25,63          
+  constants.ts     |     100 |      100 |     100 |     100 |                   
+  context.ts       |   98.09 |       95 |     100 |   98.03 | 86-87             
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  ...ev-runtime.ts |     100 |      100 |     100 |     100 |                   
+  jsx-runtime.ts   |      72 |    79.16 |   66.66 |      75 | 35-36,38,40,44-45 
+  streaming.ts     |   98.73 |    94.59 |     100 |   98.71 | 81                
+  utils.ts         |   95.65 |    97.19 |     100 |   95.49 | ...09-110,182-183 
+ src/jsx/dom       |   95.92 |    94.58 |   94.56 |   95.75 |                   
+  client.ts        |   94.73 |     87.5 |     100 |   94.73 | 34                
+  components.ts    |   93.75 |    83.33 |     100 |   93.75 | 17                
+  context.ts       |   95.65 |       75 |     100 |   95.65 | 11                
+  css.ts           |   78.48 |    77.77 |   68.75 |   77.92 | ...02-204,208,214 
+  index.ts         |     100 |     90.9 |     100 |     100 | 70                
+  ...ev-runtime.ts |     100 |      100 |     100 |     100 |                   
+  jsx-runtime.ts   |       0 |        0 |       0 |       0 |                   
+  render.ts        |   99.03 |    96.76 |     100 |   98.98 | 132,202,266-267   
+  server.ts        |     100 |      100 |     100 |     100 |                   
+  utils.ts         |     100 |      100 |     100 |     100 |                   
+ src/jsx/dom/hooks |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...rinsic-element |   98.42 |    92.12 |   96.87 |   98.38 |                   
+  components.ts    |   98.42 |    92.12 |   96.87 |   98.38 | 173-174,339       
+ src/jsx/hooks     |   96.91 |    90.24 |   92.98 |   96.77 |                   
+  index.ts         |   96.91 |    90.24 |   92.98 |   96.77 | ...67,302,340,346 
+ ...rinsic-element |   99.09 |    93.25 |     100 |   99.06 |                   
+  common.ts        |     100 |      100 |     100 |     100 |                   
+  components.ts    |      99 |    92.94 |     100 |   98.97 | 30                
+ ...are/basic-auth |   96.87 |    93.33 |     100 |   96.87 |                   
+  index.ts         |   96.87 |    93.33 |     100 |   96.87 | 88                
+ ...re/bearer-auth |     100 |    96.61 |     100 |     100 |                   
+  index.ts         |     100 |    96.61 |     100 |     100 | 110,199           
+ ...are/body-limit |     100 |    93.75 |     100 |     100 |                   
+  index.ts         |     100 |    93.75 |     100 |     100 | 72                
+ ...ddleware/cache |     100 |    97.61 |   93.33 |     100 |                   
+  index.ts         |     100 |    97.61 |   93.33 |     100 | 122,148           
+ ...leware/combine |     100 |    94.44 |     100 |     100 |                   
+  index.ts         |     100 |    94.44 |     100 |     100 | 157               
+ ...eware/compress |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...ontext-storage |    90.9 |       50 |     100 |    90.9 |                   
+  index.ts         |    90.9 |       50 |     100 |    90.9 | 56                
+ ...iddleware/cors |   96.49 |    97.72 |   91.66 |   98.03 |                   
+  index.ts         |   96.49 |    97.72 |   91.66 |   98.03 | 96                
+ ...iddleware/csrf |   97.67 |      100 |    92.3 |     100 |                   
+  index.ts         |   97.67 |      100 |    92.3 |     100 |                   
+ ...iddleware/etag |   98.87 |    95.08 |     100 |   98.86 |                   
+  digest.ts        |   98.14 |    88.46 |     100 |   98.14 | 23                
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...ip-restriction |   95.28 |    92.68 |     100 |   95.23 |                   
+  index.ts         |   95.28 |    92.68 |     100 |   95.23 | 62,94,154,242,274 
+ ...e/jsx-renderer |   96.66 |    94.44 |     100 |   96.66 |                   
+  index.ts         |   96.66 |    94.44 |     100 |   96.66 | 160               
+ ...middleware/jwk |     100 |      100 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  jwk.ts           |     100 |      100 |     100 |     100 |                   
+ ...middleware/jwt |   95.45 |    94.44 |     100 |   95.45 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  jwt.ts           |   95.45 |    94.44 |     100 |   95.45 | 67,75             
+ ...eware/language |     100 |      100 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  language.ts      |     100 |      100 |     100 |     100 |                   
+ ...dleware/logger |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...od-not-allowed |     100 |    92.85 |     100 |     100 |                   
+  index.ts         |     100 |    92.85 |     100 |     100 | 107,116           
+ ...ethod-override |     100 |    96.15 |     100 |     100 |                   
+  index.ts         |     100 |    96.15 |     100 |     100 | 121               
+ ...are/powered-by |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...re/pretty-json |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...are/request-id |     100 |      100 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  request-id.ts    |     100 |      100 |     100 |     100 |                   
+ ...secure-headers |   98.85 |    96.42 |     100 |    98.8 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  ...re-headers.ts |   98.85 |    96.42 |     100 |    98.8 | 317               
+ ...e/serve-static |   98.24 |    95.55 |     100 |   98.21 |                   
+  index.ts         |   97.77 |    94.44 |     100 |   97.77 | 57                
+  path.ts          |     100 |      100 |     100 |     100 |                   
+ ...leware/timeout |     100 |       80 |     100 |     100 |                   
+  index.ts         |     100 |       80 |     100 |     100 | 53                
+ ...dleware/timing |     100 |      100 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  timing.ts        |     100 |      100 |     100 |     100 |                   
+ ...trailing-slash |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ src/preset        |     100 |      100 |     100 |     100 |                   
+  quick.ts         |     100 |      100 |     100 |     100 |                   
+  tiny.ts          |     100 |      100 |     100 |     100 |                   
+ src/request       |     100 |      100 |     100 |     100 |                   
+  constants.ts     |     100 |      100 |     100 |     100 |                   
+ src/router        |     100 |      100 |     100 |     100 |                   
+  utils.ts         |     100 |      100 |     100 |     100 |                   
+ .../linear-router |   97.91 |    91.95 |     100 |   97.64 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  router.ts        |   97.91 |    91.95 |     100 |   97.64 | 66,71             
+ ...pattern-router |     100 |      100 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  router.ts        |     100 |      100 |     100 |     100 |                   
+ ...reg-exp-router |   96.83 |    90.37 |     100 |   96.65 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  matcher.ts       |     100 |      100 |     100 |     100 |                   
+  node.ts          |    89.7 |    85.39 |     100 |   89.39 | 33-44             
+  ...red-router.ts |     100 |    97.61 |     100 |     100 | 41                
+  router.ts        |   98.64 |    94.44 |     100 |   98.57 | 73                
+  trie.ts          |   97.87 |    85.71 |     100 |   97.72 | 79                
+ ...r/smart-router |   88.57 |    66.66 |     100 |   87.87 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  router.ts        |   88.57 |    66.66 |     100 |   87.87 | 23,43,54,65       
+ ...er/trie-router |     100 |    98.66 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  node.ts          |     100 |    98.63 |     100 |     100 | 148               
+  router.ts        |     100 |      100 |     100 |     100 |                   
+ src/utils         |   96.45 |    93.21 |   98.36 |   96.31 |                   
+  accept.ts        |   97.31 |    96.26 |     100 |   97.29 | 53,56,63,245      
+  basic-auth.ts    |     100 |      100 |     100 |     100 |                   
+  body.ts          |   98.11 |    95.55 |     100 |   98.07 | 146               
+  buffer.ts        |      96 |    91.17 |     100 |   95.91 | 56,92             
+  color.ts         |      70 |       50 |   66.66 |      70 | 45-50             
+  compress.ts      |     100 |      100 |     100 |     100 |                   
+  concurrent.ts    |     100 |      100 |     100 |     100 |                   
+  constants.ts     |     100 |      100 |     100 |     100 |                   
+  cookie.ts        |   96.61 |     95.6 |     100 |   96.55 | 182,188,192,196   
+  crypto.ts        |   83.33 |       90 |      80 |   83.33 | 28-30,57          
+  encode.ts        |     100 |       50 |     100 |     100 | 7-11              
+  filepath.ts      |    90.9 |     87.5 |     100 |    90.9 | 18,56             
+  handler.ts       |     100 |      100 |     100 |     100 |                   
+  html.ts          |   95.06 |     87.5 |     100 |   94.87 | 75,107-108,132    
+  ipaddr.ts        |   94.85 |    89.74 |     100 |   94.52 | ...87,219,254,268 
+  mime.ts          |     100 |      100 |     100 |     100 |                   
+  stream.ts        |     100 |     87.5 |     100 |     100 | 41                
+  url.ts           |     100 |    99.11 |     100 |     100 | 123               
+ src/utils/jwt     |   95.31 |    94.67 |     100 |   95.26 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  jwa.ts           |     100 |      100 |     100 |     100 |                   
+  jws.ts           |   90.32 |    88.88 |     100 |   90.32 | ...80,110,113,231 
+  jwt.ts           |   97.34 |    97.39 |     100 |   97.29 | 53,125,212        
+  utf8.ts          |     100 |      100 |     100 |     100 |                   
+ src/validator     |     100 |    96.66 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  validator.ts     |     100 |    96.66 |     100 |     100 | 124               
+-------------------|---------|----------|---------|---------|-------------------
