@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@barney-media/crap-typescript": "0.5.0",
+    "@eslint/js": "^10.0.1",
     "@types/node": "latest",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
