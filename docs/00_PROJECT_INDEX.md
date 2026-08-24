@@ -64,3 +64,29 @@ For development with OpenCode, also read the repository-root `OPENCODE_START_HER
 - `implementation/WP4.1_EVIDENCE_ACQUISITION_INVESTIGATION.md` — authoritative research specification
 - `implementation/WP4.1_EXECUTION_PLAYBOOK.md` — execution procedure
 - `research/WP4.1_FAILURE_SEMANTICS_QUESTIONS.md` — state-model questions
+
+
+## WP4.2.1 — Current
+
+- `research/WP4.2_IMPLEMENTATION_RESULTS.md` — WP4.2 implementation result
+- `research/WP4.2_DECISION_SUMMARY.md` — WP4.2 classified as not yet verified
+- `implementation/WP4.2.1_CORRECTIVE_VERIFICATION.md` — **current task**
+- `implementation/WP4.2.1_EXECUTION_PLAYBOOK.md` — execution procedure
+- `implementation/WP4R_RERUN_PREVIEW.md` — blocked until WP4.2.1 verification
+
+
+## WP4R — Current
+
+- `research/WP4.2.1_CORRECTIVE_VERIFICATION_RESULTS.md` — final verified corrective result
+- `research/WP4.2.1_DECISION_SUMMARY.md` — WP4R authorization
+- `implementation/WP4R_REAL_REPOSITORY_RERUN.md` — **current validation specification**
+- `implementation/WP4R_EXECUTION_PLAYBOOK.md` — execution procedure
+- `research/WP4R_HUMAN_REVIEW_TEMPLATE.md` — human usefulness review
+
+
+## WP4R.1 — Current
+
+- `research/WP4R_USEFULNESS_VALIDATION_RESULTS.md` — WP4R empirical result
+- `research/WP4R_DECISION_SUMMARY.md` — WP4R classified as inconclusive
+- `implementation/WP4R.1_COVERAGE_ARTIFACT_DISCOVERY.md` — **current research specification**
+- `implementation/WP4R.1_EXECUTION_PLAYBOOK.md` — execution procedure
