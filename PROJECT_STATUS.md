@@ -1,20 +1,23 @@
 # Project Status
 
-Version: v0.7 WP3
+Version: v0.8 WP4 usefulness validation
 
 WP0: COMPLETE — GO WITH CONSTRAINTS  
 WP1: COMPLETE — GO  
 WP1.1: COMPLETE — VERIFIED  
 WP2: COMPLETE — VERIFIED  
 WP2.1: COMPLETE — VERIFIED  
-WP3 threshold research: COMPLETE  
-WP3 semantics: READY TO IMPLEMENT  
-WP3 implementation: CURRENT
+WP3: COMPLETE — GO  
+WP4: CURRENT
 
-Current rule: `CHANGED_FUNCTION_HIGH_CRAP`
+WP4 changes the question from:
 
-Default CRAP threshold: 30, configurable.
+> Can we build this deterministically?
 
-WP3 is advisory: PASS/WARN/NOT_EVALUATED. No FAIL gate.
+to:
 
-Separate coverage gating and test-failure evidence are deferred. Baseline/delta ratcheting is documented as the leading future experiment.
+> Is the deterministic output actually useful on real code changes?
+
+Production behavior is frozen during WP4.
+
+No baseline/delta, additional evidence sources, new thresholds, languages, or gating behavior are authorized.

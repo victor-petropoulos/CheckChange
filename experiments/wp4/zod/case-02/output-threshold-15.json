@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "0.1",
+  "analysis": {
+    "base": "28e1ebd89d26147bacb164af988da6ed6de738d4",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "crapTypescript": "failed"
+  },
+  "changedFunctions": [],
+  "policy": {
+    "crapThreshold": 15
+  },
+  "ruleResults": [],
+  "gate": "PASS",
+  "completeness": "COMPLETE"
+}

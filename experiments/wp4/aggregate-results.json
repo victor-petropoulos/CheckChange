@@ -1,0 +1,15 @@
+{
+  "repositories": 3,
+  "cases": 9,
+  "thresholdRuns": 18,
+  "successesThreshold30": 3,
+  "failuresThreshold30": 6,
+  "totalChangedFunctionsThreshold30": 0,
+  "totalPASS": 0,
+  "totalWARN30": 0,
+  "totalWARN15": 0,
+  "totalNOT_EVALUATED": 0,
+  "evaluationRate": null,
+  "thresholdComparison": "30->0 WARNs, 15->0 WARNs",
+  "notes": "All 9 cases produced 0 WARNs, 0 PASS; p-limit 3 available with 0 changedFunctions (JS files), zod/zustand 6 failed due to coverage command"
+}

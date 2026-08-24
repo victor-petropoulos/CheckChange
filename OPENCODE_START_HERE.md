@@ -7,28 +7,36 @@ WP1: COMPLETE — GO
 WP1.1: COMPLETE — VERIFIED  
 WP2: COMPLETE — VERIFIED  
 WP2.1: COMPLETE — VERIFIED  
-WP3 research/design: COMPLETE — READY TO IMPLEMENT  
-WP3 implementation: **CURRENT**
+WP3: COMPLETE — GO  
+WP4: **CURRENT — USEFULNESS VALIDATION**
 
 ## Read First
 
-1. `docs/research/WP2.1_ENVELOPE_CLARIFICATION_RESULTS.md`
-2. `docs/research/WP3_THRESHOLD_AND_POLICY_RESEARCH.md`
-3. `docs/research/WP3_RULE_SEMANTICS_DECISION.md`
-4. `docs/implementation/WP3_ADVISORY_HIGH_CRAP_RULE.md`
+1. `docs/research/WP3_IMPLEMENTATION_RESULTS.md`
+2. `docs/research/WP3_DECISION_SUMMARY.md`
+3. `docs/implementation/WP4_USEFULNESS_VALIDATION.md`
+4. `docs/implementation/WP4_EXECUTION_PLAYBOOK.md`
 
 ## Current Assignment
 
-Execute WP3 implementation only.
+Execute WP4 as an experiment.
 
-Implement one advisory rule:
+Do not add product features.
 
-```text
-changed function + CRAP > configurable threshold (default 30) -> WARN
-```
+Select the repositories before testing them. Pin every repository and change to exact commits. Run the existing WP3 behavior at thresholds 30 and 15, preserve raw outputs, and collect the required measurements.
 
-No separate coverage gate. No test rule. No FAIL gate. No baseline/delta work.
+Human usefulness classification is required for WARN findings. Do not autonomously decide that your own findings are useful.
 
-Create `docs/research/WP3_IMPLEMENTATION_RESULTS.md`, end with `GO`, `GO WITH CONSTRAINTS`, or `STOP`, then stop.
+Create:
+
+`docs/research/WP4_USEFULNESS_VALIDATION_RESULTS.md`
+
+End with exactly:
+
+- `CONTINUE`
+- `CONTINUE WITH CONSTRAINTS`
+- `STOP`
+
+Then stop.
 
 > This project consumes analysis. It does not perform analysis.

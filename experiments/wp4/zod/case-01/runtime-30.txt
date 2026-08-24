@@ -1,0 +1,1 @@
+Runtime for threshold 30: 0.848061 seconds
