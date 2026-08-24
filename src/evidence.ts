@@ -89,7 +89,7 @@ export function buildOutput(base, changed, threshold = 30, capabilities = {}) {
  * @param threshold CRAP threshold for evaluating changed functions
  * @returns Promise<OutputJson>
  */
-export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30) {
+export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, coverageFile?: string) {
     // We'll assume that the git repo is valid and the base is resolved (done by cli.ts)
     // We'll set the git capability to 'available' (if we got here, git is working)
     const gitCapability = 'available';
@@ -140,16 +140,16 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30) 
             completeness: 'NOT_APPLICABLE'
         };
     }
-    // Step 2: Read coverage
-    let coverageResult;
-    let coverageCapability = 'available';
-    try {
-        coverageResult = await readCoverage(cwd);
-    }
-    catch (error) {
-        coverageCapability = 'failed';
-        coverageResult = { available: false, coverageMap: null, error: true };
-    }
+// Step 2: Read coverage
+     let coverageResult;
+     let coverageCapability = 'available';
+     try {
+         coverageResult = await readCoverage(cwd, coverageFile);
+     }
+     catch (error) {
+         coverageCapability = 'failed';
+         coverageResult = { available: false, coverageMap: null, error: true };
+     }
     // If coverageResult indicates an error (e.g., malformed JSON), treat as failed
     if (coverageResult.error) {
         coverageCapability = 'failed';
@@ -187,63 +187,25 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30) 
             completeness: completeness
         };
     }
-    // If coverage provider failed (malformed)
-    if (coverageCapability === 'failed') {
-        analysisStatus = 'FAILED';
-        gate = null;
-        completeness = 'INCOMPLETE';
-        return {
-            schemaVersion: '0.2',
-            analysis: {
-                base: base,
-                target: 'target'
-            },
-            capabilities: {
-                git: gitCapability,
-                complexity: complexityCapability,
-                coverageArtifact: coverageCapability
-            },
-            changedFunctions: [],
-            policy: {
-                crapThreshold: threshold
-            },
-            ruleResults: [],
-            analysisStatus: analysisStatus,
-            gate: gate,
-            completeness: completeness
-        };
-    }
+// If coverage provider failed (malformed)
+     if (coverageCapability === 'failed') {
+         analysisStatus = 'FAILED';
+         gate = null;
+         completeness = 'INCOMPLETE';
+         return buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold);
+     }
     // Step 3: Attach coverage to complexity info
     let attributedComplexity = [];
     try {
         attributedComplexity = await attachCoverage(complexityInfo, coverageResult);
     }
     catch (error) {
-        // If attachment fails, treat as coverage failure? But we already checked coverageResult.
-        // We'll set analysisStatus to FAILED.
-        analysisStatus = 'FAILED';
-        gate = null;
-        completeness = 'INCOMPLETE';
-        return {
-            schemaVersion: '0.2',
-            analysis: {
-                base: base,
-                target: 'current'
-            },
-            capabilities: {
-                git: gitCapability,
-                complexity: complexityCapability,
-                coverageArtifact: coverageCapability
-            },
-            changedFunctions: [],
-            policy: {
-                crapThreshold: threshold
-            },
-            ruleResults: [],
-            analysisStatus: analysisStatus,
-            gate: gate,
-            completeness: completeness
-        };
+// If attachment fails, treat as coverage failure? But we already checked coverageResult.
+// We'll set analysisStatus to FAILED.
+     analysisStatus = 'FAILED';
+     gate = null;
+     completeness = 'INCOMPLETE';
+     return buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold);
     }
     // Step 4: Compute CRAP for each attributed complexity
     const crappedComplexity = attributedComplexity.map(ac => ({
@@ -318,7 +280,7 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30) 
     };
 }
 // Helper function to build output when there is a provider failure
-function buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability) {
+function buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold) {
     return {
         schemaVersion: '0.2',
         analysis: {
@@ -332,7 +294,7 @@ function buildFailedOutput(base, gitCapability, complexityCapability, coverageCa
         },
         changedFunctions: [],
         policy: {
-            crapThreshold: 30 // default, but we don't have the threshold here? We'll use 30.
+            crapThreshold: threshold
         },
         ruleResults: [],
         analysisStatus: 'FAILED',

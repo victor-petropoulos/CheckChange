@@ -11,6 +11,7 @@ function parseCliArgs() {
     let json = false;
     let help = false;
     let crapThreshold = 30; // default
+    let coverageFile = undefined; // optional --coverage-file <path>
     const positionals = [];
     const args = process.argv.slice(2);
     let i = 0;
@@ -49,6 +50,25 @@ function parseCliArgs() {
             }
             crapThreshold = parsed;
         }
+        else if (arg.startsWith('--coverage-file')) {
+            let value;
+            const parts = arg.split('=');
+            if (parts.length > 1) {
+                value = parts[1];
+            }
+            else {
+                if (i + 1 >= args.length) {
+                    console.error('Error: --coverage-file requires a value');
+                    process.exit(1);
+                }
+                value = args[++i];
+            }
+            if (value === undefined || value === '') {
+                console.error('Error: --coverage-file requires a value');
+                process.exit(1);
+            }
+            coverageFile = value;
+        }
         else if (arg.startsWith('-')) {
             console.error(`Error: Unknown option ${arg}`);
             process.exit(1);
@@ -59,11 +79,12 @@ function parseCliArgs() {
         i++;
     }
     if (help) {
-        console.log('Usage: code-risk check --base <ref> [--json] [--crap-threshold <number>]');
+        console.log('Usage: code-risk check --base <ref> [--json] [--crap-threshold <number>] [--coverage-file <path>]');
         console.log('Options:');
         console.log('  --base <ref>             Git base reference to compare against (required)');
         console.log('  --json                   Output JSON (default: false)');
         console.log('  --crap-threshold <number> CRAP threshold for WARN (default: 30)');
+        console.log('  --coverage-file <path>   Istanbul coverage JSON file path');
         process.exit(0);
     }
     // Validate explicit --base required
@@ -76,14 +97,14 @@ function parseCliArgs() {
         console.error('Error: Command must be "check"');
         process.exit(1);
     }
-    return { base, json, crapThreshold };
+    return { base, json, crapThreshold, coverageFile };
 }
 /**
  * Main CLI function
  */
 async function main() {
     try {
-        const { base, json, crapThreshold } = parseCliArgs();
+        const { base, json, crapThreshold, coverageFile } = parseCliArgs();
         // Validate git repo
         await validateGitRepo();
         // Resolve base ref
@@ -91,7 +112,7 @@ async function main() {
         // Get changed intervals
         const { intervals } = await getChangedIntervals(resolvedBase);
         // Build evidence output using composed providers
-        const output = await buildEvidenceOutput(resolvedBase, intervals, process.cwd(), crapThreshold);
+        const output = await buildEvidenceOutput(resolvedBase, intervals, process.cwd(), crapThreshold, coverageFile);
         // Output JSON if --json flag is set
         if (json) {
             console.log(JSON.stringify(output, null, 2));

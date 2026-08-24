@@ -1,14 +1,32 @@
 # Project Status
 
-Version: v1.4 WP4R.1a V8 reporter resolution
+Version: v1.5 WP4R.2 explicit Istanbul coverage path
 
-WP4R: INCONCLUSIVE — COVERAGE CONTRACT FAILED  
-WP4R.1: COMPLETE — EXPLICIT ISTANBUL PATH STRONGLY SUPPORTED  
-WP4R.1a: CURRENT  
-WP4R.2: BLOCKED
+WP4R: INCONCLUSIVE — coverage contract blocked evaluation  
+WP4R.1: COMPLETE — explicit path strongly supported  
+WP4R.1a: COMPLETE — V8 JSON CONFIRMED  
+WP4R.2: CURRENT  
+WP4R usefulness rerun: BLOCKED
 
-## Current Question
-Can h3's already-installed `@vitest/coverage-v8` emit compatible `coverage-final.json` without installing or modifying anything?
+## Current Implementation Goal
 
-## Production State
-Frozen. Research only.
+Add:
+
+```text
+--coverage-file <path>
+```
+
+while preserving the default:
+
+```text
+coverage/coverage-final.json
+```
+
+## Architectural Boundary
+
+The caller generates coverage.
+
+The prototype only consumes an explicitly supplied or default Istanbul JSON
+artifact.
+
+No test execution or coverage generation is authorized.

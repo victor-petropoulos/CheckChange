@@ -1,16 +1,51 @@
 # OpenCode Start Here
 
-WP4R: INCONCLUSIVE — COVERAGE CONTRACT FAILED  
+## Current Status
+
+WP4R: INCONCLUSIVE — COVERAGE CONTRACT BLOCKED EVALUATION  
 WP4R.1: COMPLETE — EXPLICIT PATH STRONGLY SUPPORTED  
-WP4R.1a: **CURRENT — V8 REPORTER RESOLUTION**  
-WP4R.2: BLOCKED
+WP4R.1a: COMPLETE — **V8 JSON CONFIRMED**  
+WP4R.2: **CURRENT — EXPLICIT ISTANBUL PATH**  
+WP4R rerun: BLOCKED
 
 ## Read First
-1. `docs/research/WP4R.1_COVERAGE_ARTIFACT_DISCOVERY_RESULTS.md`
-2. `docs/research/WP4R.1_DECISION_SUMMARY.md`
-3. `docs/implementation/WP4R.1a_V8_REPORTER_RESOLUTION.md`
-4. `docs/implementation/WP4R.1a_EXECUTION_PLAYBOOK.md`
 
-Execute WP4R.1a only. Resolve why h3's existing v8 provider emitted no JSON while Hono's did. Pay special attention to `coverage.reportOnFailure`. Do not change production code or install dependencies.
+1. `docs/research/WP4R.1a_V8_REPORTER_RESOLUTION_RESULTS.md`
+2. `docs/research/WP4R.1a_DECISION_SUMMARY.md`
+3. `docs/implementation/WP4R.2_EXPLICIT_COVERAGE_PATH_IMPLEMENTATION.md`
+4. `docs/implementation/WP4R.2_EXECUTION_PLAYBOOK.md`
 
-Create `docs/research/WP4R.1a_V8_REPORTER_RESOLUTION_RESULTS.md`, end with exactly one authorized decision from the specification, then stop.
+## Current Assignment
+
+Execute **WP4R.2 only**.
+
+Add one optional CLI input:
+
+```text
+--coverage-file <path>
+```
+
+The prototype must consume the exact caller-supplied Istanbul JSON path.
+
+Do not run tests, generate coverage, discover artifacts, parse LCOV, or configure
+Vitest/Jest inside the prototype.
+
+Retain the default:
+
+```text
+coverage/coverage-final.json
+```
+
+when the flag is omitted.
+
+Create:
+
+`docs/research/WP4R.2_IMPLEMENTATION_RESULTS.md`
+
+End with exactly one:
+
+- `READY FOR WP4R RERUN`
+- `READY WITH CONSTRAINTS`
+- `STOP`
+
+Then stop for human review.

@@ -19,7 +19,7 @@
     "@vitest/coverage-v8": "^4.1.11",
     "eslint": "latest",
     "tsx": "^4.23.12",
-    "typescript": "latest",
+    "typescript": "6.0.3",
     "vitest": "latest"
   },
   "allowScripts": {
