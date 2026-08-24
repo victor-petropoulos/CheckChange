@@ -1,13 +1,11 @@
-# WP3 — Three Deterministic Rules Preview
+# Superseded WP3 Design
 
-**FUTURE — DO NOT EXECUTE YET**
+This document has been superseded by the completed WP3 research and decision:
 
-This file preserves direction only.
+- `../research/WP3_THRESHOLD_AND_POLICY_RESEARCH.md`
+- `../research/WP3_RULE_SEMANTICS_DECISION.md`
+- `WP3_ADVISORY_HIGH_CRAP_RULE.md`
 
-1. **Test failure:** existing project tests fail → FAIL.
-2. **Changed function high CRAP:** changed current function + CRAP above explicit threshold → finding.
-3. **Changed high-risk function with inadequate coverage:** changed + CRAP above threshold + reliable coverage below threshold → HIGH/FAIL.
+The earlier three-rule concept is intentionally retired.
 
-Unavailable coverage must never be treated as zero. Threshold policy must be explicit; do not silently adopt the analyzer's default as product policy.
-
-Rules report deterministic facts, not subjective review prose. No LLM.
+WP3 now implements one advisory changed-function CRAP rule with a configurable historical default threshold of 30. Separate coverage and test-failure rules are deferred.

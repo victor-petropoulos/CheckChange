@@ -1,14 +1,20 @@
 # Project Status
 
-Version: v0.6 WP2.1 + WP3 design package
+Version: v0.7 WP3
 
 WP0: COMPLETE — GO WITH CONSTRAINTS  
 WP1: COMPLETE — GO  
 WP1.1: COMPLETE — VERIFIED  
-WP2: COMPLETE — VERIFIED with clarification  
-WP2.1: CURRENT  
-WP3: DESIGN PREPARED / BLOCKED
+WP2: COMPLETE — VERIFIED  
+WP2.1: COMPLETE — VERIFIED  
+WP3 threshold research: COMPLETE  
+WP3 semantics: READY TO IMPLEMENT  
+WP3 implementation: CURRENT
 
-Current task: verify `0` versus `null` semantics and remove the WP2 compliance-checklist ambiguity.
+Current rule: `CHANGED_FUNCTION_HIGH_CRAP`
 
-No risk-rule implementation is authorized yet.
+Default CRAP threshold: 30, configurable.
+
+WP3 is advisory: PASS/WARN/NOT_EVALUATED. No FAIL gate.
+
+Separate coverage gating and test-failure evidence are deferred. Baseline/delta ratcheting is documented as the leading future experiment.

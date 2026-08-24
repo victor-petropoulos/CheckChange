@@ -172,8 +172,8 @@ describe('correlate', () => {
 describe('buildOutput', () => {
   test('should build correct JSON shape', () => {
     const changedFunctions: any[] = [{
-      file: 'src/test.ts',
-      method: 'test',
+      file: 'src/math.ts',
+      method: 'add',
       lineStart: 1,
       lineEnd: 10,
       cc: 1,
@@ -187,7 +187,7 @@ describe('buildOutput', () => {
       }
     }];
 
-    const result = buildOutput('HEAD~1', changedFunctions);
+    const result = buildOutput('HEAD~1', changedFunctions, 30, { git: 'available', crapTypescript: 'available' });
     
     expect(result).toEqual({
       schemaVersion: '0.1',
@@ -199,14 +199,29 @@ describe('buildOutput', () => {
         git: 'available',
         crapTypescript: 'available'
       },
-      changedFunctions: changedFunctions
+      changedFunctions: changedFunctions,
+      policy: {
+        crapThreshold: 30
+      },
+      ruleResults: [{
+        ruleId: 'changed-function-high-crap',
+        result: 'PASS',
+        file: 'src/math.ts',
+        method: 'add',
+        crap: 0,
+        threshold: 30,
+        cc: 1,
+        coverage: null
+      }],
+      gate: 'PASS',
+      completeness: 'COMPLETE'
     });
   });
 
   test('should handle capabilities overrides', () => {
     const changedFunctions: any[] = [];
     
-    const result = buildOutput('HEAD~1', changedFunctions, {
+    const result = buildOutput('HEAD~1', changedFunctions, 30, {
       git: 'failed',
       crapTypescript: 'unavailable'
     });

@@ -16,9 +16,14 @@
     "@types/node": "latest",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
+    "@vitest/coverage-v8": "^4.1.11",
     "eslint": "latest",
     "tsx": "^4.23.12",
     "typescript": "latest",
     "vitest": "latest"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "fsevents@2.3.3": true
   }
 }

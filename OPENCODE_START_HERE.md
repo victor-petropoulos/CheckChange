@@ -1,23 +1,34 @@
 # OpenCode Start Here
 
-WP0: COMPLETE — **GO WITH CONSTRAINTS**  
-WP1: COMPLETE — **GO**  
-WP1.1: COMPLETE — **VERIFIED**  
-WP2: COMPLETE — **VERIFIED with clarification**  
-WP2.1: **CURRENT**  
-WP3: DESIGN PREPARED / BLOCKED
+## Current Status
+
+WP0: COMPLETE — GO WITH CONSTRAINTS  
+WP1: COMPLETE — GO  
+WP1.1: COMPLETE — VERIFIED  
+WP2: COMPLETE — VERIFIED  
+WP2.1: COMPLETE — VERIFIED  
+WP3 research/design: COMPLETE — READY TO IMPLEMENT  
+WP3 implementation: **CURRENT**
 
 ## Read First
 
-1. `docs/research/WP2_EVIDENCE_ENVELOPE_RESULTS.md`
-2. `docs/research/WP2_DECISION_SUMMARY.md`
-3. `docs/implementation/WP2.1_ENVELOPE_CLARIFICATION.md`
-4. `docs/implementation/WP3_RULE_SEMANTICS_DESIGN.md`
+1. `docs/research/WP2.1_ENVELOPE_CLARIFICATION_RESULTS.md`
+2. `docs/research/WP3_THRESHOLD_AND_POLICY_RESEARCH.md`
+3. `docs/research/WP3_RULE_SEMANTICS_DECISION.md`
+4. `docs/implementation/WP3_ADVISORY_HIGH_CRAP_RULE.md`
 
-Execute **WP2.1 only**.
+## Current Assignment
 
-Generate `docs/research/WP2.1_ENVELOPE_CLARIFICATION_RESULTS.md`, ending with `VERIFIED`, `DEFECT FOUND AND FIXED`, or `STOP`.
+Execute WP3 implementation only.
 
-Do not implement WP3.
+Implement one advisory rule:
 
-> **This project consumes analysis. It does not perform analysis.**
+```text
+changed function + CRAP > configurable threshold (default 30) -> WARN
+```
+
+No separate coverage gate. No test rule. No FAIL gate. No baseline/delta work.
+
+Create `docs/research/WP3_IMPLEMENTATION_RESULTS.md`, end with `GO`, `GO WITH CONSTRAINTS`, or `STOP`, then stop.
+
+> This project consumes analysis. It does not perform analysis.

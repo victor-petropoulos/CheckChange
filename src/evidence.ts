@@ -1,4 +1,5 @@
 import { MethodEvidence } from './crap.js';
+import { RuleResult } from './rules.js';
 
 export interface ChangedFunction {
   file: string;
@@ -27,6 +28,12 @@ export interface OutputJson {
     crapTypescript: string;
   };
   changedFunctions: ChangedFunction[];
+  policy: {
+    crapThreshold: number;
+  };
+  ruleResults: RuleResult[];
+  gate: "PASS" | "WARN";
+  completeness: "COMPLETE" | "INCOMPLETE";
 }
 
 /**
@@ -77,14 +84,25 @@ export function correlate(methodEvidence: MethodEvidence[], intervals: Map<strin
   return changedFunctions;
 }
 
+import { evaluateHighCrap } from './rules.js';
+
 /**
  * Builds the final JSON output.
  * @param base The base reference used for comparison
  * @param changed Array of changed functions
+ * @param threshold CRAP threshold for evaluating changed functions
  * @param capabilities Optional capabilities object
  * @returns OutputJson object
  */
-export function buildOutput(base: string, changed: ChangedFunction[], capabilities: { git?: string; crapTypescript?: string } = {}): OutputJson {
+export function buildOutput(base: string, changed: ChangedFunction[], threshold: number = 30, capabilities: { git?: string; crapTypescript?: string } = {}): OutputJson {
+  const ruleResults = evaluateHighCrap(changed, threshold);
+  
+  // Compute gate: any WARN -> WARN else PASS
+  const gate = ruleResults.some(r => r.result === "WARN") ? "WARN" : "PASS";
+  
+  // Compute completeness: any NOT_EVALUATED -> INCOMPLETE else COMPLETE
+  const completeness = ruleResults.some(r => r.result === "NOT_EVALUATED") ? "INCOMPLETE" : "COMPLETE";
+  
   return {
     schemaVersion: '0.1',
     analysis: {
@@ -95,6 +113,12 @@ export function buildOutput(base: string, changed: ChangedFunction[], capabiliti
       git: capabilities.git ?? 'available',
       crapTypescript: capabilities.crapTypescript ?? 'available'
     },
-    changedFunctions: changed
+    changedFunctions: changed,
+    policy: {
+      crapThreshold: threshold
+    },
+    ruleResults: ruleResults,
+    gate: gate,
+    completeness: completeness
   };
 }
