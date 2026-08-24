@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "61b1548a40b02dc0f56d28feadabc78ceeb06184",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/utils/ws.ts",
+      "method": "defineWebSocketHandler",
+      "lineStart": 86,
+      "lineEnd": 108,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/ws.ts",
+      "method": "toUpgradeResponse",
+      "lineStart": 142,
+      "lineEnd": 160,
+      "cc": 3,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 15
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/utils/ws.ts",
+      "method": "defineWebSocketHandler",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/utils/ws.ts",
+      "method": "toUpgradeResponse",
+      "crap": null,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": null
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "INCOMPLETE"
+}

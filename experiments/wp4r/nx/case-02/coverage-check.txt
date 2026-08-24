@@ -1,0 +1,1 @@
+ls: /tmp/wp4r-repos/nx/coverage/coverage-final.json: No such file or directory

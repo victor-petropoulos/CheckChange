@@ -1,0 +1,472 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "2ead4a939a0b24f12dbd26bcabbc56379e3c6f35",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "packages/js/src/release/version-actions.ts",
+      "method": "JsVersionActions.readCurrentVersionOfDependency",
+      "lineStart": 156,
+      "lineEnd": 206,
+      "cc": 12,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/js/src/release/version-actions.ts",
+      "method": "JsVersionActions.updateProjectDependencies",
+      "lineStart": 224,
+      "lineEnd": 415,
+      "cc": 38,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/js/src/release/version-actions.ts",
+      "method": "JsVersionActions.resolveVersion",
+      "lineStart": 254,
+      "lineEnd": 266,
+      "cc": 3,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/js/src/release/version-actions.ts",
+      "method": "JsVersionActions.getLocalDependencyProjectLookup",
+      "lineStart": 417,
+      "lineEnd": 439,
+      "cc": 6,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/js/src/release/version-actions.ts",
+      "method": "JsVersionActions.resolveLocalDependencySpecifier",
+      "lineStart": 441,
+      "lineEnd": 482,
+      "cc": 13,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/js/src/release/version-actions.ts",
+      "method": "JsVersionActions.applyVersionPrefix",
+      "lineStart": 484,
+      "lineEnd": 508,
+      "cc": 8,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/command-line/release/utils/release-graph.ts",
+      "method": "ReleaseGraph.resolveCurrentVersionsForProjects",
+      "lineStart": 640,
+      "lineEnd": 661,
+      "cc": 4,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/command-line/release/utils/release-graph.ts",
+      "method": "ReleaseGraph.resolveCurrentVersionForProject",
+      "lineStart": 671,
+      "lineEnd": 716,
+      "cc": 2,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/command-line/release/utils/release-graph.ts",
+      "method": "ReleaseGraph.resolveCurrentVersionForDependency",
+      "lineStart": 725,
+      "lineEnd": 780,
+      "cc": 10,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/command-line/release/version/release-group-processor.ts",
+      "method": "ReleaseGroupProcessor.processGroups",
+      "lineStart": 171,
+      "lineEnd": 215,
+      "cc": 8,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/command-line/release/version/release-group-processor.ts",
+      "method": "ReleaseGroupProcessor.bumpFixedVersionGroup",
+      "lineStart": 357,
+      "lineEnd": 518,
+      "cc": 22,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/command-line/release/version/release-group-processor.ts",
+      "method": "ReleaseGroupProcessor.bumpIndependentVersionGroup",
+      "lineStart": 520,
+      "lineEnd": 596,
+      "cc": 11,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/command-line/release/version/release-group-processor.ts",
+      "method": "ReleaseGroupProcessor.updateDependenciesForProject",
+      "lineStart": 776,
+      "lineEnd": 844,
+      "cc": 15,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/command-line/release/version/release-group-processor.ts",
+      "method": "ReleaseGroupProcessor.finalizeVersionDecisionsForGroup",
+      "lineStart": 846,
+      "lineEnd": 850,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/command-line/release/version/release-group-processor.ts",
+      "method": "ReleaseGroupProcessor.finalizeAllVersionDecisions",
+      "lineStart": 852,
+      "lineEnd": 897,
+      "cc": 7,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/command-line/release/version/release-group-processor.ts",
+      "method": "ReleaseGroupProcessor.resolveVersionForDependency",
+      "lineStart": 905,
+      "lineEnd": 941,
+      "cc": 8,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/command-line/release/version/test-utils.ts",
+      "method": "MockJsVersionActions.updateProjectDependencies",
+      "lineStart": 339,
+      "lineEnd": 401,
+      "cc": 22,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/command-line/release/version/version-actions.ts",
+      "method": "NOOP_VERSION_ACTIONS.updateProjectDependencies",
+      "lineStart": 556,
+      "lineEnd": 563,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 15
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/js/src/release/version-actions.ts",
+      "method": "JsVersionActions.readCurrentVersionOfDependency",
+      "crap": null,
+      "threshold": 15,
+      "cc": 12,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/js/src/release/version-actions.ts",
+      "method": "JsVersionActions.updateProjectDependencies",
+      "crap": null,
+      "threshold": 15,
+      "cc": 38,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/js/src/release/version-actions.ts",
+      "method": "JsVersionActions.resolveVersion",
+      "crap": null,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/js/src/release/version-actions.ts",
+      "method": "JsVersionActions.getLocalDependencyProjectLookup",
+      "crap": null,
+      "threshold": 15,
+      "cc": 6,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/js/src/release/version-actions.ts",
+      "method": "JsVersionActions.resolveLocalDependencySpecifier",
+      "crap": null,
+      "threshold": 15,
+      "cc": 13,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/js/src/release/version-actions.ts",
+      "method": "JsVersionActions.applyVersionPrefix",
+      "crap": null,
+      "threshold": 15,
+      "cc": 8,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/command-line/release/utils/release-graph.ts",
+      "method": "ReleaseGraph.resolveCurrentVersionsForProjects",
+      "crap": null,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/command-line/release/utils/release-graph.ts",
+      "method": "ReleaseGraph.resolveCurrentVersionForProject",
+      "crap": null,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/command-line/release/utils/release-graph.ts",
+      "method": "ReleaseGraph.resolveCurrentVersionForDependency",
+      "crap": null,
+      "threshold": 15,
+      "cc": 10,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/command-line/release/version/release-group-processor.ts",
+      "method": "ReleaseGroupProcessor.processGroups",
+      "crap": null,
+      "threshold": 15,
+      "cc": 8,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/command-line/release/version/release-group-processor.ts",
+      "method": "ReleaseGroupProcessor.bumpFixedVersionGroup",
+      "crap": null,
+      "threshold": 15,
+      "cc": 22,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/command-line/release/version/release-group-processor.ts",
+      "method": "ReleaseGroupProcessor.bumpIndependentVersionGroup",
+      "crap": null,
+      "threshold": 15,
+      "cc": 11,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/command-line/release/version/release-group-processor.ts",
+      "method": "ReleaseGroupProcessor.updateDependenciesForProject",
+      "crap": null,
+      "threshold": 15,
+      "cc": 15,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/command-line/release/version/release-group-processor.ts",
+      "method": "ReleaseGroupProcessor.finalizeVersionDecisionsForGroup",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/command-line/release/version/release-group-processor.ts",
+      "method": "ReleaseGroupProcessor.finalizeAllVersionDecisions",
+      "crap": null,
+      "threshold": 15,
+      "cc": 7,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/command-line/release/version/release-group-processor.ts",
+      "method": "ReleaseGroupProcessor.resolveVersionForDependency",
+      "crap": null,
+      "threshold": 15,
+      "cc": 8,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/command-line/release/version/test-utils.ts",
+      "method": "MockJsVersionActions.updateProjectDependencies",
+      "crap": null,
+      "threshold": 15,
+      "cc": 22,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/command-line/release/version/version-actions.ts",
+      "method": "NOOP_VERSION_ACTIONS.updateProjectDependencies",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "INCOMPLETE"
+}

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "bd5cd6a7fd10028277786608065a90280f2fe2e0",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/utils/static.ts",
+      "method": "serveStatic",
+      "lineStart": 101,
+      "lineEnd": 266,
+      "cc": 38,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 15
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/utils/static.ts",
+      "method": "serveStatic",
+      "crap": null,
+      "threshold": 15,
+      "cc": 38,
+      "coverage": null
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "INCOMPLETE"
+}

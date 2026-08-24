@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "1096d66e03a3fd16a5cc5f912c2d5e8fd6d990b0",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/helper/accepts/accepts.ts",
+      "method": "matchType",
+      "lineStart": 21,
+      "lineEnd": 34,
+      "cc": 5,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/helper/accepts/accepts.ts",
+      "method": "getSpecificity",
+      "lineStart": 36,
+      "lineEnd": 44,
+      "cc": 4,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/helper/accepts/accepts.ts",
+      "method": "defaultMatch",
+      "lineStart": 46,
+      "lineEnd": 62,
+      "cc": 3,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 30
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/helper/accepts/accepts.ts",
+      "method": "matchType",
+      "crap": null,
+      "threshold": 30,
+      "cc": 5,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/helper/accepts/accepts.ts",
+      "method": "getSpecificity",
+      "crap": null,
+      "threshold": 30,
+      "cc": 4,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/helper/accepts/accepts.ts",
+      "method": "defaultMatch",
+      "crap": null,
+      "threshold": 30,
+      "cc": 3,
+      "coverage": null
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "INCOMPLETE"
+}

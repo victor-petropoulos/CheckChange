@@ -1,0 +1,372 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "f3ddb91cef8637b9d8bdf70ffad70c12b07caacf",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "packages/nx/src/project-graph/error-types.ts",
+      "method": "MultipleProjectsWithSameNameError.constructor",
+      "lineStart": 110,
+      "lineEnd": 148,
+      "cc": 4,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/project-graph/utils/project-configuration/project-nodes-manager.ts",
+      "method": "readProjectConfigurationsFromRootMap",
+      "lineStart": 233,
+      "lineEnd": 280,
+      "cc": 10,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/project-graph/utils/project-configuration/target-normalization.ts",
+      "method": "validateAndNormalizeProjectRootMap",
+      "lineStart": 328,
+      "lineEnd": 434,
+      "cc": 19,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "readRecordedPath",
+      "lineStart": 6,
+      "lineEnd": 19,
+      "cc": 4,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "isDirectory",
+      "lineStart": 21,
+      "lineEnd": 27,
+      "cc": 2,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "findGitRoot",
+      "lineStart": 37,
+      "lineEnd": 49,
+      "cc": 3,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "worktreeRegistry",
+      "lineStart": 58,
+      "lineEnd": 88,
+      "cc": 7,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "nestedWorktreeRoots",
+      "lineStart": 99,
+      "lineEnd": 137,
+      "cc": 9,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "isInside",
+      "lineStart": 143,
+      "lineEnd": 145,
+      "cc": 2,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "analyzeWorktreeConflicts",
+      "lineStart": 162,
+      "lineEnd": 204,
+      "cc": 8,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "ignoreTargetsFor",
+      "lineStart": 215,
+      "lineEnd": 230,
+      "cc": 4,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "anchored",
+      "lineStart": 239,
+      "lineEnd": 241,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "commonParent",
+      "lineStart": 248,
+      "lineEnd": 254,
+      "cc": 3,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "holdsOnlyWorktrees",
+      "lineStart": 256,
+      "lineEnd": 272,
+      "cc": 3,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 30
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/project-graph/error-types.ts",
+      "method": "MultipleProjectsWithSameNameError.constructor",
+      "crap": null,
+      "threshold": 30,
+      "cc": 4,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/project-graph/utils/project-configuration/project-nodes-manager.ts",
+      "method": "readProjectConfigurationsFromRootMap",
+      "crap": null,
+      "threshold": 30,
+      "cc": 10,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/project-graph/utils/project-configuration/target-normalization.ts",
+      "method": "validateAndNormalizeProjectRootMap",
+      "crap": null,
+      "threshold": 30,
+      "cc": 19,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "readRecordedPath",
+      "crap": null,
+      "threshold": 30,
+      "cc": 4,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "isDirectory",
+      "crap": null,
+      "threshold": 30,
+      "cc": 2,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "findGitRoot",
+      "crap": null,
+      "threshold": 30,
+      "cc": 3,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "worktreeRegistry",
+      "crap": null,
+      "threshold": 30,
+      "cc": 7,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "nestedWorktreeRoots",
+      "crap": null,
+      "threshold": 30,
+      "cc": 9,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "isInside",
+      "crap": null,
+      "threshold": 30,
+      "cc": 2,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "analyzeWorktreeConflicts",
+      "crap": null,
+      "threshold": 30,
+      "cc": 8,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "ignoreTargetsFor",
+      "crap": null,
+      "threshold": 30,
+      "cc": 4,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "anchored",
+      "crap": null,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "commonParent",
+      "crap": null,
+      "threshold": 30,
+      "cc": 3,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "packages/nx/src/utils/git-worktrees.ts",
+      "method": "holdsOnlyWorktrees",
+      "crap": null,
+      "threshold": 30,
+      "cc": 3,
+      "coverage": null
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "INCOMPLETE"
+}

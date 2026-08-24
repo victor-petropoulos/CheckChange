@@ -1,0 +1,147 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "48e360fcaa107c7706fcf8adccb93505876791dc",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/router/reg-exp-router/router.ts",
+      "method": "buildWildcardRegExp",
+      "lineStart": 21,
+      "lineEnd": 35,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/router/reg-exp-router/router.ts",
+      "method": "findMiddleware",
+      "lineStart": 37,
+      "lineEnd": 45,
+      "cc": 3,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/router/reg-exp-router/router.ts",
+      "method": "RegExpRouter.add",
+      "lineStart": 67,
+      "lineEnd": 126,
+      "cc": 22,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/router/reg-exp-router/router.ts",
+      "method": "RegExpRouter.buildAllMatchers",
+      "lineStart": 130,
+      "lineEnd": 142,
+      "cc": 2,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/router/reg-exp-router/router.ts",
+      "method": "RegExpRouter.#buildMatcher",
+      "lineStart": 144,
+      "lineEnd": 172,
+      "cc": 4,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 15
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/router/reg-exp-router/router.ts",
+      "method": "buildWildcardRegExp",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/router/reg-exp-router/router.ts",
+      "method": "findMiddleware",
+      "crap": null,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/router/reg-exp-router/router.ts",
+      "method": "RegExpRouter.add",
+      "crap": null,
+      "threshold": 15,
+      "cc": 22,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/router/reg-exp-router/router.ts",
+      "method": "RegExpRouter.buildAllMatchers",
+      "crap": null,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/router/reg-exp-router/router.ts",
+      "method": "RegExpRouter.#buildMatcher",
+      "crap": null,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": null
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "INCOMPLETE"
+}
