@@ -8,35 +8,44 @@ WP1.1: COMPLETE — VERIFIED
 WP2: COMPLETE — VERIFIED  
 WP2.1: COMPLETE — VERIFIED  
 WP3: COMPLETE — GO  
-WP4: **CURRENT — USEFULNESS VALIDATION**
+WP4: COMPLETE — **INCONCLUSIVE**  
+WP4.1: **CURRENT — RESEARCH/DECISION**
 
 ## Read First
 
-1. `docs/research/WP3_IMPLEMENTATION_RESULTS.md`
-2. `docs/research/WP3_DECISION_SUMMARY.md`
-3. `docs/implementation/WP4_USEFULNESS_VALIDATION.md`
-4. `docs/implementation/WP4_EXECUTION_PLAYBOOK.md`
+1. `docs/research/WP4_USEFULNESS_VALIDATION_RESULTS.md`
+2. `docs/research/WP4_DECISION_SUMMARY.md`
+3. `docs/implementation/WP4.1_EVIDENCE_ACQUISITION_INVESTIGATION.md`
+4. `docs/implementation/WP4.1_EXECUTION_PLAYBOOK.md`
+5. `docs/research/WP4.1_FAILURE_SEMANTICS_QUESTIONS.md`
 
 ## Current Assignment
 
-Execute WP4 as an experiment.
+Execute WP4.1 research and controlled experiments only.
 
-Do not add product features.
+**Do not modify production source.**
 
-Select the repositories before testing them. Pin every repository and change to exact commits. Run the existing WP3 behavior at thresholds 30 and 15, preserve raw outputs, and collect the required measurements.
+Investigate:
 
-Human usefulness classification is required for WARN findings. Do not autonomously decide that your own findings are useful.
+- the current crap-typescript evidence boundary;
+- externally generated coverage artifacts;
+- existing deterministic function-level complexity providers;
+- the smallest viable composition of existing evidence;
+- correct failure semantics.
 
 Create:
 
-`docs/research/WP4_USEFULNESS_VALIDATION_RESULTS.md`
+- `docs/research/WP4.1_EVIDENCE_ACQUISITION_FINDINGS.md`
+- `docs/research/WP4.1_FAILURE_SEMANTICS_DECISION.md`
+- `docs/research/WP4.1_EVIDENCE_BOUNDARY_DECISION.md`
 
-End with exactly:
+The final decision must be exactly one of:
 
-- `CONTINUE`
-- `CONTINUE WITH CONSTRAINTS`
+- `RETAIN CURRENT PROVIDER`
+- `ADAPT PROVIDER BOUNDARY`
+- `COMPOSE EXISTING PROVIDERS`
 - `STOP`
 
-Then stop.
+Then stop for human review.
 
 > This project consumes analysis. It does not perform analysis.
