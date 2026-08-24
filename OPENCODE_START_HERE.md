@@ -1,42 +1,22 @@
 # OpenCode Start Here
 
-WP0 is complete.
-
-Decision: **GO WITH CONSTRAINTS**
+WP0: **GO WITH CONSTRAINTS**  
+WP1: **GO**, pending correlation verification  
+WP1.1: **CURRENT**
 
 Read:
+1. `docs/research/WP1_VERTICAL_SLICE_RESULTS.md`
+2. `docs/research/WP1_DECISION_SUMMARY.md`
+3. `docs/implementation/WP1.1_CORRELATION_VERIFICATION.md`
 
-1. `README.md`
-2. `docs/research/WP0_EVIDENCE_FEASIBILITY.md`
-3. `docs/implementation/UGLY_PROTOTYPE_OPENCODE_PROJECT_PLAN.md`
-4. `docs/implementation/WP1_CHANGED_FUNCTION_VERTICAL_SLICE.md`
+Execute **WP1.1 only**.
 
-## Current Assignment
+Generate:
+- `experiments/wp1.1/correlation-verification.json`
+- `docs/research/WP1.1_CORRELATION_VERIFICATION_RESULTS.md`
 
-Execute **WP1 only**:
+Do not proceed to WP2 or implement rules. Do not add source parsing, AST analysis, symbol resolution, or generalized architecture.
 
-```text
-Git diff -U0 against explicit base
-+
-full crap-typescript JSON
-↓
-changed-function JSON
-```
+> This project consumes analysis. It does not perform analysis.
 
-Do not implement rules or generalized abstractions.
-
-Do not parse TypeScript source.
-
-Do not proceed to WP2.
-
-Create:
-
-`docs/research/WP1_VERTICAL_SLICE_RESULTS.md`
-
-End with exactly one:
-
-- `GO`
-- `GO WITH CONSTRAINTS`
-- `STOP`
-
-Then stop for human review.
+End with `VERIFIED`, `DEFECT FOUND AND FIXED`, or `STOP`, then stop for human review.

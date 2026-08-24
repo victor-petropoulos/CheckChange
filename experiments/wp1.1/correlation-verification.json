@@ -1,0 +1,109 @@
+{
+  "generatedAt": "2026-08-23T22:02:20.997Z",
+  "tool": "@barney-media/crap-typescript@0.5.0",
+  "cases": [
+    {
+      "case": "modified-add",
+      "file": "src/math.ts",
+      "gitHunk": [
+        "@@ -1,0 +2,14 @@ export function add(a: number, b: number): number {",
+        "@@ -2,0 +17,14 @@ export function add(a: number, b: number): number {"
+      ],
+      "gitIntervals": [
+        {
+          "start": 2,
+          "end": 15
+        },
+        {
+          "start": 17,
+          "end": 30
+        }
+      ],
+      "method": {
+        "name": "add",
+        "start": 1,
+        "end": 17
+      },
+      "intersections": [
+        {
+          "start": 2,
+          "end": 15
+        },
+        {
+          "start": 17,
+          "end": 17
+        }
+      ],
+      "changed": true
+    },
+    {
+      "case": "added-multiply",
+      "file": "src/math.ts",
+      "gitHunk": [
+        "@@ -1,0 +2,14 @@ export function add(a: number, b: number): number {",
+        "@@ -2,0 +17,14 @@ export function add(a: number, b: number): number {"
+      ],
+      "gitIntervals": [
+        {
+          "start": 2,
+          "end": 15
+        },
+        {
+          "start": 17,
+          "end": 30
+        }
+      ],
+      "method": {
+        "name": "times",
+        "start": 19,
+        "end": 31
+      },
+      "intersections": [
+        {
+          "start": 19,
+          "end": 30
+        }
+      ],
+      "changed": true
+    },
+    {
+      "case": "rename-multiply-to-times",
+      "file": "src/math.ts",
+      "gitHunk": [
+        "@@ -19 +19 @@ export function add(a: number, b: number): number {"
+      ],
+      "gitIntervals": [
+        {
+          "start": 19,
+          "end": 19
+        }
+      ],
+      "method": {
+        "name": "times",
+        "start": 19,
+        "end": 31
+      },
+      "intersections": [
+        {
+          "start": 19,
+          "end": 19
+        }
+      ],
+      "changed": true
+    },
+    {
+      "case": "deleted-halve",
+      "file": "src/math.ts",
+      "gitHunk": [
+        "@@ -33,6 +32,0 @@ export function times(a: number, b: number): number {"
+      ],
+      "gitIntervals": [],
+      "gitDeletionDetected": true,
+      "currentAnalyzerEvidence": "absent",
+      "historicalMetrics": "unavailable",
+      "method": null,
+      "intersections": [],
+      "changed": false
+    }
+  ]
+}

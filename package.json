@@ -11,12 +11,13 @@
     "check": "node dist/cli.js check"
   },
   "devDependencies": {
-    "vitest": "latest",
-    "typescript": "latest",
-    "eslint": "latest",
     "@barney-media/crap-typescript": "0.5.0",
-    "@typescript-eslint/parser": "latest",
+    "@types/node": "latest",
     "@typescript-eslint/eslint-plugin": "latest",
-    "@types/node": "latest"
+    "@typescript-eslint/parser": "latest",
+    "eslint": "latest",
+    "tsx": "^4.23.12",
+    "typescript": "latest",
+    "vitest": "latest"
   }
 }
