@@ -90,3 +90,11 @@ For development with OpenCode, also read the repository-root `OPENCODE_START_HER
 - `research/WP4R_DECISION_SUMMARY.md` — WP4R classified as inconclusive
 - `implementation/WP4R.1_COVERAGE_ARTIFACT_DISCOVERY.md` — **current research specification**
 - `implementation/WP4R.1_EXECUTION_PLAYBOOK.md` — execution procedure
+
+
+## WP4R.1a — Current
+
+- `research/WP4R.1_COVERAGE_ARTIFACT_DISCOVERY_RESULTS.md`
+- `research/WP4R.1_DECISION_SUMMARY.md`
+- `implementation/WP4R.1a_V8_REPORTER_RESOLUTION.md` — **current research specification**
+- `implementation/WP4R.1a_EXECUTION_PLAYBOOK.md`

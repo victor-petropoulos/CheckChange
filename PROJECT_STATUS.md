@@ -1,14 +1,14 @@
 # Project Status
 
-Version: v1.3 WP4R.1 coverage artifact discovery research
+Version: v1.4 WP4R.1a V8 reporter resolution
 
 WP4R: INCONCLUSIVE — COVERAGE CONTRACT FAILED  
-WP4R.1: CURRENT
+WP4R.1: COMPLETE — EXPLICIT ISTANBUL PATH STRONGLY SUPPORTED  
+WP4R.1a: CURRENT  
+WP4R.2: BLOCKED
 
 ## Current Question
-
-> What coverage artifact do ordinary TypeScript/Vitest repositories actually produce, and what is the smallest contract the prototype needs to consume it?
+Can h3's already-installed `@vitest/coverage-v8` emit compatible `coverage-final.json` without installing or modifying anything?
 
 ## Production State
-
-Frozen. WP4R.1 is research only.
+Frozen. Research only.
