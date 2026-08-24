@@ -73,12 +73,12 @@ WP1 demonstrated the envelope by:
 
 ## Forbidden Compliance Checklist
 
-- [ ] No JSON-schema tooling
-- [ ] No runtime validation libraries
-- [ ] No providers
-- [ ] No SARIF
-- [ ] No rules
-- [ ] No test/lint/typecheck evidence
-- [ ] No multi-language concepts
+- [x] No JSON-schema tooling
+- [x] No runtime validation libraries
+- [x] No providers
+- [x] No SARIF
+- [x] No rules
+- [x] No test/lint/typecheck evidence (test files are prototype test suite, not envelope content)
+- [x] No multi-language concepts
 
 VERIFIED

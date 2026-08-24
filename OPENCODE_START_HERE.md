@@ -1,22 +1,23 @@
 # OpenCode Start Here
 
-WP0: **GO WITH CONSTRAINTS**  
-WP1: **GO**, pending correlation verification  
-WP1.1: **CURRENT**
+WP0: COMPLETE — **GO WITH CONSTRAINTS**  
+WP1: COMPLETE — **GO**  
+WP1.1: COMPLETE — **VERIFIED**  
+WP2: COMPLETE — **VERIFIED with clarification**  
+WP2.1: **CURRENT**  
+WP3: DESIGN PREPARED / BLOCKED
 
-Read:
-1. `docs/research/WP1_VERTICAL_SLICE_RESULTS.md`
-2. `docs/research/WP1_DECISION_SUMMARY.md`
-3. `docs/implementation/WP1.1_CORRELATION_VERIFICATION.md`
+## Read First
 
-Execute **WP1.1 only**.
+1. `docs/research/WP2_EVIDENCE_ENVELOPE_RESULTS.md`
+2. `docs/research/WP2_DECISION_SUMMARY.md`
+3. `docs/implementation/WP2.1_ENVELOPE_CLARIFICATION.md`
+4. `docs/implementation/WP3_RULE_SEMANTICS_DESIGN.md`
 
-Generate:
-- `experiments/wp1.1/correlation-verification.json`
-- `docs/research/WP1.1_CORRELATION_VERIFICATION_RESULTS.md`
+Execute **WP2.1 only**.
 
-Do not proceed to WP2 or implement rules. Do not add source parsing, AST analysis, symbol resolution, or generalized architecture.
+Generate `docs/research/WP2.1_ENVELOPE_CLARIFICATION_RESULTS.md`, ending with `VERIFIED`, `DEFECT FOUND AND FIXED`, or `STOP`.
 
-> This project consumes analysis. It does not perform analysis.
+Do not implement WP3.
 
-End with `VERIFIED`, `DEFECT FOUND AND FIXED`, or `STOP`, then stop for human review.
+> **This project consumes analysis. It does not perform analysis.**

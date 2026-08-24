@@ -1,0 +1,71 @@
+{
+  "cases": [
+    {
+      "case": "crap 0, coverage 100",
+      "crapCheck": {
+        "pass": true,
+        "message": "crap zero preserved"
+      },
+      "coverageCheck": {
+        "pass": true,
+        "message": "coverage number 100 preserved"
+      }
+    },
+    {
+      "case": "crap null, coverage null",
+      "crapCheck": {
+        "pass": true,
+        "message": "crap null preserved"
+      },
+      "coverageCheck": {
+        "pass": true,
+        "message": "coverage null preserved"
+      }
+    },
+    {
+      "case": "coverage 0, crap 5",
+      "crapCheck": {
+        "pass": true,
+        "message": "crap number 5 preserved"
+      },
+      "coverageCheck": {
+        "pass": true,
+        "message": "coverage zero preserved"
+      }
+    },
+    {
+      "case": "coverage null, crap null",
+      "crapCheck": {
+        "pass": true,
+        "message": "crap null preserved"
+      },
+      "coverageCheck": {
+        "pass": true,
+        "message": "coverage null preserved"
+      }
+    },
+    {
+      "case": "parseCrapJson crap 0",
+      "crapCheck": {
+        "pass": true,
+        "message": "crap zero preserved"
+      },
+      "coverageCheck": {
+        "pass": true,
+        "message": "coverage number 50 preserved"
+      }
+    },
+    {
+      "case": "parseCrapJson crap null",
+      "crapCheck": {
+        "pass": true,
+        "message": "crap null preserved"
+      },
+      "coverageCheck": {
+        "pass": true,
+        "message": "coverage null preserved"
+      }
+    }
+  ],
+  "overallPass": true
+}
