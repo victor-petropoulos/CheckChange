@@ -316,11 +316,11 @@ index 0000000..0000000
 
 Question: Does the threshold-30 WARN identify a changed function that merits advisory attention?
 
-- [ ] EXPECTED_WARN
+- [X] EXPECTED_WARN
 - [ ] QUESTIONABLE_WARN
 - [ ] UNDETERMINED
 
-**Rationale:** _(human reviewer completes)_
+**Rationale:** CC=36 and CRAP=36 despite 100% statement coverage. The function performs substantial route-rule normalization and validation across multiple concerns. A threshold-30 WARN is proportionate advisory attention for a structurally complex changed function even with high coverage.
 
 ---
 
@@ -719,18 +719,18 @@ index 0000000..0000000
 
 Question: Does passing this function at threshold 30 appear reasonable?
 
-- [ ] EXPECTED_PASS
+- [X] EXPECTED_PASS
 - [ ] QUESTIONABLE_PASS
 - [ ] UNDETERMINED
 
-**Rationale:** _(human reviewer completes)_
+**Rationale:** CC=28, branch coverage=89.36170212765957%, CRAP=28.94391416160196. It falls below threshold 30. The PASS is consistent with the deterministic boundary; proximity alone does not make the result wrong.
 
 ### Human Review — SUP-B at Threshold 15
 
 Question: Does lowering the threshold to 15 add useful advisory signal, or primarily noise?
 
-- [ ] USEFUL_WARN
+- [X] USEFUL_WARN
 - [ ] NOISY_WARN
 - [ ] UNDETERMINED
 
-**Rationale:** _(human reviewer completes)_
+**Rationale:** The function handles protocol/request validation, notification semantics, handler lookup/execution, exception handling, information-exposure protection, and error translation. With CC=28 and incomplete branch coverage, advisory attention at threshold 15 is useful rather than obviously noisy. This demonstrates meaningful threshold sensitivity using identical evidence.

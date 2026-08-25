@@ -54,15 +54,18 @@ To supplement WP4R with two real-world TypeScript runtime cases demonstrating th
 ## Evidence Issues
 - None blocking. An earlier candidate for SUP-B (createRulesRouter, same commit as SUP-A) was rejected during discovery because the gate evaluates all changed functions in a commit; it was replaced by the isolated json-rpc commit before case lock.
 
-## Pending Classification Statement
-- SUP-A: [ ] EXPECTED_WARN / [ ] QUESTIONABLE_WARN / [ ] UNDETERMINED
-- SUP-B threshold 30: [ ] EXPECTED_PASS / [ ] QUESTIONABLE_PASS / [ ] UNDETERMINED
-- SUP-B threshold 15: [ ] USEFUL_WARN / [ ] NOISY_WARN / [ ] UNDETERMINED
+## Human Classification (Recorded)
+- SUP-A: [X] EXPECTED_WARN
+- SUP-B threshold 30: [X] EXPECTED_PASS
+- SUP-B threshold 15: [X] USEFUL_WARN
+
+Reviewer rationales are recorded in `experiments/wp4r-supplemental/human-review-packet.md`. Supplemental evidence was accepted for its intended WP4R purpose (demonstrating threshold sensitivity and WARN-gate behavior on real-world cases).
 
 ## Status
-- Human classification: PENDING (all classification checkboxes blank in human-review-packet.md).
-- WP4R is NOT complete. WP4R remains at the human-review gate.
-- WP5 has NOT started.
+- Human classification: RECORDED — SUP-A EXPECTED_WARN; SUP-B threshold 30 EXPECTED_PASS; SUP-B threshold 15 USEFUL_WARN.
+- Supplemental evidence accepted for its intended WP4R purpose.
+- Threshold 30 remains the current default; nothing here establishes that 15 should universally replace 30.
+- WP4R proceeds to closure documentation. WP5 has NOT started.
 
 ## Acceptance Gate Checklist
 - [x] Documentation correction completed (isAllowedSecFetchSite note in wp4r-final packet)
@@ -75,6 +78,6 @@ To supplement WP4R with two real-world TypeScript runtime cases demonstrating th
 - [x] Same evidence used for both threshold runs per case (identical coverage artifact)
 - [x] Raw evidence preserved (coverage-final.json + outputs + exit codes under sup-a/, sup-b/)
 - [x] Review packet complete
-- [x] Classifications blank
+- [x] Classifications recorded (EXPECTED_WARN / EXPECTED_PASS / USEFUL_WARN)
 - [x] Production code untouched
 - [x] WP5 not started
