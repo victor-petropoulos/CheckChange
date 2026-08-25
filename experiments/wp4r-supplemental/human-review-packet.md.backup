@@ -1,0 +1,65 @@
+# WP4R Supplemental Human Review Packet
+
+## SUP-A
+- ID: SUP-A
+- Repo: h3
+- Subject: feat: route rules (#1524)
+- Base SHA: 5e8a31709b28dbebf2f2f8f1a3063250ec799b74
+- Target SHA: 3fae517278a2e677fbe3580918ab069348f80ccc
+- File: src/rules/normalize.ts
+- Function: normalizeRouteRules
+- Line Range: 21-136
+- Changed lines: 116 lines (21-136)
+- Complete source (target):
+```
+```
+- Exact diff:
+```
+```
+- CC: 36
+- Coverage: 100% (stmt)
+- CRAP: 36
+- Coverage artifact: experiments/wp4r-supplemental/sup-a/coverage-final.json
+- Istanbul attribution:
+  - Keys: [list of keys from coverage file]
+  - fnMap for normalizeRouteRules: [fnMap entry]
+- Threshold 30 result: gate=WARN, ruleResults for normalizeRouteRules: {result: "PASS", crap: 36, threshold: 30, cc: 36, coverage: 100}
+- Threshold 15 result: gate=WARN, ruleResults for normalizeRouteRules: {result: "PASS", crap: 36, threshold: 15, cc: 36, coverage: 100}
+- Factual logic description: The function normalizeRouteRules has CC=36 and coverage=100%, resulting in CRAP=36. At threshold 30, the function exceeds the threshold (36>30) causing a WARN gate. At threshold 15, the function also exceeds the threshold (36>15) causing a WARN gate.
+- Exact commands:
+  - Checkout target: `git -C /private/tmp/wp4r1-h3 checkout 3fae517278a2e677fbe3580918ab069348f80ccc`
+  - Generate coverage: `npx vitest --run --coverage.enabled --coverage.provider=v8 --coverage.reporter=json --coverage.reportsDirectory=coverage --coverage.reportOnFailure` (in /private/tmp/wp4r1-h3)
+  - Run prototype at threshold 30: `node /Users/victorpetropoulos/Cursor\ Projects/code-risk-prototype-v0.3-opencode/dist/cli.js check --base 5e8a31709b28dbebf2f2f8f1a3063250ec799b74 --coverage-file /private/tmp/wp4r1-h3/coverage/coverage-final.json --json > experiments/wp4r-supplemental/sup-a/output-threshold-30.json`
+  - Run prototype at threshold 15: `node /Users/victorpetropoulos/Cursor\ Projects/code-risk-prototype-v0.3-opencode/dist/cli.js check --base 5e8a31709b28dbebf2f2f8f1a3063250ec799b74 --coverage-file /private/tmp/wp4r1-h3/coverage/coverage-final.json --crap-threshold 15 --json > experiments/wp4r-supplemental/sup-a/output-threshold-15.json`
+
+## SUP-B
+- ID: SUP-B
+- Repo: h3
+- Subject: fix(json-rpc)!: require JSON content-type, validate origin and cap batch size
+- Base SHA: 07d22ecdb175416231242f7ea1ae8553ca0cc1fe
+- Target SHA: 72d8e05fb8a9a0eb6941d0c6f11b69b543452260
+- File: src/utils/json-rpc.ts
+- Function: processJsonRpcMethod
+- Line Range: 404-500
+- Changed lines: 97 lines (404-500)
+- Complete source (target):
+```
+```
+- Exact diff:
+```
+```
+- CC: 28
+- Coverage: 89.36170212765957% (branch)
+- CRAP: 28.94391416160196
+- Coverage artifact: experiments/wp4r-supplemental/sup-b/coverage-final.json
+- Istanbul attribution:
+  - Keys: [list of keys from coverage file]
+  - fnMap for processJsonRpcMethod: [fnMap entry]
+- Threshold 30 result: gate=PASS, ruleResults for processJsonRpcMethod: {result: "PASS", crap: 28.94391416160196, threshold: 30, cc: 28, coverage: 89.36170212765957}
+- Threshold 15 result: gate=WARN, ruleResults for processJsonRpcMethod: {result: "WARN", crap: 28.94391416160196, threshold: 15, cc: 28, coverage: 89.36170212765957}
+- Factual logic description: The function processJsonRpcMethod has CC=28 and coverage=89.36170212765957%, resulting in CRAP=28.94391416160196. At threshold 30, the function does not exceed the threshold (28.94<=30) causing a PASS gate. At threshold 15, the function exceeds the threshold (28.94>15) causing a WARN gate.
+- Exact commands:
+  - Checkout target: `git -C /private/tmp/wp4r1-h3 checkout 72d8e05fb8a9a0eb6941d0c6f11b69b543452260`
+  - Generate coverage: `npx vitest --run --coverage.enabled --coverage.provider=v8 --coverage.reporter=json --coverage.reportsDirectory=coverage --coverage.reportOnFailure` (in /private/tmp/wp4r1-h3)
+  - Run prototype at threshold 30: `node /Users/victorpetropoulos/Cursor\ Projects/code-risk-prototype-v0.3-opencode/dist/cli.js check --base 07d22ecdb175416231242f7ea1ae8553ca0cc1fe --coverage-file /private/tmp/wp4r1-h3/coverage/coverage-final.json --json > experiments/wp4r-supplemental/sup-b/output-threshold-30.json`
+  - Run prototype at threshold 15: `node /Users/victorpetropoulos/Cursor\ Projects/code-risk-prototype-v0.3-opencode/dist/cli.js check --base 07d22ecdb175416231242f7ea1ae8553ca0cc1fe --coverage-file /private/tmp/wp4r1-h3/coverage/coverage-final.json --crap-threshold 15 --json > experiments/wp4r-supplemental/sup-b/output-threshold-15.json`

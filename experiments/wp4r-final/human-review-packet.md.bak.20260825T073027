@@ -489,84 +489,10 @@ export const csrf = (options?: CSRFOptions): MiddlewareHandler => {
 - **Coverage:** 100 (stmt)
 - **CRAP:** 3
 - **Gate:** PASS
-- **Completeness:** COMPLETE
 
-**Base source:** `isAllowedSecFetchSite` does NOT exist in base SHA `d9f7b99c519602d6f0664514a42b1bbc6ef57206`. Zero references to `isAllowedSecFetchSite` or `secFetchSite` in base `src/middleware/csrf/index.ts` (90 lines).
+**Coverage evidence:** Same as `csrf` above.
 
-**Target source (lines 123–133, extracted via `git -C /private/tmp/wp4r-repos/hono show 117d0a413fb021804e4996c3c79cdbac56e17b43:src/middleware/csrf/index.ts`):**
-
-```typescript
-const isAllowedSecFetchSite = (secFetchSite: string | undefined, c: Context) => {
-  if (secFetchSite === undefined) {
-    // denied always when sec-fetch-site header is not present
-    return false
-  }
-  // type guard to check if the value is a valid SecFetchSite
-  if (!isSecFetchSite(secFetchSite)) {
-    return false
-  }
-  return secFetchSiteHandler(secFetchSite, c)
-}
-```
-
-**Relevant diff hunks (base→target, extracted via `git -C /private/tmp/wp4r-repos/hono diff d9f7b99c519602d6f0664514a42b1bbc6ef57206..117d0a413fb021804e4996c3c79cdbac56e17b43 -- src/middleware/csrf/index.ts`):**
-
-```diff
-+const secFetchSiteValues = ['same-origin', 'same-site', 'none', 'cross-site'] as const
-+type SecFetchSite = (typeof secFetchSiteValues)[number]
-+
-+const isSecFetchSite = (value: string): value is SecFetchSite =>
-+  (secFetchSiteValues as readonly string[]).includes(value)
-+
-+type IsAllowedSecFetchSiteHandler = (secFetchSite: SecFetchSite, context: Context) => boolean
-+
- interface CSRFOptions {
-   origin?: string | string[] | IsAllowedOriginHandler
-+  secFetchSite?: SecFetchSite | SecFetchSite[] | IsAllowedSecFetchSiteHandler
- }
-```
-
-```diff
-+  const secFetchSiteHandler: IsAllowedSecFetchSiteHandler = ((optsSecFetchSite) => {
-+    if (!optsSecFetchSite) {
-+      // Default: only allow same-origin
-+      return (secFetchSite) => secFetchSite === 'same-origin'
-+    } else if (typeof optsSecFetchSite === 'string') {
-+      return (secFetchSite) => secFetchSite === optsSecFetchSite
-+    } else if (typeof optsSecFetchSite === 'function') {
-+      return optsSecFetchSite
-+    } else {
-+      return (secFetchSite) => optsSecFetchSite.includes(secFetchSite)
-+    }
-+  })(options?.secFetchSite)
-+  const isAllowedSecFetchSite = (secFetchSite: string | undefined, c: Context) => {
-+    if (secFetchSite === undefined) {
-+      // denied always when sec-fetch-site header is not present
-+      return false
-+    }
-+    // type guard to check if the value is a valid SecFetchSite
-+    if (!isSecFetchSite(secFetchSite)) {
-+      return false
-+    }
-+    return secFetchSiteHandler(secFetchSite, c)
-+  }
-```
-
-```diff
-+      !isAllowedSecFetchSite(c.req.header('sec-fetch-site'), c) &&
-```
-
-**Changed lines (target):** 123–133 (11 lines of new code: `isAllowedSecFetchSite` function body). Additional changed lines in same file: 11–14 (type guards + handler type), 22 (CSRFOptions field), 111–122 (secFetchSiteHandler closure), 150 (middleware guard condition).
-
-**CC:** 3 — three conditional branches: (1) `secFetchSite === undefined` → false, (2) `!isSecFetchSite(secFetchSite)` → false, (3) `secFetchSiteHandler(secFetchSite, c)` → return result. No loops, no nested conditionals.
-
-**Coverage:** 100% (stmt). All 11 lines covered by tests.
-
-**CRAP:** 3 (per output-threshold-30.json) — computed via `CC² × (1 - coverage/100)³ + CC`: CC=3, coverage=100% → 3²×0³+3 = 3.
-
-**Istanbul coverage evidence:** File `/private/tmp/wp4r-repos/hono/src/middleware/csrf/index.ts` present in `coverage-final.json` with 5 fnMap entries. `isAllowedSecFetchSite` fnMap entry: `decl.start.line=123, decl.end.line=133`. Confirms function exists in runtime coverage with correct line range.
-
-**Factual description:** `isAllowedSecFetchSite` is a new 11-line type-guard function added as part of the CSRF middleware refactor. It validates the `sec-fetch-site` request header in three stages: (1) denies requests where the header is absent (`undefined` → `false`), (2) rejects values not in the allowed set `['same-origin', 'same-site', 'none', 'cross-site']` via the `isSecFetchSite` type guard, (3) delegates to `secFetchSiteHandler` for configurable allowlist matching (default: only `same-origin`). The function has CC=3 due to three independent conditional branches, all covered by tests (coverage=100%). It is called from the middleware guard condition at line 150 alongside `isAllowedOrigin`.
+**Factual note:** New fn added alongside csrf mw refactor. Simple 11-line validator fn.
 
 **Classification:** [ ] EXPECTED_PASS / [ ] QUESTIONABLE_PASS / [ ] UNDETERMINED
 **Question:** Does threshold 30 appear to miss something obviously risky?
@@ -604,7 +530,7 @@ const isAllowedSecFetchSite = (secFetchSite: string | undefined, c: Context) => 
 
 **Why no PASS sample:** Pure type-only change — `Array` → `ReadonlyArray` in type alias in `src/cache/core/types/common.ts`. No runtime code changed. TypeScript type aliases are not fn declarations, so CRAP analyzer produces 0 changed fns.
 
-**Coverage evidence:** No coverage artifact at expected path `/tmp/wp4r-repos/apollo-client/coverage/coverage-final.json` — CONFIRMED missing (no file in preserved `experiments/wp4r-final/apollo-client/apollo-01/` and `/tmp/wp4r-repos/apollo-client/coverage` does not exist). **Coverage command (Jest, not Vitest — CONFIRMED from `metadata.md`/`aggregate-results.json`):** `node --expose-gc --experimental-import-meta-resolve --disable-warning=ExperimentalWarning ./node_modules/jest/bin/jest.js --config ./config/jest.config.ts --coverage --coverageReporters=json --coverageDirectory=/tmp/wp4r-repos/apollo-client/coverage --runInBand --watchAll=false --testPathPatterns="src/cache/core"` — **coverage exit 1** (CONFIRMED `coverage-exit.txt`), **stdout 0 bytes** (CONFIRMED), **stderr 12128 bytes** (CONFIRMED, starts `ts-jest[config] (WARN)`, contains `FAIL Core Tests ... expect(...).toBeCalled is not a function`). **Prototype exit 1** with `analysisStatus: SUCCESS` `gate: PASS` `completeness: COMPLETE` `changed: 0` — exit 1 signals missing coverage, not analysis failure (LIKELY; SUCCESS indicates analysis completed). Word "coverage" absent from stderr (CONFIRMED `grep -ci coverage` 0). Empty stdout alone is not confirmed root cause.
+**Coverage evidence:** No coverage artifacts generated. `coverage-generation-stdout.txt` and `coverage-generation-stderr.txt` are both empty (0 bytes). test suite has failures (`expect(...).toBeCalled is not a function`), which likely caused coverage to not be generated.
 
 ---
 
@@ -618,11 +544,9 @@ const isAllowedSecFetchSite = (secFetchSite: string | undefined, c: Context) => 
 **Changed fn:** `useMutation` (lines 223–386)
 - **CC:** 2 | **CRAP:** null | **Coverage:** null
 
-**Why NOT_EVALUATED:** No coverage artifact at `/tmp/wp4r-repos/apollo-client/coverage/coverage-final.json` — CONFIRMED missing (no file in preserved dir, `/tmp/wp4r-repos/apollo-client/coverage` does not exist). **Coverage command (Jest, CONFIRMED):** `node --expose-gc --experimental-import-meta-resolve --disable-warning=ExperimentalWarning ./node_modules/jest/bin/jest.js --config ./config/jest.config.ts --coverage --coverageReporters=json --coverageDirectory=/tmp/wp4r-repos/apollo-client/coverage --runInBand --watchAll=false --testPathPatterns="src/react/hooks/__tests__/useMutation"` — **coverage exit 1** (CONFIRMED), **stdout 0 bytes** (CONFIRMED), **stderr 8948 bytes** (CONFIRMED, starts `ts-jest[config] (WARN)`, contains `PASS ReactDOM 19 ... useMutation.test.tsx` and console.error). Word "coverage" absent from stderr (CONFIRMED).
+**Why NOT_EVALUATED:** No coverage artifact generated. Both `coverage-generation-stdout.txt` and `coverage-generation-stderr.txt` are empty (0 bytes). test suite ran with ts-jest deprecation warnings and console.error msgs but no coverage output was produced.
 
-**Coverage vs prototype distinction (CONFIRMED):** `coverage-generation-stdout.txt` 0 bytes / `stderr` 8948 bytes vs `prototype-exit-30.txt` 1 vs `analysisStatus: SUCCESS` `gate: PASS` `completeness: INCOMPLETE` `changed: 1` `coverageAvail: 0/1` `CRAP: null` — coverage-command exit 1 and prototype exit 1 are distinct from SUCCESS/PASS; prototype exit 1 LIKELY signals NOT_EVALUATED handling, not analysis failure.
-
-**Artifact at execution time:** If artifact existed at prototype time it would be `coverageAvail 1/1`; measured `0/1` and no file preserved → LIKELY never generated, but cannot prove absence at exact execution instant without timestamped snapshot (UNRESOLVED edge).
+**Diagnostic:** `coverage-generation-stdout.txt` is empty (0 bytes), indicating vitest coverage command either failed silently or produced no output. stderr shows ts-jest deprecation warnings and console.error from tests but no coverage-specific errors. apollo-client repo has no `coverage/` dir in `/private/tmp/wp4r-repos/apollo-client/`.
 
 ---
 
@@ -642,11 +566,9 @@ const isAllowedSecFetchSite = (secFetchSite: string | undefined, c: Context) => 
 | `useOptions` | 496–525 | 1 | null | null |
 | `useResubscribeIfNecessary` | 600–652 | 8 | null | null |
 
-**Why NOT_EVALUATED:** Same as apollo-02 — no artifact at `/tmp/wp4r-repos/apollo-client/coverage/coverage-final.json` — CONFIRMED missing. **Coverage command (Jest, CONFIRMED):** `node --expose-gc --experimental-import-meta-resolve --disable-warning=ExperimentalWarning ./node_modules/jest/bin/jest.js --config ./config/jest.config.ts --coverage --coverageReporters=json --coverageDirectory=/tmp/wp4r-repos/apollo-client/coverage --runInBand --watchAll=false --testPathPatterns="src/react/hooks/__tests__/useQuery"` — **coverage exit 1** (CONFIRMED), **stdout 0 bytes** (CONFIRMED), **stderr 118679 bytes** (CONFIRMED, starts `ts-jest[config] (WARN)`, contains `PASS ReactDOM 19 ... useQuery.test.tsx` with 5 passed suites and console.error). Word "coverage" absent from stderr (CONFIRMED).
+**Why NOT_EVALUATED:** Same as apollo-02 — no coverage artifacts generated. Both stdout and stderr are empty (0 bytes). No `coverage/` dir exists.
 
-**Coverage vs prototype distinction (CONFIRMED):** `coverage-exit.txt` 1 / `stdout` 0 / `stderr` 118679 vs `prototype-exit-30.txt` 1 vs `analysisStatus: SUCCESS` `gate: PASS` `completeness: INCOMPLETE` `changed: 4` `coverageAvail: 0/4` `CRAP: null` — prototype exit 1 distinct from SUCCESS/PASS; LIKELY signals missing coverage, not analysis failure. Full hook-suite narrow scope used (69s) vs full hooks 286s per `metadata.md`.
-
-**Root cause (CONFIRMED Jest, UNRESOLVED silent reporter failure):** Jest coverage reporter with `--coverageReporters=json` and absolute `--coverageDirectory` produced no artifact and no "coverage" word in stderr; empty stdout alone is not confirmed root cause (stderr is non-empty and contains test results).
+**Diagnostic:** Same root cause as apollo-02. `coverage-generation-stdout.txt` and `coverage-generation-stderr.txt` are both 0 bytes for all three apollo cases. This means vitest coverage command produced no output at all — neither test results nor error msgs. This is distinct from hono/h3 cases where coverage ran successfully. apollo test suite has known test failures (`expect(...).toBeCalled is not a function`) which may cause vitest to exit before coverage reporting. `--coverage.reportOnFailure` flag in command should handle this, but empty output suggests process may have failed before reaching coverage generation.
 
 ---
 
@@ -654,10 +576,10 @@ const isAllowedSecFetchSite = (secFetchSite: string | undefined, c: Context) => 
 
 | Case | Changed Fns | CC Range | CRAP | Coverage | Root Cause |
 |------|-------------|----------|----|----------|------------|
-| apollo-02 | 1 (`useMutation`) | 2 | null | null | Jest coverage exit 1, no artifact, stdout 0 / stderr 8948 (CONFIRMED) |
-| apollo-03 | 4 (`useQuery` family) | 1–8 | null | null | Jest coverage exit 1, no artifact, stdout 0 / stderr 118679 (CONFIRMED) |
+| apollo-02 | 1 (`useMutation`) | 2 | null | null | Empty coverage stdout/stderr (0 bytes) |
+| apollo-03 | 4 (`useQuery` family) | 1–8 | null | null | Empty coverage stdout/stderr (0 bytes) |
 
-**Common root cause (CONFIRMED Jest, UNRESOLVED silent reporter):** All three Apollo cases used Jest (not Vitest — CONFIRMED from `metadata.md` `aggregate-results.json` `WP4R_FINAL_USEFULNESS_RESULTS.md`): `node --expose-gc ... jest.js --config ./config/jest.config.ts --coverage --coverageReporters=json --coverageDirectory=/tmp/wp4r-repos/apollo-client/coverage --runInBand --watchAll=false --testPathPatterns="..."` — coverage exit 1 (CONFIRMED), stdout 0 bytes (CONFIRMED), stderr 12128/8948/118679 bytes non-empty (CONFIRMED, ts-jest WARN + test output), no `coverage-final.json` at expected path (CONFIRMED missing), word "coverage" absent from stderr (CONFIRMED). Prototype exit 1 with `analysisStatus: SUCCESS` `gate: PASS` is distinct — exit 1 LIKELY signals missing coverage/NOT_EVALUATED, not analysis failure. Empty stdout alone is not confirmed root cause; reporter failed silently (UNRESOLVED why no coverage word/error).
+**Common root cause:** All three apollo cases (01, 02, 03) produced empty `coverage-generation-stdout.txt` and `coverage-generation-stderr.txt` files (0 bytes each). This indicates vitest coverage command failed before producing any output. apollo-client test suite has known failures (`expect(...).toBeCalled is not a function`) which likely cause vitest to exit before coverage reporting completes.
 
 ---
 
