@@ -1,0 +1,5 @@
+Coverage command exit: 0, epoch: 1787623421->1787623422
+Coverage command exit: 1, epoch: 1787623522->1787623525
+Coverage command exit: 1, epoch: 1787623557->1787623559
+Coverage command exit: 1, epoch: 1787623598->1787623600
+Coverage command exit: 1, epoch: 1787623640->1787623642
