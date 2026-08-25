@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "393ded96196da1b4f23813fea670b0d5a70526c6",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/helper/route/index.ts",
+      "method": "routePath",
+      "lineStart": 58,
+      "lineEnd": 59,
+      "cc": 4,
+      "crap": 4,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/helper/route/index.ts",
+      "method": "baseRoutePath",
+      "lineStart": 82,
+      "lineEnd": 83,
+      "cc": 4,
+      "crap": 4,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/helper/route/index.ts",
+      "method": "basePath",
+      "lineStart": 107,
+      "lineEnd": 141,
+      "cc": 10,
+      "crap": 10.04551661356395,
+      "coverage": 92.3076923076923,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 15
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/helper/route/index.ts",
+      "method": "routePath",
+      "crap": 4,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/helper/route/index.ts",
+      "method": "baseRoutePath",
+      "crap": 4,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/helper/route/index.ts",
+      "method": "basePath",
+      "crap": 10.04551661356395,
+      "threshold": 15,
+      "cc": 10,
+      "coverage": 92.3076923076923
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "COMPLETE"
+}

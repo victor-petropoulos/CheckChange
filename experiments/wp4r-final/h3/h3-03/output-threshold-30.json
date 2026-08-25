@@ -1,0 +1,122 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "1faca72a1180216b98c7fb399b7568c7ce727c9f",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/utils/timing.ts",
+      "method": "setServerTiming",
+      "lineStart": 17,
+      "lineEnd": 35,
+      "cc": 10,
+      "crap": 10,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/timing.ts",
+      "method": "withServerTiming",
+      "lineStart": 51,
+      "lineEnd": 62,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/timing.ts",
+      "method": "_isValidToken",
+      "lineStart": 67,
+      "lineEnd": 69,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/timing.ts",
+      "method": "_escapeDesc",
+      "lineStart": 71,
+      "lineEnd": 73,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 30
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/timing.ts",
+      "method": "setServerTiming",
+      "crap": 10,
+      "threshold": 30,
+      "cc": 10,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/timing.ts",
+      "method": "withServerTiming",
+      "crap": 1,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/timing.ts",
+      "method": "_isValidToken",
+      "crap": 1,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/timing.ts",
+      "method": "_escapeDesc",
+      "crap": 1,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": 100
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "COMPLETE"
+}

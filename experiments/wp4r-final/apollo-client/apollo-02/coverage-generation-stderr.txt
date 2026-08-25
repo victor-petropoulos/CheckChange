@@ -1,0 +1,144 @@
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /private/tmp/wp4r-repos/apollo-client/tsconfig.tests.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS ReactDOM 19 src/react/hooks/__tests__/useMutation.test.tsx (5.64 s)
+  ● Console
+
+    console.error
+      Missing field 'createTodo' while writing result {}
+
+      47 |       }
+      48 |
+    > 49 |       method(message, ...args);
+         |             ^
+      50 |     }
+      51 |   } as (typeof console)[M];
+      52 | }
+
+      at invariant.apply (utilities/invariant/index.ts:49:13)
+      at error (cache/inmemory/writeToStore.ts:404:19)
+          at Map.forEach (<anonymous>)
+      at StoreWriter.forEach [as processSelectionSet] (cache/inmemory/writeToStore.ts:333:7)
+      at StoreWriter.processSelectionSet [as writeToStore] (cache/inmemory/writeToStore.ts:175:22)
+      at InMemoryCache.writeToStore [as write] (cache/inmemory/inMemoryCache.ts:210:31)
+      at write (core/QueryInfo.ts:461:52)
+          at Array.forEach (<anonymous>)
+      at forEach (core/QueryInfo.ts:461:27)
+      at update (cache/inmemory/inMemoryCache.ts:423:32)
+      at InMemoryCache.perform [as batch] (cache/inmemory/inMemoryCache.ts:463:7)
+      at QueryManager.batch [as refetchQueries] (core/QueryManager.ts:1317:18)
+      at QueryInfo.refetchQueries [as markMutationResult] (core/QueryInfo.ts:458:10)
+      at markMutationResult (core/QueryManager.ts:343:25)
+      at doInnerSub (../node_modules/rxjs/dist/cjs/internal/operators/mergeInternals.js:22:31)
+      at outerNext (../node_modules/rxjs/dist/cjs/internal/operators/mergeInternals.js:17:70)
+      at OperatorSubscriber._this._next (../node_modules/rxjs/dist/cjs/internal/operators/OperatorSubscriber.js:33:21)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/tap.js:21:28
+      at OperatorSubscriber._this._next (../node_modules/rxjs/dist/cjs/internal/operators/OperatorSubscriber.js:33:21)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at OperatorSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at next (testing/core/mocking/mockLink.ts:215:20)
+      at Timeout.task [as _onTimeout] (../node_modules/jsdom/lib/jsdom/browser/Window.js:579:19)
+
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /private/tmp/wp4r-repos/apollo-client/tsconfig.tests.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS ReactDOM 18 src/react/hooks/__tests__/useMutation.test.tsx (5.306 s)
+  ● Console
+
+    console.error
+      Missing field 'createTodo' while writing result {}
+
+      47 |       }
+      48 |
+    > 49 |       method(message, ...args);
+         |             ^
+      50 |     }
+      51 |   } as (typeof console)[M];
+      52 | }
+
+      at invariant.apply (utilities/invariant/index.ts:49:13)
+      at error (cache/inmemory/writeToStore.ts:404:19)
+          at Map.forEach (<anonymous>)
+      at StoreWriter.forEach [as processSelectionSet] (cache/inmemory/writeToStore.ts:333:7)
+      at StoreWriter.processSelectionSet [as writeToStore] (cache/inmemory/writeToStore.ts:175:22)
+      at InMemoryCache.writeToStore [as write] (cache/inmemory/inMemoryCache.ts:210:31)
+      at write (core/QueryInfo.ts:461:52)
+          at Array.forEach (<anonymous>)
+      at forEach (core/QueryInfo.ts:461:27)
+      at update (cache/inmemory/inMemoryCache.ts:423:32)
+      at InMemoryCache.perform [as batch] (cache/inmemory/inMemoryCache.ts:463:7)
+      at QueryManager.batch [as refetchQueries] (core/QueryManager.ts:1317:18)
+      at QueryInfo.refetchQueries [as markMutationResult] (core/QueryInfo.ts:458:10)
+      at markMutationResult (core/QueryManager.ts:343:25)
+      at doInnerSub (../node_modules/rxjs/dist/cjs/internal/operators/mergeInternals.js:22:31)
+      at outerNext (../node_modules/rxjs/dist/cjs/internal/operators/mergeInternals.js:17:70)
+      at OperatorSubscriber._this._next (../node_modules/rxjs/dist/cjs/internal/operators/OperatorSubscriber.js:33:21)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/tap.js:21:28
+      at OperatorSubscriber._this._next (../node_modules/rxjs/dist/cjs/internal/operators/OperatorSubscriber.js:33:21)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at OperatorSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at next (testing/core/mocking/mockLink.ts:215:20)
+      at Timeout.task [as _onTimeout] (../node_modules/jsdom/lib/jsdom/browser/Window.js:579:19)
+
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /private/tmp/wp4r-repos/apollo-client/tsconfig.tests.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS ReactDOM 17 src/react/hooks/__tests__/useMutation.test.tsx (5.288 s)
+  ● Console
+
+    console.error
+      Missing field 'createTodo' while writing result {}
+
+      47 |       }
+      48 |
+    > 49 |       method(message, ...args);
+         |             ^
+      50 |     }
+      51 |   } as (typeof console)[M];
+      52 | }
+
+      at invariant.apply (utilities/invariant/index.ts:49:13)
+      at error (cache/inmemory/writeToStore.ts:404:19)
+          at Map.forEach (<anonymous>)
+      at StoreWriter.forEach [as processSelectionSet] (cache/inmemory/writeToStore.ts:333:7)
+      at StoreWriter.processSelectionSet [as writeToStore] (cache/inmemory/writeToStore.ts:175:22)
+      at InMemoryCache.writeToStore [as write] (cache/inmemory/inMemoryCache.ts:210:31)
+      at write (core/QueryInfo.ts:461:52)
+          at Array.forEach (<anonymous>)
+      at forEach (core/QueryInfo.ts:461:27)
+      at update (cache/inmemory/inMemoryCache.ts:423:32)
+      at InMemoryCache.perform [as batch] (cache/inmemory/inMemoryCache.ts:463:7)
+      at QueryManager.batch [as refetchQueries] (core/QueryManager.ts:1317:18)
+      at QueryInfo.refetchQueries [as markMutationResult] (core/QueryInfo.ts:458:10)
+      at markMutationResult (core/QueryManager.ts:343:25)
+      at doInnerSub (../node_modules/rxjs/dist/cjs/internal/operators/mergeInternals.js:22:31)
+      at outerNext (../node_modules/rxjs/dist/cjs/internal/operators/mergeInternals.js:17:70)
+      at OperatorSubscriber._this._next (../node_modules/rxjs/dist/cjs/internal/operators/OperatorSubscriber.js:33:21)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/tap.js:21:28
+      at OperatorSubscriber._this._next (../node_modules/rxjs/dist/cjs/internal/operators/OperatorSubscriber.js:33:21)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at OperatorSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at next (testing/core/mocking/mockLink.ts:215:20)
+      at Timeout.task [as _onTimeout] (../node_modules/jsdom/lib/jsdom/browser/Window.js:579:19)
+
+
+Test Suites: 3 passed, 3 total
+Tests:       33 skipped, 132 passed, 165 total
+Snapshots:   0 total
+Time:        16.798 s
+Ran all test suites matching src/react/hooks/__tests__/useMutation in 3 projects.

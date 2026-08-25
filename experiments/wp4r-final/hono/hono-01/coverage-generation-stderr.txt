@@ -1,0 +1,131 @@
+stderr | src/hono.test.ts > Middleware > Basic > internal server error
+Error: Error!
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/hono.test.ts:1034:13
+    at dispatch [90m(/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:51:46
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/hono.test.ts:991:13
+    at dispatch [90m(/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:51:46
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/hono.test.ts:986:13
+    at dispatch [90m(/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:23:12
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/hono-base.ts:441:31
+
+stderr | src/middleware/jwk/index.test.ts > JWK > Credentials in header > Should return a server error if options.jwks_uri returns a 404
+Error: failed to fetch JWKS from http://localhost/.well-known/404-jwks.json
+    at Object.verifyWithJwks [90m(/private/tmp/wp4r-repos/hono/[39msrc/utils/jwt/jwt.ts:181:13[90m)[39m
+    at jwk2 [90m(/private/tmp/wp4r-repos/hono/[39msrc/middleware/jwk/jwk.ts:135:17[90m)[39m
+    at dispatch [90m(/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:51:17[90m)[39m
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/hono-base.ts:441:25
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/middleware/jwk/index.test.ts:221:19
+    at [90mfile:///private/tmp/wp4r-repos/hono/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:20
+
+stderr | src/middleware/jwk/index.test.ts > JWK > Credentials in header > Should return a server error if the remotely fetched keys from options.jwks_uri are missing
+Error: invalid JWKS response. "keys" field is missing
+    at Object.verifyWithJwks [90m(/private/tmp/wp4r-repos/hono/[39msrc/utils/jwt/jwt.ts:185:13[90m)[39m
+    at jwk2 [90m(/private/tmp/wp4r-repos/hono/[39msrc/middleware/jwk/jwk.ts:135:17[90m)[39m
+    at dispatch [90m(/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:51:17[90m)[39m
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/hono-base.ts:441:25
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/middleware/jwk/index.test.ts:230:19
+    at [90mfile:///private/tmp/wp4r-repos/hono/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:20
+
+stderr | src/middleware/jwk/index.test.ts > JWK > Credentials in header > Should return a server error if the remotely fetched keys from options.jwks_uri are malformed
+Error: invalid JWKS response. "keys" field is not an array
+    at Object.verifyWithJwks [90m(/private/tmp/wp4r-repos/hono/[39msrc/utils/jwt/jwt.ts:188:13[90m)[39m
+    at jwk2 [90m(/private/tmp/wp4r-repos/hono/[39msrc/middleware/jwk/jwk.ts:135:17[90m)[39m
+    at dispatch [90m(/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:51:17[90m)[39m
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/hono-base.ts:441:25
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/middleware/jwk/index.test.ts:239:19
+    at [90mfile:///private/tmp/wp4r-repos/hono/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:20
+
+stderr | src/hono.test.ts > Error handling in middleware > Should handle the error in middleware
+Error: Error message
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/hono.test.ts:1530:11
+    at dispatch [90m(/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:51:46
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/hono.test.ts:1511:11
+    at dispatch [90m(/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:23:12
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/hono-base.ts:441:31
+    at Hono.#dispatch [90m(/private/tmp/wp4r-repos/hono/[39msrc/hono-base.ts:452:5[90m)[39m
+    at Hono.fetch [90m(/private/tmp/wp4r-repos/hono/[39msrc/hono-base.ts:471:17[90m)[39m
+    at Hono.request [90m(/private/tmp/wp4r-repos/hono/[39msrc/hono-base.ts:496:17[90m)[39m
+
+stderr | src/hono.test.ts > Error handling in middleware > Should handle the error in middleware - async
+Error: Error message
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/hono.test.ts:1534:11
+    at dispatch [90m(/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:51:46
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/hono.test.ts:1519:11
+    at dispatch [90m(/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:23:12
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/hono-base.ts:441:31
+    at Hono.#dispatch [90m(/private/tmp/wp4r-repos/hono/[39msrc/hono-base.ts:452:5[90m)[39m
+    at Hono.fetch [90m(/private/tmp/wp4r-repos/hono/[39msrc/hono-base.ts:471:17[90m)[39m
+    at Hono.request [90m(/private/tmp/wp4r-repos/hono/[39msrc/hono-base.ts:496:17[90m)[39m
+
+stderr | src/jsx/dom/intrinsic-element/components.test.tsx > intrinsic element > document metadata > script element > should be fired onError event
+Error: Could not load script: "http://localhost/invalid.js"
+    at QueueItem.onErrorWrapped [as onError] (/private/tmp/wp4r-repos/hono/node_modules/jsdom/lib/jsdom/browser/resources/per-document-resource-loader.js:38:19)
+    at AsyncResourceQueue._check (/private/tmp/wp4r-repos/hono/node_modules/jsdom/lib/jsdom/browser/resources/async-resource-queue.js:37:22)
+    at /private/tmp/wp4r-repos/hono/node_modules/jsdom/lib/jsdom/browser/resources/async-resource-queue.js:94:20 Invalid URL
+
+stderr | src/jsx/dom/intrinsic-element/components.test.tsx > intrinsic element > document metadata > script element > should be inserted into body if has no props
+Error: Not implemented: window.alert
+    at module.exports (/private/tmp/wp4r-repos/hono/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:9:17)
+    at /private/tmp/wp4r-repos/hono/node_modules/jsdom/lib/jsdom/browser/Window.js:897:7
+    at about:blank:1:1
+    at Script.runInContext (node:vm:149:12)
+    at Object.runInContext (node:vm:301:6)
+    at processJavaScript (/private/tmp/wp4r-repos/hono/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js:238:10)
+    at HTMLScriptElementImpl._innerEval (/private/tmp/wp4r-repos/hono/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js:173:5)
+    at /private/tmp/wp4r-repos/hono/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js:114:12
+    at ResourceQueue.push (/private/tmp/wp4r-repos/hono/node_modules/jsdom/lib/jsdom/browser/resources/resource-queue.js:53:16)
+    at HTMLScriptElementImpl._fetchInternalScript (/private/tmp/wp4r-repos/hono/node_modules/jsdom/lib/jsdom/living/nodes/HTMLScriptElement-impl.js:113:21) [90mundefined[39m
+
+stderr | src/client/utils.test.ts > parseResponse > should throw error matching snapshots
+[MSW] Warning: intercepted a request without a matching request handler:
+
+  • GET http://localhost/noRoute
+
+If you still wish to intercept this unhandled request, please create a request handler for it.
+Read more: https://mswjs.io/docs/getting-started/mocks
+
+stderr | src/middleware/language/index.test.ts > languageDetector > Debug Mode > should log errors in debug mode
+Error in querystring detector: Error: Simulated error
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/middleware/language/index.test.ts:242:15
+    at mockCall [90m(file:///private/tmp/wp4r-repos/hono/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:96:15[90m)[39m
+    at detectFromQuery [90m(file:///private/tmp/wp4r-repos/hono/[39mnode_modules/[4mtinyspy[24m/dist/index.js:47:103[90m)[39m
+    at detectLanguage [90m(/private/tmp/wp4r-repos/hono/[39msrc/middleware/language/language.ts:235:22[90m)[39m
+    at languageDetector2 [90m(/private/tmp/wp4r-repos/hono/[39msrc/middleware/language/language.ts:278:20[90m)[39m
+    at dispatch [90m(/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:51:23[90m)[39m
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/compose.ts:23:12
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/hono-base.ts:441:31
+    at Hono.#dispatch [90m(/private/tmp/wp4r-repos/hono/[39msrc/hono-base.ts:452:5[90m)[39m
+    at Hono.fetch [90m(/private/tmp/wp4r-repos/hono/[39msrc/hono-base.ts:471:17[90m)[39m
+
+stderr | src/helper/websocket/index.test.ts > defineWebSocketHelper > When upgrading failed and use it in handler, it should throw error
+Promise returned by `expect(actual).rejects.toThrow()` was not awaited. Vitest currently auto-awaits hanging assertions at the end of the test, but this will cause the test to fail in Vitest 3. Please remember to await the assertion.
+    at /private/tmp/wp4r-repos/hono/src/helper/websocket/index.test.ts:54:41
+
+stderr | src/jsx/dom/server.test.tsx > renderToString > Should omit options
+options are not supported yet
+
+stderr | src/jsx/dom/server.test.tsx > renderToReadableStream > Should omit options, except onError
+options are not supported yet, except onError
+
+stderr | src/middleware/body-limit/index.test.ts > Body Limit Middleware > POST request > ReadableStream body > should return 413 response
+BodyLimitError: Payload Too Large
+    at Object.start [90m(/private/tmp/wp4r-repos/hono/[39msrc/middleware/body-limit/index.ts:94:32[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+
+stderr | src/adapter/cloudflare-workers/websocket.test.ts > upgradeWebSocket middleware > Should receive message and readyState is valid
+RangeError: init["status"] must be in the range of 200 to 599, inclusive.
+[90m    at initializeResponse (node:internal/deps/undici/undici:11875:15)[39m
+[90m    at new Response (node:internal/deps/undici/undici:11633:9)[39m
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/adapter/cloudflare-workers/websocket.ts:48:10
+    at Array.upgradeWebSocket [90m(/private/tmp/wp4r-repos/hono/[39msrc/helper/websocket/index.ts:118:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at [90m/private/tmp/wp4r-repos/hono/[39msrc/adapter/cloudflare-workers/websocket.test.ts:32:5
+    at [90mfile:///private/tmp/wp4r-repos/hono/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:20
+

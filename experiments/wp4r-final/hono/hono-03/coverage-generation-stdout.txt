@@ -1,0 +1,462 @@
+
+ RUN  v3.0.5 /private/tmp/wp4r-repos/hono
+      Coverage enabled with v8
+
+ ✓ src/router/trie-router/node.test.ts (79 tests) 7ms
+ ✓ src/compose.test.ts (32 tests) 9ms
+stdout | src/hono.test.ts > Middleware > Basic > logging and custom header
+GET : http://localhost/hello
+
+stdout | src/hono.test.ts > Middleware > Basic > logging and custom header with named param
+GET : http://localhost/hello/message
+
+stdout | src/hono.test.ts > Middleware > Basic > should return correct the content-type header
+GET : http://localhost/json
+
+stdout | src/hono.test.ts > Middleware > Basic > not found
+GET : http://localhost/foo
+
+ ✓ src/types.test.ts (61 tests) 6ms
+stdout | src/hono.test.ts > Middleware > Basic > internal server error
+GET : http://localhost/error
+
+stdout | src/hono.test.ts > Middleware > Basic > internal server error
+Internal Server Error
+
+ ✓ src/validator/validator.test.ts (50 tests) 22ms
+ ✓ src/middleware/jwt/index.test.ts (31 tests) 24ms
+ ✓ src/client/client.test.ts (71 tests) 39ms
+stdout | src/helper/ssg/ssg.test.tsx > toSSG function > should execute additional processing using afterGenerateHook
+static/index.html
+static/about.html
+static/about/some.txt
+static/bravo.html
+static/Charlie.html
+static/post/1.html
+static/post/2.html
+static/user/1.html
+static/user/2.html
+static/user/3.html
+
+ ✓ src/hono.test.ts (200 tests) 69ms
+ ✓ src/middleware/jwk/index.test.ts (37 tests) 101ms
+stdout | src/helper/ssg/ssg.test.tsx > toSSG function > should handle asynchronous afterGenerateHook correctly
+Generated 10 files.
+
+ ✓ src/context.test.ts (57 tests) 12ms
+stdout | src/helper/ssg/ssg.test.tsx > Combined Generate hooks - AfterGenerateHook > should execute combined AfterGenerateHooks affecting the result
+Generation completed with status: [33mtrue[39m
+
+ ✓ src/jsx/index.test.tsx (218 tests) 57ms
+ ✓ src/helper/ssg/ssg.test.tsx (41 tests) 120ms
+ ✓ src/middleware/bearer-auth/index.test.ts (27 tests) 56ms
+ ✓ src/helper/cookie/index.test.ts (29 tests) 23ms
+ ✓ src/middleware/secure-headers/index.test.ts (22 tests) 11ms
+ ✓ src/middleware/csrf/index.test.ts (25 tests) 12ms
+ ✓ src/utils/cookie.test.ts (29 tests) 14ms
+ ✓ src/jsx/intrinsic-element/components.test.tsx (24 tests) 4ms
+ ✓ src/middleware/jsx-renderer/index.test.tsx (13 tests) 18ms
+stdout | src/middleware/cache/index.test.ts > Cache Middleware > Should not be enabled if caches is not defined
+Cache Middleware is not enabled because caches is not defined.
+
+ ✓ src/middleware/cache/index.test.ts (119 tests) 18ms
+ ✓ src/utils/url.test.ts (23 tests) 5ms
+stdout | src/jsx/streaming.test.tsx > Streaming > reject()
+[90mundefined[39m
+
+ ✓ src/client/utils.test.ts (26 tests) 43ms
+ ✓ src/utils/body.test.ts (32 tests) 15ms
+ ✓ src/jsx/hooks/dom.test.tsx (23 tests) 248ms
+ ✓ src/helper/factory/index.test.ts (14 tests) 7ms
+ ✓ src/jsx/dom/intrinsic-element/components.test.tsx (46 tests) 279ms
+ ✓ src/request.test.ts (22 tests) 12ms
+ ✓ src/utils/jwt/jwt.test.ts (41 tests) 663ms
+ ✓ src/jsx/components.test.tsx (22 tests) 187ms
+ ✓ src/jsx/streaming.test.tsx (23 tests) 347ms
+ ✓ src/adapter/aws-lambda/handler.test.ts (8 tests) 6ms
+ ✓ src/middleware/combine/index.test.ts (15 tests) 11ms
+ ✓ src/middleware/etag/index.test.ts (15 tests) 37ms
+ ✓ src/middleware/basic-auth/index.test.ts (13 tests) 23ms
+ ✓ src/adapter/cloudflare-pages/handler.test.ts (15 tests) 16ms
+ ✓ src/jsx/dom/components.test.tsx (22 tests) 159ms
+ ✓ src/utils/types.test.ts (29 tests) 2ms
+ ✓ src/helper/proxy/index.test.ts (10 tests) 10ms
+ ✓ src/middleware/serve-static/index.test.ts (17 tests) 12ms
+ ✓ src/middleware/cors/index.test.ts (10 tests) 8ms
+ ✓ src/middleware/trailing-slash/index.test.ts (18 tests) 10ms
+ ✓ src/adapter/cloudflare-workers/serve-static.test.ts (16 tests | 1 skipped) 11ms
+stdout | src/middleware/language/index.test.ts > languageDetector > Debug Mode > should log debug information when enabled
+Language detected from querystring: fr
+
+ ✓ src/middleware/language/index.test.ts (19 tests) 15ms
+ ✓ src/helper/css/index.test.tsx (38 tests) 12ms
+ ✓ src/helper/accepts/accepts.test.ts (8 tests) 12ms
+ ✓ src/middleware/method-override/index.test.ts (10 tests) 31ms
+ ✓ src/helper/route/index.test.ts (7 tests) 14ms
+ ✓ src/helper/streaming/sse.test.tsx (9 tests) 158ms
+ ✓ src/middleware/request-id/index.test.ts (10 tests) 7ms
+ ✓ src/utils/buffer.test.ts (10 tests) 9ms
+ ✓ src/helper/dev/index.test.ts (8 tests) 4ms
+stdout | src/router/reg-exp-router/router.test.ts > RegExpRouter > Common > Complex > Parameter with {.*} regexp
+Skip: UnsupportedPath
+
+stdout | src/router/reg-exp-router/router.test.ts > RegExpRouter > Common > Duplicate param name > parent
+Skip: UnsupportedPath
+
+stdout | src/router/reg-exp-router/router.test.ts > RegExpRouter > Common > Duplicate param name > child
+Skip: UnsupportedPath
+
+stdout | src/router/reg-exp-router/router.test.ts > RegExpRouter > Common > Including slashes > GET /js/main.js
+Skip: This route can not be added with `:label` to RegExpRouter. This is ambiguous
+
+stdout | src/router/reg-exp-router/router.test.ts > RegExpRouter > Common > Capture complex multiple directories > GET /part1/middle-b/latest
+Skip: UnsupportedPath
+
+stdout | src/router/reg-exp-router/router.test.ts > RegExpRouter > Common > Capture complex multiple directories > GET /part1/middle-b/end-c/latest
+Skip: UnsupportedPath
+
+stdout | src/router/reg-exp-router/router.test.ts > RegExpRouter > Common > Capture Group > Complex capturing group > GET request
+Skip: UnsupportedPath
+
+ ✓ src/jsx/dom/index.test.tsx (258 tests) 815ms
+ ✓ src/router/reg-exp-router/router.test.ts (83 tests | 7 skipped) 17ms
+ ✓ src/middleware/timing/index.test.ts (8 tests) 38ms
+ ✓ src/utils/accept.test.ts (18 tests) 78ms
+ ✓ src/utils/stream.test.ts (9 tests) 9ms
+ ✓ src/middleware/ip-restriction/index.test.ts (6 tests) 7ms
+ ✓ src/helper/websocket/index.test.ts (11 tests) 8ms
+ ✓ src/jsx/dom/hooks/index.test.tsx (5 tests) 58ms
+ ✓ src/jsx/dom/server.test.tsx (16 tests) 30ms
+ ✓ src/jsx/dom/context.test.tsx (12 tests) 88ms
+ ✓ src/adapter/lambda-edge/handler.test.ts (4 tests) 7ms
+ ✓ src/middleware/body-limit/index.test.ts (6 tests) 10ms
+ ✓ src/helper/streaming/stream.test.ts (5 tests) 13ms
+ ✓ src/adapter/bun/websocket.test.ts (6 tests) 4ms
+ ✓ src/utils/filepath.test.ts (2 tests) 2ms
+ ✓ src/adapter/service-worker/handler.test.ts (5 tests) 6ms
+ ✓ src/utils/ipaddr.test.ts (14 tests) 3ms
+ ✓ src/jsx/utils.test.ts (72 tests) 6ms
+ ✓ src/helper/html/index.test.ts (11 tests) 3ms
+ ✓ src/utils/encode.test.ts (44 tests) 5ms
+ ✓ src/jsx/dom/client.test.tsx (8 tests) 69ms
+ ✓ src/adapter/bun/conninfo.test.ts (5 tests) 2ms
+ ✓ src/helper/ssg/utils.test.ts (3 tests) 2ms
+stdout | src/router/linear-router/router.test.ts > LinearRouter > Common > Complex > Parameter with {.*} regexp
+Skip: UnsupportedPath
+
+stdout | src/router/linear-router/router.test.ts > LinearRouter > Common > Multi match > `params` per a handler > GET /entry/123/show
+Skip: UnsupportedPath
+
+ ✓ src/adapter/deno/websocket.test.ts (3 tests) 5ms
+stdout | src/router/linear-router/router.test.ts > LinearRouter > Common > Capture regex pattern has trailing wildcard > GET /foo/bar/file.html
+Skip: UnsupportedPath
+
+stdout | src/router/linear-router/router.test.ts > LinearRouter > Common > Trailing slash > GET /book/
+Skip: LinearRouter allows trailing slashes
+
+ ✓ src/client/types.test.ts (8 tests) 1ms
+ ✓ src/router/linear-router/router.test.ts (76 tests | 4 skipped) 10ms
+ ✓ src/utils/mime.test.ts (3 tests) 2ms
+ ✓ src/utils/basic-auth.test.ts (6 tests) 5ms
+ ✓ src/jsx/dom/css.test.tsx (28 tests | 3 skipped) 87ms
+ ✓ src/utils/concurrent.test.ts (6 tests) 149ms
+ ✓ src/helper/testing/index.test.ts (5 tests) 9ms
+ ✓ src/http-exception.test.ts (3 tests) 3ms
+ ✓ src/utils/crypto.test.ts (5 tests | 1 skipped) 5ms
+ ✓ src/middleware/compress/index.test.ts (19 tests) 796ms
+   ✓ Compress Middleware > Streaming Responses > should compress streaming responses written in multiple chunks 724ms
+ ✓ src/middleware/serve-static/path.test.ts (1 test) 2ms
+ ✓ src/jsx/children.test.ts (6 tests) 2ms
+ ✓ src/middleware/pretty-json/index.test.ts (3 tests) 6ms
+ ✓ src/helper/adapter/index.test.ts (4 tests) 2ms
+ ✓ src/adapter/cloudflare-workers/websocket.test.ts (2 tests) 8ms
+ ✓ src/jsx/base.test.tsx (3 tests) 2ms
+ ✓ src/jsx/hooks/string.test.tsx (3 tests) 5ms
+stdout | src/router/pattern-router/router.test.ts > Pattern > Common > Duplicate param name > self
+Skip: UnsupportedPath
+
+stdout | src/router/pattern-router/router.test.ts > Pattern > Common > Trailing slash > GET /book/
+Skip: PatternRouter allows trailing slashes
+
+ ✓ src/router/pattern-router/router.test.ts (75 tests | 2 skipped) 10ms
+ ✓ src/adapter/cloudflare-workers/utils.test.ts (1 test) 1ms
+ ✓ src/preset/quick.test.ts (2 tests) 2ms
+ ✓ src/middleware/powered-by/index.test.ts (3 tests) 5ms
+ ✓ src/adapter/vercel/handler.test.ts (2 tests) 6ms
+ ✓ src/helper/streaming/text.test.ts (1 test) 9ms
+ ✓ src/preset/tiny.test.ts (2 tests) 2ms
+ ✓ build/validate-exports.test.ts (1 test) 2ms
+ ✓ src/jsx/jsx-runtime.test.tsx (6 tests) 5ms
+ ✓ src/utils/color.test.ts (3 tests) 302ms
+   ✓ esbuild compatibility test > should build color.ts with esbuild without errors 300ms
+ ✓ src/adapter/deno/conninfo.test.ts (1 test) 2ms
+ ✓ src/utils/jwt/jwa.test.ts (1 test) 2ms
+ ✓ src/utils/html.test.ts (1 test) 2ms
+ ✓ src/adapter/cloudflare-workers/conninfo.test.ts (1 test) 2ms
+ ✓ src/adapter/bun/server.test.ts (1 test) 2ms
+ ✓ src/adapter/lambda-edge/conninfo.test.ts (1 test) 2ms
+ ✓ src/adapter/vercel/conninfo.test.ts (1 test) 2ms
+ ✓ src/router/trie-router/router.test.ts (73 tests) 12ms
+ ✓ src/middleware/context-storage/index.test.ts (1 test) 5ms
+ ✓ src/router/smart-router/router.test.ts (73 tests) 18ms
+ ✓ src/middleware/logger/index.test.ts (15 tests) 2011ms
+   ✓ Logger by Middleware > Time in seconds 1001ms
+   ✓ Logger by Middleware in NO_COLOR > Time in seconds 1001ms
+ ✓ build/remove-private-fields-worker.test.ts (2 tests) 1687ms
+   ✓ removePrivateFields > Works 909ms
+   ✓ removePrivateFields > Should throw error when path does not exist 777ms
+ ✓ src/middleware/timeout/index.test.ts (4 tests) 4214ms
+   ✓ Timeout API > Should trigger default timeout exception 1006ms
+   ✓ Timeout API > Should apply custom exception with function 1101ms
+   ✓ Timeout API > Error timeout with custom status code and message 1202ms
+   ✓ Timeout API > No Timeout should pass 902ms
+
+ Test Files  114 passed (114)
+      Tests  2792 passed | 18 skipped (2810)
+   Start at  19:11:33
+   Duration  6.83s (transform 3.09s, setup 771ms, collect 10.57s, tests 13.68s, environment 12ms, prepare 4.99s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   93.13 |    93.93 |   93.24 |   93.13 |                   
+ build             |   59.52 |    79.16 |   83.33 |   59.52 |                   
+  ...lds-worker.ts |      75 |    72.72 |     100 |      75 | 26-29,74-85       
+  ...ate-fields.ts |       0 |        0 |       0 |       0 | 1-40              
+  ...te-exports.ts |   93.75 |    91.66 |     100 |   93.75 | 24-25             
+ src               |    99.7 |    99.61 |     100 |    99.7 |                   
+  compose.ts       |     100 |      100 |     100 |     100 |                   
+  context.ts       |     100 |      100 |     100 |     100 |                   
+  hono-base.ts     |     100 |      100 |     100 |     100 |                   
+  hono.ts          |     100 |      100 |     100 |     100 |                   
+  ...-exception.ts |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  request.ts       |   98.24 |    97.91 |     100 |   98.24 | 224-225           
+  router.ts        |     100 |      100 |     100 |     100 |                   
+ ...ter/aws-lambda |   52.03 |    77.55 |   58.06 |   52.03 |                   
+  handler.ts       |    52.2 |    79.16 |      60 |    52.2 | ...22-523,534-535 
+  index.ts         |       0 |        0 |       0 |       0 | 1                 
+ src/adapter/bun   |   67.76 |    85.18 |      75 |   67.76 |                   
+  conninfo.ts      |   88.88 |    85.71 |     100 |   88.88 | 14-15             
+  index.ts         |       0 |        0 |       0 |       0 | 1                 
+  serve-static.ts  |       0 |        0 |       0 |       0 | 1-32              
+  server.ts        |     100 |      100 |     100 |     100 |                   
+  ssg.ts           |       0 |        0 |       0 |       0 | 1-27              
+  websocket.ts     |     100 |      100 |     100 |     100 |                   
+ ...oudflare-pages |   98.48 |    95.45 |      75 |   98.48 |                   
+  handler.ts       |     100 |      100 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 | 1                 
+ ...dflare-workers |   85.57 |    70.96 |      70 |   85.57 |                   
+  conninfo.ts      |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  ...tic-module.ts |   33.33 |      100 |       0 |   33.33 | 7-10              
+  serve-static.ts  |   90.47 |       60 |     100 |   90.47 | 31,33             
+  utils.ts         |   85.29 |    76.92 |     100 |   85.29 | 27-28,34,41-42    
+  websocket.ts     |   89.18 |    66.66 |      50 |   89.18 | 37-38,43-44       
+ src/adapter/deno  |   38.37 |    66.66 |      25 |   38.37 |                   
+  conninfo.ts      |     100 |      100 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 | 1                 
+  serve-static.ts  |       0 |        0 |       0 |       0 | 1-42              
+  ssg.ts           |       0 |        0 |       0 |       0 | 1-27              
+  websocket.ts     |      92 |     87.5 |      25 |      92 | 19-20             
+ ...er/lambda-edge |   92.94 |       72 |   77.77 |   92.94 |                   
+  conninfo.ts      |     100 |      100 |     100 |     100 |                   
+  handler.ts       |   93.67 |    73.91 |   85.71 |   93.67 | ...30,155,188-189 
+  index.ts         |       0 |        0 |       0 |       0 | 1                 
+ ...dapter/netlify |       0 |    33.33 |   33.33 |       0 |                   
+  handler.ts       |       0 |      100 |     100 |       0 | 4-10              
+  index.ts         |       0 |        0 |       0 |       0 | 1-6               
+  mod.ts           |       0 |        0 |       0 |       0 | 1                 
+ ...service-worker |   66.66 |    85.71 |      50 |   66.66 |                   
+  handler.ts       |     100 |      100 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 | 1-35              
+ ...adapter/vercel |    90.9 |       75 |   66.66 |    90.9 |                   
+  conninfo.ts      |     100 |      100 |     100 |     100 |                   
+  handler.ts       |     100 |      100 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 | 1                 
+ src/client        |   99.64 |    95.14 |     100 |   99.64 |                   
+  client.ts        |   99.38 |    91.52 |     100 |   99.38 | 205               
+  ...ult-please.ts |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  utils.ts         |     100 |      100 |     100 |     100 |                   
+ ...helper/accepts |   93.75 |       90 |   66.66 |   93.75 |                   
+  accepts.ts       |     100 |      100 |     100 |     100 |                   
+  index.ts         |       0 |        0 |       0 |       0 | 1                 
+ ...helper/adapter |   46.15 |       50 |   66.66 |   46.15 |                   
+  index.ts         |   46.15 |       50 |   66.66 |   46.15 | ...70,74-75,79-84 
+ ...elper/conninfo |       0 |        0 |       0 |       0 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+ src/helper/cookie |   95.37 |    93.02 |     100 |   95.37 |                   
+  index.ts         |   95.37 |    93.02 |     100 |   95.37 | 43-44,63,71-72    
+ src/helper/css    |   98.95 |    97.64 |     100 |   98.95 |                   
+  common.ts        |   98.87 |    98.11 |     100 |   98.87 | 115-116           
+  index.ts         |   99.09 |    96.87 |     100 |   99.09 | 102               
+ src/helper/dev    |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...helper/factory |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ src/helper/html   |   93.18 |       92 |     100 |   93.18 |                   
+  index.ts         |   93.18 |       92 |     100 |   93.18 | 46-47,54          
+ src/helper/proxy  |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ src/helper/route  |     100 |    94.11 |     100 |     100 |                   
+  index.ts         |     100 |    94.11 |     100 |     100 | 117               
+ src/helper/ssg    |   94.75 |    90.56 |   95.83 |   94.75 |                   
+  index.ts         |       0 |        0 |       0 |       0 | 1                 
+  middleware.ts    |   94.44 |    94.44 |     100 |   94.44 | 20-21             
+  ssg.ts           |   94.19 |    88.98 |     100 |   94.19 | ...67,389,396,403 
+  utils.ts         |     100 |      100 |     100 |     100 |                   
+ ...lper/streaming |   96.74 |     87.5 |     100 |   96.74 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  sse.ts           |    97.1 |    92.85 |     100 |    97.1 | 57-58             
+  stream.ts        |   93.93 |     87.5 |     100 |   93.93 | 37-38             
+  text.ts          |     100 |      100 |     100 |     100 |                   
+  utils.ts         |     100 |    77.77 |     100 |     100 | 7                 
+ ...helper/testing |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...lper/websocket |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ src/jsx           |   92.75 |    93.23 |   97.56 |   92.75 |                   
+  base.ts          |   97.64 |    93.43 |     100 |   97.64 | ...51-352,357-358 
+  children.ts      |     100 |      100 |     100 |     100 |                   
+  components.ts    |    90.2 |       90 |     100 |    90.2 | ...45,66-68,81-82 
+  constants.ts     |     100 |      100 |     100 |     100 |                   
+  context.ts       |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  ...ev-runtime.ts |     100 |      100 |     100 |     100 |                   
+  jsx-runtime.ts   |       0 |        0 |       0 |       0 | 1-48              
+  streaming.ts     |   97.22 |    95.65 |     100 |   97.22 | 47-48,80-81       
+  utils.ts         |   97.14 |     92.3 |     100 |   97.14 | 26                
+ src/jsx/dom       |    95.9 |    96.48 |   92.98 |    95.9 |                   
+  client.ts        |      96 |       90 |     100 |      96 | 34-35             
+  components.ts    |   92.59 |    66.66 |     100 |   92.59 | 17-18             
+  context.ts       |   95.34 |    88.88 |     100 |   95.34 | 11-12             
+  css.ts           |   78.12 |    90.62 |   63.63 |   78.12 | ...85-188,193-198 
+  index.ts         |     100 |     90.9 |     100 |     100 | 70                
+  ...ev-runtime.ts |     100 |      100 |     100 |     100 |                   
+  jsx-runtime.ts   |     100 |      100 |     100 |     100 |                   
+  render.ts        |   98.88 |    98.38 |     100 |   98.88 | ...33,181,236-239 
+  server.ts        |     100 |      100 |     100 |     100 |                   
+  utils.ts         |     100 |      100 |     100 |     100 |                   
+ src/jsx/dom/hooks |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...rinsic-element |   98.51 |    97.02 |     100 |   98.51 |                   
+  components.ts    |   98.51 |    97.02 |     100 |   98.51 | 136-138,299-300   
+ src/jsx/hooks     |   96.18 |     93.8 |   93.93 |   96.18 |                   
+  index.ts         |   96.18 |     93.8 |   93.93 |   96.18 | ...03,336-337,421 
+ ...rinsic-element |   95.12 |    92.85 |     100 |   95.12 |                   
+  common.ts        |     100 |      100 |     100 |     100 |                   
+  components.ts    |   94.83 |    92.85 |     100 |   94.83 | 25-26,96-101      
+ ...are/basic-auth |   93.65 |       95 |     100 |   93.65 |                   
+  index.ts         |   93.65 |       95 |     100 |   93.65 | 69-72             
+ ...re/bearer-auth |   96.51 |    87.87 |     100 |   96.51 |                   
+  index.ts         |   96.51 |    87.87 |     100 |   96.51 | 74-75,154         
+ ...are/body-limit |   98.21 |       90 |     100 |   98.21 |                   
+  index.ts         |   98.21 |       90 |     100 |   98.21 | 113               
+ ...ddleware/cache |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...leware/combine |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...eware/compress |     100 |       90 |     100 |     100 |                   
+  index.ts         |     100 |       90 |     100 |     100 | 35,56             
+ ...ontext-storage |   85.71 |       75 |     100 |   85.71 |                   
+  index.ts         |   85.71 |       75 |     100 |   85.71 | 52-53             
+ ...iddleware/cors |   97.64 |    97.22 |     100 |   97.64 |                   
+  index.ts         |   97.64 |    97.22 |     100 |   97.64 | 89-90             
+ ...iddleware/csrf |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...iddleware/etag |     100 |      100 |     100 |     100 |                   
+  digest.ts        |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...ip-restriction |   90.82 |    90.38 |     100 |   90.82 |                   
+  index.ts         |   90.82 |    90.38 |     100 |   90.82 | ...52-153,173-174 
+ ...e/jsx-renderer |   96.82 |    95.83 |     100 |   96.82 |                   
+  index.ts         |   96.82 |    95.83 |     100 |   96.82 | 156-157           
+ ...middleware/jwk |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  jwk.ts           |     100 |      100 |     100 |     100 |                   
+ ...middleware/jwt |   96.11 |    91.66 |     100 |   96.11 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  jwt.ts           |   96.07 |    91.66 |     100 |   96.07 | 64-65,68-69       
+ ...eware/language |   85.11 |    80.76 |     100 |   85.11 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  language.ts      |   85.02 |    80.76 |     100 |   85.02 | ...31-232,281-285 
+ ...dleware/logger |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...ethod-override |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...are/powered-by |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...re/pretty-json |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...are/request-id |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  request-id.ts    |     100 |      100 |     100 |     100 |                   
+ ...secure-headers |   99.44 |    96.87 |     100 |   99.44 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  ...ons-policy.ts |       0 |        0 |       0 |       0 |                   
+  ...re-headers.ts |   99.43 |    96.82 |     100 |   99.43 | 307               
+ ...e/serve-static |   97.75 |    95.34 |     100 |   97.75 |                   
+  index.ts         |   97.33 |    94.11 |     100 |   97.33 | 56-57             
+  path.ts          |     100 |      100 |     100 |     100 |                   
+ ...leware/timeout |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ ...dleware/timing |   84.78 |    73.07 |     100 |   84.78 |                   
+  index.ts         |       0 |        0 |       0 |       0 |                   
+  timing.ts        |   84.78 |    73.07 |     100 |   84.78 | ...09-211,214-216 
+ ...trailing-slash |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+ src/preset        |     100 |      100 |     100 |     100 |                   
+  quick.ts         |     100 |      100 |     100 |     100 |                   
+  tiny.ts          |     100 |      100 |     100 |     100 |                   
+ src/request       |     100 |      100 |     100 |     100 |                   
+  constants.ts     |     100 |      100 |     100 |     100 |                   
+ .../linear-router |    95.9 |    93.54 |     100 |    95.9 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  router.ts        |   95.86 |    93.54 |     100 |   95.86 | 57,59-60,64-65    
+ ...pattern-router |     100 |      100 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  router.ts        |     100 |      100 |     100 |     100 |                   
+ ...reg-exp-router |   95.48 |    94.27 |     100 |   95.48 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  node.ts          |   93.02 |    95.52 |     100 |   93.02 | 30-40             
+  router.ts        |   96.26 |    94.33 |     100 |   96.26 | ...39-140,256,271 
+  trie.ts          |   98.18 |    89.47 |     100 |   98.18 | 69                
+ ...r/smart-router |   85.45 |    73.33 |     100 |   85.45 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  router.ts        |   85.18 |    73.33 |     100 |   85.18 | ...44,54-55,65-66 
+ ...er/trie-router |   97.83 |    96.92 |     100 |   97.83 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  node.ts          |   97.54 |    96.55 |     100 |   97.54 | 30-33             
+  router.ts        |     100 |      100 |     100 |     100 |                   
+ src/utils         |   96.75 |    95.44 |   98.75 |   96.75 |                   
+  accept.ts        |   96.96 |    97.22 |     100 |   96.96 | 57-58             
+  basic-auth.ts    |     100 |      100 |     100 |     100 |                   
+  body.ts          |   97.82 |    96.87 |     100 |   97.82 | 131-132           
+  buffer.ts        |     100 |      100 |     100 |     100 |                   
+  color.ts         |      64 |    28.57 |     100 |      64 | 20,24,44-52       
+  compress.ts      |     100 |      100 |     100 |     100 |                   
+  concurrent.ts    |     100 |      100 |     100 |     100 |                   
+  constants.ts     |     100 |      100 |     100 |     100 |                   
+  cookie.ts        |   94.93 |    94.52 |     100 |   94.93 | ...58-159,162-163 
+  crypto.ts        |   84.61 |    88.88 |      75 |   84.61 | 28-31,57-58       
+  encode.ts        |     100 |    81.81 |     100 |     100 | 7,11              
+  filepath.ts      |   90.62 |    84.61 |     100 |   90.62 | 18,56-57          
+  handler.ts       |     100 |      100 |     100 |     100 |                   
+  headers.ts       |       0 |        0 |       0 |       0 |                   
+  html.ts          |    95.2 |    93.65 |     100 |    95.2 | ...10-111,132-133 
+  ipaddr.ts        |     100 |      100 |     100 |     100 |                   
+  mime.ts          |     100 |      100 |     100 |     100 |                   
+  stream.ts        |   98.46 |    95.83 |     100 |   98.46 | 79                
+  url.ts           |     100 |    99.18 |     100 |     100 | 122               
+ src/utils/jwt     |   94.98 |    93.22 |     100 |   94.98 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  jwa.ts           |     100 |      100 |     100 |     100 |                   
+  jws.ts           |   92.63 |       88 |     100 |   92.63 | ...13-114,231-232 
+  jwt.ts           |   97.35 |    97.01 |     100 |   97.35 | 47-48,120-121     
+  utf8.ts          |     100 |      100 |     100 |     100 |                   
+ src/validator     |     100 |    97.22 |     100 |     100 |                   
+  index.ts         |     100 |      100 |     100 |     100 |                   
+  validator.ts     |     100 |    97.22 |     100 |     100 | 103               
+-------------------|---------|----------|---------|---------|-------------------

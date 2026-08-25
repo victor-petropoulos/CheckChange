@@ -1,0 +1,301 @@
+{
+  "cases": [
+    {
+      "repository": "h3",
+      "case": "h3-01",
+      "base": "43e1fa38ddcd13fa82558f754e4f5bd40e6aa4c8",
+      "target": "708a3aad41d8b17955af335a8b1dffac92e09d81",
+      "subject": "fix(body): enforce stream-based body size check regardless of content-length header",
+      "coverageCommand": "npx vitest --run --coverage.enabled --coverage.provider=v8 --coverage.reporter=json --coverage.reportsDirectory=coverage --coverage.reportOnFailure",
+      "artifactPath": "coverage/coverage-final.json",
+      "threshold30": {
+        "changed": 1,
+        "PASS": 1,
+        "WARN": 0,
+        "NOT_EVAL": 0,
+        "maxCRAP": 7.3919999999999995,
+        "maxCC": 7,
+        "covAvail": 1,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "COMPLETE"
+      },
+      "threshold15": {
+        "changed": 1,
+        "PASS": 1,
+        "WARN": 0,
+        "NOT_EVAL": 0,
+        "maxCRAP": 7.3919999999999995,
+        "maxCC": 7,
+        "covAvail": 1,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "COMPLETE"
+      }
+    },
+    {
+      "repository": "h3",
+      "case": "h3-02",
+      "base": "60a2e915756af3102f8af8cb5035ec997db9277c",
+      "target": "d1da262a4f535f17e5a8ac2dd9dc4817d79ce9fc",
+      "subject": "feat: add `requestWith*URL` utils and use for faster mounts (#1342)",
+      "coverageCommand": "npx vitest --run --coverage.enabled --coverage.provider=v8 --coverage.reporter=json --coverage.reportsDirectory=coverage --coverage.reportOnFailure",
+      "artifactPath": "coverage/coverage-final.json",
+      "threshold30": {
+        "changed": 4,
+        "PASS": 2,
+        "WARN": 0,
+        "NOT_EVAL": 2,
+        "maxCRAP": 2,
+        "maxCC": 2,
+        "covAvail": 2,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "INCOMPLETE"
+      },
+      "threshold15": {
+        "changed": 4,
+        "PASS": 2,
+        "WARN": 0,
+        "NOT_EVAL": 2,
+        "maxCRAP": 2,
+        "maxCC": 2,
+        "covAvail": 2,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "INCOMPLETE"
+      }
+    },
+    {
+      "repository": "h3",
+      "case": "h3-03",
+      "base": "1faca72a1180216b98c7fb399b7568c7ce727c9f",
+      "target": "6c773a4444adb6bd7f2aeefbe7abc3fd5030ebfa",
+      "subject": "feat: add `setServerTiming` and `withServerTiming` utils (#1328)",
+      "coverageCommand": "npx vitest --run --coverage.enabled --coverage.provider=v8 --coverage.reporter=json --coverage.reportsDirectory=coverage --coverage.reportOnFailure",
+      "artifactPath": "coverage/coverage-final.json",
+      "threshold30": {
+        "changed": 4,
+        "PASS": 4,
+        "WARN": 0,
+        "NOT_EVAL": 0,
+        "maxCRAP": 10,
+        "maxCC": 10,
+        "covAvail": 4,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "COMPLETE"
+      },
+      "threshold15": {
+        "changed": 4,
+        "PASS": 4,
+        "WARN": 0,
+        "NOT_EVAL": 0,
+        "maxCRAP": 10,
+        "maxCC": 10,
+        "covAvail": 4,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "COMPLETE"
+      }
+    },
+    {
+      "repository": "hono",
+      "case": "hono-01",
+      "base": "5bfbff8acf54395174d54c65ad8d796493c2b7ea",
+      "target": "c4577e93746c4642d5e663509febcb803d20f47e",
+      "subject": "fix(cors): Allow returning null or undefined for origin (#4375)",
+      "coverageCommand": "npx vitest --run --project=main --coverage",
+      "artifactPath": "coverage/raw/default/coverage-final.json",
+      "threshold30": {
+        "changed": 0,
+        "PASS": 0,
+        "WARN": 0,
+        "NOT_EVAL": 0,
+        "maxCRAP": null,
+        "maxCC": null,
+        "covAvail": 0,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "COMPLETE"
+      },
+      "threshold15": {
+        "changed": 0,
+        "PASS": 0,
+        "WARN": 0,
+        "NOT_EVAL": 0,
+        "maxCRAP": null,
+        "maxCC": null,
+        "covAvail": 0,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "COMPLETE"
+      }
+    },
+    {
+      "repository": "hono",
+      "case": "hono-02",
+      "base": "393ded96196da1b4f23813fea670b0d5a70526c6",
+      "target": "81bda2e169ba26810c8044980f1cfea66912d720",
+      "subject": "feat(helper/route): enable to get route path at specific index (#4423)",
+      "coverageCommand": "npx vitest --run --project=main --coverage",
+      "artifactPath": "coverage/raw/default/coverage-final.json",
+      "threshold30": {
+        "changed": 3,
+        "PASS": 3,
+        "WARN": 0,
+        "NOT_EVAL": 0,
+        "maxCRAP": 10.04551661356395,
+        "maxCC": 10,
+        "covAvail": 3,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "COMPLETE"
+      },
+      "threshold15": {
+        "changed": 3,
+        "PASS": 3,
+        "WARN": 0,
+        "NOT_EVAL": 0,
+        "maxCRAP": 10.04551661356395,
+        "maxCC": 10,
+        "covAvail": 3,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "COMPLETE"
+      }
+    },
+    {
+      "repository": "hono",
+      "case": "hono-03",
+      "base": "d9f7b99c519602d6f0664514a42b1bbc6ef57206",
+      "target": "117d0a413fb021804e4996c3c79cdbac56e17b43",
+      "subject": "feat(csrf): Add modern CSRF protection with Fetch Metadata support (#4353)",
+      "coverageCommand": "npx vitest --run --project=main --coverage (fallback: npx vitest --run --coverage for this SHA)",
+      "artifactPath": "coverage/raw/default/coverage-final.json",
+      "threshold30": {
+        "changed": 4,
+        "PASS": 4,
+        "WARN": 0,
+        "NOT_EVAL": 0,
+        "maxCRAP": 3,
+        "maxCC": 3,
+        "covAvail": 4,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "COMPLETE"
+      },
+      "threshold15": {
+        "changed": 4,
+        "PASS": 4,
+        "WARN": 0,
+        "NOT_EVAL": 0,
+        "maxCRAP": 3,
+        "maxCC": 3,
+        "covAvail": 4,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "COMPLETE"
+      }
+    },
+    {
+      "repository": "apollo-client",
+      "case": "apollo-01",
+      "base": "c34538e747f509d8da140e4128e25550f70b183b",
+      "target": "f6d0efac4d99375c67255aee6d9b2981753b6f55",
+      "subject": "Fix cache.modify() mapping readonly arrays to singular reference (#12983)",
+      "coverageCommand": "node --expose-gc --experimental-import-meta-resolve --disable-warning=ExperimentalWarning ./node_modules/jest/bin/jest.js --config ./config/jest.config.ts --coverage --coverageReporters=json --coverageDirectory=/tmp/wp4r-repos/apollo-client/coverage --runInBand --watchAll=false --testPathPatterns=\"src/cache/core\"",
+      "artifactPath": "coverage/coverage-final.json",
+      "threshold30": {
+        "changed": 0,
+        "PASS": 0,
+        "WARN": 0,
+        "NOT_EVAL": 0,
+        "maxCRAP": null,
+        "maxCC": null,
+        "covAvail": 0,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "COMPLETE"
+      },
+      "threshold15": {
+        "changed": 0,
+        "PASS": 0,
+        "WARN": 0,
+        "NOT_EVAL": 0,
+        "maxCRAP": null,
+        "maxCC": null,
+        "covAvail": 0,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "COMPLETE"
+      }
+    },
+    {
+      "repository": "apollo-client",
+      "case": "apollo-02",
+      "base": "4d3fb77421a7394028b788c1bf64e522155eeda6",
+      "target": "db8a04b193c157d57d6fe0f187b1892afdda1b7d",
+      "subject": "Prevent unhandled rejection for promise returned from mutate function (#12892)",
+      "coverageCommand": "node --expose-gc --experimental-import-meta-resolve --disable-warning=ExperimentalWarning ./node_modules/jest/bin/jest.js --config ./config/jest.config.ts --coverage --coverageReporters=json --coverageDirectory=/tmp/wp4r-repos/apollo-client/coverage --runInBand --watchAll=false --testPathPatterns=\"src/react/hooks/__tests__/useMutation\"",
+      "artifactPath": "coverage/coverage-final.json",
+      "threshold30": {
+        "changed": 1,
+        "PASS": 0,
+        "WARN": 0,
+        "NOT_EVAL": 1,
+        "maxCRAP": null,
+        "maxCC": null,
+        "covAvail": 0,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "INCOMPLETE"
+      },
+      "threshold15": {
+        "changed": 1,
+        "PASS": 0,
+        "WARN": 0,
+        "NOT_EVAL": 1,
+        "maxCRAP": null,
+        "maxCC": null,
+        "covAvail": 0,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "INCOMPLETE"
+      }
+    },
+    {
+      "repository": "apollo-client",
+      "case": "apollo-03",
+      "base": "5352c1208e19c93678fef7860a1a87841653eb64",
+      "target": "71f2517132a34563a14934f3971666b3691710f9",
+      "subject": "Support `skipToken` with `useQuery` (#12895)",
+      "coverageCommand": "node --expose-gc --experimental-import-meta-resolve --disable-warning=ExperimentalWarning ./node_modules/jest/bin/jest.js --config ./config/jest.config.ts --coverage --coverageReporters=json --coverageDirectory=/tmp/wp4r-repos/apollo-client/coverage --runInBand --watchAll=false --testPathPatterns=\"src/react/hooks/__tests__/useQuery\"",
+      "artifactPath": "coverage/coverage-final.json",
+      "threshold30": {
+        "changed": 4,
+        "PASS": 0,
+        "WARN": 0,
+        "NOT_EVAL": 4,
+        "maxCRAP": null,
+        "maxCC": null,
+        "covAvail": 0,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "INCOMPLETE"
+      },
+      "threshold15": {
+        "changed": 4,
+        "PASS": 0,
+        "WARN": 0,
+        "NOT_EVAL": 4,
+        "maxCRAP": null,
+        "maxCC": null,
+        "covAvail": 0,
+        "gate": "PASS",
+        "status": "SUCCESS",
+        "completeness": "INCOMPLETE"
+      }
+    }
+  ]
+}

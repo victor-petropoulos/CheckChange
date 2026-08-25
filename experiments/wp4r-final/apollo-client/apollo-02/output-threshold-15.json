@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "4d3fb77421a7394028b788c1bf64e522155eeda6",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/react/hooks/useMutation.ts",
+      "method": "useMutation",
+      "lineStart": 223,
+      "lineEnd": 386,
+      "cc": 2,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 15
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/react/hooks/useMutation.ts",
+      "method": "useMutation",
+      "crap": null,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": null
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "INCOMPLETE"
+}

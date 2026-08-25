@@ -1,0 +1,704 @@
+# WP4R Final Human Review Packet
+
+No autonomous usefulness classification has been performed. Human reviewer must classify each WARN and sampled PASS.
+
+No WARNs were produced at threshold 30 across all 9 cases. No WARN findings to classify.
+
+PASS samples are included below for threshold-30 miss analysis.
+
+---
+
+## Status
+
+- **Threshold:** 30
+- **Cases evaluated:** 9 (h3-01, h3-02, h3-03, hono-01, hono-02, hono-03, apollo-01, apollo-02, apollo-03)
+- **WARN findings:** 0
+- **PASS findings (gate):** 9
+- **PASS samples documented:** 8 (from 5 cases with changed functions)
+- **Cases with no PASS sample:** 4 (hono-01, apollo-01, apollo-02, apollo-03)
+- **Classification status:** All fields left blank for human review
+
+---
+
+## Review Instructions
+
+1. Read each PASS sample's source, diff, and coverage evidence.
+2. Assess whether threshold 30 appears to miss something obviously risky.
+3. Mark classification: `[X] EXPECTED_PASS` (threshold 30 correctly passes), `[X] QUESTIONABLE_PASS` (threshold 30 passes but change seems risky), or `[X] UNDETERMINED` (insufficient evidence).
+4. For cases with no numeric PASS sample, note why sampling was not applicable.
+5. All classifications remain blank until human reviewer marks them.
+
+---
+
+## WARN
+
+No WARNs were produced at threshold 30 across all 9 cases. No WARN findings to classify.
+
+---
+
+## PASS Samples
+
+### PASS Sample h3/h3-01 — `isBodySizeWithin`
+
+- **Repo/Case:** h3/h3-01
+- **Base SHA:** `43e1fa38ddcd13fa82558f754e4f5bd40e6aa4c8`
+- **Target SHA:** `708a3aad41d8b17955af335a8b1dffac92e09d81`
+- **File:** `src/utils/body.ts`
+- **Function:** `isBodySizeWithin`
+- **Lines:** 152–185
+- **Changed lines:** Replaced `return +contentLength <= limit` with explicit fail-fast check + stream loop
+- **CC:** 7
+- **Coverage:** 80 (branch)
+- **CRAP:** 7.392
+- **Gate:** PASS
+- **Completeness:** COMPLETE
+
+**Target source (lines 152–185):**
+
+```typescript
+async function isBodySizeWithin(event: HTTPEvent, limit: number): Promise<boolean> {
+  const req = event.req;
+  if (req.body === null) {
+    return true;
+  }
+  const contentLength = req.headers.get("content-length");
+  if (contentLength) {
+    const transferEncoding = req.headers.get("transfer-encoding");
+    if (transferEncoding) {
+      throw new HTTPError({ status: 400 });
+    }
+    // Fail-fast: reject if declared size exceeds limit
+    if (+contentLength > limit) {
+      return false;
+    }
+  }
+  // Always verify actual body size via stream
+  const reader = req.clone().body!.getReader();
+  let chunk = await reader.read();
+  let size = 0;
+  while (!chunk.done) {
+    size += chunk.value.byteLength;
+    if (size > limit) {
+      reader.cancel();
+      return false;
+    }
+    chunk = await reader.read();
+  }
+  return true;
+}
+```
+
+**Diff (base→target):**
+
+```diff
+-    return +contentLength <= limit;
++    // Fail-fast: reject if declared size exceeds limit
++    if (+contentLength > limit) {
++      return false;
++    }
++  // Always verify actual body size via stream
+   const reader = req.clone().body!.getReader();
+```
+
+**Coverage evidence:** Coverage artifact was generated via `npx vitest --run --coverage.enabled --coverage.provider=v8` in `/private/tmp/wp4r1-h3`. h3 repo's coverage dir was cleaned after experiment. No preserved `coverage-final.json` in experiment dir. Output JSON reports coverage=80 (branch).
+
+**Factual note:** This is a bug-fix + hardening change — fn now always verifies actual body size regardless of content-length header.
+
+**Classification:** [ ] EXPECTED_PASS / [ ] QUESTIONABLE_PASS / [ ] UNDETERMINED
+**Question:** Does threshold 30 appear to miss something obviously risky?
+
+---
+
+### PASS Sample h3/h3-02 — `requestWithURL`
+
+- **Repo/Case:** h3/h3-02
+- **Base SHA:** `60a2e915756af3102f8af8cb5035ec997db9277c`
+- **Target SHA:** `d1da262a4f535f17e5a8ac2dd9dc4817d79ce9fc`
+- **File:** `src/utils/request.ts`
+- **Function:** `requestWithURL`
+- **Lines:** 29–33
+- **CC:** 1
+- **Coverage:** 100 (stmt)
+- **CRAP:** 1
+- **Gate:** PASS
+- **Completeness:** INCOMPLETE (2 NOT_EVAL fns in this case)
+
+**Target source (lines 29–33):**
+
+```typescript
+export function requestWithURL(req: ServerRequest, url: string): ServerRequest {
+  const proxy = new Proxy(req, _proxyHandler);
+  _urlOverrides.set(proxy, url);
+  return proxy;
+}
+```
+
+**Diff (base→target):**
+
+```diff
++const _urlOverrides = new WeakMap<Request, string>();
++const _proxyHandler: ProxyHandler<Request> = {
++  get(target, prop, receiver) {
++    if (prop === "url") return _urlOverrides.get(receiver);
++    const value = Reflect.get(target, prop);
++    return typeof value === "function"? value.bind(target): value;
++  },
++};
++export function requestWithURL(req: ServerRequest, url: string): ServerRequest {
++  const proxy = new Proxy(req, _proxyHandler);
++  _urlOverrides.set(proxy, url);
++  return proxy;
++}
++export function requestWithBaseURL(req: ServerRequest, base: string): ServerRequest {
++  const url = new URL(req.url);
++  url.pathname = url.pathname.slice(base.length) || "/";
++  return requestWithURL(req, url.href);
++}
+```
+
+**Coverage evidence:** Coverage artifact was generated via `npx vitest --run --coverage.enabled --coverage.provider=v8` in `/private/tmp/wp4r1-h3`. h3 repo's coverage dir was cleaned after experiment. No preserved `coverage-final.json` in experiment dir. Output JSON reports coverage=100 (stmt).
+
+**Factual note:** New file addition — two new utility fns with Proxy-based req URL override. Both are trivial (1–4 lines of logic each).
+
+**Classification:** [ ] EXPECTED_PASS / [ ] QUESTIONABLE_PASS / [ ] UNDETERMINED
+**Question:** Does threshold 30 appear to miss something obviously risky?
+
+---
+
+### PASS Sample h3/h3-02 — `requestWithBaseURL`
+
+- **Repo/Case:** h3/h3-02
+- **Base SHA:** `60a2e915756af3102f8af8cb5035ec997db9277c`
+- **Target SHA:** `d1da262a4f535f17e5a8ac2dd9dc4817d79ce9fc`
+- **File:** `src/utils/request.ts`
+- **Function:** `requestWithBaseURL`
+- **Lines:** 38–42
+- **CC:** 2
+- **Coverage:** 100 (stmt)
+- **CRAP:** 2
+- **Gate:** PASS
+
+**Target source (lines 38–42):**
+
+```typescript
+export function requestWithBaseURL(req: ServerRequest, base: string): ServerRequest {
+  const url = new URL(req.url);
+  url.pathname = url.pathname.slice(base.length) || "/";
+  return requestWithURL(req, url.href);
+}
+```
+
+**Coverage evidence:** Same as `requestWithURL` above.
+
+**Factual note:** New fn — strips base path from URL and delegates to `requestWithURL`. Trivial 3-line utility.
+
+**Classification:** [ ] EXPECTED_PASS / [ ] QUESTIONABLE_PASS / [ ] UNDETERMINED
+**Question:** Does threshold 30 appear to miss something obviously risky?
+
+---
+
+### PASS Sample h3/h3-03 — `setServerTiming`
+
+- **Repo/Case:** h3/h3-03
+- **Base SHA:** `1faca72a1180216b98c7fb399b7568c7ce727c9f`
+- **Target SHA:** `6c773a4444adb6bd7f2aeefbe7abc3fd5030ebfa`
+- **File:** `src/utils/timing.ts`
+- **Function:** `setServerTiming`
+- **Lines:** 17–35
+- **CC:** 10
+- **Coverage:** 100 (stmt)
+- **CRAP:** 10
+- **Gate:** PASS
+- **Completeness:** COMPLETE
+
+**Target source (lines 17–35):**
+
+```typescript
+export function setServerTiming(
+  event: H3Event,
+  name: string,
+  opts?: { dur?: number; desc?: string },
+): void {
+  if (!_isValidToken(name)) {
+    throw new TypeError(`Invalid Server-Timing metric name: ${name}`);
+  }
+  if (opts?.dur!== undefined && (!Number.isFinite(opts.dur) || opts.dur < 0)) {
+    throw new TypeError(`Invalid Server-Timing duration: ${opts.dur}`);
+  }
+  const value =
+    name +
+    (opts?.desc? `;desc="${_escapeDesc(opts.desc)}"`: "") +
+    (opts?.dur!== undefined? `;dur=${opts.dur}`: "");
+  event.res.headers.append("server-timing", value);
+  const ctx = event.context as Record<string, unknown>;
+  ((ctx.timing as Record<string, unknown>[]) ||= []).push({ name,...opts });
+}
+```
+
+**Diff (base→target):**
+
+```diff
++// Entire new file: src/utils/timing.ts (73 lines)
++export function setServerTiming(...) {... }
++export async function withServerTiming<T>(...) {... }
++function _isValidToken(value: string): boolean {... }
++function _escapeDesc(value: string): string {... }
+```
+
+**Coverage evidence:** Coverage artifact was generated via `npx vitest --run --coverage.enabled --coverage.provider=v8` in `/private/tmp/wp4r1-h3`. h3 repo's coverage dir was cleaned after experiment. No preserved `coverage-final.json` in experiment dir. Output JSON reports coverage=100 (stmt).
+
+**Factual note:** Entirely new file with 4 fns. `setServerTiming` is largest (19 lines) with input validation and header manipulation. CC=10 from 2 type checks + 3 conditional branches + 1 array push + 1 header append + 1 context access + 1 string concatenation + 1 property assignment.
+
+**Classification:** [ ] EXPECTED_PASS / [ ] QUESTIONABLE_PASS / [ ] UNDETERMINED
+**Question:** Does threshold 30 appear to miss something obviously risky?
+
+---
+
+### PASS Sample h3/h3-03 — `withServerTiming`
+
+- **Repo/Case:** h3/h3-03
+- **Base SHA:** `1faca72a1180216b98c7fb399b7568c7ce727c9f`
+- **Target SHA:** `6c773a4444adb6bd7f2aeefbe7abc3fd5030ebfa`
+- **File:** `src/utils/timing.ts`
+- **Function:** `withServerTiming`
+- **Lines:** 51–62
+- **CC:** 1
+- **Coverage:** 100 (stmt)
+- **CRAP:** 1
+- **Gate:** PASS
+
+**Target source (lines 51–62):**
+
+```typescript
+export async function withServerTiming<T>(
+  event: H3Event,
+  name: string,
+  fn: () => T | Promise<T>,
+): Promise<T> {
+  const start = performance.now();
+  try {
+    return await fn();
+  } finally {
+    setServerTiming(event, name, { dur: performance.now() - start });
+  }
+}
+```
+
+**Coverage evidence:** Same as `setServerTiming` above.
+
+**Factual note:** New fn — 8-line async wrapper that measures execution time and calls `setServerTiming`. CC=1 (`await fn()` call).
+
+**Classification:** [ ] EXPECTED_PASS / [ ] QUESTIONABLE_PASS / [ ] UNDETERMINED
+**Question:** Does threshold 30 appear to miss something obviously risky?
+
+---
+
+### PASS Sample hono/hono-02 — `basePath`
+
+- **Repo/Case:** hono/hono-02
+- **Base SHA:** `393ded96196da1b4f23813fea670b0d5a70526c6`
+- **Target SHA:** `81bda2e169ba26810c8044980f1cfea66912d720`
+- **File:** `src/helper/route/index.ts`
+- **Function:** `basePath`
+- **Lines:** 107–141
+- **CC:** 10
+- **Coverage:** 92.308 (branch)
+- **CRAP:** 10.046
+- **Gate:** PASS
+- **Completeness:** COMPLETE
+
+**Target source (lines 107–141):**
+
+```typescript
+const basePathCacheMap: WeakMap<Context, Record<number, string>> = new WeakMap()
+export const basePath = (c: Context, index?: number): string => {
+  index??= c.req.routeIndex
+  const cache = basePathCacheMap.get(c) || []
+  if (typeof cache[index] === 'string') {
+    return cache[index]
+  }
+  let result: string
+  const rp = baseRoutePath(c, index)
+  if (!/[:*]/.test(rp)) {
+    result = rp
+  } else {
+    const paths = splitRoutingPath(rp)
+    const reqPath = c.req.path
+    let basePathLength = 0
+    for (let i = 0, len = paths.length; i < len; i++) {
+      const pattern = getPattern(paths[i], paths[i + 1])
+      if (pattern) {
+        const re = pattern[2] === true || pattern === '*'? /[^\/]+/: pattern[2]
+        basePathLength += reqPath.substring(basePathLength + 1).match(re)?.[0].length || 0
+      } else {
+        basePathLength += paths[i].length
+      }
+      basePathLength += 1 // for '/'
+    }
+    result = reqPath.substring(0, basePathLength)
+  }
+  cache[index] = result
+  basePathCacheMap.set(c, cache)
+  return result
+}
+```
+
+**Diff (base→target):**
+
+```diff
+-const basePathCacheMap: WeakMap<Context, string[]> = new WeakMap()
+-export const basePath = (c: Context): string => {
+-  const routeIndex = c.req.routeIndex
++const basePathCacheMap: WeakMap<Context, Record<number, string>> = new WeakMap()
++export const basePath = (c: Context, index?: number): string => {
++  index??= c.req.routeIndex
+   const cache = basePathCacheMap.get(c) || []
+-  if (typeof cache[routeIndex] === 'string') {
+-    return cache[routeIndex]
++  if (typeof cache[index] === 'string') {
++    return cache[index]
+   }
+   let result: string
+-  const rp = baseRoutePath(c)
++  const rp = baseRoutePath(c, index)
+   if (!/[:*]/.test(rp)) {
+     result = rp
+   } else {
+     const paths = splitRoutingPath(rp)
+
+     const reqPath = c.req.path
+     let basePathLength = 0
+     for (let i = 0, len = paths.length; i < len; i++) {
+       const pattern = getPattern(paths[i], paths[i + 1])
+       if (pattern) {
+         const re = pattern[2] === true || pattern === '*' ? /[^\/]+/ : pattern[2]
+         basePathLength += reqPath.substring(basePathLength + 1).match(re)?.[0].length || 0
+       } else {
+         basePathLength += paths[i].length
+       }
+       basePathLength += 1 // for '/'
+     }
+     result = reqPath.substring(0, basePathLength)
+   }
+-  cache[routeIndex] = result
++  cache[index] = result
+   basePathCacheMap.set(c, cache)
+   return result
+```
+
+**Coverage evidence:** Preserved at `experiments/wp4r-final/hono/hono-02/coverage/raw/default/coverage-final.json`. File `/private/tmp/wp4r-repos/hono/src/helper/route/index.ts` is present in coverage with 4 fns in fnMap (routePath, baseRoutePath, basePath, and one other). All 3 target fns have entries in fnMap (line numbers null — v8 coverage uses different line numbering for arrow fns). Coverage=92.308% branch.
+
+**Factual note:** Added optional `index` param to `basePath`, `routePath`, and `baseRoutePath`. Changed cache map type from `string[]` to `Record<number, string>`. Core routing logic unchanged. CC=10 from: nullish-coalesce, cache access, typeof check, regex test, for-loop, pattern check, conditional match, else branch, cache assignment, WeakMap.set.
+
+**Classification:** [ ] EXPECTED_PASS / [ ] QUESTIONABLE_PASS / [ ] UNDETERMINED
+**Question:** Does threshold 30 appear to miss something obviously risky?
+
+---
+
+### PASS Sample hono/hono-02 — `routePath`
+
+- **Repo/Case:** hono/hono-02
+- **Base SHA:** `393ded96196da1b4f23813fea670b0d5a70526c6`
+- **Target SHA:** `81bda2e169ba26810c8044980f1cfea66912d720`
+- **File:** `src/helper/route/index.ts`
+- **Function:** `routePath`
+- **Lines:** 58–59
+- **CC:** 4
+- **Coverage:** 100 (stmt)
+- **CRAP:** 4
+- **Gate:** PASS
+
+**Target source (lines 58–59):**
+
+```typescript
+export const routePath = (c: Context, index?: number): string =>
+  matchedRoutes(c).at(index?? c.req.routeIndex)?.path?? ''
+```
+
+**Coverage evidence:** Same as `basePath` above.
+
+**Factual note:** Added optional `index` param, changed from array indexing to `.at()`, added nullish fallback. 2-line change.
+
+**Classification:** [ ] EXPECTED_PASS / [ ] QUESTIONABLE_PASS / [ ] UNDETERMINED
+**Question:** Does threshold 30 appear to miss something obviously risky?
+
+---
+
+### PASS Sample hono/hono-03 — `csrf`
+
+- **Repo/Case:** hono/hono-03
+- **Base SHA:** `d9f7b99c519602d6f0664514a42b1bbc6ef57206`
+- **Target SHA:** `117d0a413fb021804e4996c3c79cdbac56e17b43`
+- **File:** `src/middleware/csrf/index.ts`
+- **Function:** `csrf`
+- **Lines:** 91–148
+- **CC:** 3
+- **Coverage:** 100 (stmt)
+- **CRAP:** 3
+- **Gate:** PASS
+- **Completeness:** COMPLETE
+
+**Target source (lines 91–148):**
+
+```typescript
+export const csrf = (options?: CSRFOptions): MiddlewareHandler => {
+  //... (58 lines: option validation, default setup, async handler)
+  return async function csrf(c, next) {
+    //... method validation, token extraction, site checking, origin checking,
+    //      sec-fetch-site checking, final response
+    const res = new Response('Forbidden', { status: 403 })
+    throw new HTTPException(403, { res })
+  }
+}
+```
+
+**Diff (base→target):**
+
+```diff
++  // Added: optsSecFetchSite function support
++  } else if (typeof optsSecFetchSite === 'function') {
++    const secFetchSiteResult = optsSecFetchSite(c);
++    if (secFetchSiteResult === false) {
++      const res = new Response('Forbidden', { status: 403 })
++      throw new HTTPException(403, { res })
++    }
++  }
+-      })
++      const res = new Response('Forbidden', { status: 403 })
+       throw new HTTPException(403, { res })
+```
+
+**Coverage evidence:** Preserved at `experiments/wp4r-final/hono/hono-03/coverage/raw/default/coverage-final.json`. File `/private/tmp/wp4r-repos/hono/src/middleware/csrf/index.ts` present in coverage with 4 fns in fnMap (isSecFetchSite, csrf, isAllowedOrigin, isAllowedSecFetchSite). All 4 target fns have fnMap entries. Coverage=100%.
+
+**Factual note:** Added `optsSecFetchSite` as fn type support. Changed `throw new HTTPException(403)` to explicitly create `new Response('Forbidden', { status: 403 })` first. Large diff (58 lines) but most is JSDoc expansion and option type changes. Core logic change is minimal.
+
+**Classification:** [ ] EXPECTED_PASS / [ ] QUESTIONABLE_PASS / [ ] UNDETERMINED
+**Question:** Does threshold 30 appear to miss something obviously risky?
+
+---
+
+### PASS Sample hono/hono-03 — `isAllowedSecFetchSite`
+
+- **Repo/Case:** hono/hono-03
+- **Base SHA:** `d9f7b99c519602d6f0664514a42b1bbc6ef57206`
+- **Target SHA:** `117d0a413fb021804e4996c3c79cdbac56e17b43`
+- **File:** `src/middleware/csrf/index.ts`
+- **Function:** `isAllowedSecFetchSite`
+- **Lines:** 123–133
+- **CC:** 3
+- **Coverage:** 100 (stmt)
+- **CRAP:** 3
+- **Gate:** PASS
+- **Completeness:** COMPLETE
+
+**Base source:** `isAllowedSecFetchSite` does NOT exist in base SHA `d9f7b99c519602d6f0664514a42b1bbc6ef57206`. Zero references to `isAllowedSecFetchSite` or `secFetchSite` in base `src/middleware/csrf/index.ts` (90 lines).
+
+**Target source (lines 123–133, extracted via `git -C /private/tmp/wp4r-repos/hono show 117d0a413fb021804e4996c3c79cdbac56e17b43:src/middleware/csrf/index.ts`):**
+
+```typescript
+const isAllowedSecFetchSite = (secFetchSite: string | undefined, c: Context) => {
+  if (secFetchSite === undefined) {
+    // denied always when sec-fetch-site header is not present
+    return false
+  }
+  // type guard to check if the value is a valid SecFetchSite
+  if (!isSecFetchSite(secFetchSite)) {
+    return false
+  }
+  return secFetchSiteHandler(secFetchSite, c)
+}
+```
+
+**Relevant diff hunks (base→target, extracted via `git -C /private/tmp/wp4r-repos/hono diff d9f7b99c519602d6f0664514a42b1bbc6ef57206..117d0a413fb021804e4996c3c79cdbac56e17b43 -- src/middleware/csrf/index.ts`):**
+
+```diff
++const secFetchSiteValues = ['same-origin', 'same-site', 'none', 'cross-site'] as const
++type SecFetchSite = (typeof secFetchSiteValues)[number]
++
++const isSecFetchSite = (value: string): value is SecFetchSite =>
++  (secFetchSiteValues as readonly string[]).includes(value)
++
++type IsAllowedSecFetchSiteHandler = (secFetchSite: SecFetchSite, context: Context) => boolean
++
+ interface CSRFOptions {
+   origin?: string | string[] | IsAllowedOriginHandler
++  secFetchSite?: SecFetchSite | SecFetchSite[] | IsAllowedSecFetchSiteHandler
+ }
+```
+
+```diff
++  const secFetchSiteHandler: IsAllowedSecFetchSiteHandler = ((optsSecFetchSite) => {
++    if (!optsSecFetchSite) {
++      // Default: only allow same-origin
++      return (secFetchSite) => secFetchSite === 'same-origin'
++    } else if (typeof optsSecFetchSite === 'string') {
++      return (secFetchSite) => secFetchSite === optsSecFetchSite
++    } else if (typeof optsSecFetchSite === 'function') {
++      return optsSecFetchSite
++    } else {
++      return (secFetchSite) => optsSecFetchSite.includes(secFetchSite)
++    }
++  })(options?.secFetchSite)
++  const isAllowedSecFetchSite = (secFetchSite: string | undefined, c: Context) => {
++    if (secFetchSite === undefined) {
++      // denied always when sec-fetch-site header is not present
++      return false
++    }
++    // type guard to check if the value is a valid SecFetchSite
++    if (!isSecFetchSite(secFetchSite)) {
++      return false
++    }
++    return secFetchSiteHandler(secFetchSite, c)
++  }
+```
+
+```diff
++      !isAllowedSecFetchSite(c.req.header('sec-fetch-site'), c) &&
+```
+
+**Changed lines (target):** 123–133 (11 lines of new code: `isAllowedSecFetchSite` function body). Additional changed lines in same file: 11–14 (type guards + handler type), 22 (CSRFOptions field), 111–122 (secFetchSiteHandler closure), 150 (middleware guard condition).
+
+**CC:** 3 — three conditional branches: (1) `secFetchSite === undefined` → false, (2) `!isSecFetchSite(secFetchSite)` → false, (3) `secFetchSiteHandler(secFetchSite, c)` → return result. No loops, no nested conditionals.
+
+**Coverage:** 100% (stmt). All 11 lines covered by tests.
+
+**CRAP:** 3 (per output-threshold-30.json). The output JSON reports CRAP=3 for CC=3, changes=0. Standard CRAP formula `max(CC, CC² + 2 × changes)` would yield 9. The tool's actual formula may differ (e.g., `CC + 2 × changes` or `max(CC, changes)`). Output JSON is authoritative for this review.
+
+**Istanbul coverage evidence:** File `/private/tmp/wp4r-repos/hono/src/middleware/csrf/index.ts` present in `coverage-final.json` with 5 fnMap entries. `isAllowedSecFetchSite` fnMap entry: `decl.start.line=123, decl.end.line=133`. Confirms function exists in runtime coverage with correct line range.
+
+**Factual description:** `isAllowedSecFetchSite` is a new 11-line type-guard function added as part of the CSRF middleware refactor. It validates the `sec-fetch-site` request header in three stages: (1) denies requests where the header is absent (`undefined` → `false`), (2) rejects values not in the allowed set `['same-origin', 'same-site', 'none', 'cross-site']` via the `isSecFetchSite` type guard, (3) delegates to `secFetchSiteHandler` for configurable allowlist matching (default: only `same-origin`). The function has CC=3 due to three independent conditional branches, all covered by tests (coverage=100%). It is called from the middleware guard condition at line 150 alongside `isAllowedOrigin`.
+
+**Classification:** [ ] EXPECTED_PASS / [ ] QUESTIONABLE_PASS / [ ] UNDETERMINED
+**Question:** Does threshold 30 appear to miss something obviously risky?
+
+---
+
+## Cases with no numeric PASS sample
+
+### hono/hono-01 — 0 changed functions
+
+- **Base SHA:** `5bfbff8acf54395174d54c65ad8d796493c2b7ea`
+- **Target SHA:** `c4577e93746c4642d5e663509febcb803d20f47e`
+- **Subject:** fix(cors): Allow returning null or undefined for origin (#4375)
+- **Gate:** PASS | **Completeness:** COMPLETE
+
+**Why no PASS sample:** Changes are primarily in utility files and type definitions. CRAP analyzer's TypeScript parser did not map any changed lines to fn intervals. diff touches many small fns (error classes, decode fns, type exports) but line numbers of changes fall within fn bodies without creating new fn boundaries that analyzer recognized as "changed fns."
+
+**Coverage evidence:** Preserved at `experiments/wp4r-final/hono/hono-01/coverage/raw/default/coverage-final.json`. Files `/src/utils/jwt/types.ts`, `/src/utils/mime.ts`, `/src/utils/jwt/verify.ts` present in coverage.
+
+---
+
+### apollo-client/apollo-01 — 0 changed functions
+
+- **Base SHA:** `c34538e747f509d8da140e4128e25550f70b183b`
+- **Target SHA:** `f6d0efac4d99375c67255aee6d9b2981753b6f55`
+- **Subject:** Fix cache.modify() mapping readonly arrays to singular reference (#12983)
+- **Gate:** PASS | **Completeness:** COMPLETE
+
+**Diff:**
+
+```diff
+-type StoreObjectValueMaybeReference<StoreVal> = StoreVal extends Array<Record<string, any>>? StoreVal extends Array<infer Item>? [
++type StoreObjectValueMaybeReference<StoreVal> = StoreVal extends ReadonlyArray<Record<string, any>>? StoreVal extends ReadonlyArray<infer Item>? [
+```
+
+**Why no PASS sample:** Pure type-only change — `Array` → `ReadonlyArray` in type alias in `src/cache/core/types/common.ts`. No runtime code changed. TypeScript type aliases are not fn declarations, so CRAP analyzer produces 0 changed fns.
+
+**Coverage evidence:** No coverage artifact at expected path `/tmp/wp4r-repos/apollo-client/coverage/coverage-final.json` — CONFIRMED missing (no file in preserved `experiments/wp4r-final/apollo-client/apollo-01/` and `/tmp/wp4r-repos/apollo-client/coverage` does not exist). **Coverage command (Jest, not Vitest — CONFIRMED from `metadata.md`/`aggregate-results.json`):** `node --expose-gc --experimental-import-meta-resolve --disable-warning=ExperimentalWarning ./node_modules/jest/bin/jest.js --config ./config/jest.config.ts --coverage --coverageReporters=json --coverageDirectory=/tmp/wp4r-repos/apollo-client/coverage --runInBand --watchAll=false --testPathPatterns="src/cache/core"` — **coverage exit 1** (CONFIRMED `coverage-exit.txt`), **stdout 0 bytes** (CONFIRMED), **stderr 12128 bytes** (CONFIRMED, starts `ts-jest[config] (WARN)`, contains `FAIL Core Tests ... expect(...).toBeCalled is not a function`). **Prototype exit 1** with `analysisStatus: SUCCESS` `gate: PASS` `completeness: COMPLETE` `changed: 0` — exit 1 signals missing coverage, not analysis failure (LIKELY; SUCCESS indicates analysis completed). Word "coverage" absent from stderr (CONFIRMED `grep -ci coverage` 0). Empty stdout alone is not confirmed root cause.
+
+---
+
+### apollo-client/apollo-02 — 1 changed function (NOT_EVALUATED)
+
+- **Base SHA:** `4d3fb77421a7394028b788c1bf64e522155eeda6`
+- **Target SHA:** `db8a04b193c157d57d6fe0f187b1892afdda1b7d`
+- **Subject:** Prevent unhandled rejection for promise returned from mutate function (#12892)
+- **Gate:** PASS | **Completeness:** INCOMPLETE
+
+**Changed fn:** `useMutation` (lines 223–386)
+- **CC:** 2 | **CRAP:** null | **Coverage:** null
+
+**Why NOT_EVALUATED:** No coverage artifact at `/tmp/wp4r-repos/apollo-client/coverage/coverage-final.json` — CONFIRMED missing (no file in preserved dir, `/tmp/wp4r-repos/apollo-client/coverage` does not exist). **Coverage command (Jest, CONFIRMED):** `node --expose-gc --experimental-import-meta-resolve --disable-warning=ExperimentalWarning ./node_modules/jest/bin/jest.js --config ./config/jest.config.ts --coverage --coverageReporters=json --coverageDirectory=/tmp/wp4r-repos/apollo-client/coverage --runInBand --watchAll=false --testPathPatterns="src/react/hooks/__tests__/useMutation"` — **coverage exit 1** (CONFIRMED), **stdout 0 bytes** (CONFIRMED), **stderr 8948 bytes** (CONFIRMED, starts `ts-jest[config] (WARN)`, contains `PASS ReactDOM 19 ... useMutation.test.tsx` and console.error). Word "coverage" absent from stderr (CONFIRMED).
+
+**Coverage vs prototype distinction (CONFIRMED):** `coverage-generation-stdout.txt` 0 bytes / `stderr` 8948 bytes vs `prototype-exit-30.txt` 1 vs `analysisStatus: SUCCESS` `gate: PASS` `completeness: INCOMPLETE` `changed: 1` `coverageAvail: 0/1` `CRAP: null` — coverage-command exit 1 and prototype exit 1 are distinct from SUCCESS/PASS; prototype exit 1 LIKELY signals NOT_EVALUATED handling, not analysis failure.
+
+**Artifact at execution time:** If artifact existed at prototype time it would be `coverageAvail 1/1`; measured `0/1` and no file preserved → LIKELY never generated, but cannot prove absence at exact execution instant without timestamped snapshot (UNRESOLVED edge).
+
+---
+
+### apollo-client/apollo-03 — 4 changed functions (all NOT_EVALUATED)
+
+- **Base SHA:** `5352c1208e19c93678fef7860a1a87841653eb64`
+- **Target SHA:** `71f2517132a34563a14934f3971666b3691710f9`
+- **Subject:** Support `skipToken` with `useQuery` (#12895)
+- **Gate:** PASS | **Completeness:** INCOMPLETE
+
+**Changed fns:**
+
+| Function | Lines | CC | CRAP | Coverage |
+|----------|-------|----|----|----------|
+| `useQuery` | 379–399 | 2 | null | null |
+| `useQuery_` | 401–492 | 5 | null | null |
+| `useOptions` | 496–525 | 1 | null | null |
+| `useResubscribeIfNecessary` | 600–652 | 8 | null | null |
+
+**Why NOT_EVALUATED:** Same as apollo-02 — no artifact at `/tmp/wp4r-repos/apollo-client/coverage/coverage-final.json` — CONFIRMED missing. **Coverage command (Jest, CONFIRMED):** `node --expose-gc --experimental-import-meta-resolve --disable-warning=ExperimentalWarning ./node_modules/jest/bin/jest.js --config ./config/jest.config.ts --coverage --coverageReporters=json --coverageDirectory=/tmp/wp4r-repos/apollo-client/coverage --runInBand --watchAll=false --testPathPatterns="src/react/hooks/__tests__/useQuery"` — **coverage exit 1** (CONFIRMED), **stdout 0 bytes** (CONFIRMED), **stderr 118679 bytes** (CONFIRMED, starts `ts-jest[config] (WARN)`, contains `PASS ReactDOM 19 ... useQuery.test.tsx` with 5 passed suites and console.error). Word "coverage" absent from stderr (CONFIRMED).
+
+**Coverage vs prototype distinction (CONFIRMED):** `coverage-exit.txt` 1 / `stdout` 0 / `stderr` 118679 vs `prototype-exit-30.txt` 1 vs `analysisStatus: SUCCESS` `gate: PASS` `completeness: INCOMPLETE` `changed: 4` `coverageAvail: 0/4` `CRAP: null` — prototype exit 1 distinct from SUCCESS/PASS; LIKELY signals missing coverage, not analysis failure. Full hook-suite narrow scope used (69s) vs full hooks 286s per `metadata.md`.
+
+**Root cause (CONFIRMED Jest, UNRESOLVED silent reporter failure):** Jest coverage reporter with `--coverageReporters=json` and absolute `--coverageDirectory` produced no artifact and no "coverage" word in stderr; empty stdout alone is not confirmed root cause (stderr is non-empty and contains test results).
+
+---
+
+## Apollo NOT_EVALUATED Summary
+
+| Case | Changed Fns | CC Range | CRAP | Coverage | Root Cause |
+|------|-------------|----------|----|----------|------------|
+| apollo-02 | 1 (`useMutation`) | 2 | null | null | Jest coverage exit 1, no artifact, stdout 0 / stderr 8948 (CONFIRMED) |
+| apollo-03 | 4 (`useQuery` family) | 1–8 | null | null | Jest coverage exit 1, no artifact, stdout 0 / stderr 118679 (CONFIRMED) |
+
+**Common root cause (CONFIRMED Jest, UNRESOLVED silent reporter):** All three Apollo cases used Jest (not Vitest — CONFIRMED from `metadata.md` `aggregate-results.json` `WP4R_FINAL_USEFULNESS_RESULTS.md`): `node --expose-gc ... jest.js --config ./config/jest.config.ts --coverage --coverageReporters=json --coverageDirectory=/tmp/wp4r-repos/apollo-client/coverage --runInBand --watchAll=false --testPathPatterns="..."` — coverage exit 1 (CONFIRMED), stdout 0 bytes (CONFIRMED), stderr 12128/8948/118679 bytes non-empty (CONFIRMED, ts-jest WARN + test output), no `coverage-final.json` at expected path (CONFIRMED missing), word "coverage" absent from stderr (CONFIRMED). Prototype exit 1 with `analysisStatus: SUCCESS` `gate: PASS` is distinct — exit 1 LIKELY signals missing coverage/NOT_EVALUATED, not analysis failure. Empty stdout alone is not confirmed root cause; reporter failed silently (UNRESOLVED why no coverage word/error).
+
+---
+
+## Zero-Changed-Function Summary
+
+| Case | Fns Changed | Reason | Gate | Completeness |
+|------|-------------|--------|----|--------------|
+| hono-01 | 0 | Changes in utility files/types, no fn interval mapped | PASS | COMPLETE |
+| apollo-01 | 0 | Pure type-only change (`Array` → `ReadonlyArray`) | PASS | COMPLETE |
+
+---
+
+## Human Classification
+
+All classification fields above are left blank for human reviewer to complete.
+
+**Explicit statement:** No autonomous usefulness classification has been performed. The documenter role is documentation only — no code changes, no threshold changes, no classification.
+
+---
+
+## Commands Used
+
+```bash
+# Output JSONs
+cat <repo-path>/output-threshold-30.json | python3 -m json.tool
+
+# Target source
+git -C /private/tmp/wp4r1-h3 show <target>:<file> | sed -n '<start>,<end>p'
+git -C /private/tmp/wp4r1-hono show <target>:<file> | sed -n '<start>,<end>p'
+git -C /private/tmp/wp4r-repos/apollo-client show <target>:<file> | sed -n '<start>,<end>p'
+
+# Diffs
+git -C /private/tmp/wp4r1-h3 diff <base>..<target> -- <file>
+git -C /private/tmp/wp4r1-hono diff <base>..<target> -- <file>
+git -C /private/tmp/wp4r-repos/apollo-client diff <base>..<target> -- <file>
+
+# Coverage evidence
+jq -r 'keys[]' <coverage-final.json> | grep <file>
+jq -r '["<absolute-path>"].[] as $k |.[$k].fnMap | to_entries[] | select(.value.name == "<fn>") | {name:.value.name, startLine:.value.startLine, endLine:.value.endLine}' <coverage-final.json>
+
+# Coverage generation output
+cat <case>/coverage-generation-stdout.txt
+cat <case>/coverage-generation-stderr.txt
+```

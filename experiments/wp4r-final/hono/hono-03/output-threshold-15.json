@@ -1,0 +1,122 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "d9f7b99c519602d6f0664514a42b1bbc6ef57206",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/middleware/csrf/index.ts",
+      "method": "isSecFetchSite",
+      "lineStart": 15,
+      "lineEnd": 16,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/middleware/csrf/index.ts",
+      "method": "csrf",
+      "lineStart": 91,
+      "lineEnd": 148,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/middleware/csrf/index.ts",
+      "method": "isAllowedOrigin",
+      "lineStart": 103,
+      "lineEnd": 109,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/middleware/csrf/index.ts",
+      "method": "isAllowedSecFetchSite",
+      "lineStart": 123,
+      "lineEnd": 133,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 15
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/middleware/csrf/index.ts",
+      "method": "isSecFetchSite",
+      "crap": 1,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/middleware/csrf/index.ts",
+      "method": "csrf",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/middleware/csrf/index.ts",
+      "method": "isAllowedOrigin",
+      "crap": 2,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/middleware/csrf/index.ts",
+      "method": "isAllowedSecFetchSite",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "COMPLETE"
+}

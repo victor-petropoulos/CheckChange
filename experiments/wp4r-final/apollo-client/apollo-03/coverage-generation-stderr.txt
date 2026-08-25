@@ -1,0 +1,1890 @@
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /private/tmp/wp4r-repos/apollo-client/tsconfig.tests.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS ReactDOM 19 src/react/hooks/__tests__/useQuery.test.tsx (19.304 s)
+  ● Console
+
+    console.error
+      Missing field 'hello' while writing result { hello: undefined }
+
+      47 |       }
+      48 |
+    > 49 |       method(message, ...args);
+         |             ^
+      50 |     }
+      51 |   } as (typeof console)[M];
+      52 | }
+
+      at invariant.apply (utilities/invariant/index.ts:49:13)
+      at error (cache/inmemory/writeToStore.ts:404:19)
+          at Map.forEach (<anonymous>)
+      at StoreWriter.forEach [as processSelectionSet] (cache/inmemory/writeToStore.ts:333:7)
+      at StoreWriter.processSelectionSet [as writeToStore] (cache/inmemory/writeToStore.ts:175:22)
+      at InMemoryCache.writeToStore [as write] (cache/inmemory/inMemoryCache.ts:210:31)
+      at InMemoryCache.write [as writeQuery] (cache/core/cache.ts:456:17)
+      at update (react/hooks/__tests__/useQuery.test.tsx:853:25)
+      at update (core/QueryInfo.ts:499:17)
+      at update (cache/inmemory/inMemoryCache.ts:423:32)
+      at InMemoryCache.perform [as batch] (cache/inmemory/inMemoryCache.ts:463:7)
+      at QueryManager.batch [as refetchQueries] (core/QueryManager.ts:1317:18)
+      at QueryInfo.refetchQueries [as markMutationResult] (core/QueryInfo.ts:458:10)
+      at markMutationResult (core/QueryManager.ts:343:25)
+      at doInnerSub (../node_modules/rxjs/dist/cjs/internal/operators/mergeInternals.js:22:31)
+      at outerNext (../node_modules/rxjs/dist/cjs/internal/operators/mergeInternals.js:17:70)
+      at OperatorSubscriber._this._next (../node_modules/rxjs/dist/cjs/internal/operators/OperatorSubscriber.js:33:21)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/tap.js:21:28
+      at OperatorSubscriber._this._next (../node_modules/rxjs/dist/cjs/internal/operators/OperatorSubscriber.js:33:21)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at OperatorSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at next (testing/core/mocking/mockLink.ts:215:20)
+      at Timeout.task [as _onTimeout] (../node_modules/jsdom/lib/jsdom/browser/Window.js:579:19)
+
+    console.error
+      An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
+      at runWithFiberInDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
+      at forceStoreRerender (../node_modules/react-dom/cjs/react-dom-client.development.js:8262:24)
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:8247:11
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
+      at runWithFiberInDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
+      at forceStoreRerender (../node_modules/react-dom/cjs/react-dom-client.development.js:8262:24)
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:8247:11
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
+      at runWithFiberInDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
+      at forceStoreRerender (../node_modules/react-dom/cjs/react-dom-client.development.js:8262:24)
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:8247:11
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
+      at runWithFiberInDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
+      at forceStoreRerender (../node_modules/react-dom/cjs/react-dom-client.development.js:8262:24)
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:8247:11
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.warn
+      No more mocked responses for the query:
+      {
+        hello
+      }
+      
+      Request variables: {}
+      
+      This typically indicates a configuration error in your mocks setup, usually due to a typo or mismatched variable.
+
+      168 |
+      169 |       if (this.showWarnings) {
+    > 170 |         console.warn(
+          |                 ^
+      171 |           message +
+      172 |             "\nThis typically indicates a configuration error in your mocks " +
+      173 |             "setup, usually due to a typo or mismatched variable."
+
+      at MockLink.warn [as request] (testing/core/mocking/mockLink.ts:170:17)
+      at request (link/core/ApolloLink.ts:353:17)
+      at QueryManager.getObservableFromLink (core/QueryManager.ts:940:39)
+      at QueryManager.getObservableFromLink [as getResultsFromLink] (core/QueryManager.ts:1041:17)
+      at getResultsFromLink (core/QueryManager.ts:1631:12)
+      at QueryManager.resultsFromLink [as fetchQueryByPolicy] (core/QueryManager.ts:1705:46)
+      at fetchQueryByPolicy (core/QueryManager.ts:1190:39)
+      at QueryManager.fromVariables [as fetchObservableWithInfo] (core/QueryManager.ts:1260:31)
+      at ObservableQuery.fetchObservableWithInfo [as fetch] (core/ObservableQuery.ts:1256:54)
+      at ObservableQuery.fetch [as _reobserve] (core/ObservableQuery.ts:1541:57)
+      at _reobserve (core/ObservableQuery.ts:1364:16)
+      at callTimer (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:1525:24)
+      at runTimersInRange (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2223:25)
+      at doTickInner (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2318:21)
+      at doTick (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2334:20)
+      at Object.tick (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2342:20)
+      at Object.runToLast (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2414:26)
+      at FakeTimers.runOnlyPendingTimers (../node_modules/@jest/fake-timers/build/index.js:545:19)
+      at runOnlyPendingTimers (testing/internal/disposables/enableFakeTimers.ts:22:12)
+      at Object.cleanup (testing/internal/disposables/withCleanup.ts:9:7)
+      at next (../node_modules/tslib/tslib.js:393:48)
+      at Object.__disposeResources (../node_modules/tslib/tslib.js:405:16)
+      at react/hooks/__tests__/useQuery.test.tsx:3632:37
+      at step (../node_modules/tslib/tslib.js:196:27)
+      at Object.next (../node_modules/tslib/tslib.js:177:57)
+      at fulfilled (../node_modules/tslib/tslib.js:167:62)
+
+    console.error
+      An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
+      at runWithFiberInDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
+      at forceStoreRerender (../node_modules/react-dom/cjs/react-dom-client.development.js:8262:24)
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:8247:11
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
+      at runWithFiberInDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
+      at forceStoreRerender (../node_modules/react-dom/cjs/react-dom-client.development.js:8262:24)
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:8247:11
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
+      at runWithFiberInDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
+      at forceStoreRerender (../node_modules/react-dom/cjs/react-dom-client.development.js:8262:24)
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:8247:11
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
+      at runWithFiberInDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
+      at forceStoreRerender (../node_modules/react-dom/cjs/react-dom-client.development.js:8262:24)
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:8247:11
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
+      at runWithFiberInDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
+      at forceStoreRerender (../node_modules/react-dom/cjs/react-dom-client.development.js:8262:24)
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:8247:11
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
+      at runWithFiberInDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
+      at forceStoreRerender (../node_modules/react-dom/cjs/react-dom-client.development.js:8262:24)
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:8247:11
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.warn
+      No more mocked responses for the query:
+      {
+        hello
+      }
+      
+      Request variables: {}
+      
+      This typically indicates a configuration error in your mocks setup, usually due to a typo or mismatched variable.
+
+      168 |
+      169 |       if (this.showWarnings) {
+    > 170 |         console.warn(
+          |                 ^
+      171 |           message +
+      172 |             "\nThis typically indicates a configuration error in your mocks " +
+      173 |             "setup, usually due to a typo or mismatched variable."
+
+      at MockLink.warn [as request] (testing/core/mocking/mockLink.ts:170:17)
+      at request (link/core/ApolloLink.ts:353:17)
+      at QueryManager.getObservableFromLink (core/QueryManager.ts:940:39)
+      at QueryManager.getObservableFromLink [as getResultsFromLink] (core/QueryManager.ts:1041:17)
+      at getResultsFromLink (core/QueryManager.ts:1631:12)
+      at QueryManager.resultsFromLink [as fetchQueryByPolicy] (core/QueryManager.ts:1705:46)
+      at fetchQueryByPolicy (core/QueryManager.ts:1190:39)
+      at QueryManager.fromVariables [as fetchObservableWithInfo] (core/QueryManager.ts:1260:31)
+      at ObservableQuery.fetchObservableWithInfo [as fetch] (core/ObservableQuery.ts:1256:54)
+      at ObservableQuery.fetch [as _reobserve] (core/ObservableQuery.ts:1541:57)
+      at _reobserve (core/ObservableQuery.ts:1364:16)
+      at callTimer (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:1525:24)
+      at runTimersInRange (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2223:25)
+      at doTickInner (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2318:21)
+      at doTick (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2334:20)
+      at Object.tick (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2342:20)
+      at Object.runToLast (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2414:26)
+      at FakeTimers.runOnlyPendingTimers (../node_modules/@jest/fake-timers/build/index.js:545:19)
+      at runOnlyPendingTimers (testing/internal/disposables/enableFakeTimers.ts:22:12)
+      at Object.cleanup (testing/internal/disposables/withCleanup.ts:9:7)
+      at next (../node_modules/tslib/tslib.js:393:48)
+      at Object.__disposeResources (../node_modules/tslib/tslib.js:405:16)
+      at react/hooks/__tests__/useQuery.test.tsx:3761:37
+      at step (../node_modules/tslib/tslib.js:196:27)
+      at Object.next (../node_modules/tslib/tslib.js:177:57)
+      at fulfilled (../node_modules/tslib/tslib.js:167:62)
+
+    console.error
+      An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
+      at runWithFiberInDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
+      at forceStoreRerender (../node_modules/react-dom/cjs/react-dom-client.development.js:8262:24)
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:8247:11
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
+      at runWithFiberInDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
+      at forceStoreRerender (../node_modules/react-dom/cjs/react-dom-client.development.js:8262:24)
+      at ../node_modules/react-dom/cjs/react-dom-client.development.js:8247:11
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /private/tmp/wp4r-repos/apollo-client/tsconfig.tests.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS ReactDOM 18 src/react/hooks/__tests__/useQuery.test.tsx (18.899 s)
+  ● Console
+
+    console.error
+      Missing field 'hello' while writing result { hello: undefined }
+
+      47 |       }
+      48 |
+    > 49 |       method(message, ...args);
+         |             ^
+      50 |     }
+      51 |   } as (typeof console)[M];
+      52 | }
+
+      at invariant.apply (utilities/invariant/index.ts:49:13)
+      at error (cache/inmemory/writeToStore.ts:404:19)
+          at Map.forEach (<anonymous>)
+      at StoreWriter.forEach [as processSelectionSet] (cache/inmemory/writeToStore.ts:333:7)
+      at StoreWriter.processSelectionSet [as writeToStore] (cache/inmemory/writeToStore.ts:175:22)
+      at InMemoryCache.writeToStore [as write] (cache/inmemory/inMemoryCache.ts:210:31)
+      at InMemoryCache.write [as writeQuery] (cache/core/cache.ts:456:17)
+      at update (react/hooks/__tests__/useQuery.test.tsx:853:25)
+      at update (core/QueryInfo.ts:499:17)
+      at update (cache/inmemory/inMemoryCache.ts:423:32)
+      at InMemoryCache.perform [as batch] (cache/inmemory/inMemoryCache.ts:463:7)
+      at QueryManager.batch [as refetchQueries] (core/QueryManager.ts:1317:18)
+      at QueryInfo.refetchQueries [as markMutationResult] (core/QueryInfo.ts:458:10)
+      at markMutationResult (core/QueryManager.ts:343:25)
+      at doInnerSub (../node_modules/rxjs/dist/cjs/internal/operators/mergeInternals.js:22:31)
+      at outerNext (../node_modules/rxjs/dist/cjs/internal/operators/mergeInternals.js:17:70)
+      at OperatorSubscriber._this._next (../node_modules/rxjs/dist/cjs/internal/operators/OperatorSubscriber.js:33:21)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/tap.js:21:28
+      at OperatorSubscriber._this._next (../node_modules/rxjs/dist/cjs/internal/operators/OperatorSubscriber.js:33:21)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at OperatorSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at next (testing/core/mocking/mockLink.ts:215:20)
+      at Timeout.task [as _onTimeout] (../node_modules/jsdom/lib/jsdom/browser/Window.js:579:19)
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3444:36)
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at printWarning (../node_modules/react-dom-18/cjs/react-dom.development.js:86:30)
+      at error (../node_modules/react-dom-18/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom-18/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom-18/cjs/react-dom.development.js:25547:5)
+      at forceStoreRerender (../node_modules/react-dom-18/cjs/react-dom.development.js:16158:5)
+      at handleStoreChange (../node_modules/react-dom-18/cjs/react-dom.development.js:16134:7)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3444:36)
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at printWarning (../node_modules/react-dom-18/cjs/react-dom.development.js:86:30)
+      at error (../node_modules/react-dom-18/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom-18/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom-18/cjs/react-dom.development.js:25547:5)
+      at forceStoreRerender (../node_modules/react-dom-18/cjs/react-dom.development.js:16158:5)
+      at handleStoreChange (../node_modules/react-dom-18/cjs/react-dom.development.js:16134:7)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3444:36)
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at printWarning (../node_modules/react-dom-18/cjs/react-dom.development.js:86:30)
+      at error (../node_modules/react-dom-18/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom-18/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom-18/cjs/react-dom.development.js:25547:5)
+      at forceStoreRerender (../node_modules/react-dom-18/cjs/react-dom.development.js:16158:5)
+      at handleStoreChange (../node_modules/react-dom-18/cjs/react-dom.development.js:16134:7)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3444:36)
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at printWarning (../node_modules/react-dom-18/cjs/react-dom.development.js:86:30)
+      at error (../node_modules/react-dom-18/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom-18/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom-18/cjs/react-dom.development.js:25547:5)
+      at forceStoreRerender (../node_modules/react-dom-18/cjs/react-dom.development.js:16158:5)
+      at handleStoreChange (../node_modules/react-dom-18/cjs/react-dom.development.js:16134:7)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.warn
+      No more mocked responses for the query:
+      {
+        hello
+      }
+      
+      Request variables: {}
+      
+      This typically indicates a configuration error in your mocks setup, usually due to a typo or mismatched variable.
+
+      168 |
+      169 |       if (this.showWarnings) {
+    > 170 |         console.warn(
+          |                 ^
+      171 |           message +
+      172 |             "\nThis typically indicates a configuration error in your mocks " +
+      173 |             "setup, usually due to a typo or mismatched variable."
+
+      at MockLink.warn [as request] (testing/core/mocking/mockLink.ts:170:17)
+      at request (link/core/ApolloLink.ts:353:17)
+      at QueryManager.getObservableFromLink (core/QueryManager.ts:940:39)
+      at QueryManager.getObservableFromLink [as getResultsFromLink] (core/QueryManager.ts:1041:17)
+      at getResultsFromLink (core/QueryManager.ts:1631:12)
+      at QueryManager.resultsFromLink [as fetchQueryByPolicy] (core/QueryManager.ts:1705:46)
+      at fetchQueryByPolicy (core/QueryManager.ts:1190:39)
+      at QueryManager.fromVariables [as fetchObservableWithInfo] (core/QueryManager.ts:1260:31)
+      at ObservableQuery.fetchObservableWithInfo [as fetch] (core/ObservableQuery.ts:1256:54)
+      at ObservableQuery.fetch [as _reobserve] (core/ObservableQuery.ts:1541:57)
+      at _reobserve (core/ObservableQuery.ts:1364:16)
+      at callTimer (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:1525:24)
+      at runTimersInRange (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2223:25)
+      at doTickInner (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2318:21)
+      at doTick (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2334:20)
+      at Object.tick (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2342:20)
+      at Object.runToLast (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2414:26)
+      at FakeTimers.runOnlyPendingTimers (../node_modules/@jest/fake-timers/build/index.js:545:19)
+      at runOnlyPendingTimers (testing/internal/disposables/enableFakeTimers.ts:22:12)
+      at Object.cleanup (testing/internal/disposables/withCleanup.ts:9:7)
+      at next (../node_modules/tslib/tslib.js:393:48)
+      at Object.__disposeResources (../node_modules/tslib/tslib.js:405:16)
+      at react/hooks/__tests__/useQuery.test.tsx:3632:37
+      at step (../node_modules/tslib/tslib.js:196:27)
+      at Object.next (../node_modules/tslib/tslib.js:177:57)
+      at fulfilled (../node_modules/tslib/tslib.js:167:62)
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3444:36)
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at printWarning (../node_modules/react-dom-18/cjs/react-dom.development.js:86:30)
+      at error (../node_modules/react-dom-18/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom-18/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom-18/cjs/react-dom.development.js:25547:5)
+      at forceStoreRerender (../node_modules/react-dom-18/cjs/react-dom.development.js:16158:5)
+      at handleStoreChange (../node_modules/react-dom-18/cjs/react-dom.development.js:16134:7)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3444:36)
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at printWarning (../node_modules/react-dom-18/cjs/react-dom.development.js:86:30)
+      at error (../node_modules/react-dom-18/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom-18/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom-18/cjs/react-dom.development.js:25547:5)
+      at forceStoreRerender (../node_modules/react-dom-18/cjs/react-dom.development.js:16158:5)
+      at handleStoreChange (../node_modules/react-dom-18/cjs/react-dom.development.js:16134:7)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at call (/private/tmp/wp4r-repos/apollo-client/src/testing/react/MockedProvider.tsx:38:10)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3556:36)
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at printWarning (../node_modules/react-dom-18/cjs/react-dom.development.js:86:30)
+      at error (../node_modules/react-dom-18/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom-18/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom-18/cjs/react-dom.development.js:25547:5)
+      at forceStoreRerender (../node_modules/react-dom-18/cjs/react-dom.development.js:16158:5)
+      at handleStoreChange (../node_modules/react-dom-18/cjs/react-dom.development.js:16134:7)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at call (/private/tmp/wp4r-repos/apollo-client/src/testing/react/MockedProvider.tsx:38:10)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3556:36)
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at printWarning (../node_modules/react-dom-18/cjs/react-dom.development.js:86:30)
+      at error (../node_modules/react-dom-18/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom-18/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom-18/cjs/react-dom.development.js:25547:5)
+      at forceStoreRerender (../node_modules/react-dom-18/cjs/react-dom.development.js:16158:5)
+      at handleStoreChange (../node_modules/react-dom-18/cjs/react-dom.development.js:16134:7)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at call (/private/tmp/wp4r-repos/apollo-client/src/testing/react/MockedProvider.tsx:38:10)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3556:36)
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at printWarning (../node_modules/react-dom-18/cjs/react-dom.development.js:86:30)
+      at error (../node_modules/react-dom-18/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom-18/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom-18/cjs/react-dom.development.js:25547:5)
+      at forceStoreRerender (../node_modules/react-dom-18/cjs/react-dom.development.js:16158:5)
+      at handleStoreChange (../node_modules/react-dom-18/cjs/react-dom.development.js:16134:7)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at call (/private/tmp/wp4r-repos/apollo-client/src/testing/react/MockedProvider.tsx:38:10)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3556:36)
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at printWarning (../node_modules/react-dom-18/cjs/react-dom.development.js:86:30)
+      at error (../node_modules/react-dom-18/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom-18/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom-18/cjs/react-dom.development.js:25547:5)
+      at forceStoreRerender (../node_modules/react-dom-18/cjs/react-dom.development.js:16158:5)
+      at handleStoreChange (../node_modules/react-dom-18/cjs/react-dom.development.js:16134:7)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.warn
+      No more mocked responses for the query:
+      {
+        hello
+      }
+      
+      Request variables: {}
+      
+      This typically indicates a configuration error in your mocks setup, usually due to a typo or mismatched variable.
+
+      168 |
+      169 |       if (this.showWarnings) {
+    > 170 |         console.warn(
+          |                 ^
+      171 |           message +
+      172 |             "\nThis typically indicates a configuration error in your mocks " +
+      173 |             "setup, usually due to a typo or mismatched variable."
+
+      at MockLink.warn [as request] (testing/core/mocking/mockLink.ts:170:17)
+      at request (link/core/ApolloLink.ts:353:17)
+      at QueryManager.getObservableFromLink (core/QueryManager.ts:940:39)
+      at QueryManager.getObservableFromLink [as getResultsFromLink] (core/QueryManager.ts:1041:17)
+      at getResultsFromLink (core/QueryManager.ts:1631:12)
+      at QueryManager.resultsFromLink [as fetchQueryByPolicy] (core/QueryManager.ts:1705:46)
+      at fetchQueryByPolicy (core/QueryManager.ts:1190:39)
+      at QueryManager.fromVariables [as fetchObservableWithInfo] (core/QueryManager.ts:1260:31)
+      at ObservableQuery.fetchObservableWithInfo [as fetch] (core/ObservableQuery.ts:1256:54)
+      at ObservableQuery.fetch [as _reobserve] (core/ObservableQuery.ts:1541:57)
+      at _reobserve (core/ObservableQuery.ts:1364:16)
+      at callTimer (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:1525:24)
+      at runTimersInRange (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2223:25)
+      at doTickInner (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2318:21)
+      at doTick (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2334:20)
+      at Object.tick (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2342:20)
+      at Object.runToLast (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2414:26)
+      at FakeTimers.runOnlyPendingTimers (../node_modules/@jest/fake-timers/build/index.js:545:19)
+      at runOnlyPendingTimers (testing/internal/disposables/enableFakeTimers.ts:22:12)
+      at Object.cleanup (testing/internal/disposables/withCleanup.ts:9:7)
+      at next (../node_modules/tslib/tslib.js:393:48)
+      at Object.__disposeResources (../node_modules/tslib/tslib.js:405:16)
+      at react/hooks/__tests__/useQuery.test.tsx:3761:37
+      at step (../node_modules/tslib/tslib.js:196:27)
+      at Object.next (../node_modules/tslib/tslib.js:177:57)
+      at fulfilled (../node_modules/tslib/tslib.js:167:62)
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at call (/private/tmp/wp4r-repos/apollo-client/src/testing/react/MockedProvider.tsx:38:10)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3556:36)
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at printWarning (../node_modules/react-dom-18/cjs/react-dom.development.js:86:30)
+      at error (../node_modules/react-dom-18/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom-18/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom-18/cjs/react-dom.development.js:25547:5)
+      at forceStoreRerender (../node_modules/react-dom-18/cjs/react-dom.development.js:16158:5)
+      at handleStoreChange (../node_modules/react-dom-18/cjs/react-dom.development.js:16134:7)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at call (/private/tmp/wp4r-repos/apollo-client/src/testing/react/MockedProvider.tsx:38:10)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3556:36)
+
+      577 |
+      578 |             resultData.current = result;
+    > 579 |             handleStoreChange();
+          |             ^
+      580 |           });
+      581 |
+      582 |         // Do the "unsubscribe" with a short delay.
+
+      at printWarning (../node_modules/react-dom-18/cjs/react-dom.development.js:86:30)
+      at error (../node_modules/react-dom-18/cjs/react-dom.development.js:60:7)
+      at warnIfUpdatesNotWrappedWithActDEV (../node_modules/react-dom-18/cjs/react-dom.development.js:27628:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom-18/cjs/react-dom.development.js:25547:5)
+      at forceStoreRerender (../node_modules/react-dom-18/cjs/react-dom.development.js:16158:5)
+      at handleStoreChange (../node_modules/react-dom-18/cjs/react-dom.development.js:16134:7)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+PASS ReactDOM 19 src/react/hooks/__tests__/useQueryRefHandlers.test.tsx (9.737 s)
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /private/tmp/wp4r-repos/apollo-client/tsconfig.tests.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+PASS ReactDOM 17 src/react/hooks/__tests__/useQuery.test.tsx (18.348 s)
+  ● Console
+
+    console.error
+      Missing field 'hello' while writing result { hello: undefined }
+
+      47 |       }
+      48 |
+    > 49 |       method(message, ...args);
+         |             ^
+      50 |     }
+      51 |   } as (typeof console)[M];
+      52 | }
+
+      at invariant.apply (utilities/invariant/index.ts:49:13)
+      at error (cache/inmemory/writeToStore.ts:404:19)
+          at Map.forEach (<anonymous>)
+      at StoreWriter.forEach [as processSelectionSet] (cache/inmemory/writeToStore.ts:333:7)
+      at StoreWriter.processSelectionSet [as writeToStore] (cache/inmemory/writeToStore.ts:175:22)
+      at InMemoryCache.writeToStore [as write] (cache/inmemory/inMemoryCache.ts:210:31)
+      at InMemoryCache.write [as writeQuery] (cache/core/cache.ts:456:17)
+      at update (react/hooks/__tests__/useQuery.test.tsx:853:25)
+      at update (core/QueryInfo.ts:499:17)
+      at update (cache/inmemory/inMemoryCache.ts:423:32)
+      at InMemoryCache.perform [as batch] (cache/inmemory/inMemoryCache.ts:463:7)
+      at QueryManager.batch [as refetchQueries] (core/QueryManager.ts:1317:18)
+      at QueryInfo.refetchQueries [as markMutationResult] (core/QueryInfo.ts:458:10)
+      at markMutationResult (core/QueryManager.ts:343:25)
+      at doInnerSub (../node_modules/rxjs/dist/cjs/internal/operators/mergeInternals.js:22:31)
+      at outerNext (../node_modules/rxjs/dist/cjs/internal/operators/mergeInternals.js:17:70)
+      at OperatorSubscriber._this._next (../node_modules/rxjs/dist/cjs/internal/operators/OperatorSubscriber.js:33:21)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/tap.js:21:28
+      at OperatorSubscriber._this._next (../node_modules/rxjs/dist/cjs/internal/operators/OperatorSubscriber.js:33:21)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at OperatorSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at OperatorSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at next (testing/core/mocking/mockLink.ts:215:20)
+      at Timeout.task [as _onTimeout] (../node_modules/jsdom/lib/jsdom/browser/Window.js:579:19)
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:1061:34)
+
+      130 |         if (checkIfSnapshotChanged(inst)) {
+      131 |           // Force a re-render.
+    > 132 |           forceUpdate({ inst });
+          |           ^
+      133 |         }
+      134 |       });
+      135 |       // React Hook React.useEffect has a missing dependency: 'inst'. Either include it or remove the dependency array.
+
+      at printWarning (../node_modules/react-dom-17/cjs/react-dom.development.js:67:30)
+      at error (../node_modules/react-dom-17/cjs/react-dom.development.js:43:5)
+      at warnIfNotCurrentlyActingUpdatesInDEV (../node_modules/react-dom-17/cjs/react-dom.development.js:24064:9)
+      at dispatchAction (../node_modules/react-dom-17/cjs/react-dom.development.js:16135:9)
+      at forceUpdate (react/hooks/useSyncExternalStore.ts:132:11)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:1061:34)
+
+      130 |         if (checkIfSnapshotChanged(inst)) {
+      131 |           // Force a re-render.
+    > 132 |           forceUpdate({ inst });
+          |           ^
+      133 |         }
+      134 |       });
+      135 |       // React Hook React.useEffect has a missing dependency: 'inst'. Either include it or remove the dependency array.
+
+      at printWarning (../node_modules/react-dom-17/cjs/react-dom.development.js:67:30)
+      at error (../node_modules/react-dom-17/cjs/react-dom.development.js:43:5)
+      at warnAboutUpdateOnUnmountedFiberInDEV (../node_modules/react-dom-17/cjs/react-dom.development.js:23914:9)
+      at scheduleUpdateOnFiber (../node_modules/react-dom-17/cjs/react-dom.development.js:21840:5)
+      at dispatchAction (../node_modules/react-dom-17/cjs/react-dom.development.js:16139:5)
+      at forceUpdate (react/hooks/useSyncExternalStore.ts:132:11)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3444:36)
+
+      130 |         if (checkIfSnapshotChanged(inst)) {
+      131 |           // Force a re-render.
+    > 132 |           forceUpdate({ inst });
+          |           ^
+      133 |         }
+      134 |       });
+      135 |       // React Hook React.useEffect has a missing dependency: 'inst'. Either include it or remove the dependency array.
+
+      at printWarning (../node_modules/react-dom-17/cjs/react-dom.development.js:67:30)
+      at error (../node_modules/react-dom-17/cjs/react-dom.development.js:43:5)
+      at warnIfNotCurrentlyActingUpdatesInDEV (../node_modules/react-dom-17/cjs/react-dom.development.js:24064:9)
+      at dispatchAction (../node_modules/react-dom-17/cjs/react-dom.development.js:16135:9)
+      at forceUpdate (react/hooks/useSyncExternalStore.ts:132:11)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3444:36)
+
+      130 |         if (checkIfSnapshotChanged(inst)) {
+      131 |           // Force a re-render.
+    > 132 |           forceUpdate({ inst });
+          |           ^
+      133 |         }
+      134 |       });
+      135 |       // React Hook React.useEffect has a missing dependency: 'inst'. Either include it or remove the dependency array.
+
+      at printWarning (../node_modules/react-dom-17/cjs/react-dom.development.js:67:30)
+      at error (../node_modules/react-dom-17/cjs/react-dom.development.js:43:5)
+      at warnIfNotCurrentlyActingUpdatesInDEV (../node_modules/react-dom-17/cjs/react-dom.development.js:24064:9)
+      at dispatchAction (../node_modules/react-dom-17/cjs/react-dom.development.js:16135:9)
+      at forceUpdate (react/hooks/useSyncExternalStore.ts:132:11)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3444:36)
+
+      130 |         if (checkIfSnapshotChanged(inst)) {
+      131 |           // Force a re-render.
+    > 132 |           forceUpdate({ inst });
+          |           ^
+      133 |         }
+      134 |       });
+      135 |       // React Hook React.useEffect has a missing dependency: 'inst'. Either include it or remove the dependency array.
+
+      at printWarning (../node_modules/react-dom-17/cjs/react-dom.development.js:67:30)
+      at error (../node_modules/react-dom-17/cjs/react-dom.development.js:43:5)
+      at warnIfNotCurrentlyActingUpdatesInDEV (../node_modules/react-dom-17/cjs/react-dom.development.js:24064:9)
+      at dispatchAction (../node_modules/react-dom-17/cjs/react-dom.development.js:16135:9)
+      at forceUpdate (react/hooks/useSyncExternalStore.ts:132:11)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3444:36)
+
+      130 |         if (checkIfSnapshotChanged(inst)) {
+      131 |           // Force a re-render.
+    > 132 |           forceUpdate({ inst });
+          |           ^
+      133 |         }
+      134 |       });
+      135 |       // React Hook React.useEffect has a missing dependency: 'inst'. Either include it or remove the dependency array.
+
+      at printWarning (../node_modules/react-dom-17/cjs/react-dom.development.js:67:30)
+      at error (../node_modules/react-dom-17/cjs/react-dom.development.js:43:5)
+      at warnIfNotCurrentlyActingUpdatesInDEV (../node_modules/react-dom-17/cjs/react-dom.development.js:24064:9)
+      at dispatchAction (../node_modules/react-dom-17/cjs/react-dom.development.js:16135:9)
+      at forceUpdate (react/hooks/useSyncExternalStore.ts:132:11)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.warn
+      No more mocked responses for the query:
+      {
+        hello
+      }
+      
+      Request variables: {}
+      
+      This typically indicates a configuration error in your mocks setup, usually due to a typo or mismatched variable.
+
+      168 |
+      169 |       if (this.showWarnings) {
+    > 170 |         console.warn(
+          |                 ^
+      171 |           message +
+      172 |             "\nThis typically indicates a configuration error in your mocks " +
+      173 |             "setup, usually due to a typo or mismatched variable."
+
+      at MockLink.warn [as request] (testing/core/mocking/mockLink.ts:170:17)
+      at request (link/core/ApolloLink.ts:353:17)
+      at QueryManager.getObservableFromLink (core/QueryManager.ts:940:39)
+      at QueryManager.getObservableFromLink [as getResultsFromLink] (core/QueryManager.ts:1041:17)
+      at getResultsFromLink (core/QueryManager.ts:1631:12)
+      at QueryManager.resultsFromLink [as fetchQueryByPolicy] (core/QueryManager.ts:1705:46)
+      at fetchQueryByPolicy (core/QueryManager.ts:1190:39)
+      at QueryManager.fromVariables [as fetchObservableWithInfo] (core/QueryManager.ts:1260:31)
+      at ObservableQuery.fetchObservableWithInfo [as fetch] (core/ObservableQuery.ts:1256:54)
+      at ObservableQuery.fetch [as _reobserve] (core/ObservableQuery.ts:1541:57)
+      at _reobserve (core/ObservableQuery.ts:1364:16)
+      at callTimer (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:1525:24)
+      at runTimersInRange (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2223:25)
+      at doTickInner (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2318:21)
+      at doTick (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2334:20)
+      at Object.tick (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2342:20)
+      at Object.runToLast (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2414:26)
+      at FakeTimers.runOnlyPendingTimers (../node_modules/@jest/fake-timers/build/index.js:545:19)
+      at runOnlyPendingTimers (testing/internal/disposables/enableFakeTimers.ts:22:12)
+      at Object.cleanup (testing/internal/disposables/withCleanup.ts:9:7)
+      at next (../node_modules/tslib/tslib.js:393:48)
+      at Object.__disposeResources (../node_modules/tslib/tslib.js:405:16)
+      at react/hooks/__tests__/useQuery.test.tsx:3632:37
+      at step (../node_modules/tslib/tslib.js:196:27)
+      at Object.next (../node_modules/tslib/tslib.js:177:57)
+      at fulfilled (../node_modules/tslib/tslib.js:167:62)
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3444:36)
+
+      130 |         if (checkIfSnapshotChanged(inst)) {
+      131 |           // Force a re-render.
+    > 132 |           forceUpdate({ inst });
+          |           ^
+      133 |         }
+      134 |       });
+      135 |       // React Hook React.useEffect has a missing dependency: 'inst'. Either include it or remove the dependency array.
+
+      at printWarning (../node_modules/react-dom-17/cjs/react-dom.development.js:67:30)
+      at error (../node_modules/react-dom-17/cjs/react-dom.development.js:43:5)
+      at warnIfNotCurrentlyActingUpdatesInDEV (../node_modules/react-dom-17/cjs/react-dom.development.js:24064:9)
+      at dispatchAction (../node_modules/react-dom-17/cjs/react-dom.development.js:16135:9)
+      at forceUpdate (react/hooks/useSyncExternalStore.ts:132:11)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3444:36)
+
+      130 |         if (checkIfSnapshotChanged(inst)) {
+      131 |           // Force a re-render.
+    > 132 |           forceUpdate({ inst });
+          |           ^
+      133 |         }
+      134 |       });
+      135 |       // React Hook React.useEffect has a missing dependency: 'inst'. Either include it or remove the dependency array.
+
+      at printWarning (../node_modules/react-dom-17/cjs/react-dom.development.js:67:30)
+      at error (../node_modules/react-dom-17/cjs/react-dom.development.js:43:5)
+      at warnIfNotCurrentlyActingUpdatesInDEV (../node_modules/react-dom-17/cjs/react-dom.development.js:24064:9)
+      at dispatchAction (../node_modules/react-dom-17/cjs/react-dom.development.js:16135:9)
+      at forceUpdate (react/hooks/useSyncExternalStore.ts:132:11)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at call (/private/tmp/wp4r-repos/apollo-client/src/testing/react/MockedProvider.tsx:38:10)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3556:36)
+
+      130 |         if (checkIfSnapshotChanged(inst)) {
+      131 |           // Force a re-render.
+    > 132 |           forceUpdate({ inst });
+          |           ^
+      133 |         }
+      134 |       });
+      135 |       // React Hook React.useEffect has a missing dependency: 'inst'. Either include it or remove the dependency array.
+
+      at printWarning (../node_modules/react-dom-17/cjs/react-dom.development.js:67:30)
+      at error (../node_modules/react-dom-17/cjs/react-dom.development.js:43:5)
+      at warnIfNotCurrentlyActingUpdatesInDEV (../node_modules/react-dom-17/cjs/react-dom.development.js:24064:9)
+      at dispatchAction (../node_modules/react-dom-17/cjs/react-dom.development.js:16135:9)
+      at forceUpdate (react/hooks/useSyncExternalStore.ts:132:11)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at call (/private/tmp/wp4r-repos/apollo-client/src/testing/react/MockedProvider.tsx:38:10)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3556:36)
+
+      130 |         if (checkIfSnapshotChanged(inst)) {
+      131 |           // Force a re-render.
+    > 132 |           forceUpdate({ inst });
+          |           ^
+      133 |         }
+      134 |       });
+      135 |       // React Hook React.useEffect has a missing dependency: 'inst'. Either include it or remove the dependency array.
+
+      at printWarning (../node_modules/react-dom-17/cjs/react-dom.development.js:67:30)
+      at error (../node_modules/react-dom-17/cjs/react-dom.development.js:43:5)
+      at warnIfNotCurrentlyActingUpdatesInDEV (../node_modules/react-dom-17/cjs/react-dom.development.js:24064:9)
+      at dispatchAction (../node_modules/react-dom-17/cjs/react-dom.development.js:16135:9)
+      at forceUpdate (react/hooks/useSyncExternalStore.ts:132:11)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at call (/private/tmp/wp4r-repos/apollo-client/src/testing/react/MockedProvider.tsx:38:10)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3556:36)
+
+      130 |         if (checkIfSnapshotChanged(inst)) {
+      131 |           // Force a re-render.
+    > 132 |           forceUpdate({ inst });
+          |           ^
+      133 |         }
+      134 |       });
+      135 |       // React Hook React.useEffect has a missing dependency: 'inst'. Either include it or remove the dependency array.
+
+      at printWarning (../node_modules/react-dom-17/cjs/react-dom.development.js:67:30)
+      at error (../node_modules/react-dom-17/cjs/react-dom.development.js:43:5)
+      at warnIfNotCurrentlyActingUpdatesInDEV (../node_modules/react-dom-17/cjs/react-dom.development.js:24064:9)
+      at dispatchAction (../node_modules/react-dom-17/cjs/react-dom.development.js:16135:9)
+      at forceUpdate (react/hooks/useSyncExternalStore.ts:132:11)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at call (/private/tmp/wp4r-repos/apollo-client/src/testing/react/MockedProvider.tsx:38:10)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3556:36)
+
+      130 |         if (checkIfSnapshotChanged(inst)) {
+      131 |           // Force a re-render.
+    > 132 |           forceUpdate({ inst });
+          |           ^
+      133 |         }
+      134 |       });
+      135 |       // React Hook React.useEffect has a missing dependency: 'inst'. Either include it or remove the dependency array.
+
+      at printWarning (../node_modules/react-dom-17/cjs/react-dom.development.js:67:30)
+      at error (../node_modules/react-dom-17/cjs/react-dom.development.js:43:5)
+      at warnIfNotCurrentlyActingUpdatesInDEV (../node_modules/react-dom-17/cjs/react-dom.development.js:24064:9)
+      at dispatchAction (../node_modules/react-dom-17/cjs/react-dom.development.js:16135:9)
+      at forceUpdate (react/hooks/useSyncExternalStore.ts:132:11)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.warn
+      No more mocked responses for the query:
+      {
+        hello
+      }
+      
+      Request variables: {}
+      
+      This typically indicates a configuration error in your mocks setup, usually due to a typo or mismatched variable.
+
+      168 |
+      169 |       if (this.showWarnings) {
+    > 170 |         console.warn(
+          |                 ^
+      171 |           message +
+      172 |             "\nThis typically indicates a configuration error in your mocks " +
+      173 |             "setup, usually due to a typo or mismatched variable."
+
+      at MockLink.warn [as request] (testing/core/mocking/mockLink.ts:170:17)
+      at request (link/core/ApolloLink.ts:353:17)
+      at QueryManager.getObservableFromLink (core/QueryManager.ts:940:39)
+      at QueryManager.getObservableFromLink [as getResultsFromLink] (core/QueryManager.ts:1041:17)
+      at getResultsFromLink (core/QueryManager.ts:1631:12)
+      at QueryManager.resultsFromLink [as fetchQueryByPolicy] (core/QueryManager.ts:1705:46)
+      at fetchQueryByPolicy (core/QueryManager.ts:1190:39)
+      at QueryManager.fromVariables [as fetchObservableWithInfo] (core/QueryManager.ts:1260:31)
+      at ObservableQuery.fetchObservableWithInfo [as fetch] (core/ObservableQuery.ts:1256:54)
+      at ObservableQuery.fetch [as _reobserve] (core/ObservableQuery.ts:1541:57)
+      at _reobserve (core/ObservableQuery.ts:1364:16)
+      at callTimer (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:1525:24)
+      at runTimersInRange (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2223:25)
+      at doTickInner (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2318:21)
+      at doTick (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2334:20)
+      at Object.tick (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2342:20)
+      at Object.runToLast (../node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:2414:26)
+      at FakeTimers.runOnlyPendingTimers (../node_modules/@jest/fake-timers/build/index.js:545:19)
+      at runOnlyPendingTimers (testing/internal/disposables/enableFakeTimers.ts:22:12)
+      at Object.cleanup (testing/internal/disposables/withCleanup.ts:9:7)
+      at next (../node_modules/tslib/tslib.js:393:48)
+      at Object.__disposeResources (../node_modules/tslib/tslib.js:405:16)
+      at react/hooks/__tests__/useQuery.test.tsx:3761:37
+      at step (../node_modules/tslib/tslib.js:196:27)
+      at Object.next (../node_modules/tslib/tslib.js:177:57)
+      at fulfilled (../node_modules/tslib/tslib.js:167:62)
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at call (/private/tmp/wp4r-repos/apollo-client/src/testing/react/MockedProvider.tsx:38:10)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3556:36)
+
+      130 |         if (checkIfSnapshotChanged(inst)) {
+      131 |           // Force a re-render.
+    > 132 |           forceUpdate({ inst });
+          |           ^
+      133 |         }
+      134 |       });
+      135 |       // React Hook React.useEffect has a missing dependency: 'inst'. Either include it or remove the dependency array.
+
+      at printWarning (../node_modules/react-dom-17/cjs/react-dom.development.js:67:30)
+      at error (../node_modules/react-dom-17/cjs/react-dom.development.js:43:5)
+      at warnIfNotCurrentlyActingUpdatesInDEV (../node_modules/react-dom-17/cjs/react-dom.development.js:24064:9)
+      at dispatchAction (../node_modules/react-dom-17/cjs/react-dom.development.js:16135:9)
+      at forceUpdate (react/hooks/useSyncExternalStore.ts:132:11)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+    console.error
+      Warning: An update to TestComponent inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+          at TestComponent (/private/tmp/wp4r-repos/apollo-client/node_modules/@testing-library/react/dist/pure.js:307:5)
+          at client (/private/tmp/wp4r-repos/apollo-client/src/react/context/ApolloProvider.tsx:17:9)
+          at call (/private/tmp/wp4r-repos/apollo-client/src/testing/react/MockedProvider.tsx:38:10)
+          at wrapper (/private/tmp/wp4r-repos/apollo-client/src/react/hooks/__tests__/useQuery.test.tsx:3556:36)
+
+      130 |         if (checkIfSnapshotChanged(inst)) {
+      131 |           // Force a re-render.
+    > 132 |           forceUpdate({ inst });
+          |           ^
+      133 |         }
+      134 |       });
+      135 |       // React Hook React.useEffect has a missing dependency: 'inst'. Either include it or remove the dependency array.
+
+      at printWarning (../node_modules/react-dom-17/cjs/react-dom.development.js:67:30)
+      at error (../node_modules/react-dom-17/cjs/react-dom.development.js:43:5)
+      at warnIfNotCurrentlyActingUpdatesInDEV (../node_modules/react-dom-17/cjs/react-dom.development.js:24064:9)
+      at dispatchAction (../node_modules/react-dom-17/cjs/react-dom.development.js:16135:9)
+      at forceUpdate (react/hooks/useSyncExternalStore.ts:132:11)
+      at Object.handleStoreChange [as next] (react/hooks/useQuery.ts:579:13)
+      at ConsumerObserver.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:113:33)
+      at SafeSubscriber.Subscriber._next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:80:26)
+      at SafeSubscriber.Subscriber.next (../node_modules/rxjs/dist/cjs/internal/Subscriber.js:51:18)
+      at ../node_modules/rxjs/dist/cjs/internal/operators/observeOn.js:10:199
+      at AsapAction.work (../node_modules/rxjs/dist/cjs/internal/util/executeSchedule.js:8:9)
+      at AsapAction.AsyncAction._execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:79:18)
+      at AsapAction.AsyncAction.execute (../node_modules/rxjs/dist/cjs/internal/scheduler/AsyncAction.js:67:26)
+      at AsapScheduler.flush (../node_modules/rxjs/dist/cjs/internal/scheduler/AsapScheduler.js:33:33)
+      at ../node_modules/rxjs/dist/cjs/internal/util/Immediate.js:21:74
+
+PASS ReactDOM 18 src/react/hooks/__tests__/useQueryRefHandlers.test.tsx
+
+Test Suites: 5 passed, 5 total
+Tests:       33 skipped, 508 passed, 541 total
+Snapshots:   0 total
+Time:        68.765 s
+Ran all test suites matching src/react/hooks/__tests__/useQuery in 3 projects.

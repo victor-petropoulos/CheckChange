@@ -1,0 +1,119 @@
+npm warn Unknown project config "ignore-workspace-root-check". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+[33mTesting types with tsc and vue-tsc is an experimental feature.
+Breaking changes might not follow SemVer, please pin Vitest's version when using it.[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m test/status.test.ts[2m > [22mevent response[2m > [22mweb[2m > [22mcontent response[2m > [22msets status 200 as default (web)
+[31m[1mAssertionError[22m: expected { status: 200, statusText: '', …(2) } to match object { status: 200, statusText: 'OK', …(2) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "body": "text",[22m
+[2m    "headers": {},[22m
+[2m    "status": 200,[22m
+[32m-   "statusText": "OK",[39m
+[31m+   "statusText": "",[39m
+[2m  }[22m
+
+[36m [2m❯[22m test/status.test.ts:[2m22:45[22m[39m
+    [90m 20|[39m       })[33m;[39m
+    [90m 21|[39m
+    [90m 22|[39m       [34mexpect[39m([35mawait[39m [34mwebResponseToPlain[39m(res))[33m.[39m[34mtoMatchObject[39m({
+    [90m   |[39m                                             [31m^[39m
+    [90m 23|[39m         status[33m:[39m [34m200[39m[33m,[39m
+    [90m 24|[39m         statusText[33m:[39m [32m"OK"[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m test/status.test.ts[2m > [22mevent response[2m > [22mnode[2m > [22mcontent response[2m > [22msets status 200 as default (node)
+[31m[1mAssertionError[22m: expected { status: 200, statusText: '', …(2) } to match object { status: 200, statusText: 'OK', …(2) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -4,7 +4,7 @@[39m
+[2m      "connection": "keep-alive",[22m
+[2m      "date": Any<String>,[22m
+[2m      "keep-alive": "timeout=5",[22m
+[2m    },[22m
+[2m    "status": 200,[22m
+[32m-   "statusText": "OK",[39m
+[31m+   "statusText": "",[39m
+[2m  }[22m
+
+[36m [2m❯[22m test/status.test.ts:[2m22:45[22m[39m
+    [90m 20|[39m       })[33m;[39m
+    [90m 21|[39m
+    [90m 22|[39m       [34mexpect[39m([35mawait[39m [34mwebResponseToPlain[39m(res))[33m.[39m[34mtoMatchObject[39m({
+    [90m   |[39m                                             [31m^[39m
+    [90m 23|[39m         status[33m:[39m [34m200[39m[33m,[39m
+    [90m 24|[39m         statusText[33m:[39m [32m"OK"[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m test/utils.test.ts[2m > [22mutils[2m > [22mnode[2m > [22mgetRequestFingerprint[2m > [22muses the request ip when no x-forwarded-for header set (node)
+[31m[1mAssertionError[22m: expected '::ffff:127.0.0.1' to match /^0\.0\.0\.0|::1$/[39m
+
+[32m- Expected:[39m
+/^0\.0\.0\.0|::1$/
+
+[31m+ Received:[39m
+"::ffff:127.0.0.1"
+
+[36m [2m❯[22m test/utils.test.ts:[2m439:34[22m[39m
+    [90m437|[39m
+    [90m438|[39m       [35mif[39m (t[33m.[39mtarget [33m!==[39m [32m"web"[39m) {
+    [90m439|[39m         [34mexpect[39m([35mawait[39m res[33m.[39m[34mtext[39m())[33m.[39m[34mtoMatch[39m([36m/^0\.0\.0\.0|::1$/[39m)[33m;[39m
+    [90m   |[39m                                  [31m^[39m
+    [90m440|[39m       }
+    [90m441|[39m     })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m test/bench/bundle.test.ts[2m > [22mbenchmark[2m > [22mbundle size (H3)
+[31m[1mAssertionError[22m: expected 16984 to be less than or equal to 16000[39m
+[36m [2m❯[22m test/bench/bundle.test.ts:[2m21:26[22m[39m
+    [90m 19|[39m       console.log(`Bundle size (H3): ${bundle.bytes} (gzip: ${bundle.g…
+    [90m 20|[39m     }
+    [90m 21|[39m     [34mexpect[39m(bundle[33m.[39mbytes)[33m.[39m[34mtoBeLessThanOrEqual[39m([34m16_000[39m)[33m;[39m [90m// <16kb[39m
+    [90m   |[39m                          [31m^[39m
+    [90m 22|[39m     [34mexpect[39m(bundle[33m.[39mgzipSize)[33m.[39m[34mtoBeLessThanOrEqual[39m([34m6_000[39m)[33m;[39m [90m// <6kb[39m
+    [90m 23|[39m   })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Unhandled Errors [49m[22m[31m⎯⎯⎯⎯⎯⎯[39m
+[31m[1m
+Vitest caught 2 unhandled errors during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.[22m[39m
+
+[31m⎯⎯⎯[39m[1m[41m Unhandled Source Error [49m[22m[31m⎯⎯⎯[39m
+[31m[1mTypeCheckError[22m: Type 'Cookies' is not assignable to type 'Record<string, string>'.
+  'string' index signatures are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.[39m
+[36m [2m❯[22m src/utils/cookie.ts:[2m23:3[22m[39m
+    [90m 21|[39m  */[39m
+    [90m 22|[39m export function parseCookies(event: HTTPEvent): Record<string, string>…
+    [90m 23|[39m   [35mreturn[39m [34mparseCookie[39m(event[33m.[39mreq[33m.[39mheaders[33m.[39m[35mget[39m([32m"cookie"[39m) [33m||[39m [32m""[39m)[33m;[39m
+    [90m   |[39m   [31m^[39m
+    [90m 24|[39m }
+    [90m 25|[39m
+
+
+[31m⎯⎯⎯[39m[1m[41m Unhandled Source Error [49m[22m[31m⎯⎯⎯[39m
+[31m[1mTypeCheckError[22m: Argument of type 'SetCookie$1 | undefined' is not assignable to parameter of type 'Partial<SetCookie>'.
+  Type 'undefined' is not assignable to type 'Partial<SetCookie>'.[39m
+[36m [2m❯[22m src/utils/cookie.ts:[2m101:64[22m[39m
+    [90m 99|[39m   event[33m.[39mres[33m.[39mheaders[33m.[39m[35mdelete[39m([32m"set-cookie"[39m)[33m;[39m
+    [90m100|[39m   [35mfor[39m ([35mconst[39m cookie [35mof[39m currentCookies) {
+    [90m101|[39m     const _key = _getDistinctCookieKey(cookie.split("=")?.[0], parseSe…
+    [90m   |[39m                                                                [31m^[39m
+    [90m102|[39m     [35mif[39m (_key [33m===[39m newCookieKey) {
+    [90m103|[39m       [35mcontinue[39m[33m;[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39m
+

@@ -115,3 +115,12 @@ For development with OpenCode, also read the repository-root `OPENCODE_START_HER
 - `research/WP4R.2_DECISION_SUMMARY.md`
 - `implementation/WP4R.2_REAL_ARTIFACT_VERIFICATION.md` — **current task**
 - `implementation/WP4R.2_REAL_ARTIFACT_EXECUTION_PLAYBOOK.md`
+
+
+## WP4R Final — Current
+
+- `research/WP4R.2_REAL_ARTIFACT_VERIFICATION_RESULTS.md`
+- `research/WP4R.2_FINAL_DECISION_SUMMARY.md`
+- `implementation/WP4R_FINAL_USEFULNESS_RERUN.md` — **current experiment**
+- `implementation/WP4R_FINAL_EXECUTION_PLAYBOOK.md`
+- `research/WP4R_FINAL_HUMAN_REVIEW_TEMPLATE.md`

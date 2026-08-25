@@ -1,0 +1,349 @@
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /private/tmp/wp4r-repos/apollo-client/tsconfig.tests.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+FAIL Core Tests src/cache/core/__tests__/cache.ts
+  ● abstract cache › readQuery › runs the read method
+
+    TypeError: expect(...).toBeCalled is not a function
+
+       99 |
+      100 |       test.readQuery({ query });
+    > 101 |       expect(test.read).toBeCalled();
+          |                         ^
+      102 |     });
+      103 |
+      104 |     it("defaults optimistic to false", () => {
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:101:25)
+
+  ● abstract cache › readFragment › runs the read method
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      125 |
+      126 |       test.readFragment(fragment);
+    > 127 |       expect(test.read).toBeCalled();
+          |                         ^
+      128 |     });
+      129 |
+      130 |     it("defaults optimistic to false", () => {
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:127:25)
+
+  ● abstract cache › writeQuery › runs the write method
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      154 |         data: "foo",
+      155 |       });
+    > 156 |       expect(test.write).toBeCalled();
+          |                          ^
+      157 |     });
+      158 |   });
+      159 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:156:26)
+
+  ● abstract cache › writeFragment › runs the write method
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      173 |
+      174 |       test.writeFragment(fragment);
+    > 175 |       expect(test.write).toBeCalled();
+          |                          ^
+      176 |     });
+      177 |   });
+      178 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:175:26)
+
+  ● abstract cache › updateQuery › runs the readQuery & writeQuery methods
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      185 |       test.updateQuery({ query }, (data) => "foo");
+      186 |
+    > 187 |       expect(test.readQuery).toBeCalled();
+          |                              ^
+      188 |       expect(test.writeQuery).toBeCalled();
+      189 |     });
+      190 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:187:30)
+
+  ● abstract cache › updateQuery › does not call writeQuery method if data is null
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      196 |       test.updateQuery({ query }, (data) => null);
+      197 |
+    > 198 |       expect(test.readQuery).toBeCalled();
+          |                              ^
+      199 |       expect(test.writeQuery).not.toBeCalled();
+      200 |     });
+      201 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:198:30)
+
+  ● abstract cache › updateQuery › does not call writeQuery method if data is undefined
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      209 |       });
+      210 |
+    > 211 |       expect(test.readQuery).toBeCalled();
+          |                              ^
+      212 |       expect(test.writeQuery).not.toBeCalled();
+      213 |     });
+      214 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:211:30)
+
+  ● abstract cache › updateQuery › calls the readQuery & writeQuery methods with the options object
+
+    TypeError: expect(...).toBeCalledWith is not a function
+
+      227 |       test.updateQuery(options, (data) => "foo");
+      228 |
+    > 229 |       expect(test.readQuery).toBeCalledWith(expect.objectContaining(options));
+          |                              ^
+      230 |
+      231 |       expect(test.writeQuery).toBeCalledWith(
+      232 |         expect.objectContaining({ ...options, data: "foo" })
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:229:30)
+
+  ● abstract cache › updateFragment › runs the readFragment & writeFragment methods
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      274 |       test.updateFragment({ id: fragmentId, fragment }, (data) => "foo");
+      275 |
+    > 276 |       expect(test.readFragment).toBeCalled();
+          |                                 ^
+      277 |       expect(test.writeFragment).toBeCalled();
+      278 |     });
+      279 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:276:33)
+
+  ● abstract cache › updateFragment › does not call writeFragment method if data is null
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      285 |       test.updateFragment({ id: fragmentId, fragment }, (data) => null);
+      286 |
+    > 287 |       expect(test.readFragment).toBeCalled();
+          |                                 ^
+      288 |       expect(test.writeFragment).not.toBeCalled();
+      289 |     });
+      290 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:287:33)
+
+  ● abstract cache › updateFragment › does not call writeFragment method if data is undefined
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      298 |       });
+      299 |
+    > 300 |       expect(test.readFragment).toBeCalled();
+          |                                 ^
+      301 |       expect(test.writeFragment).not.toBeCalled();
+      302 |     });
+      303 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:300:33)
+
+  ● abstract cache › updateFragment › calls the readFragment & writeFragment methods with the options object
+
+    TypeError: expect(...).toBeCalledWith is not a function
+
+      318 |       test.updateFragment(options, (data) => "foo");
+      319 |
+    > 320 |       expect(test.readFragment).toBeCalledWith(
+          |                                 ^
+      321 |         expect.objectContaining(options)
+      322 |       );
+      323 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:320:33)
+
+ts-jest[config] (WARN) 
+    The "ts-jest" config option "isolatedModules" is deprecated and will be removed in v30.0.0. Please use "isolatedModules: true" in /private/tmp/wp4r-repos/apollo-client/tsconfig.tests.json instead, see https://www.typescriptlang.org/tsconfig/#isolatedModules
+  
+FAIL Core Tests - RxJS min version src/cache/core/__tests__/cache.ts
+  ● abstract cache › readQuery › runs the read method
+
+    TypeError: expect(...).toBeCalled is not a function
+
+       99 |
+      100 |       test.readQuery({ query });
+    > 101 |       expect(test.read).toBeCalled();
+          |                         ^
+      102 |     });
+      103 |
+      104 |     it("defaults optimistic to false", () => {
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:101:25)
+
+  ● abstract cache › readFragment › runs the read method
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      125 |
+      126 |       test.readFragment(fragment);
+    > 127 |       expect(test.read).toBeCalled();
+          |                         ^
+      128 |     });
+      129 |
+      130 |     it("defaults optimistic to false", () => {
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:127:25)
+
+  ● abstract cache › writeQuery › runs the write method
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      154 |         data: "foo",
+      155 |       });
+    > 156 |       expect(test.write).toBeCalled();
+          |                          ^
+      157 |     });
+      158 |   });
+      159 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:156:26)
+
+  ● abstract cache › writeFragment › runs the write method
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      173 |
+      174 |       test.writeFragment(fragment);
+    > 175 |       expect(test.write).toBeCalled();
+          |                          ^
+      176 |     });
+      177 |   });
+      178 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:175:26)
+
+  ● abstract cache › updateQuery › runs the readQuery & writeQuery methods
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      185 |       test.updateQuery({ query }, (data) => "foo");
+      186 |
+    > 187 |       expect(test.readQuery).toBeCalled();
+          |                              ^
+      188 |       expect(test.writeQuery).toBeCalled();
+      189 |     });
+      190 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:187:30)
+
+  ● abstract cache › updateQuery › does not call writeQuery method if data is null
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      196 |       test.updateQuery({ query }, (data) => null);
+      197 |
+    > 198 |       expect(test.readQuery).toBeCalled();
+          |                              ^
+      199 |       expect(test.writeQuery).not.toBeCalled();
+      200 |     });
+      201 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:198:30)
+
+  ● abstract cache › updateQuery › does not call writeQuery method if data is undefined
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      209 |       });
+      210 |
+    > 211 |       expect(test.readQuery).toBeCalled();
+          |                              ^
+      212 |       expect(test.writeQuery).not.toBeCalled();
+      213 |     });
+      214 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:211:30)
+
+  ● abstract cache › updateQuery › calls the readQuery & writeQuery methods with the options object
+
+    TypeError: expect(...).toBeCalledWith is not a function
+
+      227 |       test.updateQuery(options, (data) => "foo");
+      228 |
+    > 229 |       expect(test.readQuery).toBeCalledWith(expect.objectContaining(options));
+          |                              ^
+      230 |
+      231 |       expect(test.writeQuery).toBeCalledWith(
+      232 |         expect.objectContaining({ ...options, data: "foo" })
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:229:30)
+
+  ● abstract cache › updateFragment › runs the readFragment & writeFragment methods
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      274 |       test.updateFragment({ id: fragmentId, fragment }, (data) => "foo");
+      275 |
+    > 276 |       expect(test.readFragment).toBeCalled();
+          |                                 ^
+      277 |       expect(test.writeFragment).toBeCalled();
+      278 |     });
+      279 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:276:33)
+
+  ● abstract cache › updateFragment › does not call writeFragment method if data is null
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      285 |       test.updateFragment({ id: fragmentId, fragment }, (data) => null);
+      286 |
+    > 287 |       expect(test.readFragment).toBeCalled();
+          |                                 ^
+      288 |       expect(test.writeFragment).not.toBeCalled();
+      289 |     });
+      290 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:287:33)
+
+  ● abstract cache › updateFragment › does not call writeFragment method if data is undefined
+
+    TypeError: expect(...).toBeCalled is not a function
+
+      298 |       });
+      299 |
+    > 300 |       expect(test.readFragment).toBeCalled();
+          |                                 ^
+      301 |       expect(test.writeFragment).not.toBeCalled();
+      302 |     });
+      303 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:300:33)
+
+  ● abstract cache › updateFragment › calls the readFragment & writeFragment methods with the options object
+
+    TypeError: expect(...).toBeCalledWith is not a function
+
+      318 |       test.updateFragment(options, (data) => "foo");
+      319 |
+    > 320 |       expect(test.readFragment).toBeCalledWith(
+          |                                 ^
+      321 |         expect.objectContaining(options)
+      322 |       );
+      323 |
+
+      at Object.<anonymous> (cache/core/__tests__/cache.ts:320:33)
+
+Test Suites: 2 failed, 2 total
+Tests:       24 failed, 18 skipped, 20 passed, 62 total
+Snapshots:   0 total
+Time:        1.118 s, estimated 4 s
+Ran all test suites matching src/cache/core in 2 projects.

@@ -1,19 +1,12 @@
 # Project Status
 
-Version: v1.6 WP4R.2 real-artifact verification
+Version: v1.7 WP4R final usefulness rerun
 
-WP4R.2: IMPLEMENTED — READY WITH CONSTRAINTS  
-Real-artifact verification: CURRENT  
-WP4R usefulness rerun: BLOCKED
+WP4R.2 real-artifact verification: COMPLETE — VERIFIED
+WP4R final usefulness rerun: CURRENT
 
-Current goal:
+Current question:
 
-```text
-h3/Hono real coverage artifact
--> --coverage-file
--> real changed function
--> numeric coverage
--> numeric CRAP
-```
+> Does changed-function CRAP provide useful real-world review signal?
 
 Production is frozen.

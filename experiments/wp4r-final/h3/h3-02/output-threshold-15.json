@@ -1,0 +1,122 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "60a2e915756af3102f8af8cb5035ec997db9277c",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/h3.ts",
+      "method": "H3.mount",
+      "lineStart": 122,
+      "lineEnd": 150,
+      "cc": 5,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/request.ts",
+      "method": "_proxyHandler.get",
+      "lineStart": 17,
+      "lineEnd": 21,
+      "cc": 3,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/request.ts",
+      "method": "requestWithURL",
+      "lineStart": 29,
+      "lineEnd": 33,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/request.ts",
+      "method": "requestWithBaseURL",
+      "lineStart": 38,
+      "lineEnd": 42,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 15
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/h3.ts",
+      "method": "H3.mount",
+      "crap": null,
+      "threshold": 15,
+      "cc": 5,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/utils/request.ts",
+      "method": "_proxyHandler.get",
+      "crap": null,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/request.ts",
+      "method": "requestWithURL",
+      "crap": 1,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/request.ts",
+      "method": "requestWithBaseURL",
+      "crap": 2,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 100
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "INCOMPLETE"
+}
