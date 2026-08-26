@@ -66,6 +66,7 @@ export function writeCoverageFile(coverageDir: string, coverageMap: Map<string, 
   // Debug: log what we are writing
   console.log(`[helpers] Writing coverage file to: ${coverageFilePath}`);
   console.log(`[helpers] Coverage JSON: ${coverageJson}`);
+  console.log(`[helpers] Plain obj keys: ${Object.keys(plainObj)}`);
   writeFileSync(coverageFilePath, coverageJson, 'utf8');
   return coverageFilePath;
 }
