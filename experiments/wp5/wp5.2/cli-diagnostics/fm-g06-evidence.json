@@ -1,0 +1,9 @@
+{
+  "fmId": "FM-G06",
+  "command": "node dist/cli.js check --base HEAD --coverage-file /tmp/nonexistent-coverage-xyz123.json",
+  "exitCode": 1,
+  "stderr": "Error: coverage artifact malformed",
+  "stdout": "Analysis complete. Base: bbbb30a7ff02f5e8e4ac12a3cc47f3247d85f7b3, Changed functions: 0",
+  "classification": "CONFIRMED",
+  "notes": "Evidence captured with a temporary TypeScript change (to reach coverage path). Without TS change, CLI returns UNSUPPORTED (exit 0) because analysis exits early when no TypeScript intervals are present. The misleading 'coverage artifact malformed' message occurs only when TS change is present, confirming the defect claim."
+}

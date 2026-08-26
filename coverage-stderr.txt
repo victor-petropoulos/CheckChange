@@ -1,5 +1,0 @@
-npm error Missing script: "coverage"
-npm error
-npm error To see a list of scripts, run:
-npm error   npm run
-npm error A complete log of this run can be found in: /Users/victorpetropoulos/.npm/_logs/2026-08-25T01_35_38_133Z-debug-0.log

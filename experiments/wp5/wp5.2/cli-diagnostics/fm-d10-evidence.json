@@ -1,0 +1,9 @@
+{
+  "fmId": "FM-D10",
+  "command": "env -i PATH=/Users/victorpetropoulos/.nvm/versions/node/v24.18.1/bin HOME=/Users/victorpetropoulos USER=victorpetropoulos node dist/cli.js check --base HEAD",
+  "exitCode": 1,
+  "stderr": "Error: Not a git repository",
+  "stdout": "",
+  "classification": "CONFIRMED",
+  "notes": "The CLI reports \"Not a git repository\" when the git binary is not found in PATH. This matches the defect claim that the CLI misleadingly reports a repository issue when the root cause is missing git binary."
+}

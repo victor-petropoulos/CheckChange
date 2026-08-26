@@ -19,7 +19,7 @@
 | FM-C03 | CONFIRMED | `expect(changedCount).toBe(1);` |
 | FM-A08 | CONFIRMED | `expect(funcNames).toContain('alpha'); expect(funcNames).toContain('beta');` |
 | FM-V01 | CONFIRMED | `expect(output.capabilities.coverageArtifact).toBe('available');` |
-| FM-D10 / FM-G06 | CONFIRMED | `expect(output.analysisStatus).toBe('FAILED');` |
+| FM-D10 / FM-G06 | CONFIRMED | FM-D10: "Error: Not a git repository"; FM-G06: "Error: coverage artifact malformed" (requires TS change; without TS change returns UNSUPPORTED) |
 | FM-G07 | CONFIRMED | `expect(func.analyzerStatus).toBe('passed');` |
 
 ## OQ Results Summary
@@ -51,6 +51,12 @@ experiments/wp5/planning/WP5_TRACEABILITY_MATRIX_WP5_2_UPDATE.md | 20 +
 ## Confirmation Production Untouched
 - src/** clean: verified via `git status` (no modifications in src/)
 
+## CLI Diagnostics Preserved
+- Verbatim CLI output for FM-D10 and FM-G06 preserved in `experiments/wp5/wp5.2/cli-diagnostics/`
+- Evidence includes exit codes, stdout, stderr, and JSON output where applicable
+- FM-G06 evidence documents precondition: defect requires a TypeScript change to reach coverage validation path
+- Files: fm-d10-evidence.md/.json, fm-g06-evidence.md/.json
+
 ## Recommended WP5.3/WP5.4 Authorization Scope
 Based on confirmed defects, fix:
 1. FM-A07: Change attribution key from `functionName` to `containerName.functionName`
@@ -58,4 +64,6 @@ Based on confirmed defects, fix:
 3. FM-A08: Implement more precise path matching (full path comparison, not suffix-only)
 4. FM-V01: Correct capabilities.coverageArtifact to reflect actual availability
 5. FM-G07: Set analyzerStatus based on actual evaluation success/coverage validity
-(FM-D10/FM-G06: No fix needed if underlying function is correct; verify CLI behavior separately)
+6. FM-D10/FM-G06: CLI diagnostic defects confirmed; route to WP5.4 for messaging improvements
+   - FM-D10: Clarify message to indicate git binary missing (ENOENT) rather than repo state
+   - FM-G06: Clarify message to indicate missing coverage file rather than malformed artifact

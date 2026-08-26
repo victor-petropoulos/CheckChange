@@ -10,7 +10,7 @@ This document presents the results of reproducing the defects identified in WP5.
 | FM-C03 | Source-root blind spot: `findAllTypeScriptFilesUnderSourceRoots` restricts scanning to paths containing a `src` segment — changed TS files outside `src` (e.g. `tools/`) invisible. | FM-C03: Source-root blind spot -> observed behavior: changed TS file outside src/ is invisible | `expect(changedCount).toBe(1);` | CONFIRMED | TS files outside src root are not enumerated by complexity → absent from changedFunctions |
 | FM-A08 | Suffix-collision path attribution: bidirectional `endsWith` matching with first-entry-wins can misattribute coverage between files sharing relative path suffixes. | FM-A08: Suffix-collision path attribution -> two files share relative path suffix | `expect(funcNames).toContain('alpha'); expect(funcNames).toContain('beta');` | CONFIRMED | Coverage can be misattributed between files with identical relative paths |
 | FM-V01 | Coverage capability mislabel: default coverage absent sets `available: false` but capabilities envelope reports `coverageArtifact: 'available'`. | FM-V01: Default missing coverage capability mislabel -> assert coverageArtifact='available' when default missing | `expect(output.capabilities.coverageArtifact).toBe('available');` | CONFIRMED | capabilities.coverageArtifact incorrectly reports 'available' when default coverage missing |
-| FM-D10 / FM-G06 | CLI message inaccuracies: missing binary ENOENT reports "Not a git repository"; missing explicit coverage says "coverage artifact malformed". | FM-D10/FM-G06: CLI message inaccuracies -> invoke buildEvidenceOutput with missing explicit coverage file, assert analysisStatus is FAILED | `expect(output.analysisStatus).toBe('FAILED');` | CONFIRMED | CLI threshold validation shows correct error messaging for invalid inputs (note: appears accurate, defect may be misdiagnosed) |
+| FM-D10 / FM-G06 | CLI message inaccuracies: missing binary ENOENT reports "Not a git repository"; missing explicit coverage says "coverage artifact malformed". | FM-D10/FM-G06: CLI message inaccurabilities -> actual CLI invocation | FM-D10: "Error: Not a git repository"; FM-G06: "Error: coverage artifact malformed" (requires TS change; without TS change returns UNSUPPORTED) | CONFIRMED | CLI diagnostics confirm misleading messages: FM-D10 reports repo error when git binary missing (ENOENT), FM-G06 reports malformed artifact when coverage file missing only when TS file changed (coverage path active). |
 | FM-G07 | Composed-path `analyzerStatus` hardcoded `'passed'` regardless of whether function actually evaluated / received null coverage. | FM-G07: Composed-path analyzerStatus hardcoded 'passed' -> drive null-coverage fn through pipeline, assert analyzerStatus field is 'passed' regardless | `expect(func.analyzerStatus).toBe('passed');` | CONFIRMED | analyzerStatus is always 'passed' for evaluated functions, even those with null coverage |
 
 ## Detailed Reproduction Results
@@ -55,10 +55,13 @@ This document presents the results of reproducing the defects identified in WP5.
 
 ### FM-D10 / FM-G06: CLI message inaccuracies
 **Status**: CONFIRMED  
-**Evidence from test**: FM-D10/FM-G06: CLI message inaccuracies -> invoke buildEvidenceOutput with missing explicit coverage file, assert analysisStatus is FAILED  
-- **Missing explicit coverage**: When an explicit coverage file is provided but missing, buildEvidenceOutput returns analysisStatus: 'FAILED'  
-- **Observed behavior**: The underlying function correctly reports failure  
-- **Note**: These appear to be accurate in current implementation; defect may be misdiagnosed  
+**Evidence from CLI diagnostics**: Verbatim output from actual CLI invocation  
+- **FM-D10**: Command `env -i PATH=/Users/victorpetropoulos/.nvm/versions/node/v24.18.1/bin HOME=/Users/victorpetropoulos USER=victorpetropoulos node dist/cli.js check --base HEAD` => exit 1, stderr "Error: Not a git repository", stdout empty  
+- **FM-G06**: With TypeScript change (to activate coverage path): Command `node dist/cli.js check --base HEAD --coverage-file /tmp/nonexistent-coverage-xyz123.json` => exit 1, stdout "Analysis complete. Base: bbbb30a7ff02f5e8e4ac12a3cc47f3247d85f7b3, Changed functions: 0", stderr "Error: coverage artifact malformed"  
+- **FM-G06 (--json variant)**: Adding --json flag produces same stderr/stdout plus JSON output with analysisStatus: "FAILED" and coverageArtifact: "failed"  
+- **FM-G06 without TypeScript change**: Command `node dist/cli.js check --base HEAD --coverage-file /tmp/nonexistent-coverage-xyz123.json` => exit 0, stdout "Analysis complete. Base: bbbb30a7ff02f5e8e4ac12a3cc47f3247d85f7b3, Changed functions: 0", stderr empty; JSON output shows analysisStatus: "UNSUPPORTED" and coverageArtifact: "available"  
+- **Classification basis**: experiments/wp5/wp5.2/cli-diagnostics/fm-d10-evidence.{md,json} and fm-g06-evidence.{md,json}  
+- **Notes**: CLI output confirms defect claims are accurate - messages appear as described when TypeScript change is present. However, root cause analysis shows: FM-D10 message is misleading (git binary missing vs repo state), FM-G06 message is misleading (file missing vs artifact malformed) and only appears when a TypeScript file is changed (coverage path active). Without TypeScript change, the CLI correctly returns UNSUPPORTED.  
 
 ### FM-G07: analyzerStatus hardcoded 'passed'
 **Status**: CONFIRMED  
@@ -79,5 +82,5 @@ This document presents the results of reproducing the defects identified in WP5.
 2. Fix FM-C03 by modifying source root scanner to respect tsconfig `include` patterns
 3. Fix FM-A08 by implementing more precise path matching (full path comparison, not suffix-only)
 4. Fix FM-V01 by correcting capabilities.coverageArtifact to reflect actual availability
-5. FM-D10/FM-G06: No fix needed if the underlying function is correct; verify CLI behavior separately
+5. FM-D10/FM-G06: Confirmed as CLI diagnostic defects; route to WP5.4 for messaging improvements (FM-D10: clarify git binary missing vs repo state; FM-G06: clarify missing file vs malformed artifact)
 6. Fix FM-G07 by setting analyzerStatus based on actual evaluation success/coverage validity
