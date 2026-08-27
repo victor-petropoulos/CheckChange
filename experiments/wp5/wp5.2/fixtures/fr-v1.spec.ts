@@ -40,9 +40,9 @@ describe('FR-V1: P0 - Default-missing coverage → capabilities envelope mislabe
       expect(output).toBeDefined();
       expect(output.capabilities).toBeDefined();
       expect(output.capabilities.coverageArtifact).toBeDefined();
-      // According to FM-V01, when no coverage artifact exists, the capabilities.coverageArtifact is 'available' (mislabel).
-      // We'll assert the observed value.
-      expect(output.capabilities.coverageArtifact).toBe('available');
+// According to FM-V01, when no coverage artifact exists, the capabilities.coverageArtifact was 'available' (mislabel). [FIXED]
+    // We'll assert the observed value.
+    expect(output.capabilities.coverageArtifact).toBe('absent'); // FM-V01 fixed: absent
       // Additionally, we expect changed functions to be NOT_EVALUATED.
       // The changedFunctions array may be empty or contain entries.
       // We'll check each changed function's coverageKind? Actually NOT_EVALUATED appears in ruleResults.result.

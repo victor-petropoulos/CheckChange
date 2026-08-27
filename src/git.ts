@@ -8,10 +8,13 @@ export interface GitChangeIntervals {
 /**
  * Validates that the current directory is a git repository.
  * @param cwd The current working directory (defaults to process.cwd())
- * @throws If not a git repository
+ * @throws If not a git repository or if git executable is not found
  */
 export async function validateGitRepo(cwd: string = process.cwd()): Promise<void> {
   const result = await execute('git', ['rev-parse', '--git-dir'], { cwd });
+  if (result.errorCode === 'ENOENT') {
+    throw new Error('Git executable not found');
+  }
   if (result.exitCode !== 0) {
     throw new Error('Not a git repository');
   }
@@ -22,10 +25,13 @@ export async function validateGitRepo(cwd: string = process.cwd()): Promise<void
  * @param base The base reference (e.g., branch name, tag, commit hash)
  * @param cwd The current working directory (defaults to process.cwd())
  * @returns The resolved commit hash
- * @throws If the base reference cannot be resolved
+ * @throws If the base reference cannot be resolved or if git executable is not found
  */
 export async function resolveBaseRef(base: string, cwd: string = process.cwd()): Promise<string> {
   const result = await execute('git', ['rev-parse', '--verify', `${base}^{commit}`], { cwd });
+  if (result.errorCode === 'ENOENT') {
+    throw new Error('Git executable not found');
+  }
   if (result.exitCode !== 0) {
     throw new Error(`Cannot resolve base reference: ${base}`);
   }
@@ -81,11 +87,15 @@ export function parseChangedIntervals(diffText: string): Map<string, Array<{ sta
  * @param base The base reference to compare against (e.g., branch name, tag, commit hash)
  * @param cwd The current working directory (defaults to process.cwd())
  * @returns An object containing the intervals map and the raw diff output
- * @throws If the git commands fail */
+ * @throws If the git commands fail
+ */
 export async function getChangedIntervals(base: string, cwd: string = process.cwd()): Promise<GitChangeIntervals> {
   await validateGitRepo(cwd);
   const resolvedBase = await resolveBaseRef(base, cwd);
   const diffResult = await execute('git', ['diff', '--unified=0', resolvedBase], { cwd });
+  if (diffResult.errorCode === 'ENOENT') {
+    throw new Error('Git executable not found');
+  }
   if (diffResult.exitCode !== 0) {
     throw new Error(`Git diff failed: ${diffResult.stderr}`);
   }

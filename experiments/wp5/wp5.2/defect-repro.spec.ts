@@ -350,14 +350,10 @@ describe('Defect reproduction evidence', () => {
     expect(output.changedFunctions).toBeDefined();
     expect(output.capabilities).toBeDefined();
     
-    // FM-V01: we expect that capabilities.coverageArtifact is 'available' even though coverage is missing
-    // From the defect description: 
-    //   "coverage capability mislabel: default coverage absent sets available: false but capabilities envelope reports coverageArtifact: 'available'"
-    // So we expect:
-    //   output.capabilities.coverageArtifact === 'available'
-    //   but the actual coverageResult (which we don't have directly) would have available: false
-    // However, we can infer from the output that when coverage is missing, the gate is PASS and coverage is null in changedFunctions.
-    expect(output.capabilities.coverageArtifact).toBe('available');
+    // FM-V01: [FIXED] we now expect capabilities.coverageArtifact to be 'absent' when coverage is missing
+    // Originally, the defect was: capabilities.coverageArtifact was 'available' despite missing coverage
+    // See above for original defect description.
+    expect(output.capabilities.coverageArtifact).toBe('absent'); // FM-V01 fixed: absent
     
     // Additionally, we expect that the changedFunctions have null coverage (since no coverage artifact)
     const changedCount = output.changedFunctions?.length ?? 0;
@@ -507,8 +503,8 @@ describe('Defect reproduction evidence', () => {
     const func = output.changedFunctions[0];
     // We expect func to have an analyzerStatus field
     expect(func).toHaveProperty('analyzerStatus');
-    // And we expect it to be 'passed' even though the coverage is null (due to FM-A07 defect)
-    expect(func.analyzerStatus).toBe('passed');
+    // And we expect it to be 'skipped' when coverage is null (FM-G07 fixed)
+    expect(func.analyzerStatus).toBe('skipped'); // FM-G07 fixed: coverage null -> analyzerStatus skipped
     // And we expect the coverage to be null (as per FM-A07)
     expect(func.coverage).toBeNull();
   });

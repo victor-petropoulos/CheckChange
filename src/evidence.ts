@@ -141,18 +141,22 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
         };
     }
 // Step 2: Read coverage
-     let coverageResult;
-     let coverageCapability = 'available';
-     try {
-         coverageResult = await readCoverage(cwd, coverageFile);
-     }
-     catch (error) {
-         coverageCapability = 'failed';
-         coverageResult = { available: false, coverageMap: null, error: true };
-     }
-    // If coverageResult indicates an error (e.g., malformed JSON), treat as failed
-    if (coverageResult.error) {
+    let coverageResult;
+    let coverageCapability = 'available';
+    let coverageErrorReason;
+    try {
+        coverageResult = await readCoverage(cwd, coverageFile);
+        if (coverageResult.error) {
+            coverageCapability = 'failed';
+            coverageErrorReason = coverageResult.reason;
+        }
+        if (!coverageResult.available && !coverageResult.error) {
+            coverageCapability = 'absent';
+        }
+    } catch (error) {
         coverageCapability = 'failed';
+        coverageErrorReason = 'malformed';
+        coverageResult = { available: false, coverageMap: null, error: true, reason: 'malformed' };
     }
     // Determine analysisStatus, gate, and completeness based on provider failures
     let analysisStatus = 'SUCCESS';
@@ -189,10 +193,10 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
     }
 // If coverage provider failed (malformed)
      if (coverageCapability === 'failed') {
-         analysisStatus = 'FAILED';
-         gate = null;
-         completeness = 'INCOMPLETE';
-         return buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold);
+analysisStatus = 'FAILED';
+          gate = null;
+          completeness = 'INCOMPLETE';
+          return buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason);
      }
     // Step 3: Attach coverage to complexity info
     let attributedComplexity = [];
@@ -204,8 +208,8 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
 // We'll set analysisStatus to FAILED.
      analysisStatus = 'FAILED';
      gate = null;
-     completeness = 'INCOMPLETE';
-     return buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold);
+completeness = 'INCOMPLETE';
+      return buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason);
     }
     // Step 4: Compute CRAP for each attributed complexity
     const crappedComplexity = attributedComplexity.map(ac => ({
@@ -213,7 +217,7 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
         crap: calculateCrap(ac.info.cc, ac.coveragePercent),
         coverage: ac.coveragePercent,
         coverageKind: ac.coverageKind ?? 'N/A',
-        analyzerStatus: 'passed',
+        analyzerStatus: ac.coveragePercent !== null && ac.coveragePercent !== undefined ? 'passed' : 'skipped',
         source: {
             tool: '@barney-media/crap-typescript-core',
             version: '0.5.0'
@@ -280,7 +284,7 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
     };
 }
 // Helper function to build output when there is a provider failure
-function buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold) {
+function buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason) {
     return {
         schemaVersion: '0.2',
         analysis: {
@@ -299,6 +303,7 @@ function buildFailedOutput(base, gitCapability, complexityCapability, coverageCa
         ruleResults: [],
         analysisStatus: 'FAILED',
         gate: null,
-        completeness: 'INCOMPLETE'
+        completeness: 'INCOMPLETE',
+        ...(coverageErrorReason !== undefined ? { coverageErrorReason } : {}),
     };
 }

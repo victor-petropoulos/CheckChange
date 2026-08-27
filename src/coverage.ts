@@ -6,6 +6,7 @@ export interface CoverageResult {
   available: boolean;
   coverageMap: Map<string, any> | null;
   error: boolean;
+  reason?: string;
 }
 
 export async function readCoverage(cwd: string, coverageFile?: string): Promise<CoverageResult> {
@@ -18,24 +19,24 @@ export async function readCoverage(cwd: string, coverageFile?: string): Promise<
         coveragePath = join(cwd, 'coverage/coverage-final.json');
     }
 
-  try {
-    await access(coveragePath, constants.R_OK);
-  } catch {
-    // File does not exist or cannot be read
-    if (coverageFile !== undefined && coverageFile !== null && coverageFile !== '') {
-        // Explicitly provided file missing -> error:true to trigger FAILED semantics
-        return { available: true, coverageMap: null, error: true };
-    } else {
-        // Default file missing -> existing behavior: available:false, error:false
-        return { available: false, coverageMap: null, error: false };
-    }
-  }
+try {
+     await access(coveragePath, constants.R_OK);
+   } catch {
+     // File does not exist or cannot be read
+     if (coverageFile !== undefined && coverageFile !== null && coverageFile !== '') {
+         // Explicitly provided file missing -> error:true to trigger FAILED semantics
+         return { available: true, coverageMap: null, error: true, reason: 'missing' };
+     } else {
+         // Default file missing -> existing behavior: available:false, error:false
+         return { available: false, coverageMap: null, error: false };
+     }
+   }
 
-  try {
-    const coverageMap = await parseCoverageReport(coveragePath, cwd);
-    return { available: true, coverageMap, error: false };
-  } catch (error) {
-    // Malformed or unreadable
-    return { available: true, coverageMap: null, error: true };
-  }
+try {
+     const coverageMap = await parseCoverageReport(coveragePath, cwd);
+     return { available: true, coverageMap, error: false };
+   } catch (error) {
+     // Malformed or unreadable
+     return { available: true, coverageMap: null, error: true, reason: 'malformed' };
+   }
 }

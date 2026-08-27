@@ -9,6 +9,7 @@ export interface CommandResult {
   stderr: string;
   durationMs: number;
   timedOut: boolean;
+  errorCode: string | undefined;
 }
 
 /**
@@ -32,29 +33,35 @@ export function execute(
       const end = Date.now();
       const durationMs = end - start;
 
-let exitCode: number | null = null;
-       let timedOut = false;
+      let exitCode: number | null = null;
+      let timedOut = false;
+      let errorCode: string | undefined;
 
-       if (error) {
-         if (error.name === 'TimeoutError') {
-           timedOut = true;
-         }
-         let maybeExitCode: number | null = null;
-         if ('exitCode' in error) {
-           maybeExitCode = (error as any).exitCode;
-         } else if ('code' in error && typeof error.code === 'number') {
-           maybeExitCode = error.code;
-         }
-         if (maybeExitCode !== null) {
-           exitCode = maybeExitCode;
-         } else if (error.code === 'ENOENT') {
-           exitCode = null;
-         } else {
-           exitCode = null;
-         }
-       } else {
-         exitCode = 0;
-       }
+      if (error) {
+        if (error.name === 'TimeoutError') {
+          timedOut = true;
+        }
+        let maybeExitCode: number | null = null;
+        if ('exitCode' in error) {
+          maybeExitCode = (error as any).exitCode;
+        } else if ('code' in error && typeof error.code === 'number') {
+          maybeExitCode = error.code;
+        }
+        if (maybeExitCode !== null) {
+          exitCode = maybeExitCode;
+        } else if (error.code === 'ENOENT') {
+          exitCode = null;
+          errorCode = error.code;
+        } else {
+          exitCode = null;
+          // If error.code is a string (but not ENOENT), we still want to capture it
+          if (typeof error.code === 'string') {
+            errorCode = error.code;
+          }
+        }
+      } else {
+        exitCode = 0;
+      }
 
       resolve({
         command,
@@ -64,7 +71,8 @@ let exitCode: number | null = null;
         stdout: stdout ?? '',
         stderr: stderr ?? '',
         durationMs,
-        timedOut
+        timedOut,
+        errorCode
       });
     });
   });

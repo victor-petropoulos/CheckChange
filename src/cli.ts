@@ -122,8 +122,15 @@ async function main() {
             console.log(`Analysis complete. Base: ${resolvedBase}, Changed functions: ${output.changedFunctions.length}`);
         }
         if (output.analysisStatus === 'FAILED') {
-            console.error('Error: coverage artifact malformed');
-            process.exit(1);
+            if (output.coverageErrorReason === 'missing') {
+                console.error('Error: coverage artifact missing');
+            } else if (output.coverageErrorReason === 'malformed') {
+                console.error('Error: coverage artifact malformed');
+            } else {
+                console.error('Error: coverage artifact malformed');
+            }
+            process.exitCode = 1;
+            return;
         }
         process.exit(0);
     }

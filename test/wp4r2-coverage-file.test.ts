@@ -171,7 +171,7 @@ const coverageData = {
     expect(output.analysisStatus).toBe('SUCCESS');
     expect(output.gate).toBe('PASS');
     expect(output.completeness).toBe('INCOMPLETE');
-    expect(output.capabilities.coverageArtifact).toBe('available'); // Note: default missing still returns available:false but coverageArtifact is 'available' in evidence.ts? Let's check
+    expect(output.capabilities.coverageArtifact).toBe('absent'); // FM-V01 fix: default missing -> coverageArtifact absent, gate PASS, SUCCESS
     
     // Actually, looking at evidence.ts, when coverageFile is omitted and default is missing:
     // readCoverage returns { available: false, coverageMap: null, error: false }
@@ -289,10 +289,10 @@ function bar() {
     expect(fooFn).toBeDefined();
     expect(barFn).toBeDefined();
     
-    // Verify foo/bar have numeric coverage/crap when attribution succeeds — allow null if statementMap misaligned
-    // Keep loose: just verify they exist and have analyzerStatus passed
-    expect(fooFn?.analyzerStatus).toBe('passed');
-    expect(barFn?.analyzerStatus).toBe('passed');
+    // Verify foo/bar have analyzerStatus passed if coverage is not null, else skipped (FM-G07 fix)
+    // Keep loose: just verify they exist and have correct analyzerStatus based on coverage
+    expect(fooFn?.analyzerStatus).toBe(fooFn?.coverage !== null ? 'passed' : 'skipped');
+    expect(barFn?.analyzerStatus).toBe(barFn?.coverage !== null ? 'passed' : 'skipped');
     // If coverage numeric, validate range
     if (fooFn?.coverage !== null) expect(fooFn?.coverage).toBeGreaterThanOrEqual(0);
     if (barFn?.coverage !== null) expect(barFn?.coverage).toBeGreaterThanOrEqual(0);
