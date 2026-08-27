@@ -349,3 +349,38 @@ untracked:
 ### Open decision for next session
 
 **WP5.4 authorization gate:** planning is done. Next step is to approve WP5.4 implementation, then execute per the implementation plan: write characterization tests → apply fixes → run regression → verify.
+
+---
+
+## 13. WP5.5 Closure (2026-08-27 CONTINUE)
+
+**Status:** WP5.5 CLOSED via CONTINUE 2026-08-27 after corrections.
+
+### Commits
+
+| Commit | Description |
+|--------|-------------|
+| `6c690a7` | fix(wp5.5): matrix stale + determinism false-PASS + infra brittle — diagnostic-matrix row3 `COMPLETE`→`INCOMPLETE`, determinism C1/C2 absolute Istanbul + strict gate, CLI pre-build in beforeAll |
+| `7ab2301` | docs(wp5.5): F-01 TODO→FIXED — marks finding resolved in WP5_5_RESULTS.md |
+
+### Invariants
+
+INV-01 through INV-04 survive full pipeline composition (complexity → coverage → attribution → CRAP → threshold → analyzerStatus → correlate → ruleResults → gate). All 8 diagnostic-matrix.md rows verified via `buildEvidenceOutput` integration — exit codes, stderr, JSON fields all match expectations.
+
+### Determinism
+
+5× identical `JSON.stringify` outputs across consecutive runs with identical inputs (same repo, intervals, coverage file). No randomness, no timestamp-dependent fields, no nondeterministic ordering.
+
+### Corrections
+
+- **F-01 FIXED:** diagnostic-matrix.md:54 `COMPLETE` → `INCOMPLETE` per `evidence.ts:250` (NOT_EVALUATED rule results trigger INCOMPLETE). Verified via `wp55-coverage-distinction.spec.ts:50` and `wp55-determinism` condition3.
+- **F-02 hardened:** CLI pre-build moved from per-test `spawnSync` to `beforeAll` hook, eliminating transient timeout risk.
+- **Determinism C1/C2:** Updated to absolute Istanbul fixture paths + strict `gate='PASS'`/`gate='WARN'` assertions (no implicit truthy).
+
+### Test Results
+
+53 files, 143 tests pass, 0 fail. WP5.2 anchors 7/7 green, WP5.3 10/10 green, WP5.5 new 18 tests (T2 3, T3 4, T4 4, T5 7) all PASS.
+
+### Next
+
+WP5.6 — Usefulness — authorized.

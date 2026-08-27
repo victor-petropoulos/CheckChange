@@ -27,9 +27,9 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 
 ## Current Step
 
-**WP5.4 — CLOSED via CONTINUE. WP5.5 — End-to-end integration verification: IMPLEMENTED & VERIFIED, awaiting human review.**
+**WP5.5 — CLOSED via CONTINUE (2026-08-27). WP5.6 — Usefulness — ACTIVE.**
 
-WP5.4 gate satisfied 2026-08-27 via `CONTINUE`. WP5.5 proves corrected semantics (V01/D10/G06/G07 + ZERO≠NULL, MISSING≠MALFORMED, GIT≠REPO, analyzer truthful) survive full pipeline composition.
+WP5.4 gate satisfied 2026-08-27 via `CONTINUE`. WP5.5 gate satisfied 2026-08-27 via `CONTINUE` after corrections (commits 6c690a7 + 7ab2301). WP5.5 proves corrected semantics (V01/D10/G06/G07 + ZERO≠NULL, MISSING≠MALFORMED, GIT≠REPO, analyzer truthful) survive full pipeline composition.
 
 Invariants verified:
 - INV-01 ZERO≠NULL: `coverage:0`→`passed` / `null`→`skipped` (evidence.ts:216) — PASS via T2+T5
@@ -39,21 +39,18 @@ Invariants verified:
 
 Test results: 53 files, 143 tests pass, 0 fail. WP5.2 anchors 7/7 green, WP5.3 10/10 green, WP5.5 new 18 tests (T2 3, T3 4, T4 4, T5 7) all PASS. 5× determinism identical. 8-row status propagation matrix via buildEvidenceOutput + CLI (exit, stderr, JSON) all PASS.
 
+Corrections applied 2026-08-27:
+- F-01 FIXED: diagnostic-matrix.md:54 `COMPLETE` → `INCOMPLETE` per code (commit 6c690a7)
+- F-02 hardened: CLI pre-build moved to `beforeAll`, eliminating per-test build overhead (commit 6c690a7)
+
 Human-review packet:
 - `experiments/wp5/wp5.5/WP5_5_RESULTS.md` — integration results, 6 Roadmap scenarios A–F, 8-row matrix, determinism, findings F-01 (diagnostic-matrix stale completeness) + F-02 (transient build timeout healed)
 - `experiments/wp5/wp5.4/failure-semantics-contract.md` — validated status taxonomy (still authoritative)
-- `experiments/wp5/wp5.4/diagnostic-matrix.md` — CLI diagnostics per condition (row 3 completeness stale: INCOMPLETE per code, documented as COMPLETE)
+- `experiments/wp5/wp5.4/diagnostic-matrix.md` — CLI diagnostics per condition (row 3 corrected 2026-08-27: `INCOMPLETE` per code, commit 6c690a7)
 - `experiments/wp5/wp5.5/wp55-*.spec.ts` — 4 integration suites exercising Git→Changed→Complexity→Coverage→Attribution→CRAP→Threshold→Analyzer→Aggregate→JSON→CLI→Exit
 
 ---
 
 ## Next Step
 
-**WP5.6 — Usefulness, only after WP5.5 closure via human review.**
-
-Per Roadmap: WP5.6 asks usefulness/robustness. Authorized ONLY after human review of WP5.5 document with:
-- `CONTINUE` — proceed to WP5.6
-- `CONTINUE WITH CONSTRAINTS` — proceed with constraints
-- `STOP` — do not proceed
-
-Do not proceed to WP5.6 until WP5.5 gate satisfied.
+**WP5.6 — Usefulness — AUTHORIZED, next action: case design per Roadmap WP5.6 (h3/Hono/apollo-client, 9 cases, tiered coverage). Do not classify usefulness autonomously.**
