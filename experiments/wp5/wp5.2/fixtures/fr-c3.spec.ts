@@ -101,7 +101,7 @@ describe('FR-C3: P2 - Changed TS file outside src root blind spot pinning', () =
       const changedToolsFunction = (output.changedFunctions as ChangedFunction[]).find(f => f.file === 'tools/check.ts');
       
       expect(changedSrcFunction).toBeDefined(); // Function inside src should be present
-      expect(changedToolsFunction).toBeUndefined();   // Function outside src should be absent (blind spot)
+      expect(changedToolsFunction).toBeDefined();   // Function outside src — after FM-C03 fix, should be defined
       
       if (changedSrcFunction) {
         expect(changedSrcFunction.method).toBe('okFunc');

@@ -47,16 +47,12 @@ describe('Defect reproduction evidence', () => {
     const coverageData = {
       statementMap: {
         '0': {
-          start: { line: 3, column: 0 },
-          end: { line: 3, column: 100 }
+          start: { line: 2, column: 8 },
+          end: { line: 4, column: 3 }
         },
         '1': {
-          start: { line: 6, column: 0 },
-          end: { line: 6, column: 100 }
-        },
-        '2': {
-          start: { line: 7, column: 0 },
-          end: { line: 7, column: 100 }
+          start: { line: 5, column: 8 },
+          end: { line: 8, column: 3 }
         }
       },
       fnMap: {
@@ -70,7 +66,7 @@ describe('Defect reproduction evidence', () => {
         }
       },
       branchMap: {},
-      s: { '0': 1, '1': 1, '2': 1 },
+      s: { '0': 1, '1': 1 },
       f: { '0': 1, '1': 1 },
       b: {},
       _coverageSchema: '3.3.2'
@@ -99,15 +95,13 @@ describe('Defect reproduction evidence', () => {
     expect(output.completeness).toBeDefined();
     expect(output.changedFunctions).toBeDefined();
     
-    // FM-A07: we expect that due to the defect, the coverage for the methods is null
-    // Let's check the changedFunctions
+    // FM-A07: container fix → class methods get numeric coverage now
     const changedCount = output.changedFunctions?.length ?? 0;
     expect(changedCount).toBeGreaterThan(0);
     
-    // Check each function's coverage
     for (const func of output.changedFunctions) {
-      // According to the defect, coverage should be null
-      expect(func.coverage).toBeNull();
+      expect(func.coverage).not.toBeNull();
+      expect(typeof func.coverage).toBe('number');
     }
     
     // Additionally, we can note that the analysisStatus should be 'passed' (since gate is PASS when coverage is null? 
@@ -205,16 +199,14 @@ describe('Defect reproduction evidence', () => {
     expect(output.completeness).toBeDefined();
     expect(output.changedFunctions).toBeDefined();
     
-    // FM-C03: we expect that the tools/check.ts function is absent from changedFunctions due to the blind spot
+    // After FM-C03 hybrid fix: tools/check.ts now visible via git ls-files union
     const changedCount = output.changedFunctions?.length ?? 0;
     
-    // We changed two files, but only the src/ok.ts function should be detected
-    expect(changedCount).toBe(1);
+    expect(changedCount).toBe(2);
     
-    // The changed function should be 'ok'
     const funcNames = output.changedFunctions.map(f => f.method);
     expect(funcNames).toContain('ok');
-    expect(funcNames).not.toContain('check');
+    expect(funcNames).toContain('check'); // After FM-C03 hybrid fix: tools/check.ts now visible via git ls-files union
   });
 
   test('FM-A08: Suffix-collision path attribution -> two files share relative path suffix', async () => {

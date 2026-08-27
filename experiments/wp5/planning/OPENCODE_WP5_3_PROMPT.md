@@ -1,21 +1,58 @@
-# OpenCode Prompt --- WP5.3
+# OpenCode Execution Prompt — WP5.3
+## Revised after WP5.2 acceptance
 
-Read approved WP5.1/WP5.2 results. If they materially change this
-draft's assumptions, revise WP5.3 and STOP for approval.
+## Mission
+Fix only:
+1. FM-A08 — suffix-collision wrong-file attribution
+2. FM-A07 — container-method attribution mismatch
+3. FM-C03 — silent source-root blind spot
 
-Formalize approved attribution invariants and adversarially test nested,
-arrow, anonymous, method, same-name, adjacent, overlapping,
-range-mismatch, ambiguous, and map-order cases as applicable.
+Treat FM-A08 as highest priority.
 
-Prove correct attribution or explicit refusal to evaluate. Preserve
-failing evidence before fixes. Make only narrowly justified fixes with
-regression tests.
+## Read first
+Approved WP5.1/WP5.2 artifacts, defect results, open-question results, decision log, traceability matrix, and revised WP5.3 spec.
 
-Do not add coverage formats/provider abstraction, run target tests
-inside the prototype, use LLM judgment, or silently choose among
-ambiguous candidates.
+## Phase 1
+Re-run relevant characterization fixtures and preserve baseline defective behavior before edits.
 
-Produce `attribution-invariants.md`, `adversarial-case-matrix.md`,
-`WP5_3_RESULTS.md`, tests, and approved minimal fixes.
+## Phase 2
+Create `experiments/wp5/wp5.3/attribution-invariants.md` covering same-function identity, wrong-file prohibition, ambiguity refusal, order independence, deterministic container identity, and explicit missing/unsupported discovery.
 
-STOP at WP5.3 review gate.
+## Phase 3 — FM-A08
+Extend FR-A7 for:
+- colliding suffix paths
+- reversed coverage-map order
+- exact-path control
+
+Implement the smallest fix that guarantees correct source identity or explicit non-attribution.
+
+## Phase 4 — FM-A07
+Using OQ-1 evidence, test:
+- class method
+- object method
+- same raw method name in different containers
+- top-level function
+
+Implement the smallest identity fix satisfying all cases.
+
+## Phase 5 — FM-C03
+Create `source-discovery-decision.md`. Compare expand, detect/surface, and hybrid approaches with deterministic fixtures for `src/` and non-`src` changed TS. Select the narrowest safe contract, then implement it.
+
+## Phase 6 — Regression
+Run all WP5.2 fixtures, all new WP5.3 adversarial tests, and relevant existing regressions.
+
+## Outputs
+Create:
+- `attribution-invariants.md`
+- `adversarial-case-matrix.md`
+- `source-discovery-decision.md`
+- `defect-fix-record.md`
+- `WP5_3_RESULTS.md`
+
+Update decision log and traceability matrix.
+
+## Hard constraints
+Do not modify FM-V01, FM-D10, FM-G06, or FM-G07. No threshold, CRAP, provider, orchestration, language, or LLM changes.
+
+## Stop
+STOP after WP5.3. Report before/after evidence for A08/A07, chosen C03 contract, code/files changed, regression counts, unresolved limitations, confirmation WP5.4-only issues untouched, and recommended WP5.4 scope.

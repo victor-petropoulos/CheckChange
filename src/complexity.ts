@@ -1,5 +1,6 @@
 import { findAllTypeScriptFilesUnderSourceRoots, parseFileMethods } from '@barney-media/crap-typescript-core';
-import { relative } from 'node:path';
+import { relative, resolve } from 'node:path';
+import { execSync } from 'node:child_process';
 
 export interface ComplexityInfo {
   file: string;
@@ -9,9 +10,42 @@ export interface ComplexityInfo {
   cc: number;
 }
 
+function getGitTrackedTsFiles(cwd: string): string[] {
+  try {
+    // Get list of tracked files, one per line
+    const output = execSync('git ls-files --cached --others --exclude-standard', { cwd, encoding: 'utf8' });
+    const lines = output.trim().split('\n');
+    const tsFiles: string[] = [];
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed.endsWith('.ts')) {
+        // Convert to absolute path
+        tsFiles.push(resolve(cwd, trimmed));
+      }
+    }
+    return tsFiles;
+  } catch (_) {
+    // If git fails (not a repo, or any error), return empty array
+    return [];
+  }
+}
+
 export async function collectComplexity(cwd: string): Promise<ComplexityInfo[]> {
   // Find all TypeScript files under the source roots
-  const filePaths = await findAllTypeScriptFilesUnderSourceRoots(cwd);
+  const sourceRootFiles = await findAllTypeScriptFilesUnderSourceRoots(cwd);
+  // Get all tracked TS files in the repo (respects .gitignore)
+  const gitTrackedTs = getGitTrackedTsFiles(cwd);
+  
+  // Union of both lists, deduplicated
+  const fileSet = new Set<string>();
+  for (const f of sourceRootFiles) {
+    fileSet.add(f);
+  }
+  for (const f of gitTrackedTs) {
+    fileSet.add(f);
+  }
+  const filePaths = Array.from(fileSet);
+  
   const complexityInfo: ComplexityInfo[] = [];
 
   for (const filePath of filePaths) {
