@@ -1,6 +1,6 @@
 # WP5.3 Results — Coverage Attribution Fixes
 
-**Date:** 2025-08-26  
+**Date:** 2026-08-26  
 **Spec:** `WP5_3_ATTRIBUTION_CORRECTNESS_SPEC.md`  
 **Invariants:** `attribution-invariants.md` (INV-01 through INV-09)  
 **Source Discovery Decision:** `source-discovery-decision.md`  
@@ -114,7 +114,7 @@ vitest run experiments/wp5/wp5.3/
 
 ## Unresolved Limitations
 
-1. **Untracked TS files:** `git ls-files` only returns tracked files. Newly added but uncommitted TS files (not yet `git add`ed) will not be enumerated. Mitigation: user should `git add` new files before running analysis. This is acceptable — untracked files are not part of the versioned project.
+1. **Untracked TS files:** `git ls-files` only returns tracked files. Newly added but uncommitted TS files (not yet `git add`ed) will not be enumerated. Current behavior: only tracked TS files are added by Git-based expansion; new or untracked TS files may remain undiscovered by the Git-based expansion. This is an unresolved product/analysis-contract question; no fix authorized in this pass. Do not prescribe `git add` as product requirement.
 
 2. **Git availability:** `getGitTrackedTsFiles()` falls back to empty array if `git ls-files` fails (not a git repo). In non-git environments, only `src/` files are analyzed — same as pre-fix behavior. No regression.
 
@@ -130,10 +130,10 @@ The following FMs are explicitly **untouched** by WP5.3 and remain deferred to W
 
 | FM | Description | Status |
 |----|-------------|--------|
-| FM-V01 | Version/commit metadata attribution | Untouched → WP5.4 |
-| FM-D10 | Diff-based attribution | Untouched → WP5.4 |
-| FM-G06 | Git blame attribution | Untouched → WP5.4 |
-| FM-G07 | Git log attribution | Untouched → WP5.4 |
+| FM-V01 | Coverage capability mislabel — `capabilities.coverageArtifact` reports 'available' when default coverage missing (`available: false`) | Untouched → WP5.4 |
+| FM-D10 | CLI reports "Not a git repository" when git binary missing (ENOENT), not repo state | Untouched → WP5.4 |
+| FM-G06 | CLI reports "coverage artifact malformed" when explicit coverage file missing — requires TS change to activate coverage path | Untouched → WP5.4 |
+| FM-G07 | Composed-path `analyzerStatus` hardcoded 'passed' regardless of null coverage | Untouched → WP5.4 |
 
 **Verification:** No code changes touch any of these FMs. The fixes are strictly scoped to:
 - Source-file identity resolution (FM-A08)
@@ -148,10 +148,10 @@ No threshold, CRAP formula, provider, orchestration, language, or LLM logic was 
 
 Based on WP5.3 completion, WP5.4 should address:
 
-1. **FM-V01:** Version/commit metadata attribution — link coverage to specific commits/versions.
-2. **FM-D10:** Diff-based attribution — attribute coverage only to changed lines within functions (not whole-function coverage).
-3. **FM-G06:** Git blame attribution — use `git blame` to attribute coverage to specific commits.
-4. **FM-G07:** Git log attribution — correlate coverage trends with commit history.
+1. **FM-V01:** Correct `capabilities.coverageArtifact` to reflect actual availability (currently reports 'available' when default coverage missing).
+2. **FM-D10:** Clarify CLI message for git binary missing (ENOENT) vs. actual "not a git repository" repo state.
+3. **FM-G06:** Clarify CLI message for missing coverage file vs. "malformed artifact" — requires TS-change precondition for coverage path activation.
+4. **FM-G07:** Set `analyzerStatus` based on actual evaluation result / coverage validity (currently hardcoded 'passed').
 5. **INV-06 (explicit missing/unsupported):** Surface NOT_EVALUATED status for functions with no coverage data (currently silently omitted).
 6. **INV-09 (WP5.2 regression anchors):** Continue maintaining WP5.2 anchors as WP5.4 changes are made.
 

@@ -1,6 +1,6 @@
 # WP5.3 Defect Fix Record
 
-**Date:** 2025-08-26  
+**Date:** 2026-08-26  
 **Spec:** `WP5_3_ATTRIBUTION_CORRECTNESS_SPEC.md`  
 **Invariants:** `attribution-invariants.md` (INV-01 through INV-09)
 

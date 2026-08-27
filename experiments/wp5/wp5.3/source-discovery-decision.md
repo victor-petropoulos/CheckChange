@@ -31,8 +31,10 @@ We choose a **modified hybrid** approach that is implementable within the existi
 
 ### Trade-offs
 - Slight overhead of executing `git ls-files` on each call (negligible for typical repo sizes).
-- If a TS file is untracked (e.g., newly added but not yet `git add`ed), it will not be included. However, such a file is not yet part of the versioned project and the blind spot is less critical; the user can add it to git to have it analyzed.
+- If a TS file is untracked (e.g., newly added but not yet `git add`ed), it will not be included by the Git-based expansion.
 - The approach still relies on git being available; if git fails, we fall back to the source-root scanner only (maintaining existing behavior).
 
 ## Conclusion
+
+**Unresolved contract question:** New or untracked TS files may remain undiscovered by the Git-based expansion. This is an unresolved product/analysis-contract question; no fix authorized in this pass.
 Implement the hybrid approach: augment `findAllTypeScriptFilesUnderSourceRoots` result with tracked TS files from `git ls-files`.

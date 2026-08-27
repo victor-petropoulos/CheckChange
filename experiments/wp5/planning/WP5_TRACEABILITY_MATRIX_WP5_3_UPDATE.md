@@ -50,3 +50,17 @@ FM-G07 → fr-g7.spec.ts → INV-09 → no change → none → hardcoded 'passed
 - **WP5.3**: Fix applied and verified in this pass.
 - **WP5.4**: Fix requires policy/schema decision or deeper redesign; deferred from WP5.3 scope.
 - **neither**: No fix needed or out of scope.
+
+## Traceability Correction (Documentation Reconciliation)
+
+| Correction | Before | After | Artifact |
+|------------|--------|-------|----------|
+| WP5.3 documentation reconciliation | WP5.4 routing section used inferred FM descriptions for V01/D10/G06/G07 that did not match WP5.2 authoritative taxonomy | FM descriptions corrected to match authoritative WP5.2 records: V01=capability mislabel, D10=git binary ENOENT, G06=malformed artifact msg, G07=hardcoded passed | `WP5_3_DOCUMENTATION_RECONCILIATION.md` reconciliation table |
+
+**Principle:** WP5.4 deferred FM descriptions must inherit from WP5.2 authoritative records (`defect-reproduction-results.md`, `WP5_2_RESULTS.md`, `cli-diagnostics/*.md`), not from WP5.3 inferred descriptions. This is a documentation correction, not a new defect.
+
+**Deferred FM Traceability (authoritative WP5.2 meanings):**
+- FM-V01 → `fr-v1.spec.ts` → INV-09 → `defect-reproduction-results.md` FM-V01 row + `WP5_2_RESULTS.md` Defect Classifications `expect(output.capabilities.coverageArtifact).toBe('available')` → WP5.4 DEFERRED
+- FM-D10 → `fm-d10-evidence.md` → INV-09 → `defect-reproduction-results.md` FM-D10/FM-G06 row (CLI: "Error: Not a git repository" when git binary missing) → WP5.4 DEFERRED
+- FM-G06 → `fm-g06-evidence.md` → INV-09 → `defect-reproduction-results.md` FM-D10/FM-G06 row (CLI: "Error: coverage artifact malformed" when coverage file missing, requires TS change) → WP5.4 DEFERRED
+- FM-G07 → `fr-g7.spec.ts` → INV-09 → `defect-reproduction-results.md` FM-G07 row + `defect-repro.spec.ts` `expect(func.analyzerStatus).toBe('passed')` → WP5.4 DEFERRED
