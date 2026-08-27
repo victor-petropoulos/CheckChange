@@ -1,0 +1,2628 @@
+# Code-Risk / CRAP Project
+# WP5.4–WP9 Master Provisional Execution Roadmap
+## Expanded LLM Execution Edition — Planning, Evidence, Forks, Examples, and Exit Criteria
+
+STATUS: PROVISIONAL / CONTROLLED ROADMAP
+CURRENT POSITION: WP5.4
+NEXT AUTHORIZED STEP: WP5.5, ONLY AFTER WP5.4 CLOSURE
+TARGET PLANNING HORIZON: WP5.4 THROUGH WP9
+
+PURPOSE
+
+This document is a forward execution plan for the remaining Code-Risk / CRAP research project. It is intentionally provisional. It is designed to give another LLM, including OpenCode and the coding LLM used within OpenCode, enough context to execute the remaining work without losing the experimental discipline established through WP4R and WP5.
+
+This document must not be interpreted as authorization to implement all future capabilities described here immediately.
+
+The implementing LLM must continuously distinguish between:
+
+- what has already been proven;
+- what is currently being tested;
+- what is planned;
+- what is assumed;
+- what is hypothesized;
+- what is a possible future direction.
+
+A future work package must not be treated as authorized until the preceding work package's exit gate has been satisfied.
+
+The governing principle for the remainder of the project is:
+
+EVIDENCE DETERMINES THE NEXT STEP. THE ROADMAP DOES NOT OVERRIDE EVIDENCE.
+
+At the beginning of every work package, the implementing LLM must:
+
+1. Inspect the actual repository.
+2. Inspect the current source.
+3. Inspect the current tests.
+4. Inspect the current documentation.
+5. Read the completed prior work-package results.
+6. Establish the actual current behavior.
+7. Compare that behavior with this provisional roadmap.
+8. Identify assumptions that are no longer true.
+9. Identify any contradictions between the roadmap and the actual repository.
+10. Adjust the provisional plan when the evidence justifies doing so.
+11. State what it intends to do before making broad changes.
+
+At the end of every work package, the implementing LLM must:
+
+1. Report what was actually done.
+2. Report what was actually observed.
+3. Distinguish failures caused by the current work from pre-existing failures.
+4. Record newly discovered findings.
+5. Record limitations.
+6. Record unresolved questions.
+7. Determine whether the exit gate passed.
+8. Stop at the gate unless explicit authorization exists to continue.
+
+The project should not optimize for code volume.
+
+The objective is a defensible deterministic evidence system and a defensible research conclusion.
+
+
+PROJECT PURPOSE AND CORE THESIS
+
+The project is a deliberately small deterministic changed-function code-risk / CRAP prototype.
+
+The core conceptual pipeline is:
+
+Git change
+    ↓
+Changed functions
+    ↓
+Complexity evidence
+    +
+Coverage evidence
+    ↓
+Deterministic attribution
+    ↓
+CRAP calculation
+    ↓
+Threshold evaluation
+    ↓
+Structured risk evidence
+
+The critical architectural distinction is between EVIDENCE and JUDGMENT.
+
+The deterministic pipeline should establish factual evidence such as:
+
+- which functions changed;
+- what their complexity is;
+- what their measured coverage is;
+- whether coverage was actually available;
+- what CRAP value follows from those measurements;
+- what threshold was applied;
+- whether evaluation completed successfully;
+- what provenance exists for the measurements.
+
+A human or LLM may then reason about what that evidence means.
+
+The LLM should not invent measurements that the deterministic pipeline is responsible for producing.
+
+The potential long-term relationship with Engram remains a hypothesis. A future implementation may eventually use the deterministic evidence engine as an evidence layer for AI-assisted code review, but the research project must not distort its methodology merely because that outcome is strategically attractive.
+
+
+PROJECT HISTORY THAT MUST BE PRESERVED
+
+The project previously went through WP4R, including the final verification and freeze work.
+
+The deterministic prototype uses:
+
+- Git changed-function information;
+- TypeScript complexity analysis;
+- crap-typescript-core;
+- Istanbul-compatible coverage JSON;
+- deterministic coverage attribution;
+- deterministic CRAP calculation;
+- defined thresholds;
+- explicit statuses;
+- structured output.
+
+The project deliberately excludes autonomous LLM classification from the deterministic evidence/rule pipeline.
+
+The caller or CI environment supplies evidence.
+
+The prototype consumes that evidence.
+
+This boundary is important and should remain intact unless a future work package explicitly demonstrates that changing it is justified.
+
+
+WP4R FOUNDATION
+
+WP4R established the deterministic foundation.
+
+Important principles coming out of WP4R include:
+
+- coverage 0 is a valid measurement;
+- unavailable coverage must remain distinguishable from zero;
+- Git-derived intervals must be real rather than fabricated;
+- statuses such as SUCCESS, WARN, and INCOMPLETE must correspond to actual conditions;
+- high complexity plus zero coverage must produce a real CRAP value rather than being converted into an unavailable state;
+- external Istanbul-compatible coverage may be supplied explicitly;
+- the prototype should not autonomously classify changes using an LLM;
+- the caller/CI generates evidence and the deterministic engine consumes it.
+
+These are not merely historical details.
+
+They are regression invariants.
+
+
+WP5.3 CLOSED FINDINGS
+
+WP5.3 established and closed the following findings.
+
+FM-A07:
+Container-method attribution issue.
+
+FM-A08:
+Suffix-collision path attribution issue.
+
+FM-C03:
+Source-root discovery blind spot.
+
+These findings are closed.
+
+They should remain regression anchors.
+
+Do not reopen them merely because their underlying implementation is interesting.
+
+If a later test demonstrates that one has regressed, then:
+
+1. identify the exact regression;
+2. compare current behavior with the previously accepted behavior;
+3. determine whether the regression was caused by the current work;
+4. document the evidence;
+5. correct it only within an appropriate work package.
+
+
+WP5.4 FINDINGS AND CURRENT POSITION
+
+WP5.4 identified four semantic, status, and diagnostic truthfulness findings.
+
+FM-V01 — Coverage capability mislabel
+
+The system can incorrectly communicate that coverage capability is available when the requested/default coverage source is not actually available.
+
+The important distinction is:
+
+coverage capability exists
+
+versus:
+
+coverage evidence was actually obtained.
+
+The second is what matters to a particular analysis.
+
+The implementation must not claim evidence exists merely because a coverage mechanism or analyzer capability exists.
+
+
+FM-D10 — Git ENOENT misclassification
+
+When the Git executable is unavailable, the resulting error can be incorrectly described as:
+
+"Not a git repository"
+
+That is factually wrong.
+
+The correct distinction is:
+
+Git executable unavailable
+
+versus:
+
+Git executable available, but target is not a repository.
+
+These are different environmental conditions and must remain distinguishable.
+
+
+FM-G06 — Missing coverage reported as malformed
+
+A missing coverage file and a malformed coverage file are different conditions.
+
+They must remain distinct.
+
+MISSING means:
+
+The requested artifact does not exist.
+
+MALFORMED means:
+
+The artifact exists but cannot be parsed or validated.
+
+The distinction matters because the remedies are different.
+
+A missing file may mean coverage was never generated or the path is wrong.
+
+A malformed file means coverage was generated or supplied but the artifact is invalid or unsupported.
+
+
+FM-G07 — Composed-path analyzerStatus hardcoded
+
+A composed-path analyzer result can incorrectly report:
+
+"passed"
+
+without demonstrating that analysis actually completed successfully.
+
+The status must describe actual execution and evaluation state.
+
+The fact that an object was returned is not sufficient evidence that analysis passed.
+
+
+PERMANENT SEMANTIC INVARIANTS
+
+The following distinctions must be treated as project-wide invariants.
+
+
+ZERO IS NOT NULL
+
+coverage = 0
+
+means:
+
+A valid measurement exists and measured coverage is zero.
+
+coverage = null, or equivalent unavailable state,
+
+means:
+
+A valid measurement was not obtained.
+
+Example:
+
+complexity = 25
+coverage = 0
+CRAP = valid calculated value
+
+must not become:
+
+coverage unavailable
+CRAP unavailable
+
+simply because coverage is zero.
+
+
+MISSING IS NOT MALFORMED
+
+Example:
+
+coverage.json does not exist
+
+is not equivalent to:
+
+coverage.json exists but contains invalid JSON.
+
+The distinction must survive from the evidence acquisition layer through the final output.
+
+
+GIT UNAVAILABLE IS NOT NOT-A-REPOSITORY
+
+Example:
+
+git: command not found
+
+is an environment/tooling failure.
+
+Example:
+
+fatal: not a git repository
+
+is a repository-state failure.
+
+They must not collapse into one diagnostic.
+
+
+ANALYSIS SUCCESS MUST MEAN SUCCESSFUL ANALYSIS
+
+An object being returned is not evidence that analysis succeeded.
+
+For example:
+
+{
+  "analyzerStatus": "passed",
+  "result": null
+}
+
+is not inherently a successful analysis.
+
+The status must correspond to the actual evaluation path.
+
+
+EVIDENCE, POLICY, AND DECISION ARE DIFFERENT
+
+Evidence:
+
+complexity = 18
+coverage = 0
+CRAP = 324
+
+Policy:
+
+CRAP > 30
+
+Decision:
+
+additional human review recommended
+
+These are three different layers.
+
+The engine should not unnecessarily combine them.
+
+
+STANDARD WORK-PACKAGE EXECUTION CYCLE
+
+Every remaining work package should follow this pattern.
+
+
+PHASE A — ORIENT
+
+Read:
+
+- repository structure;
+- relevant implementation;
+- tests;
+- documentation;
+- prior work-package results;
+- current working state.
+
+
+PHASE B — BASELINE
+
+Run relevant tests before changing code.
+
+Record:
+
+- command;
+- result;
+- environment;
+- pre-existing failures.
+
+
+PHASE C — INSPECT
+
+Find the smallest implementation surface that can satisfy the requirement.
+
+Do not redesign the system unless the evidence requires it.
+
+
+PHASE D — IMPLEMENT
+
+Make the smallest correct change.
+
+
+PHASE E — UNIT VERIFY
+
+Test the changed behavior directly.
+
+
+PHASE F — REGRESSION VERIFY
+
+Run:
+
+- current relevant tests;
+- WP5.3 regression anchors;
+- WP4R regression anchors;
+- any relevant integration tests.
+
+
+PHASE G — INTEGRATION VERIFY
+
+Exercise the actual composed path where the work package requires it.
+
+
+PHASE H — DOCUMENT
+
+Record:
+
+- change;
+- reason;
+- tests;
+- observations;
+- limitations;
+- new findings.
+
+
+PHASE I — GATE
+
+Explicitly determine:
+
+PASS
+FAIL
+BLOCKED
+
+Then stop.
+
+
+WP5.4 — FINAL CORRECTION PASS
+
+OBJECTIVE
+
+Correct the four confirmed WP5.4 findings without changing unrelated analytical behavior.
+
+This is a semantic correctness pass, not a feature-development pass.
+
+
+FM-V01 PLAN
+
+Verify:
+
+- default coverage exists;
+- default coverage does not exist;
+- explicit coverage exists;
+- explicit coverage does not exist;
+- coverage is zero;
+- coverage is non-zero;
+- coverage is malformed;
+- coverage is unavailable.
+
+The output should allow a downstream consumer to determine whether the system actually measured coverage.
+
+A valid zero-coverage result must remain valid evidence.
+
+
+FM-D10 PLAN
+
+Test at least:
+
+1. valid Git repository;
+2. non-repository directory;
+3. Git executable unavailable;
+4. other Git execution failure.
+
+Example:
+
+Input condition:
+
+Git executable missing
+
+Bad:
+
+Not a git repository
+
+Better:
+
+Git executable unavailable
+
+The exact final wording should follow the project's existing vocabulary.
+
+Do not create a new error taxonomy without justification.
+
+
+FM-G06 PLAN
+
+Test:
+
+- valid coverage;
+- missing coverage;
+- malformed coverage;
+- valid zero coverage;
+- valid but irrelevant coverage.
+
+The output should preserve these states.
+
+
+FM-G07 PLAN
+
+Test:
+
+- successful evaluation;
+- valid zero coverage;
+- unavailable coverage;
+- malformed coverage;
+- valid CRAP calculation;
+- inability to evaluate.
+
+Do not hardcode "passed".
+
+The status must emerge from the actual evaluation state.
+
+
+WP5.4 NON-GOALS
+
+Do not:
+
+- change CRAP mathematics;
+- change thresholds;
+- redesign attribution;
+- redesign source discovery;
+- add new languages;
+- add LLM judgment;
+- change experiment methodology;
+- add unrelated features.
+
+
+WP5.4 EXIT GATE
+
+Required:
+
+- FM-V01 fixed;
+- FM-D10 fixed;
+- FM-G06 fixed;
+- FM-G07 fixed;
+- zero remains distinct from unavailable;
+- missing remains distinct from malformed;
+- Git environment failures are truthful;
+- analyzer status is truthful;
+- JSON is truthful;
+- CLI is truthful;
+- exit behavior is consistent;
+- WP5.3 anchors remain green;
+- WP4R anchors remain green;
+- no unexplained unrelated changes.
+
+If any required condition fails:
+
+WP5.4 REMAINS OPEN.
+
+Do not proceed to WP5.5 until the gate is satisfied or an explicit project-level decision changes the gate.
+
+
+WP5.5 — END-TO-END INTEGRATION VERIFICATION
+
+OBJECTIVE
+
+WP5.4 proves individual semantic corrections.
+
+WP5.5 asks:
+
+Do the corrected semantics remain correct when the complete pipeline is composed?
+
+The conceptual flow is:
+
+Git
+ ↓
+Changed functions
+ ↓
+Source discovery
+ ↓
+Complexity
+ ↓
+Coverage acquisition
+ ↓
+Coverage availability
+ ↓
+Coverage attribution
+ ↓
+Function evaluation
+ ↓
+CRAP
+ ↓
+Threshold
+ ↓
+Analyzer status
+ ↓
+Aggregate status
+ ↓
+JSON
+ ↓
+CLI
+ ↓
+Exit code
+
+The actual repository implementation is authoritative.
+
+The implementing LLM must inspect the real flow rather than assume that the implementation exactly matches this conceptual diagram.
+
+
+WP5.5 WHAT TO ACCOUNT FOR
+
+WP5.5 should explicitly consider:
+
+Input validity:
+
+- valid repository;
+- invalid repository;
+- missing Git;
+- malformed evidence;
+- absent evidence;
+- empty changes.
+
+Change shape:
+
+- one changed function;
+- several changed functions;
+- multiple files;
+- methods;
+- nested functions where supported;
+- similarly named functions;
+- path collisions;
+- container methods.
+
+Complexity:
+
+- low;
+- medium;
+- high;
+- threshold boundaries.
+
+Coverage:
+
+- high;
+- moderate;
+- low;
+- zero;
+- unavailable;
+- missing;
+- malformed;
+- irrelevant.
+
+Composition:
+
+The key question is not merely:
+
+"Does each component work?"
+
+It is:
+
+"Does the meaning survive the transition between components?"
+
+
+WP5.5 EXAMPLE SCENARIOS
+
+SCENARIO A — HIGH COMPLEXITY + ZERO COVERAGE
+
+Expected concept:
+
+complexity = high
+coverage = 0
+CRAP = valid and high
+status = valid evaluation
+
+This is an important regression anchor.
+
+
+SCENARIO B — HIGH COMPLEXITY + UNAVAILABLE COVERAGE
+
+Expected concept:
+
+complexity = high
+coverage = unavailable
+CRAP = unavailable or explicitly not computable
+status = incomplete/unavailable
+
+Do not manufacture a zero.
+
+
+SCENARIO C — MISSING COVERAGE FILE
+
+Expected:
+
+coverage artifact missing
+
+Not:
+
+coverage malformed
+
+
+SCENARIO D — MALFORMED COVERAGE FILE
+
+Expected:
+
+coverage artifact malformed
+
+Not:
+
+coverage missing
+
+
+SCENARIO E — GIT EXECUTABLE UNAVAILABLE
+
+Expected:
+
+Git unavailable
+
+Not:
+
+not a Git repository
+
+
+SCENARIO F — NO RELEVANT CHANGED FUNCTIONS
+
+The system must define what "no changed functions" means.
+
+A possible legitimate outcome is:
+
+no relevant analysis
+
+But the implementing LLM must verify the existing contract instead of inventing a new one.
+
+
+WP5.5 STATUS PROPAGATION TEST
+
+Choose representative cases and trace:
+
+raw condition
+ ↓
+internal evidence
+ ↓
+function result
+ ↓
+analyzerStatus
+ ↓
+aggregate status
+ ↓
+JSON
+ ↓
+CLI
+ ↓
+exit code
+
+For every transition ask:
+
+Did the meaning change?
+
+Example:
+
+missing coverage
+
+must not become:
+
+malformed coverage
+
+at the CLI layer.
+
+Likewise:
+
+coverage = 0
+
+must not become:
+
+coverage unavailable
+
+in JSON.
+
+
+WP5.5 DETERMINISM
+
+Repeat identical analyses.
+
+Where practical, vary:
+
+- execution order;
+- filesystem ordering;
+- evidence ordering;
+- repeated invocation.
+
+Expected:
+
+Same inputs should produce the same substantive outputs.
+
+Permissible variation may include explicitly nondeterministic metadata such as timing.
+
+The implementing LLM must distinguish genuine nondeterminism from metadata variation.
+
+
+WP5.5 NEW-FINDING HANDLING
+
+If a new problem appears, classify it first.
+
+Possible classifications:
+
+A. Regression caused by current work.
+
+B. Pre-existing defect.
+
+C. Environment problem.
+
+D. Methodology problem.
+
+E. New legitimate defect.
+
+F. Test defect.
+
+Do not immediately fix every finding.
+
+For each one record:
+
+- observed behavior;
+- expected behavior;
+- evidence;
+- severity;
+- current work-package relevance;
+- whether it blocks the gate.
+
+This prevents WP5.5 from becoming an uncontrolled bug backlog.
+
+
+WP5.5 EXIT GATE
+
+PASS requires:
+
+- end-to-end pipeline works;
+- status propagation is truthful;
+- zero/null distinction survives;
+- missing/malformed distinction survives;
+- Git error distinction survives;
+- JSON remains truthful;
+- CLI remains truthful;
+- exit behavior is understood;
+- determinism demonstrated;
+- prior regression anchors remain green;
+- unexpected findings documented.
+
+Then stop.
+
+
+WP5.6 — USEFULNESS, ROBUSTNESS, AND FREEZE
+
+OBJECTIVE
+
+Determine whether the deterministic evidence is actually useful to a human reviewer.
+
+This is a critical transition.
+
+WP5.4 asks:
+
+Is it semantically correct?
+
+WP5.5 asks:
+
+Does that correctness survive composition?
+
+WP5.6 asks:
+
+Is the resulting evidence useful?
+
+A technically correct metric can still be operationally useless.
+
+
+WP5.6 EXPERIMENTAL DISCIPLINE
+
+Do not alter the experimental method merely because results are inconvenient.
+
+If the methodology needs to change:
+
+1. identify the deficiency;
+2. document it;
+3. explain why it matters;
+4. propose the revised method;
+5. distinguish old and new results;
+6. obtain approval before treating the new method as authoritative.
+
+Never silently rewrite the experiment.
+
+
+WP5.6 REPOSITORY CASE DESIGN
+
+Planned repositories include:
+
+- h3;
+- Hono;
+- apollo-client.
+
+Target:
+
+3 repositories
+×
+3 historical cases
+=
+approximately 9 cases.
+
+Per repository:
+
+- one small;
+- one moderate;
+- one non-trivial.
+
+
+WP5.6 CASE CLASSIFICATION
+
+Use changed-function count.
+
+SMALL:
+
+1 changed function
+
+MODERATE:
+
+2–3 changed functions
+
+NON-TRIVIAL:
+
+4+ changed functions
+
+This is deliberately objective.
+
+Do not replace it with subjective judgment such as:
+
+"this commit feels small."
+
+If a case does not fit cleanly, document why.
+
+
+WP5.6 COVERAGE STRATEGY
+
+For a large repository such as apollo-client, running the full test suite for every historical case may be unnecessarily expensive.
+
+The planned strategy is a two-tier approach.
+
+TIER 1:
+
+Run at least one representative case through the full suite where practical.
+
+Purpose:
+
+Validate the general coverage methodology against the repository.
+
+TIER 2:
+
+Use case-attributable or appropriately scoped coverage for remaining cases where appropriate.
+
+The scope must be explicitly documented.
+
+Never claim:
+
+"full-suite coverage"
+
+when only:
+
+"scoped coverage"
+
+was used.
+
+
+WP5.6 WHAT TO LOOK FOR IN EACH CASE
+
+Each case should answer:
+
+CHANGE
+
+What actually changed?
+
+FUNCTION IDENTIFICATION
+
+Which functions did the engine identify?
+
+Did it identify all expected changed functions?
+
+Did it identify anything unexpected?
+
+COMPLEXITY
+
+What complexity was measured?
+
+Does it look plausible?
+
+COVERAGE
+
+Where did coverage come from?
+
+Was it:
+
+- full suite;
+- scoped suite;
+- existing artifact;
+- generated artifact?
+
+ATTRIBUTION
+
+Was coverage correctly associated with the changed function?
+
+CRAP
+
+Was the CRAP value calculated correctly?
+
+THRESHOLD
+
+Did the result cross the selected threshold?
+
+STATUS
+
+Was the status truthful?
+
+REVIEW USEFULNESS
+
+Would a reviewer care about this result?
+
+
+WP5.6 EXAMPLE CASE OUTCOMES
+
+OUTCOME A — HIGH CRAP IDENTIFIES AN OBVIOUSLY RISKY CHANGE
+
+Example:
+
+Changed function:
+calculateEligibility()
+
+Complexity:
+21
+
+Coverage:
+0%
+
+CRAP:
+high
+
+If the function was substantially changed and poorly tested, a reviewer may immediately understand why the result matters.
+
+This is a strong usefulness signal.
+
+
+OUTCOME B — HIGH CRAP BUT OBVIOUSLY HARMLESS CHANGE
+
+This may be a false-positive-like observation.
+
+Do not immediately change the formula.
+
+Investigate:
+
+- why complexity is high;
+- whether coverage is representative;
+- whether generated code is involved;
+- whether the function is inherently complex but stable;
+- whether threshold policy is too sensitive.
+
+The correct conclusion may be:
+
+"CRAP is useful as a review signal but not sufficient by itself."
+
+That is a legitimate outcome.
+
+
+OUTCOME C — LOW CRAP BUT REVIEWER IDENTIFIES SERIOUS RISK
+
+This may expose a missing risk dimension.
+
+Possible missing context:
+
+- dependency impact;
+- API exposure;
+- security sensitivity;
+- architectural centrality;
+- data sensitivity;
+- historical defect patterns.
+
+These are hypotheses.
+
+Do not immediately add them to the engine.
+
+Record them for WP6 or later consideration.
+
+
+OUTCOME D — COVERAGE UNAVAILABLE
+
+This is not automatically a failed case.
+
+The question is whether the system correctly communicates:
+
+"risk evidence incomplete because coverage evidence is unavailable."
+
+Truthfulness may itself be a successful result.
+
+
+WP5.6 HUMAN REVIEW PACKET
+
+For each case, provide enough information for a reviewer to answer:
+
+1. What changed?
+2. Which functions were affected?
+3. How complex are they?
+4. How well tested are they?
+5. What CRAP risk follows?
+6. Why did the system produce this status?
+7. What evidence was missing?
+8. Would this affect my review behavior?
+
+Do not require the reviewer to reverse-engineer the experiment.
+
+
+WP5.6 CLAIMS/EVIDENCE MATRIX
+
+Create a matrix conceptually like:
+
+Claim | Evidence | Confidence | Limitation
+
+Changed functions can be identified | historical cases | Medium/High | repository-specific
+
+Coverage can be attributed | case results | Medium | provider dependent
+
+CRAP is deterministic | repeated runs | High | tested environments
+
+Output is explainable | human review | Medium | limited sample
+
+Signal is useful | reviewer feedback | Medium/Low | small sample
+
+The confidence must match the actual sample.
+
+Nine cases cannot justify universal claims about all software repositories.
+
+
+WP5.6 ROBUSTNESS QUESTIONS
+
+Consider:
+
+- repeated execution;
+- zero coverage;
+- missing coverage;
+- malformed coverage;
+- partial coverage;
+- multiple changed functions;
+- unusual paths;
+- methods;
+- monorepos;
+- source-root differences;
+- large coverage artifacts.
+
+The purpose is not to prove that every repository works.
+
+The purpose is to identify the boundaries of reliable behavior.
+
+
+WP5.6 LIMITATIONS TO EXPECT
+
+Potential limitations include:
+
+- TypeScript/JavaScript focus;
+- coverage-provider assumptions;
+- repository structure assumptions;
+- test-run assumptions;
+- attribution limitations;
+- small experimental sample;
+- CRAP's inherent limitations;
+- inability to measure risks unrelated to complexity and coverage;
+- scoped test limitations;
+- generated-code complications.
+
+A limitation is not a failure.
+
+An undocumented limitation is a problem.
+
+
+WP5.6 FREEZE
+
+If the usefulness experiment is successful enough to justify continuation, freeze the prototype.
+
+Freeze:
+
+- source;
+- tests;
+- contracts;
+- methodology;
+- thresholds;
+- experiment results;
+- limitations;
+- reproducibility instructions.
+
+The frozen result becomes the input to WP6.
+
+Do not continue silently modifying the experimental baseline after freeze.
+
+
+WP5.6 EXIT GATE
+
+Required:
+
+- usefulness experiment complete;
+- robustness evaluation complete;
+- human-review packet complete;
+- claims/evidence matrix complete;
+- limitations documented;
+- regression suite green;
+- reproducibility documented;
+- methodology documented;
+- prototype frozen.
+
+Then:
+
+WP5 = COMPLETE
+
+Do not begin WP6 implementation until the WP5 closure package exists.
+
+
+WP6 — STRATEGIC DIRECTION AND MINIMAL PROOF
+
+OBJECTIVE
+
+WP6 should answer:
+
+What is the smallest useful engineering capability justified by WP5 evidence?
+
+WP6 is not automatically a feature-development phase.
+
+It is a decision and proof phase.
+
+
+WP6 STARTING POINT
+
+Begin with the frozen WP5 artifact.
+
+Document:
+
+- inputs;
+- outputs;
+- evidence model;
+- statuses;
+- provenance;
+- supported conditions;
+- unsupported conditions;
+- dependencies;
+- deterministic guarantees;
+- known limitations.
+
+Do not design the future architecture before understanding what was actually proven.
+
+
+WP6 POSSIBLE DIRECTIONS
+
+DIRECTION A — REUSABLE EVIDENCE API / PROTOCOL
+
+The engine becomes a reusable deterministic service or library.
+
+Potential architecture:
+
+Git / CI / Analyzer
+        ↓
+Evidence
+        ↓
+Deterministic Engine
+        ↓
+Structured Risk Evidence
+        ↓
+Consumers
+
+This is attractive if the evidence model itself proves broadly useful.
+
+
+DIRECTION B — ENGRAM INTEGRATION
+
+Potential architecture:
+
+Coding LLM
+    ↓
+Proposed change
+    ↓
+Deterministic evidence engine
+    ↓
+Risk evidence
+    ↓
+Auditor LLM
+    ↓
+Review decision
+
+The LLM would reason over factual evidence instead of generating the evidence.
+
+This is strategically interesting because it reinforces Engram's separation between coding and auditing.
+
+But it should only be pursued if WP5 demonstrates that the evidence is meaningful.
+
+
+DIRECTION C — CI/CD GATE
+
+Potential:
+
+Pull Request
+    ↓
+Changed functions
+    ↓
+Risk engine
+    ↓
+Policy
+    ↓
+PASS / WARN / BLOCK
+
+This may be the most practical path if organizations care primarily about automated review gates.
+
+The initial objective should be:
+
+Can a real change reliably produce a useful, deterministic risk result in CI?
+
+Not:
+
+Can we build a complete enterprise platform?
+
+
+DIRECTION D — HISTORICAL RISK / BASELINE
+
+Possible evidence:
+
+Function A
+
+Change 1:
+CRAP = 18
+
+Change 2:
+CRAP = 27
+
+Change 3:
+CRAP = 52
+
+The change in risk could potentially be more informative than the absolute value.
+
+This should only be explored if WP5/WP8 indicates that historical context improves decision quality.
+
+
+DIRECTION E — ADDITIONAL LANGUAGE SUPPORT
+
+Potential architecture:
+
+Common Evidence Model
+        ↑
+   +----+----+
+   |    |    |
+  TS   C#   Python
+
+Each language adapter would have to preserve deterministic semantics.
+
+Do not claim language independence after adding one adapter.
+
+
+WP6 DECISION FORKS
+
+IF USEFULNESS IS WEAK:
+
+Possible outcomes:
+
+- freeze and stop;
+- conduct targeted research;
+- narrow the intended use;
+- identify why the signal is weak.
+
+Do not productize a weak signal.
+
+
+IF USEFULNESS IS STRONG BUT CONSUMER IS UNCLEAR:
+
+Prioritize a stable evidence contract.
+
+This is likely the safest choice.
+
+
+IF ENGRAM IS CLEARLY THE STRONGEST USE CASE:
+
+Build a minimal Engram proof.
+
+Do not immediately embed the engine deeply into Engram's architecture.
+
+First prove:
+
+Engram
+→
+real change
+→
+risk engine
+→
+evidence
+→
+LLM interpretation
+
+
+IF CI IS CLEARLY STRONGEST:
+
+Build a minimal CI proof.
+
+The first objective is reliable evidence production in CI, not a complete platform.
+
+
+IF HISTORY IS CLEARLY VALUABLE:
+
+Prototype historical comparison before designing a full database.
+
+
+IF LANGUAGE LIMITATIONS DOMINATE:
+
+Prove one carefully selected second language.
+
+Do not implement a generalized multi-language architecture prematurely.
+
+
+WP6 WHAT WE ARE LOOKING FOR
+
+A successful WP6 proof should demonstrate:
+
+real caller
+    ↓
+real evidence
+    ↓
+deterministic engine
+    ↓
+real structured output
+    ↓
+real consumer
+
+The most important architectural decision is the boundary between:
+
+FACTUAL EVIDENCE
+
+and:
+
+INTERPRETATION / POLICY
+
+That boundary should remain explicit.
+
+
+WP6 EXIT ARTIFACTS
+
+Produce:
+
+- strategic direction;
+- selected use case;
+- rejected alternatives;
+- evidence supporting the selection;
+- architecture;
+- evidence contract;
+- minimal integration proof;
+- production requirements;
+- unresolved risks;
+- next-work-package recommendation.
+
+If no direction is sufficiently justified, WP6 should say so.
+
+A "no-go" or "narrow the scope" result is a valid WP6 outcome.
+
+
+WP7 — PRODUCTIONIZATION
+
+OBJECTIVE
+
+Turn the selected WP6 capability into a dependable engineering component.
+
+WP7 should not become a feature explosion.
+
+Productionization means:
+
+- predictable;
+- installable;
+- testable;
+- observable;
+- secure;
+- supportable;
+- documented.
+
+
+WP7 CONTRACT FREEZE
+
+Define explicitly:
+
+- input schema;
+- output schema;
+- status vocabulary;
+- error vocabulary;
+- provenance;
+- versioning;
+- compatibility expectations.
+
+The semantic lessons from WP5.4 must be preserved.
+
+For example:
+
+coverage = 0
+
+must never be silently converted into:
+
+coverage unavailable
+
+during production packaging.
+
+
+WP7 PACKAGING DECISION
+
+Choose packaging based on the selected consumer.
+
+Possible forms:
+
+- CLI;
+- library;
+- container;
+- service;
+- CI action/integration;
+- Engram component.
+
+Do not automatically build every form.
+
+Example:
+
+If WP6 proves CI is the primary consumer, a CLI plus CI integration may be enough.
+
+A web service may add complexity without adding value.
+
+
+WP7 CONFIGURATION DESIGN
+
+Potential configuration:
+
+- CRAP thresholds;
+- coverage source;
+- repository settings;
+- policy thresholds;
+- output format;
+- failure behavior.
+
+Important distinction:
+
+Evidence semantics should remain stable.
+
+Policy can be configurable.
+
+Example:
+
+CRAP calculation
+=
+deterministic evidence
+
+threshold 30 vs 20
+=
+policy
+
+Do not allow configuration to change the meaning of the evidence itself.
+
+
+WP7 SECURITY
+
+Account for:
+
+- untrusted repositories;
+- Git execution;
+- filesystem access;
+- path traversal;
+- malicious coverage artifacts;
+- dependency vulnerabilities;
+- CI permissions;
+- secrets;
+- command injection;
+- service isolation if applicable.
+
+The exact threat model depends on the WP6 deployment model.
+
+
+WP7 PERFORMANCE
+
+Benchmark:
+
+- small repository;
+- medium repository;
+- large repository;
+- monorepo;
+- many changed functions;
+- large coverage file.
+
+Record:
+
+- wall-clock time;
+- memory;
+- scaling behavior.
+
+Do not optimize prematurely.
+
+First establish a baseline.
+
+
+WP7 OBSERVABILITY
+
+Operational diagnostics should explain:
+
+- what was attempted;
+- which evidence sources were used;
+- what succeeded;
+- what failed;
+- why;
+- whether the result is complete.
+
+Operational diagnostics must not contradict analytical status.
+
+
+WP7 RELEASE READINESS
+
+Before calling the system production-ready:
+
+- clean install;
+- reproducible build;
+- regression suite;
+- integration tests;
+- security review;
+- performance baseline;
+- documentation;
+- failure recovery;
+- compatibility checks.
+
+A release candidate should be reproducible by someone other than the original implementer.
+
+
+WP7 POSSIBLE OUTCOMES
+
+OUTCOME A — PRODUCTIONIZATION SUCCEEDS
+
+Proceed to WP8.
+
+
+OUTCOME B — PERFORMANCE UNACCEPTABLE
+
+Return to targeted optimization.
+
+
+OUTCOME C — INTEGRATION TOO FRAGILE
+
+Reconsider architecture.
+
+
+OUTCOME D — OPERATIONAL COMPLEXITY OVERWHELMS VALUE
+
+Potentially stop or narrow the product.
+
+
+OUTCOME E — EVIDENCE CONTRACT PROVES UNSTABLE
+
+Return to WP6 rather than freezing an unstable contract.
+
+
+WP8 — REAL-WORLD VALIDATION
+
+OBJECTIVE
+
+Determine whether the productionized capability works and provides value outside the controlled WP5 experiment.
+
+WP8 is where assumptions meet broader reality.
+
+
+WP8 REPOSITORY DIVERSITY
+
+Where practical, include repositories differing in:
+
+- size;
+- architecture;
+- test strategy;
+- monorepo structure;
+- coverage tooling;
+- development style;
+- supported languages.
+
+The objective is not statistical proof.
+
+It is boundary discovery.
+
+
+WP8 REAL CHANGE VALIDATION
+
+Evaluate actual historical or permitted engineering changes.
+
+For each:
+
+change
+ ↓
+identified functions
+ ↓
+complexity
+ ↓
+coverage
+ ↓
+CRAP
+ ↓
+risk evidence
+ ↓
+reviewer interpretation
+ ↓
+actual/expected engineering significance
+
+The important question becomes:
+
+Does the evidence correspond reasonably well with engineering reality?
+
+
+WP8 FALSE POSITIVES
+
+A false-positive-like case might look like:
+
+high CRAP
+
+but:
+
+reviewer: low practical concern
+
+Do not immediately conclude the metric is wrong.
+
+Investigate:
+
+- complexity is high by design;
+- coverage measurement is incomplete;
+- generated code;
+- stable but complex utility;
+- threshold too aggressive;
+- missing context.
+
+Possible conclusion:
+
+"CRAP is a useful attention signal but not a standalone risk classifier."
+
+That may be more accurate than changing the formula.
+
+
+WP8 FALSE NEGATIVES
+
+A more concerning case may be:
+
+low CRAP
+
+but:
+
+reviewer: significant risk
+
+Ask what the current evidence model cannot see.
+
+Potential missing dimensions:
+
+- dependency blast radius;
+- security sensitivity;
+- public API exposure;
+- architecture;
+- data sensitivity;
+- historical defect rate;
+- concurrency;
+- external integration.
+
+Again, these are hypotheses.
+
+Do not automatically add them.
+
+
+WP8 DEVELOPER EXPERIENCE
+
+Evaluate:
+
+- trust;
+- comprehension;
+- noise;
+- friction;
+- review focus;
+- willingness to use;
+- whether results are actionable.
+
+A technically correct result that engineers ignore is not necessarily a successful product.
+
+
+WP8 AI-GENERATED CODE
+
+If Engram is involved, compare changes based on their evidence rather than assuming authorship determines risk.
+
+The engine should evaluate:
+
+what changed
++
+how complex it is
++
+how well it is tested
+
+not:
+
+who or what generated it
+
+unless future evidence proves authorship is itself relevant to a specific risk model.
+
+
+WP8 DECISION FORKS
+
+IF RELIABILITY IS WEAK:
+
+Return to WP7.
+
+
+IF RELIABILITY IS STRONG BUT USEFULNESS IS WEAK:
+
+Investigate signal quality.
+
+
+IF USEFULNESS IS STRONG:
+
+Expand validation.
+
+
+IF FALSE POSITIVES DOMINATE:
+
+Investigate:
+
+- thresholds;
+- evidence completeness;
+- policy;
+- CRAP limitations.
+
+
+IF FALSE NEGATIVES DOMINATE:
+
+Investigate missing evidence dimensions.
+
+
+IF OPERATIONAL COST IS TOO HIGH:
+
+Optimize or narrow the use case.
+
+
+WP8 EXIT ARTIFACTS
+
+Produce:
+
+- real-world validation report;
+- false-positive analysis;
+- false-negative analysis;
+- operational findings;
+- developer-experience findings;
+- adoption assessment;
+- limitations;
+- recommended next steps.
+
+The recommended next step must be evidence-backed.
+
+
+WP9 — EVIDENCE-DRIVEN EVOLUTION
+
+OBJECTIVE
+
+WP9 should answer:
+
+What should actually be built next based on everything learned?
+
+WP9 is intentionally not a predetermined feature backlog.
+
+
+WP9 PRIORITIZATION MODEL
+
+Every proposed capability should answer:
+
+USER VALUE
+
+Who benefits?
+
+EVIDENCE
+
+What finding justifies this?
+
+COST
+
+What is the implementation burden?
+
+RISK
+
+Could it weaken deterministic semantics?
+
+VALIDATION
+
+How will success be measured?
+
+STRATEGIC FIT
+
+Does it strengthen the architecture?
+
+A feature without evidence should be labeled a hypothesis, not a commitment.
+
+
+WP9 POSSIBLE EVOLUTION AREAS
+
+Potential areas include:
+
+- historical baselines;
+- risk deltas;
+- additional languages;
+- additional coverage providers;
+- richer evidence provenance;
+- CI policy;
+- Engram integration;
+- reviewer-facing explanations;
+- dependency impact;
+- architecture-aware evidence;
+- historical defect evidence.
+
+Only pursue those justified by WP8.
+
+
+HISTORICAL RISK
+
+Possible model:
+
+Function A
+
+Change 1:
+CRAP = 18
+
+Change 2:
+CRAP = 27
+
+Change 3:
+CRAP = 52
+
+This might reveal:
+
+- increasing risk;
+- persistent risk;
+- deteriorating test confidence.
+
+But it could also introduce:
+
+- baseline complexity;
+- noisy historical comparisons;
+- coverage changes;
+- test-suite evolution;
+- refactoring effects.
+
+Therefore history must be validated before becoming a product feature.
+
+
+RISK DELTA
+
+Potential future evidence:
+
+previous CRAP = 18
+current CRAP = 42
+delta = +24
+
+This could potentially be more useful than:
+
+current CRAP = 42
+
+because it describes change in risk.
+
+But it should not be assumed to be better.
+
+WP8 evidence should determine whether this is worth pursuing.
+
+
+LANGUAGE EXPANSION
+
+A generalized architecture could become:
+
+Common Evidence Model
+        ↑
+   +----+----+
+   |    |    |
+  TS   C#   Python
+
+Each adapter must define:
+
+- changed-function identity;
+- complexity source;
+- coverage source;
+- attribution;
+- missing behavior;
+- malformed behavior;
+- zero behavior;
+- provenance.
+
+The common model should not erase language-specific uncertainty.
+
+
+COVERAGE PROVIDER EXPANSION
+
+If demand exists, add coverage adapters.
+
+Each adapter should explicitly define:
+
+- input;
+- normalization;
+- validity;
+- missing behavior;
+- malformed behavior;
+- zero behavior;
+- provenance.
+
+The WP5.4 lessons apply directly.
+
+
+ENGRAM INTEGRATION AS A POSSIBLE END STATE
+
+If evidence supports it, a future architecture could be:
+
+Coding LLM
+    ↓
+Proposed Change
+    ↓
+Deterministic Evidence Engine
+    ↓
+Risk Evidence
+    ↓
+Auditor LLM
+    ↓
+Decision
+
+The deterministic layer answers:
+
+What happened?
+
+The LLM answers:
+
+What does this evidence mean in context?
+
+This separation could become an important architectural principle for Engram.
+
+But it must be validated, not assumed.
+
+
+POLICY AS A SEPARATE LAYER
+
+Potential future policy:
+
+risk low
+→ normal review
+
+risk moderate
+→ additional review
+
+risk high
+→ mandatory human review
+
+But:
+
+risk calculation
+
+must remain separate from:
+
+policy decision.
+
+This allows the same evidence to support different organizational policies.
+
+
+OVERALL DECISION TREE
+
+WP5.4
+  |
+  +-- FAIL → remain in WP5.4
+  |
+  +-- PASS
+       ↓
+WP5.5
+  |
+  +-- FAIL → investigate/correct integration
+  |
+  +-- PASS
+       ↓
+WP5.6
+  |
+  +-- weak usefulness
+  |      ↓
+  |   narrow / research / stop
+  |
+  +-- sufficient usefulness
+          ↓
+        WP6
+          |
+          +-- evidence API
+          +-- Engram
+          +-- CI
+          +-- history
+          +-- language
+          |
+          ↓
+        WP7
+          |
+          +-- not production ready
+          |       ↓
+          |    harden/rethink
+          |
+          +-- production ready
+                  ↓
+                WP8
+                  |
+          +-------+-------+
+          ↓               ↓
+       weak value      strong value
+          |               |
+          ↓               ↓
+       rethink         expand
+                          |
+                          ↓
+                        WP9
+
+
+MASTER LIST OF QUESTIONS TO ASK AT EVERY WORK PACKAGE
+
+Before implementation:
+
+1. What are we trying to prove?
+2. What is already known?
+3. What is only assumed?
+4. What evidence would falsify the assumption?
+5. What is the smallest experiment?
+6. What is explicitly out of scope?
+7. What is the exit gate?
+
+During implementation:
+
+1. Did the actual repository match expectations?
+2. Did we discover an existing capability?
+3. Did we discover a contradiction?
+4. Did we change public behavior?
+5. Did we change semantics?
+6. Did we introduce nondeterminism?
+7. Did we accidentally expand scope?
+
+After implementation:
+
+1. What changed?
+2. What did we prove?
+3. What did we fail to prove?
+4. What new findings appeared?
+5. What limitations remain?
+6. Did the gate pass?
+7. What does the evidence imply for the next work package?
+
+
+REQUIRED TREATMENT OF PROVISIONAL ASSUMPTIONS
+
+Every future assumption should be mentally labeled:
+
+ASSUMED
+
+until demonstrated.
+
+Examples:
+
+"CRAP is useful to reviewers"
+
+is assumed until WP5.6/WP8 evidence supports it.
+
+"Engram is the best consumer"
+
+is assumed until WP6 evidence supports it.
+
+"Historical CRAP delta will be useful"
+
+is assumed until validated.
+
+"Additional languages are worth supporting"
+
+is assumed until demand and evidence support it.
+
+This prevents the roadmap from turning hypotheses into requirements.
+
+
+WHAT A STRONG RESULT LOOKS LIKE
+
+A strong result is not necessarily:
+
+more features.
+
+A strong result may be:
+
+We tested X.
+
+We observed Y.
+
+Therefore we can confidently claim Z.
+
+However, limitation Q remains.
+
+For example:
+
+"Changed-function risk evidence was reproducible across the tested TypeScript repositories. Coverage attribution worked under the tested Istanbul-compatible configurations. Reviewers found high-complexity/low-coverage changes useful as attention signals. However, the sample was small and the signal does not capture dependency or architectural risk."
+
+That is a stronger engineering conclusion than:
+
+"The system detects risky code."
+
+The first is evidence-backed and scoped.
+
+
+WHAT A NEGATIVE RESULT MEANS
+
+The project is allowed to conclude:
+
+- CRAP is not sufficiently useful by itself;
+- coverage attribution is unreliable in important environments;
+- the signal is too noisy;
+- reviewers do not trust it;
+- the cost of obtaining coverage outweighs the value;
+- a deterministic evidence layer is useful but CRAP alone is insufficient;
+- the best application is narrower than originally expected.
+
+A negative result is preferable to unsupported product claims.
+
+
+WHAT A POSITIVE RESULT MEANS
+
+Even if results are strong, do not immediately expand scope.
+
+Instead:
+
+1. document the result;
+2. identify why it worked;
+3. identify the boundary conditions;
+4. reproduce it;
+5. validate the generalization;
+6. then expand.
+
+Unexpected success should increase rigor.
+
+
+RECOMMENDED DOCUMENTATION PACKAGE
+
+The exact repository structure is authoritative, but conceptually the project should maintain:
+
+docs/
+    architecture/
+    contracts/
+    methodology/
+    decisions/
+    release/
+    validation/
+
+experiments/
+    wp5/
+        wp5.4/
+        wp5.5/
+        wp5.6/
+    wp6/
+    wp7/
+    wp8/
+    wp9/
+
+Do not restructure the repository merely to match this example.
+
+If higher-level folders already exist, inspect them before creating new structures.
+
+
+FUTURE DOCUMENTS TO MAINTAIN
+
+WP5.5:
+
+- execution plan;
+- integration matrix;
+- status/diagnostic matrix;
+- determinism plan;
+- regression plan;
+- results template;
+- closure document.
+
+WP5.6:
+
+- usefulness experiment plan;
+- repository/case selection;
+- coverage methodology;
+- human-review packet;
+- claims/evidence matrix;
+- limitations record;
+- freeze checklist.
+
+WP6:
+
+- strategy evaluation;
+- evidence-contract proposal;
+- architecture proposal;
+- integration proof plan;
+- decision matrix;
+- architecture decision record.
+
+WP7:
+
+- production architecture;
+- contract specification;
+- security plan;
+- performance plan;
+- operational readiness;
+- release checklist.
+
+WP8:
+
+- real-world validation plan;
+- evaluation protocol;
+- false-positive analysis;
+- false-negative analysis;
+- developer-experience evaluation;
+- adoption assessment.
+
+WP9:
+
+- evidence synthesis;
+- capability prioritization;
+- feature decision matrix;
+- evolution architecture;
+- next-roadmap document.
+
+These documents remain provisional until their work package is reached.
+
+
+PRODUCTION ARCHITECTURE PRINCIPLE
+
+The likely desirable long-term architecture is:
+
+                 EVIDENCE SOURCES
+                        |
+          +-------------+-------------+
+          |             |             |
+         Git        Complexity     Coverage
+          |             |             |
+          +-------------+-------------+
+                        |
+                        ↓
+               NORMALIZED EVIDENCE
+                        |
+                        ↓
+              DETERMINISTIC ENGINE
+                        |
+          +-------------+-------------+
+          |             |             |
+        CRAP          Status      Provenance
+          |             |             |
+          +-------------+-------------+
+                        |
+                        ↓
+                  RISK EVIDENCE
+                        |
+              +---------+---------+
+              |                   |
+             CI                 ENGRAM
+              |                   |
+              ↓                   ↓
+           POLICY            LLM REVIEW
+              |                   |
+              ↓                   ↓
+           ACTION              DECISION
+
+The most important boundary is:
+
+Evidence Engine
+      ↓
+Factual deterministic output
+      ↓
+Consumer / LLM
+
+The consumer should not have to reconstruct the evidence.
+
+
+WHY THE DETERMINISTIC BOUNDARY MATTERS
+
+An LLM can say:
+
+"This change looks risky."
+
+That is subjective.
+
+A deterministic engine can say:
+
+changed function:
+calculateEligibility()
+
+complexity:
+21
+
+coverage:
+0%
+
+CRAP:
+441
+
+threshold:
+30
+
+analysis:
+successful
+
+A reviewer or LLM can then reason:
+
+"This changed function is highly complex and has zero measured test coverage. The evidence warrants additional review."
+
+The LLM is now reasoning from evidence rather than fabricating evidence.
+
+This is potentially one of the strongest long-term ideas in the project.
+
+It must nevertheless be earned through validation.
+
+
+POTENTIAL RISKS THROUGH WP5.4–WP9
+
+RISK 1 — SCOPE EXPLOSION
+
+The project gradually becomes a general code-quality platform.
+
+Response:
+
+Return to the evidence engine's core purpose.
+
+
+RISK 2 — CRAP BECOMES TREATED AS UNIVERSAL RISK
+
+CRAP measures a specific combination of complexity and coverage.
+
+It does not automatically measure:
+
+- architecture;
+- security;
+- dependency blast radius;
+- business criticality;
+- maintainability in every dimension.
+
+Response:
+
+Describe it as a signal, not universal truth.
+
+
+RISK 3 — LLM JUDGMENT LEAKS INTO DETERMINISTIC EVIDENCE
+
+Response:
+
+Maintain strict evidence/judgment boundary.
+
+
+RISK 4 — COVERAGE QUALITY IS MISTAKEN FOR COVERAGE AVAILABILITY
+
+Response:
+
+Preserve provenance and validity states.
+
+
+RISK 5 — FALSE PRECISION
+
+A CRAP score may look more authoritative than the underlying evidence warrants.
+
+Response:
+
+Maintain context and provenance.
+
+
+RISK 6 — THRESHOLD BECOMES THE PRODUCT
+
+Thresholds are policy.
+
+The evidence engine should remain independent.
+
+
+RISK 7 — EXPERIMENTAL RESULTS BECOME PRODUCT CLAIMS
+
+A handful of repositories cannot establish universal reliability.
+
+Response:
+
+Scope every claim.
+
+
+POSSIBLE WP6–WP9 OUTCOME MATRIX
+
+Finding | Likely Direction | What Not To Do
+
+Strong usefulness, simple integration | CI/CLI | Build platform prematurely
+
+Strong usefulness, AI workflow benefit | Engram | Put LLM in evidence pipeline
+
+Strong evidence, unclear consumer | Evidence API | Build multiple consumers
+
+Weak usefulness | Narrow/research/stop | Productize anyway
+
+Strong signal but missing context | Evidence expansion | Immediately rewrite CRAP
+
+Language limitation dominant | Adapter research | Build every language
+
+Historical trend clearly valuable | Baseline/history | Build large data platform first
+
+Operational cost high | Optimization/narrowing | Hide runtime cost
+
+High false positives | Threshold/context research | Arbitrarily lower threshold
+
+High false negatives | Missing-evidence research | Claim comprehensive risk detection
+
+
+FINAL SUCCESS CRITERIA FOR THE OVERALL PROJECT
+
+The project should ultimately be able to defend some or all of these statements:
+
+1. Changed functions can be identified deterministically under defined conditions.
+2. Complexity can be measured deterministically.
+3. Coverage can be attributed deterministically under defined conditions.
+4. CRAP can be calculated deterministically.
+5. Zero coverage is handled correctly.
+6. Missing and malformed evidence are distinguished.
+7. Git/environment failures are represented truthfully.
+8. Status propagation is semantically correct.
+9. Results are reproducible.
+10. Evidence has sufficient provenance to explain where it came from.
+11. The signal is useful enough for at least one clearly defined engineering use case.
+12. The system's limitations are understood.
+13. The boundary between deterministic evidence and LLM/human judgment is explicit.
+14. Any proposed future expansion is supported by evidence.
+
+The project does NOT need to prove:
+
+- every programming language;
+- every coverage provider;
+- every repository architecture;
+- universal software risk prediction;
+- that CRAP is the best possible risk metric.
+
+
+FINAL END-TO-END ROADMAP
+
+WP5.4
+Semantic/status/diagnostic correctness
+        ↓
+WP5.5
+End-to-end integration and determinism
+        ↓
+WP5.6
+Usefulness + robustness + human review + freeze
+        ↓
+WP6
+Strategic direction + minimal real integration
+        ↓
+WP7
+Productionization
+        ↓
+WP8
+Real-world validation
+        ↓
+WP9
+Evidence-driven evolution
+
+The progression is intentional.
+
+WP5.4 asks:
+
+Are the semantics truthful?
+
+WP5.5 asks:
+
+Does that truth survive composition?
+
+WP5.6 asks:
+
+Is the resulting evidence useful?
+
+WP6 asks:
+
+What engineering use is justified?
+
+WP7 asks:
+
+Can engineers depend on it?
+
+WP8 asks:
+
+Does it work in broader real-world conditions?
+
+WP9 asks:
+
+What should we build next based on evidence?
+
+
+FINAL OPERATING RULE
+
+When uncertain:
+
+STOP
+ ↓
+INSPECT
+ ↓
+MEASURE
+ ↓
+DOCUMENT
+ ↓
+CLASSIFY
+ ↓
+DECIDE
+
+Do not guess.
+
+Do not silently broaden scope.
+
+Do not silently change methodology.
+
+Do not treat provisional architecture as final.
+
+Do not treat hypotheses as findings.
+
+Do not let an LLM replace deterministic evidence.
+
+Do not let future product ambitions dictate current experimental conclusions.
+
+The purpose of this roadmap is not to guarantee that WP9 looks a particular way.
+
+The purpose is to ensure that every step from WP5.4 through WP9 is justified by what the project actually learns.
+
+The strongest possible end state is not necessarily a large product.
+
+It is a defensible engineering system and a defensible body of evidence showing:
+
+WHAT THE SYSTEM KNOWS
+
++
+
+WHAT THE SYSTEM DOES NOT KNOW
+
++
+
+HOW RELIABLE THE EVIDENCE IS
+
++
+
+HOW THAT EVIDENCE CAN BE USED
+
+If that foundation proves valuable, then the project has a credible basis for potentially becoming:
+
+- a deterministic CI risk gate;
+- an engineering review signal;
+- an Engram evidence layer;
+- a broader code-risk evidence platform.
+
+Those are potential outcomes.
+
+They must remain outcomes of the evidence, not assumptions built into the experiment.

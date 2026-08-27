@@ -1,21 +1,14 @@
 # OpenCode Start Here
 
-WP4R.2 real-artifact verification: COMPLETE — VERIFIED  
-WP4R final usefulness rerun: **CURRENT**
 
 Read:
 
-1. `docs/research/WP4R.2_REAL_ARTIFACT_VERIFICATION_RESULTS.md`
-2. `docs/research/WP4R.2_FINAL_DECISION_SUMMARY.md`
-3. `docs/implementation/WP4R_FINAL_USEFULNESS_RERUN.md`
-4. `docs/implementation/WP4R_FINAL_EXECUTION_PLAYBOOK.md`
-5. `docs/research/WP4R_FINAL_HUMAN_REVIEW_TEMPLATE.md`
+1. `docs/Project Master Plans/EXECUTION GUIDANCE FOR FUTURE LLMS.txt`
+2. `docs/Project Master Plans/Roadmap.txt`
+3. `docs/Project Master Plans/SESSION_CONTEXT_2026-08-26.txt`
 
-Execute the final usefulness experiment only.
 
-Production code is frozen.
-
-Use real historical changes and real externally generated Istanbul artifacts via `--coverage-file`. Run thresholds 30 and 15.
+Execute the next project step in the roadmap only. Record in this document which step you are currently working on and what step is next.
 
 Build the required human-review packet.
 

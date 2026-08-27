@@ -1,0 +1,1437 @@
+ADDITIONAL CONTINUITY AND EXECUTION GUIDANCE FOR FUTURE LLMS
+
+PURPOSE OF THIS ADDENDUM
+
+This section exists specifically for an LLM that may enter the project without having participated in the earlier conversations.
+
+The LLM must assume that the repository, not its prior model context, is the primary source of truth.
+
+The LLM should reconstruct the project's state before making decisions.
+
+The project is an experimental engineering effort. Its value depends not only on producing working software, but on preserving the distinction between:
+
+- observed fact;
+- implementation behavior;
+- test behavior;
+- experimental result;
+- interpretation;
+- hypothesis;
+- future proposal.
+
+A future LLM must not collapse these categories.
+
+----------------------------------------------------------------
+PROJECT STATE RECONSTRUCTION PROTOCOL
+----------------------------------------------------------------
+
+Before beginning any new work package, the LLM must create a temporary internal "state reconstruction" consisting of:
+
+CURRENT WORK PACKAGE:
+The work package it believes is active.
+
+LAST COMPLETED WORK PACKAGE:
+The most recent package for which a closure document exists and the exit gate passed.
+
+CURRENT BRANCH / WORKTREE:
+Actual Git branch and working-tree state.
+
+CURRENT TEST STATUS:
+Tests passing, failing, skipped, and unexplained.
+
+CURRENT IMPLEMENTATION:
+What the repository actually does today.
+
+CURRENT DOCUMENTATION:
+What the project documentation claims today.
+
+KNOWN OPEN FINDINGS:
+Issues explicitly carried forward.
+
+KNOWN CLOSED FINDINGS:
+Issues previously resolved and frozen as regression anchors.
+
+CURRENT METHODOLOGY:
+How the experiment is actually being conducted.
+
+CURRENT EXPERIMENTAL BASELINE:
+Which code, tests, repositories, commits, thresholds, and evidence formats constitute the accepted baseline.
+
+NEXT GATE:
+The exact conditions that must be satisfied before proceeding.
+
+If any of these cannot be established confidently, the LLM should stop and investigate before implementing changes.
+
+----------------------------------------------------------------
+SOURCE-OF-TRUTH HIERARCHY
+----------------------------------------------------------------
+
+When sources disagree, use this precedence unless a work-package document explicitly defines another rule:
+
+1. Actual current repository behavior.
+2. Current tests that are intentionally asserting the contract.
+3. Most recent accepted work-package closure documentation.
+4. Current architecture/contract documentation.
+5. Earlier work-package documentation.
+6. Provisional roadmap documents.
+7. Prior conversational context.
+8. LLM assumptions or general knowledge.
+
+A roadmap is subordinate to actual evidence.
+
+A future LLM must never say:
+
+"The roadmap says X, therefore the repository must do X."
+
+Instead:
+
+"The roadmap expected X. The repository currently does Y. This discrepancy must be investigated."
+
+----------------------------------------------------------------
+DOCUMENTATION IS NOT AUTOMATICALLY TRUTH
+----------------------------------------------------------------
+
+Documentation can become stale.
+
+If documentation says:
+
+"coverage is unavailable"
+
+but the implementation and tests demonstrate:
+
+"coverage = 0"
+
+the LLM must not blindly preserve the documentation.
+
+It must identify the discrepancy and determine which behavior is intentional.
+
+Likewise, code is not automatically truth.
+
+A defect may exist in code while the intended contract is documented and tested elsewhere.
+
+The LLM must reconcile:
+
+implementation
++
+tests
++
+documentation
++
+experimental evidence.
+
+----------------------------------------------------------------
+NO SILENT METHODOLOGY CHANGES
+----------------------------------------------------------------
+
+This is one of the most important rules for the entire project.
+
+An LLM must not change:
+
+- case selection methodology;
+- case classification;
+- thresholds;
+- coverage methodology;
+- attribution methodology;
+- repository selection;
+- test scope;
+- success criteria;
+- evidence interpretation;
+- statistical interpretation;
+
+merely because the original methodology produces inconvenient results.
+
+If a methodology appears inadequate, the LLM must:
+
+1. identify the problem;
+2. explain why it matters;
+3. preserve the original result;
+4. propose a revised methodology;
+5. explain how old and new results would differ;
+6. obtain approval before replacing the original methodology.
+
+The original result must never be silently overwritten.
+
+----------------------------------------------------------------
+EXPERIMENTAL IMMUTABILITY
+----------------------------------------------------------------
+
+Once an experiment has been declared frozen, its artifacts must be treated as immutable evidence.
+
+If a later implementation improves the engine and produces different results, do not rewrite the original experiment.
+
+Instead maintain:
+
+BASELINE RESULT
+
+and:
+
+CURRENT RESULT
+
+Then explain:
+
+- what changed;
+- why it changed;
+- whether the original result was wrong;
+- whether the new implementation measures something different.
+
+This distinction is essential for research credibility.
+
+----------------------------------------------------------------
+BASELINE VERSUS CURRENT IMPLEMENTATION
+----------------------------------------------------------------
+
+Future LLMs should explicitly distinguish:
+
+EXPERIMENTAL BASELINE
+
+from:
+
+DEVELOPMENT HEAD.
+
+The development version may improve.
+
+The historical experiment must remain reproducible.
+
+Where practical, record:
+
+- Git commit;
+- repository commit under test;
+- engine version;
+- Node/runtime version;
+- package manager;
+- relevant dependency versions;
+- operating-system information;
+- coverage-tool version;
+- complexity-tool version;
+- command invocation.
+
+The purpose is reproducibility, not bureaucracy.
+
+----------------------------------------------------------------
+REPRODUCIBILITY REQUIREMENT
+----------------------------------------------------------------
+
+Every meaningful experiment should eventually answer:
+
+"Could another engineer reproduce this result?"
+
+A reproducibility record should include:
+
+Repository:
+Commit:
+Engine version/commit:
+Runtime:
+Dependencies:
+Coverage command:
+Coverage artifact:
+Analysis command:
+Threshold:
+Changed-function identification method:
+Test scope:
+Result:
+Expected result:
+Observed result:
+
+If an experiment cannot be fully reproduced, document why.
+
+----------------------------------------------------------------
+EVIDENCE PROVENANCE
+----------------------------------------------------------------
+
+Every risk result should, where practical, be traceable backward.
+
+Ideal conceptual chain:
+
+Final risk result
+    ↓
+CRAP calculation
+    ↓
+complexity evidence + coverage evidence
+    ↓
+function identity
+    ↓
+source location
+    ↓
+historical change
+    ↓
+Git commit
+
+A reviewer should be able to ask:
+
+"Why did this function receive this result?"
+
+and the system should provide a deterministic answer.
+
+This becomes increasingly important if the system is eventually consumed by an LLM.
+
+----------------------------------------------------------------
+EVIDENCE CONFIDENCE VERSUS RISK SCORE
+----------------------------------------------------------------
+
+Do not confuse:
+
+RISK SCORE
+
+with:
+
+CONFIDENCE IN THE EVIDENCE.
+
+Example:
+
+CRAP = 75
+
+but coverage evidence is unavailable.
+
+The numerical risk score may not even be computable.
+
+Another example:
+
+CRAP = 75
+
+with validated complexity and validated zero coverage.
+
+That is much stronger evidence.
+
+Future versions may need an explicit evidence-confidence concept.
+
+Do not add one prematurely unless the evidence justifies it.
+
+For now, preserve the distinction conceptually.
+
+----------------------------------------------------------------
+STATUS TAXONOMY GOVERNANCE
+----------------------------------------------------------------
+
+Statuses should be treated as semantic contracts.
+
+Before adding or changing a status, define:
+
+- what condition produces it;
+- what it means;
+- what it does not mean;
+- whether analysis completed;
+- whether evidence is complete;
+- whether CRAP is available;
+- whether the result is actionable;
+- what the CLI reports;
+- what the JSON reports;
+- what exit code is produced.
+
+Do not add statuses merely to make implementation easier.
+
+Avoid statuses whose names imply more certainty than the system actually has.
+
+----------------------------------------------------------------
+ERROR TAXONOMY GOVERNANCE
+----------------------------------------------------------------
+
+Errors should describe actual causes.
+
+Examples:
+
+GIT_EXECUTABLE_UNAVAILABLE
+
+is different from:
+
+NOT_A_GIT_REPOSITORY
+
+which is different from:
+
+GIT_COMMAND_FAILED
+
+which is different from:
+
+GIT_OUTPUT_INVALID.
+
+Likewise:
+
+COVERAGE_MISSING
+
+is different from:
+
+COVERAGE_MALFORMED
+
+which is different from:
+
+COVERAGE_UNSUPPORTED
+
+which is different from:
+
+COVERAGE_UNAVAILABLE.
+
+Do not create an enormous error taxonomy without need.
+
+The objective is semantic truthfulness, not taxonomy completeness.
+
+----------------------------------------------------------------
+ZERO / NULL REGRESSION ANCHOR
+----------------------------------------------------------------
+
+This should become a permanent project-wide test principle.
+
+Any future LLM touching coverage logic must explicitly test:
+
+coverage = 0
+
+coverage > 0
+
+coverage unavailable
+
+coverage missing
+
+coverage malformed
+
+The LLM must explain why each case produces the observed result.
+
+This is not merely a coverage test.
+
+It is a semantic-integrity test.
+
+----------------------------------------------------------------
+NEGATIVE TESTING REQUIREMENT
+----------------------------------------------------------------
+
+Future work packages should include negative cases, not only happy paths.
+
+For every major capability ask:
+
+What happens when:
+
+- the tool is missing?
+- the file is missing?
+- the file is malformed?
+- the repository is invalid?
+- the path is unusual?
+- the evidence is empty?
+- the evidence is partial?
+- the function cannot be mapped?
+- the test command fails?
+- the external tool returns an unexpected result?
+
+A system that only works when everything is perfect is not sufficiently characterized.
+
+----------------------------------------------------------------
+BOUNDARY-CONDITION TESTING
+----------------------------------------------------------------
+
+Whenever thresholds exist, test around them.
+
+For threshold T, consider:
+
+T - 1
+T
+T + 1
+
+For complexity and coverage where practical, test meaningful boundary combinations.
+
+Example:
+
+CRAP = 29.9
+CRAP = 30
+CRAP = 30.1
+
+Do not assume floating-point or integer behavior without verifying the implementation.
+
+The purpose is to eliminate threshold ambiguity.
+
+----------------------------------------------------------------
+INPUT ADVERSARIALITY
+----------------------------------------------------------------
+
+As the project matures, future LLMs should consider intentionally awkward but legitimate inputs.
+
+Examples:
+
+- spaces in paths;
+- Unicode paths;
+- nested repositories;
+- symlinks where supported;
+- Windows-style path assumptions if portability matters;
+- deeply nested monorepos;
+- functions with identical names in different files;
+- overloaded constructs;
+- generated files;
+- minified files;
+- source maps;
+- unusual test layouts.
+
+Not every case needs to be supported.
+
+The important question is:
+
+"Do we know what happens?"
+
+----------------------------------------------------------------
+DEPENDENCY DRIFT
+----------------------------------------------------------------
+
+The project relies on external tools such as:
+
+- crap-typescript-core;
+- Istanbul-compatible coverage;
+- Git;
+- repository-specific test infrastructure.
+
+Future LLMs must not assume that a dependency's behavior remains unchanged.
+
+If an external dependency is upgraded, determine whether:
+
+- output schema changed;
+- complexity calculation changed;
+- coverage semantics changed;
+- path handling changed;
+- error behavior changed.
+
+An external dependency upgrade can invalidate an experiment.
+
+----------------------------------------------------------------
+TOOL VERSION PINNING FOR EXPERIMENTS
+----------------------------------------------------------------
+
+Where reproducibility matters, record or pin relevant versions.
+
+For example:
+
+Git version
+Node version
+package-manager version
+complexity analyzer version
+coverage tool version
+engine version
+
+Do not require global version pinning if that conflicts with normal project operation.
+
+Instead distinguish:
+
+REPRODUCTION ENVIRONMENT
+
+from:
+
+DEVELOPMENT ENVIRONMENT.
+
+----------------------------------------------------------------
+THIRD-PARTY TOOL TRUST BOUNDARY
+----------------------------------------------------------------
+
+The deterministic engine may rely on external analyzers.
+
+Do not automatically treat their output as ground truth.
+
+Instead document:
+
+External tool says X.
+
+The prototype normalizes X into Y.
+
+The project has or has not independently validated Y.
+
+This is especially important for:
+
+- complexity;
+- source locations;
+- coverage;
+- function identity.
+
+----------------------------------------------------------------
+COVERAGE SEMANTICS
+----------------------------------------------------------------
+
+Future LLMs must understand that "coverage" is not one universal thing.
+
+Potential meanings include:
+
+- statement coverage;
+- line coverage;
+- branch coverage;
+- function coverage.
+
+The project must explicitly document which coverage dimension is used for CRAP.
+
+If multiple coverage sources are supported, the normalization rule must be explicit.
+
+Do not silently combine incompatible coverage measures.
+
+----------------------------------------------------------------
+COVERAGE ATTRIBUTION LIMITS
+----------------------------------------------------------------
+
+Coverage attribution is potentially one of the most technically difficult parts of the system.
+
+A future LLM should investigate whether coverage corresponds to:
+
+- exact function;
+- source range;
+- statements within function;
+- lines within function;
+- branches within function.
+
+It should not assume that a coverage number attached to a file automatically represents function-level coverage.
+
+If approximation is used, document the approximation.
+
+----------------------------------------------------------------
+FUNCTION IDENTITY
+----------------------------------------------------------------
+
+Future work should preserve a stable conceptual function identity.
+
+Potential components include:
+
+- repository-relative path;
+- symbol name;
+- enclosing class;
+- source range;
+- language;
+- function kind.
+
+The exact implementation is authoritative.
+
+The key question is:
+
+Can the same function be reliably distinguished from another function with the same name?
+
+This is particularly important in monorepos and large projects.
+
+
+----------------------------------------------------------------
+HISTORICAL COMMIT VALIDATION
+----------------------------------------------------------------
+
+When using historical cases, verify that:
+
+- the commit exists;
+- the parent exists;
+- the repository is clean enough for the experiment;
+- the changed files match expectations;
+- the selected functions really changed;
+- the test environment corresponds reasonably to the commit.
+
+Do not assume a modern dependency installation perfectly represents a historical repository state.
+
+If historical execution requires special treatment, document it.
+
+
+----------------------------------------------------------------
+HISTORICAL CASE CLASSIFICATION
+----------------------------------------------------------------
+
+The established classification is:
+
+SMALL:
+1 changed function
+
+MODERATE:
+2–3 changed functions
+
+NON-TRIVIAL:
+4+ changed functions
+
+This should remain the classification unless explicitly changed through a methodology decision.
+
+Do not reclassify based on subjective perceptions of code difficulty.
+
+If one function contains a massive internal change, record that as a separate observation rather than silently changing the case-size definition.
+
+
+----------------------------------------------------------------
+CASE SELECTION BIAS
+----------------------------------------------------------------
+
+Future LLMs must be aware that manually selecting examples can bias conclusions.
+
+Avoid selecting only cases that make the metric look good.
+
+Where practical, establish selection criteria before inspecting outcomes.
+
+Record rejected candidates when useful.
+
+Explain why cases were selected.
+
+A convincing experiment should not look like:
+
+"We found nine examples that prove the metric works."
+
+It should look like:
+
+"We applied defined selection criteria and evaluated the resulting cases."
+
+
+----------------------------------------------------------------
+FULL-SUITE VERSUS SCOPED COVERAGE
+----------------------------------------------------------------
+
+Whenever scoped tests are used, document:
+
+- what was included;
+- what was excluded;
+- why;
+- what changed-function scope motivated the selection;
+- whether cross-package coverage could be missed.
+
+Do not compare full-suite and scoped results as though they were identical experimental conditions.
+
+A scoped result can be useful, but it is a different measurement context.
+
+
+----------------------------------------------------------------
+MONOREPO SPECIAL HANDLING
+----------------------------------------------------------------
+
+Monorepos should be treated as an explicit risk area.
+
+For a selected package, establish:
+
+- package boundary;
+- dependency relationships;
+- test configuration;
+- coverage configuration;
+- source root;
+- output root;
+- workspace configuration;
+- whether tests execute only the package or broader graph.
+
+For nx specifically, select one focused TypeScript project based on actual repository inspection.
+
+The selected project should be:
+
+- sufficiently small to understand;
+- capable of producing usable coverage;
+- representative enough to exercise the prototype;
+- not artificially trivial.
+
+The selection and justification belong in repository-selection.md.
+
+Do not select a project merely because it is the first directory encountered.
+
+
+----------------------------------------------------------------
+APOLLO-CLIENT TEST-SCOPE DECISION
+----------------------------------------------------------------
+
+For a large repository such as apollo-client, use the two-tier validation strategy unless later evidence justifies another approach.
+
+At least one representative case should use the broader/full suite where practical.
+
+Remaining cases may use case-attributable scope.
+
+The purpose is:
+
+Full suite:
+validate the overall methodology.
+
+Scoped suite:
+make the multi-case experiment operationally feasible.
+
+The limitation must be explicitly recorded.
+
+Do not represent scoped coverage as equivalent to full-suite coverage.
+
+
+----------------------------------------------------------------
+PERFORMANCE MEASUREMENT
+----------------------------------------------------------------
+
+Do not make performance claims without measurements.
+
+At minimum record:
+
+- repository;
+- changed-function count;
+- coverage artifact size where relevant;
+- runtime;
+- peak memory where practical;
+- test runtime separately from analysis runtime.
+
+This distinction matters.
+
+If a case takes 20 minutes, determine whether:
+
+19 minutes = test execution
+
+and:
+
+1 minute = analysis.
+
+The optimization opportunity is very different.
+
+
+----------------------------------------------------------------
+REPRODUCIBILITY VERSUS PERFORMANCE
+----------------------------------------------------------------
+
+Do not sacrifice reproducibility merely to make the experiment faster.
+
+If a scoped test is necessary:
+
+document it.
+
+If a cache is used:
+
+document it.
+
+If an existing coverage artifact is reused:
+
+document it.
+
+If a result is manually generated:
+
+document it.
+
+Fast but opaque experiments are less valuable than slightly slower reproducible experiments.
+
+
+----------------------------------------------------------------
+TEST ORACLE DISCIPLINE
+----------------------------------------------------------------
+
+For each test, distinguish:
+
+WHAT THE TEST PROVES
+
+from:
+
+WHAT THE TEST DOES NOT PROVE.
+
+Example:
+
+A test asserting coverage=0 proves zero is preserved.
+
+It does not prove coverage attribution is universally correct.
+
+A test asserting CRAP=441 proves the formula implementation for that input.
+
+It does not prove CRAP predicts real-world defects.
+
+This discipline should apply to all future tests.
+
+
+----------------------------------------------------------------
+NO TEST-ONLY FIXES
+----------------------------------------------------------------
+
+Do not modify tests merely to make implementation pass unless the test itself is demonstrably wrong.
+
+If a test conflicts with the intended contract:
+
+1. identify the conflict;
+2. determine which is authoritative;
+3. document the reasoning;
+4. change the test only when justified.
+
+A test suite should not become a rubber stamp for the current implementation.
+
+
+----------------------------------------------------------------
+NO IMPLEMENTATION-DRIVEN SPECIFICATION
+----------------------------------------------------------------
+
+Do not define the requirement after seeing what the implementation happens to do.
+
+Correct sequence:
+
+Requirement
+→ expected behavior
+→ test
+→ implementation
+→ verification.
+
+Not:
+
+Implementation
+→ observed behavior
+→ retroactive definition.
+
+This is especially important for semantic statuses.
+
+
+----------------------------------------------------------------
+CHANGE-SCOPE DISCIPLINE
+----------------------------------------------------------------
+
+Every implementation pass should define:
+
+IN SCOPE
+
+and:
+
+OUT OF SCOPE.
+
+At completion, inspect the diff.
+
+For every changed file ask:
+
+"Why did this file change?"
+
+If the answer is not directly connected to the work package, investigate.
+
+Unexpected changes should be reverted or explicitly justified.
+
+
+----------------------------------------------------------------
+HIGHER-LEVEL DIRECTORY CHANGES
+----------------------------------------------------------------
+
+Before modifying or creating files above the immediate prototype directory, inspect:
+
+- repository root;
+- docs;
+- scripts;
+- package configuration;
+- CI configuration;
+- workspace configuration;
+- README;
+- project-level configuration.
+
+A change higher in the repository hierarchy can affect multiple consumers.
+
+Do not assume a local change is isolated merely because its source file is local.
+
+When changing a higher-level configuration file, explicitly identify:
+
+- affected consumers;
+- compatibility implications;
+- regression tests;
+- rollback path.
+
+
+----------------------------------------------------------------
+DOCUMENTATION RECONCILIATION
+----------------------------------------------------------------
+
+After every significant implementation pass, search documentation for statements affected by the change.
+
+Examples:
+
+If status semantics change:
+search for all status descriptions.
+
+If coverage behavior changes:
+search for coverage documentation.
+
+If CLI behavior changes:
+search README and usage documentation.
+
+If directory structure changes:
+search references to paths.
+
+The objective is to prevent:
+
+CODE = new behavior
+
+DOCUMENTATION = old behavior.
+
+
+----------------------------------------------------------------
+GENERATED ARTIFACTS
+----------------------------------------------------------------
+
+Clearly distinguish:
+
+SOURCE
+
+TEST
+
+EXPERIMENTAL ARTIFACT
+
+GENERATED ARTIFACT
+
+TEMPORARY ARTIFACT.
+
+Do not commit large generated coverage artifacts unless the methodology explicitly requires them.
+
+Do not accidentally include:
+
+- node_modules;
+- build output;
+- temporary logs;
+- caches;
+- local environment files;
+- credentials.
+
+----------------------------------------------------------------
+SECURITY AND SECRETS
+----------------------------------------------------------------
+
+Future LLMs must inspect diffs for accidental exposure of:
+
+- API keys;
+- tokens;
+- credentials;
+- local paths that reveal unnecessary information;
+- private repository URLs;
+- environment files.
+
+Never commit secrets merely because a test needs them.
+
+Use fixtures or environment variables where appropriate.
+
+
+----------------------------------------------------------------
+LLM ROLE BOUNDARY
+----------------------------------------------------------------
+
+The LLM is an implementation and reasoning assistant.
+
+It is not the experimental authority.
+
+The LLM must not:
+
+- manufacture evidence;
+- alter results to fit expectations;
+- classify experimental outcomes without defining the basis;
+- claim validation it did not perform;
+- claim a test passed when it was not run;
+- claim full-suite coverage when scoped coverage was used;
+- claim a repository is supported because one case happened to work.
+
+Whenever uncertain, say:
+
+UNKNOWN
+
+and identify what evidence would resolve the uncertainty.
+
+
+----------------------------------------------------------------
+NO CLAIM WITHOUT A TRACEABLE BASIS
+----------------------------------------------------------------
+
+Before making a significant claim, ask:
+
+What supports this?
+
+Possible support:
+
+- test;
+- experiment;
+- source inspection;
+- measured output;
+- documented external behavior;
+- reproducible command.
+
+If no basis exists, label the statement:
+
+HYPOTHESIS
+
+or:
+
+PROPOSAL.
+
+
+----------------------------------------------------------------
+RESULT LANGUAGE GOVERNANCE
+----------------------------------------------------------------
+
+Avoid overly strong language.
+
+Prefer:
+
+"demonstrated under the tested conditions"
+
+over:
+
+"proven universally."
+
+Prefer:
+
+"provides a useful signal in the evaluated cases"
+
+over:
+
+"detects risky code."
+
+Prefer:
+
+"coverage attribution worked for the tested repositories"
+
+over:
+
+"coverage attribution is solved."
+
+Prefer:
+
+"the evidence suggests"
+
+when the sample is small.
+
+
+----------------------------------------------------------------
+FAILURE REPORTING FORMAT
+----------------------------------------------------------------
+
+When a work package fails, future LLMs should report:
+
+WORK PACKAGE:
+TEST/EXPERIMENT:
+EXPECTED:
+ACTUAL:
+REPRODUCTION:
+LIKELY CAUSE:
+CONFIDENCE:
+BLOCKING:
+PROPOSED NEXT ACTION:
+
+This prevents vague statements such as:
+
+"Some tests failed."
+
+----------------------------------------------------------------
+FINDING FORMAT
+----------------------------------------------------------------
+
+Every significant finding should contain:
+
+ID:
+TITLE:
+DISCOVERY WORK PACKAGE:
+CATEGORY:
+OBSERVED:
+EXPECTED:
+IMPACT:
+EVIDENCE:
+ROOT CAUSE:
+FIX:
+REGRESSION TEST:
+STATUS:
+FOLLOW-ON IMPACT:
+
+This makes findings reusable by future LLMs.
+
+
+----------------------------------------------------------------
+FINDING CATEGORIES
+----------------------------------------------------------------
+
+Useful categories include:
+
+SEMANTIC
+
+STATUS
+
+DIAGNOSTIC
+
+ATTRIBUTION
+
+COVERAGE
+
+COMPLEXITY
+
+GIT
+
+PATH
+
+SOURCE DISCOVERY
+
+EXPERIMENTAL METHOD
+
+REPRODUCIBILITY
+
+PERFORMANCE
+
+SECURITY
+
+DOCUMENTATION
+
+INTEGRATION
+
+USABILITY
+
+Do not create categories simply for completeness.
+
+
+----------------------------------------------------------------
+REGRESSION ANCHOR REGISTER
+----------------------------------------------------------------
+
+Maintain a list of historically important tests/findings.
+
+At minimum include the closed WP5.3 findings:
+
+FM-A07
+FM-A08
+FM-C03
+
+and WP5.4 findings:
+
+FM-V01
+FM-D10
+FM-G06
+FM-G07
+
+Future significant findings should be added when they become important enough to protect.
+
+The purpose is to prevent future improvements from silently reintroducing old defects.
+
+
+----------------------------------------------------------------
+DECISION RECORDS
+----------------------------------------------------------------
+
+Important forks in the road should become explicit decision records.
+
+Examples:
+
+Why changed-function count was selected for case classification.
+
+Why scoped coverage was accepted for some apollo-client cases.
+
+Why a specific nx project was selected.
+
+Why CI rather than Engram was selected at WP6.
+
+Why an additional language was or was not added.
+
+Why a proposed feature was rejected.
+
+A future LLM should be able to understand not only:
+
+WHAT WAS DECIDED
+
+but:
+
+WHY.
+
+
+----------------------------------------------------------------
+REJECTED ALTERNATIVES
+----------------------------------------------------------------
+
+Important decisions should record rejected alternatives.
+
+Example:
+
+Decision:
+Use changed-function count for case classification.
+
+Alternatives rejected:
+
+- lines changed;
+- subjective judgment.
+
+Reason:
+
+Changed-function count is directly related to the unit being analyzed and avoids arbitrary diff-size thresholds.
+
+This protects the project from repeatedly revisiting already-resolved questions.
+
+
+----------------------------------------------------------------
+ARCHITECTURE DECISION RECORD RULE
+----------------------------------------------------------------
+
+For major architectural choices record:
+
+CONTEXT
+
+DECISION
+
+ALTERNATIVES
+
+RATIONALE
+
+CONSEQUENCES
+
+REVERSIBILITY
+
+EVIDENCE
+
+This becomes especially important during WP6–WP9.
+
+
+----------------------------------------------------------------
+REVERSIBILITY
+----------------------------------------------------------------
+
+When selecting between approaches, ask:
+
+Can we reverse this later?
+
+Prefer reversible decisions while evidence is weak.
+
+Example:
+
+A small adapter around the existing engine is more reversible than embedding the engine deeply into a new platform.
+
+A frozen evidence contract is valuable because it reduces coupling.
+
+
+----------------------------------------------------------------
+MINIMALITY PRINCIPLE
+----------------------------------------------------------------
+
+For every future capability ask:
+
+What is the smallest implementation that can answer the question?
+
+Do not build:
+
+- databases;
+- dashboards;
+- services;
+- multi-language frameworks;
+- agent orchestration;
+
+until a smaller proof demonstrates the need.
+
+
+----------------------------------------------------------------
+DEMONSTRATION BEFORE GENERALIZATION
+----------------------------------------------------------------
+
+The preferred progression is:
+
+One real example
+→
+repeatable example
+→
+multiple examples
+→
+multiple repositories
+→
+real-world validation
+→
+generalization.
+
+Do not jump from:
+
+"It worked once"
+
+to:
+
+"We need an abstraction framework."
+
+
+----------------------------------------------------------------
+GENERALIZATION CHECKPOINT
+----------------------------------------------------------------
+
+Before generalizing a capability, ask:
+
+How many repositories have demonstrated it?
+
+How many coverage providers?
+
+How many languages?
+
+How many project structures?
+
+How many cases?
+
+What failed?
+
+What did not get tested?
+
+This should constrain claims.
+
+
+----------------------------------------------------------------
+STOP CONDITIONS
+----------------------------------------------------------------
+
+A future LLM must be willing to recommend stopping.
+
+Potential stop conditions include:
+
+- signal is not useful;
+- evidence cannot be made reliable;
+- operational cost exceeds value;
+- integration introduces excessive complexity;
+- reviewers do not trust results;
+- false positives dominate;
+- false negatives dominate;
+- the use case cannot be clearly defined.
+
+Continuing because "the roadmap says WP9" is not sufficient justification.
+
+
+----------------------------------------------------------------
+SUCCESS CONDITION
+----------------------------------------------------------------
+
+The project succeeds if it produces a defensible answer.
+
+That answer may be:
+
+"CRAP-based changed-function evidence is useful for X under conditions Y, with limitations Z."
+
+It does not have to be:
+
+"CRAP solves code risk."
+
+
+----------------------------------------------------------------
+FINAL HANDOFF PROTOCOL
+----------------------------------------------------------------
+
+At the completion of each major phase, create a concise handoff document containing:
+
+CURRENT STATE
+
+WHAT IS FROZEN
+
+WHAT IS PROVEN
+
+WHAT IS NOT PROVEN
+
+KNOWN DEFECTS
+
+KNOWN LIMITATIONS
+
+EXPERIMENTAL RESULTS
+
+CURRENT ARCHITECTURE
+
+CURRENT CONTRACT
+
+OPEN DECISIONS
+
+NEXT AUTHORIZED WORK
+
+NEXT GATE
+
+This document is specifically for the next LLM.
+
+It should be possible for a new LLM to begin from the handoff without relying on conversational memory.
+
+
+----------------------------------------------------------------
+FINAL PROJECT "NORTH STAR"
+----------------------------------------------------------------
+
+The project should ultimately make it possible to say:
+
+"We can deterministically identify defined changed-function evidence, measure defined complexity and coverage evidence, calculate a defined CRAP signal, preserve the provenance and semantic meaning of that evidence, and expose the result to a human or AI reviewer without asking the AI to invent the underlying facts."
+
+Everything else is secondary.
+
+If future work strengthens that statement, it is probably aligned with the project.
+
+If future work weakens that boundary, increases unsupported claims, or adds complexity without evidence of value, it should be questioned.
+
+----------------------------------------------------------------
+FINAL RULE FOR FUTURE LLMS
+----------------------------------------------------------------
+
+When the next step is obvious from the evidence:
+
+PROCEED.
+
+When the next step depends on an unresolved finding:
+
+INVESTIGATE.
+
+When the next step depends on a strategic choice:
+
+STOP AT THE GATE AND ASK.
+
+When the evidence contradicts the roadmap:
+
+TRUST THE EVIDENCE AND DOCUMENT THE CONTRADICTION.
+
+When the implementation works but the experiment does not support the desired conclusion:
+
+REPORT THE EXPERIMENTAL RESULT, NOT THE DESIRED CONCLUSION.
+
+When uncertain:
+
+DO NOT GUESS.
+
+That discipline is more important to the integrity of this project than completing every work package exactly as originally imagined.
