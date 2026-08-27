@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeAll } from 'vitest';
 import { validateGitRepo } from '../../../src/git.ts';
 import * as executeModule from '../../../src/execute.ts';
 import { buildEvidenceOutput } from '../../../src/evidence.ts';
@@ -8,6 +8,20 @@ import { tmpdir } from 'os';
 import { mkdtempSync, mkdirSync, rmSync } from 'fs';
 
 describe('WP5.5 Git ENOENT vs not-a-repo + unsupported/empty changes', () => {
+  // Variables for caching CLI build
+  let cliPath: string;
+  let nodeBin: string;
+
+  // Build CLI once before all tests
+  beforeAll(() => {
+    const buildResult = spawnSync('npm', ['run', 'build'], { stdio: 'ignore' });
+    if (buildResult.error) {
+      throw new Error('Failed to build CLI');
+    }
+    cliPath = join(process.cwd(), 'dist/cli.js');
+    nodeBin = process.execPath;
+  });
+
   // Scenario A: ENOENT
   describe('ENOENT (git executable not found)', () => {
     it('validateGitRepo throws \"Git executable not found\" when execute returns errorCode ENOENT', async () => {
@@ -27,24 +41,17 @@ describe('WP5.5 Git ENOENT vs not-a-repo + unsupported/empty changes', () => {
       await expect(validateGitRepo()).rejects.toThrow('Git executable not found');
     });
 
-    it('CLI exits with 1 and stderr \"Git executable not found\" when git missing via PATH', async () => {
-      // Build CLI if not already built
-      const buildResult = spawnSync('npm', ['run', 'build'], { stdio: 'ignore' });
-      if (buildResult.error) {
-        throw new Error('Failed to build CLI');
-      }
-
-      // Create a temporary directory and run cli with PATH that does not contain git
-      const tempDir = mkdtempSync(join(tmpdir(), 'crap-test-enopath-'));
-      try {
-        // Modify PATH to exclude typical git locations
-        const env = { ...process.env, PATH: '' }; // empty PATH should cause ENOENT for git
-        const nodeBin = process.execPath;
-        const cliResult = spawnSync(nodeBin, [join(process.cwd(), 'dist/cli.js'), 'check', '--base', 'HEAD'], {
-          cwd: tempDir,
-          env,
-          encoding: 'utf-8'
-        });
+it('CLI exits with 1 and stderr \"Git executable not found\" when git missing via PATH', async () => {
+       // Create a temporary directory and run cli with PATH that does not contain git
+       const tempDir = mkdtempSync(join(tmpdir(), 'crap-test-enopath-'));
+       try {
+         // Modify PATH to exclude typical git locations
+         const env = { ...process.env, PATH: '' }; // empty PATH should cause ENOENT for git
+         const cliResult = spawnSync(nodeBin, [cliPath, 'check', '--base', 'HEAD'], {
+           cwd: tempDir,
+           env,
+           encoding: 'utf-8'
+         });
 
         expect(cliResult.status).toBe(1);
         expect(cliResult.stderr.trim()).toBe('Error: Git executable not found');
@@ -56,21 +63,14 @@ describe('WP5.5 Git ENOENT vs not-a-repo + unsupported/empty changes', () => {
 
   // Scenario B: not-a-repo
   describe('not-a-repo', () => {
-    it('CLI exits with 1 and stderr \"Not a git repository\" when run in non-git directory', async () => {
-      // Build CLI
-      const buildResult = spawnSync('npm', ['run', 'build'], { stdio: 'ignore' });
-      if (buildResult.error) {
-        throw new Error('Failed to build CLI');
-      }
-
-      const tempDir = mkdtempSync(join(tmpdir(), 'crap-test-norepo-'));
-      try {
-        // Ensure no .git directory
-        const nodeBin = process.execPath;
-        const cliResult = spawnSync(nodeBin, [join(process.cwd(), 'dist/cli.js'), 'check', '--base', 'HEAD'], {
-          cwd: tempDir,
-          encoding: 'utf-8'
-        });
+it('CLI exits with 1 and stderr \"Not a git repository\" when run in non-git directory', async () => {
+       const tempDir = mkdtempSync(join(tmpdir(), 'crap-test-norepo-'));
+       try {
+         // Ensure no .git directory
+         const cliResult = spawnSync(nodeBin, [cliPath, 'check', '--base', 'HEAD'], {
+           cwd: tempDir,
+           encoding: 'utf-8'
+         });
 
         expect(cliResult.status).toBe(1);
         expect(cliResult.stderr.trim()).toBe('Error: Not a git repository');

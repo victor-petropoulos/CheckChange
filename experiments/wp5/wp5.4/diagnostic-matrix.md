@@ -51,7 +51,7 @@ Document the CLI diagnostic output per condition: exit code, stderr, and relevan
 | Stdout | `Analysis complete. Base: <ref>, Changed functions: N` |
 | JSON `analysisStatus` | `'SUCCESS'` |
 | JSON `gate` | `'PASS'` |
-| JSON `completeness` | `'COMPLETE'` |
+| JSON `completeness` | `'INCOMPLETE'` |
 | JSON `coverageArtifact` | `'absent'` |
 | JSON `coverageErrorReason` | (not present) |
 

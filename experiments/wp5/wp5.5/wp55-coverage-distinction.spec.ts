@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeAll, beforeEach, afterEach } from 'vitest';
 import { 
   createTempRepo, 
   writeSourceFile, 
@@ -19,6 +19,20 @@ describe('WP5.5: Coverage distinction (missing vs malformed vs absent)', () => {
   // We'll use a fixed threshold for all tests
   const THRESHOLD = 30;
   const BASE = 'HEAD';
+
+  // Variables for caching CLI build
+  let cliPath: string;
+  let nodeBin: string;
+
+  // Build CLI once before all tests
+  beforeAll(() => {
+    const buildResult = spawnSync('npm', ['run', 'build'], { stdio: 'ignore' });
+    if (buildResult.error) {
+      throw new Error('Failed to build CLI');
+    }
+    cliPath = join(process.cwd(), 'dist/cli.js');
+    nodeBin = process.execPath;
+  });
 
   describe('Scenario A: Default missing coverage (no coverage file)', () => {
     it('should return coverageArtifact: absent, analysisStatus: SUCCESS, gate: PASS, completeness: INCOMPLETE, exit 0', async () => {
@@ -49,17 +63,11 @@ describe('WP5.5: Coverage distinction (missing vs malformed vs absent)', () => {
         expect(output.gate).toBe('PASS');
         expect(output.completeness).toBe('INCOMPLETE');
 
-        // CLI test: build CLI and run it
-        const buildResult = spawnSync('npm', ['run', 'build'], { stdio: 'ignore' });
-        if (buildResult.error) {
-          throw new Error('Failed to build CLI');
-        }
-        const nodeBin = process.execPath;
-        const cliPath = join(process.cwd(), 'dist/cli.js');
-        const cliResult = spawnSync(nodeBin, [cliPath, 'check', '--base', 'HEAD'], {
-          cwd: repo.tempDir,
-          encoding: 'utf-8'
-        });
+// CLI test: run CLI (cli already built in beforeAll)
+         const cliResult = spawnSync(nodeBin, [cliPath, 'check', '--base', 'HEAD'], {
+           cwd: repo.tempDir,
+           encoding: 'utf-8'
+         });
 
         // Expect exit code 0 and no error in stderr (or at least not the coverage errors)
         expect(cliResult.status).toBe(0);
@@ -99,17 +107,11 @@ describe('WP5.5: Coverage distinction (missing vs malformed vs absent)', () => {
         expect(output.gate).toBeNull();
         expect(output.completeness).toBe('INCOMPLETE');
 
-        // Part 2: CLI test
-        const buildResult = spawnSync('npm', ['run', 'build'], { stdio: 'ignore' });
-        if (buildResult.error) {
-          throw new Error('Failed to build CLI');
-        }
-        const nodeBin = process.execPath;
-        const cliPath = join(process.cwd(), 'dist/cli.js');
-        const cliResult = spawnSync(nodeBin, [cliPath, 'check', '--base', 'HEAD', '--coverage-file', nonExistentCoverageFile], {
-          cwd: repo.tempDir,
-          encoding: 'utf-8'
-        });
+// Part 2: CLI test (cli already built in beforeAll)
+         const cliResult = spawnSync(nodeBin, [cliPath, 'check', '--base', 'HEAD', '--coverage-file', nonExistentCoverageFile], {
+           cwd: repo.tempDir,
+           encoding: 'utf-8'
+         });
 
         // Check exit code
         expect(cliResult.status).toBe(1);
@@ -155,17 +157,11 @@ describe('WP5.5: Coverage distinction (missing vs malformed vs absent)', () => {
         expect(output.gate).toBeNull();
         expect(output.completeness).toBe('INCOMPLETE');
 
-        // CLI test
-        const buildResult = spawnSync('npm', ['run', 'build'], { stdio: 'ignore' });
-        if (buildResult.error) {
-          throw new Error('Failed to build CLI');
-        }
-        const nodeBin = process.execPath;
-        const cliPath = join(process.cwd(), 'dist/cli.js');
-        const cliResult = spawnSync(nodeBin, [cliPath, 'check', '--base', 'HEAD', '--coverage-file', coverageFile], {
-          cwd: repo.tempDir,
-          encoding: 'utf-8'
-        });
+// CLI test (cli already built in beforeAll)
+         const cliResult = spawnSync(nodeBin, [cliPath, 'check', '--base', 'HEAD', '--coverage-file', coverageFile], {
+           cwd: repo.tempDir,
+           encoding: 'utf-8'
+         });
 
         expect(cliResult.status).toBe(1);
         expect(cliResult.stderr).toContain('Error: coverage artifact malformed');
