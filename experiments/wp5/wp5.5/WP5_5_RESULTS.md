@@ -110,7 +110,7 @@ Per Roadmap A-F taxonomy for WP5.5:
 
 | ID | Category | Finding | Severity | Resolution |
 |----|----------|---------|----------|------------|
-| F-01 | D (Methodology) | T2 scenario B expects `completeness: 'INCOMPLETE'` when coverage is absent; diagnostic-matrix.md row 3 documents `completeness: 'COMPLETE'`. Code behavior (INCOMPLETE) is correct — NOT_EVALUATED rule results trigger INCOMPLETE. Diagnostic matrix documentation is stale. | Low | Update diagnostic-matrix.md row 3 completeness from 'COMPLETE' to 'INCOMPLETE' |
+| F-01 | D (Methodology) | T2 scenario B expects `completeness: 'INCOMPLETE'` when coverage is absent; diagnostic-matrix.md row 3 documents `completeness: 'COMPLETE'`. Code behavior (INCOMPLETE) is correct — NOT_EVALUATED rule results trigger INCOMPLETE. Diagnostic matrix documentation is stale. | Low | FIXED 2026-08-27 — diagnostic-matrix.md:54 corrected to 'INCOMPLETE', verified via wp55-coverage-distinction.spec.ts:50 and wp55-determinism condition3 (commit 6c690a7), 143/143 pass |
 | F-02 | F (Test defect) | T3 scenario A transient timeout during `npm run build` (5s). Healed on retry — final run 143/143 pass. Not a product defect. | Low | Pre-build CLI in beforeAll to avoid per-test build |
 | F-03 | F (Test defect) | T5 git commit cleanup (removed redundant `git commit --allow-empty` lines). Test maintenance, not a product defect. | None | N/A — already resolved |
 
