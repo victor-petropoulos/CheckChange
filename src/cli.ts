@@ -10,6 +10,7 @@ function parseCliArgs() {
     let base = null;
     let json = false;
     let help = false;
+    let verbose = false;
     let crapThreshold = 30; // default
     let coverageFile = undefined; // optional --coverage-file <path>
     const positionals = [];
@@ -29,6 +30,9 @@ function parseCliArgs() {
         }
         else if (arg === '--help') {
             help = true;
+        }
+        else if (arg === '--verbose' || arg === '--debug') {
+            verbose = true;
         }
         else if (arg.startsWith('--crap-threshold')) {
             let value;
@@ -79,12 +83,13 @@ function parseCliArgs() {
         i++;
     }
     if (help) {
-        console.log('Usage: code-risk check --base <ref> [--json] [--crap-threshold <number>] [--coverage-file <path>]');
+        console.log('Usage: code-risk check --base <ref> [--json] [--crap-threshold <number>] [--coverage-file <path>] [--verbose]');
         console.log('Options:');
         console.log('  --base <ref>             Git base reference to compare against (required)');
         console.log('  --json                   Output JSON (default: false)');
         console.log('  --crap-threshold <number> CRAP threshold for WARN (default: 30)');
         console.log('  --coverage-file <path>   Istanbul coverage JSON file path');
+        console.log('  --verbose                Print diagnostic info to stderr');
         process.exit(0);
     }
     // Validate explicit --base required
@@ -97,14 +102,14 @@ function parseCliArgs() {
         console.error('Error: Command must be "check"');
         process.exit(1);
     }
-    return { base, json, crapThreshold, coverageFile };
+    return { base, json, crapThreshold, coverageFile, verbose };
 }
 /**
  * Main CLI function
  */
 async function main() {
     try {
-        const { base, json, crapThreshold, coverageFile } = parseCliArgs();
+        const { base, json, crapThreshold, coverageFile, verbose } = parseCliArgs();
         // Validate git repo
         await validateGitRepo();
         // Resolve base ref
@@ -113,6 +118,9 @@ async function main() {
         const { intervals } = await getChangedIntervals(resolvedBase);
         // Build evidence output using composed providers
         const output = await buildEvidenceOutput(resolvedBase, intervals, process.cwd(), crapThreshold, coverageFile);
+        if (verbose) {
+            console.error(`[verbose] analysisStatus=${output.analysisStatus} gate=${output.gate} completeness=${output.completeness} changedFunctions=${output.changedFunctions.length}`);
+        }
         // Output JSON if --json flag is set
         if (json) {
             console.log(JSON.stringify(output, null, 2));
@@ -129,10 +137,19 @@ async function main() {
             } else {
                 console.error('Error: coverage artifact malformed');
             }
-            process.exitCode = 1;
+            process.exit(1);
             return;
         }
-        process.exit(0);
+        let exitCode = 0;
+        if (output.analysisStatus === 'SUCCESS' && output.gate !== 'PASS') {
+            exitCode = 1;
+        }
+        else if (output.analysisStatus === 'UNSUPPORTED') {
+            if (!(output.gate === null && output.completeness === 'NOT_APPLICABLE')) {
+                exitCode = 1;
+            }
+        }
+        process.exit(exitCode);
     }
     catch (error) {
         // Handle git errors (invalid base, not a repo, etc.)

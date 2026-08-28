@@ -28,7 +28,23 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 
 ## Current Step
 
-**WP5.6 — Usefulness, Robustness, Freeze — CLOSED via CONTINUE 2026-08-27 (remediation accepted). WP5 = COMPLETE / ACCEPTED.**
+**WP7 — Productionization — COMPLETE, AWAITING HUMAN REVIEW (2026-08-28).**
+
+WP7 executed per plan `.opencode/plans/2026-08-28T15:51:18Z-wp7-productionization.md` (approved: true, 8 tasks) after human CONTINUE on WP6.
+
+Artifacts:
+- `package.json` 0.2.0 + `files:["dist/"]` + `prepare` + `docs/contracts/evidence-contract.md` frozen 0.2 + INV-01..04
+- `src/cli.ts` --verbose/--debug stderr diagnostics, exit codes per contract, duplicate exit removed (HIGH reversibility)
+- `src/coverage.ts` path.relative boundary check (HIGH traversal fixed WP5.6, reverified)
+- `tsconfig.json` declaration:true, types bundled
+- `experiments/wp7/perf-baseline.md` — small 0.34s/0.54s medium 4.13s large 4.96s 696K
+- `experiments/wp7/WP7_RESULTS.md` + `experiments/wp7/human-review-packet.md` + `docs/wp7-release-checklist.md` — packet ends AWAITING HUMAN REVIEW
+- WP6 proof preserved: `experiments/wp6/minimal-ci-proof/run-proof.sh` still PASS
+
+Verification:
+- 149/149 tests pass (56 files), tsc clean, build ok, npm pack 15.7kB/32 files (was 4.2M/1251 without files field — fixed per security audit)
+- Security audit: CONDITIONAL PASS → fixed files field; boundary check intact; npm audit 0 vuln; no secrets
+- WP5 invariants preserved (ZERO≠NULL, MISSING≠MALFORMED, GIT≠REPO, ANALYZER TRUTHFUL)
 
 WP5.4 gate satisfied 2026-08-27 via `CONTINUE`. WP5.5 gate satisfied 2026-08-27 via `CONTINUE` after corrections (commits 6c690a7 + 7ab2301). WP5.6 gate satisfied 2026-08-27 via `CONTINUE` (usefulness, robustness, freeze, 11-case corpus, 143 tests, F-03/F-04 documented). WP5.6 defect remediation accepted 2026-08-27 (F-03 fixed in src/coverage.ts via `normalizeCoveragePaths()`; F-04 documented; D-APOLLO resolved via re-clone; 145/145 tests pass).
 
@@ -58,39 +74,41 @@ Closure documents:
 
 ## Next Step
 
-**WP6 — Strategic Direction and Minimal Proof — NEXT (begin in new session).**
+**WP8 — Real-World Validation — NEXT, only after human review of WP7 packet.**
 
-Per Roadmap WP6: "WP6 should answer: What is the smallest useful engineering capability justified by WP5 evidence?"
+Per Roadmap, human must classify productionization readiness (CONTINUE / CONTINUE WITH CONSTRAINTS / STOP). If human review not supplied, report ends:
 
-WP5 evidence is now complete:
-- 145/145 tests pass
-- 11-case usefulness corpus (5 re-executed, 6 replay-only)
-- 3 defects remediated (F-03 fixed, F-04 documented, D-APOLLO resolved)
-- WP5.6 freeze + remediation closure complete
-- All WP5.3, WP5.4, WP5.5 anchors green
-- Cross-environment artifact replay now works (F-03 fix)
+```text
+AWAITING HUMAN REVIEW
+```
 
-Handoff to WP6:
-- Read `experiments/wp5/wp5.6/WP5_6_REMEDIATION_CLOSURE.md` for current state
-- Read `experiments/wp5/wp5.6/WP5_6_CLOSURE.md` for WP5.6 freeze + WP6 open decisions
-- Read `experiments/wp5/wp5.6/known-defects-rootcause.md` for deferred items
-- Read `docs/Project Master Plans/Roadmap.txt` WP6 section for decision forks
+Per Roadmap WP7: WP7 turns selected WP6 capability into dependable component (predictable, installable, testable, observable, secure, documented). WP8 validates outside controlled WP5 experiment.
 
-Per Roadmap WP6 decision forks:
-- IF USEFULNESS IS WEAK → consider freeze/stop, narrow scope
-- IF USEFULNESS IS STRONG BUT CONSUMER IS UNCLEAR → prioritize stable evidence contract
-- IF ENGRAM IS STRONGEST → build minimal Engram proof
-- IF CI IS STRONGEST → build minimal CI proof
-- IF HISTORY IS VALUABLE → prototype historical comparison
-- IF LANGUAGE LIMITATIONS DOMINATE → prove one second language
+WP7 evidence now complete:
+- 149/149 tests pass (56 files), tsc clean, build reproducible
+- package 0.2.0 + files:["dist/"] 15.7kB/32 files, bin works, prepare builds, types ok
+- CLI --verbose added, exit codes truthful, --crap-threshold/--coverage-file/--json stable, evidence semantics unchanged
+- Security: path.relative boundary intact, git exec array, malicious coverage handled, npm audit 0, no secrets
+- Observability: diagnostics ↔ analysisStatus/gate/completeness truthful
+- Perf baseline: 0.34s CLI, 0.54s small, 4.13s medium, 4.96s large 696K
+- WP6 minimal proof still PASS, contract 0.2 frozen, invariants preserved
+- Production readiness checklist green (clean install, build, regression, integration, security, perf, docs)
 
-WP6 should produce:
-- Strategic direction selected
-- Rejected alternatives recorded with rationale
-- Architecture chosen
-- Evidence contract preserved
-- Minimal integration proof
-- Reversibility assessed
+Handoff to WP8:
+- Read `experiments/wp7/WP7_RESULTS.md` for productionization state
+- Read `experiments/wp7/human-review-packet.md` for gate packet (ends AWAITING HUMAN REVIEW)
+- Read `experiments/wp7/perf-baseline.md` for baseline
+- Read `docs/contracts/evidence-contract.md` for frozen contract 0.2
+- Read `docs/Project Master Plans/Roadmap.txt` WP8 section for validation forks
+
+Per Roadmap WP8 forks:
+- IF RELIABILITY WEAK → return to WP7
+- IF USEFULNESS WEAK → investigate signal
+- IF FALSE POSITIVES DOMINATE → thresholds/policy/CRAP limits
+- IF FALSE NEGATIVES DOMINATE → missing evidence dimensions
+- IF COST TOO HIGH → optimize or narrow
+
+WP8 should produce: real-world validation report, false-positive/negative analysis, operational + DX findings, adoption assessment, next steps
 
 Process notes for next session:
 - Documenter subagent (`9router/ONLINE-Documenter`) returned "Model not found" repeatedly; plan ahead for fallback to direct file edits

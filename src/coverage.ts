@@ -52,6 +52,9 @@ function normalizeCoveragePaths(
     let rebased = key;
     for (let i = 1; i < segments.length; i++) {
       const candidate = path.join(cwd, ...segments.slice(i));
+      // Boundary check: candidate must stay within cwd
+      const rel = path.relative(cwd, candidate);
+      if (rel.startsWith('..') || path.isAbsolute(rel)) continue;
       try {
         // Use sync exists via a non-throwing try/catch around access.
         // We deliberately do not use fs.realpathSync here to avoid TOCTOU

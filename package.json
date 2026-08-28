@@ -1,14 +1,16 @@
 {
   "name": "code-risk-prototype",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "bin": {
     "code-risk": "./dist/cli.js"
   },
+  "files": ["dist/"],
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
-    "check": "node dist/cli.js check"
+    "check": "node dist/cli.js check",
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "@barney-media/crap-typescript": "0.5.0",
