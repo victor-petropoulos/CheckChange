@@ -1,0 +1,122 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "7ab2301d54067880f7cf036af531d096764a36e9",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/cli.ts",
+      "method": "parseCliArgs",
+      "lineStart": 9,
+      "lineEnd": 106,
+      "cc": 23,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/cli.ts",
+      "method": "main",
+      "lineStart": 110,
+      "lineEnd": 159,
+      "cc": 12,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/coverage.ts",
+      "method": "normalizeCoveragePaths",
+      "lineStart": 38,
+      "lineEnd": 75,
+      "cc": 8,
+      "crap": 9,
+      "coverage": 75,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/coverage.ts",
+      "method": "readCoverage",
+      "lineStart": 77,
+      "lineEnd": 108,
+      "cc": 10,
+      "crap": 10,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 30
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/cli.ts",
+      "method": "parseCliArgs",
+      "crap": null,
+      "threshold": 30,
+      "cc": 23,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/cli.ts",
+      "method": "main",
+      "crap": null,
+      "threshold": 30,
+      "cc": 12,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/coverage.ts",
+      "method": "normalizeCoveragePaths",
+      "crap": 9,
+      "threshold": 30,
+      "cc": 8,
+      "coverage": 75
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/coverage.ts",
+      "method": "readCoverage",
+      "crap": 10,
+      "threshold": 30,
+      "cc": 10,
+      "coverage": 100
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "INCOMPLETE"
+}

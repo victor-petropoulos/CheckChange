@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "298e1bef9ddcef697851dd2416ebe7b43cf09bde",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "failed"
+  },
+  "changedFunctions": [],
+  "policy": {
+    "crapThreshold": 30
+  },
+  "ruleResults": [],
+  "analysisStatus": "FAILED",
+  "gate": null,
+  "completeness": "INCOMPLETE",
+  "coverageErrorReason": "missing"
+}
