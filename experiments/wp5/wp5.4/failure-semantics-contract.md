@@ -114,3 +114,20 @@ When `analysisStatus === 'FAILED'`, the output may include `coverageErrorReason`
 This document describes the semantics as implemented in the codebase. It was derived from the source code after WP5.4 fixes were applied. It serves as a reference contract for consumers of the output JSON and CLI behavior.
 
 No planning assumptions remain — all values are verified against the actual implementation.
+
+## Test-File Function Discovery (added 2026-08-27, F-04 remediation)
+
+`changedFunctions` may include functions from `*.test.ts` files when those files
+are tracked by Git. This follows the WP5.3 C03 source-discovery expansion
+(`src/complexity.ts` union of source-root scan + `git ls-files`).
+
+- Inclusion is by design: a changed test function is a real change and should
+  not be silently invisible to the evidence layer.
+- Coverage is unavailable for test-file functions in Istanbul `coverage-final.json`
+  artifacts (which are keyed on source files). The pipeline therefore reports
+  `analyzerStatus=skipped` for them, per INV-04 (ANALYZER TRUTHFUL): status
+  reflects actual evaluation state, not fabricated confidence.
+- Completeness becomes `INCOMPLETE` when a changed test-file function has no
+  coverage evidence. This is truthful reporting, not a regression.
+
+See `experiments/wp5/wp5.6/known-defects-rootcause.md` §F-04 for the decision record.

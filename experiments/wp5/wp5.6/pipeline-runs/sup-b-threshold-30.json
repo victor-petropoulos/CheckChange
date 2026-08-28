@@ -1,0 +1,297 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "07d22ecdb175416231242f7ea1ae8553ca0cc1fe",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/utils/json-rpc.ts",
+      "method": "defineJsonRpcHandler",
+      "lineStart": 99,
+      "lineEnd": 197,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/json-rpc.ts",
+      "method": "handler",
+      "lineStart": 165,
+      "lineEnd": 195,
+      "cc": 7,
+      "crap": 7,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/json-rpc.ts",
+      "method": "isJsonContentType",
+      "lineStart": 202,
+      "lineEnd": 212,
+      "cc": 4,
+      "crap": 4,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/json-rpc.ts",
+      "method": "assertAllowedOrigin",
+      "lineStart": 217,
+      "lineEnd": 237,
+      "cc": 6,
+      "crap": 6.036,
+      "coverage": 90,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/json-rpc.ts",
+      "method": "defineJsonRpcWebSocketHandler",
+      "lineStart": 289,
+      "lineEnd": 325,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/json-rpc.ts",
+      "method": "message",
+      "lineStart": 311,
+      "lineEnd": 323,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/json-rpc.ts",
+      "method": "processJsonRpcBody",
+      "lineStart": 349,
+      "lineEnd": 395,
+      "cc": 8,
+      "crap": 8,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/json-rpc.ts",
+      "method": "processJsonRpcMethod",
+      "lineStart": 404,
+      "lineEnd": 500,
+      "cc": 28,
+      "crap": 28.94391416160196,
+      "coverage": 89.36170212765957,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/json-rpc.test.ts",
+      "method": "methods.count",
+      "lineStart": 1020,
+      "lineEnd": 1023,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/json-rpc.test.ts",
+      "method": "batch",
+      "lineStart": 1028,
+      "lineEnd": 1031,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/json-rpc.test.ts",
+      "method": "methods.unhandled",
+      "lineStart": 1057,
+      "lineEnd": 1064,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 30
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/json-rpc.ts",
+      "method": "defineJsonRpcHandler",
+      "crap": 2,
+      "threshold": 30,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/json-rpc.ts",
+      "method": "handler",
+      "crap": 7,
+      "threshold": 30,
+      "cc": 7,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/json-rpc.ts",
+      "method": "isJsonContentType",
+      "crap": 4,
+      "threshold": 30,
+      "cc": 4,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/json-rpc.ts",
+      "method": "assertAllowedOrigin",
+      "crap": 6.036,
+      "threshold": 30,
+      "cc": 6,
+      "coverage": 90
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/json-rpc.ts",
+      "method": "defineJsonRpcWebSocketHandler",
+      "crap": 2,
+      "threshold": 30,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/json-rpc.ts",
+      "method": "message",
+      "crap": 3,
+      "threshold": 30,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/json-rpc.ts",
+      "method": "processJsonRpcBody",
+      "crap": 8,
+      "threshold": 30,
+      "cc": 8,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/json-rpc.ts",
+      "method": "processJsonRpcMethod",
+      "crap": 28.94391416160196,
+      "threshold": 30,
+      "cc": 28,
+      "coverage": 89.36170212765957
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/json-rpc.test.ts",
+      "method": "methods.count",
+      "crap": null,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/json-rpc.test.ts",
+      "method": "batch",
+      "crap": null,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/json-rpc.test.ts",
+      "method": "methods.unhandled",
+      "crap": null,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": null
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "INCOMPLETE"
+}
