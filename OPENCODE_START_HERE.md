@@ -28,27 +28,20 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 ---
 ## Current Step
 
-**WP8 — Real-World Validation — COMPLETE AWAITING HUMAN REVIEW (2026-08-28), executed per plan `.opencode/plans/2026-08-28T16:46:26Z-wp8-real-world-validation.md` (approved:true, 7 tasks) after human CONTINUE on WP7.**
+**WP9 — Evidence-Driven Evolution — COMPLETE AWAITING HUMAN REVIEW (2026-08-28), executed per plan `.opencode/plans/2026-08-28T17:36:20Z-wp9-evidence-driven-evolution.md` (approved:true, 5 tasks) after human CONTINUE WITH CONSTRAINTS on WP8.**
 
 Artifacts:
-- `experiments/wp8/repo-selection.md`
-- `experiments/wp8/changes.md`
-- `experiments/wp8/evidence/case-1.json`
-- `experiments/wp8/evidence/case-2.json`
-- `experiments/wp8/evidence/case-3.json`
-- `experiments/wp8/evidence/case-4.json`
-- `experiments/wp8/evidence/case-5.json`
-- `experiments/wp8/repro.md`
-- `experiments/wp8/reviewer-notes.md`
-- `experiments/wp8/fp-fn-analysis.md`
-- `experiments/wp8/dx-operational.md`
-- `experiments/wp8/wp8-report.md`
+- `experiments/wp9/prioritization.md`
+- `experiments/wp9/threshold-guidance.md`
+- `experiments/wp9/evidence/external-pilot.json`
+- `experiments/wp9/repro.md`
+- `experiments/wp9/wp9-report.md`
 
-Verification: 149/149 pass, tsc clean, build ok, WP7 baseline preserved, invariants INV-01..04 preserved.
+Verification: 149/149 pass, tsc clean, build ok, WP8 baseline preserved, contract 0.2.0 frozen, invariants INV-01..04 preserved, no src code change (diagnosis: CLI gap correct per INV-01, external pilot fallback due to adapter mismatch).
 
-Summarize WP8 evidence: 5 cases (4 PASS 1 FAILED), fallback local prototype used, external Zod/Fastify deferred, zero FP observed, FN blind spots documented, DX trust/comprehension/friction, gate proposal CONTINUE WITH CONSTRAINTS awaiting human.
+Summarize WP9 evidence: Prioritization SELECTED 3 (CLI diagnosis, external pilot, threshold guidance) DEFERRED 4 hypotheses; CLI gap diagnosed as correct skipped (needs unit tests, not path hack); external pilot attempted 2 (nanoid bnt, clsx uvu) deferred, fallback local hardening PASS (3 funcs, same as WP8 case1, artifact 157230); threshold-guidance reduces friction; gate proposal CONTINUE WITH CONSTRAINTS awaiting human.
 
 ---
 ## Next Step
 
-**WP9 — Evidence-Driven Evolution — NEXT only after human review of WP8 packet. Per Roadmap WP8 forks handling (reliability weak etc). If not supplied, ends AWAITING HUMAN REVIEW. WP8 evidence complete bullet list same as report.**
+**NEXT — AWAITING HUMAN REVIEW of WP9 packet. Per Roadmap WP9 forks handling. If not supplied, ends AWAITING HUMAN REVIEW. No autonomous classification.**
