@@ -33,9 +33,9 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 ---
 ## Next Step
 
-**WP9 Hardening Round 2 — main() integration + coverage densification (CONTINUE WITH CONSTRAINTS) — ACTIVE per plan `.opencode/plans/2026-08-29T19:30:00Z-wp9-hardening-round2-main-integration.md` (approved:true, 3 tasks). Single narrow slice only.**
+**WP9 Hardening Round 2 — COMPLETE 2026-08-29 (174/174 pass 58 files, cli.ts 86/98 87.8% main 8 hits parseCliArgs 25 hits, main integration 8 tests, round2 addendum+report, reviewer ACCEPTED) — AWAITING HUMAN REVIEW for CONTINUE/STOP fork.**
 
-Scope: Task1 tester adds main() integration `test/cli.integration.spec.ts` via vi.mock git/evidence, covers PASS/WARN/FAILED/malformed/gits error paths, asserts exit codes; Task2 addendum round2 main() before/after; Task3 round2 report ending AWAITING HUMAN REVIEW. Constraints: contract 0.2.0 frozen, no CRAP/threshold change, INV-01..04 preserved, reversible, Low/Medium.
+Scope completed: main() 0%→87.8% measured, both funcs now non-null CRAP (27/12 PASS at 30), external pilot defu PASS still valid, contract 0.2 frozen INV-01..04 preserved, reversible.
 
-Artifacts pending: `experiments/wp9-hardening-round2/*`
-Verification target: 170+ tests pass, tsc clean, build ok, main() coverage >0%
+Artifacts: `experiments/wp9-hardening-round2/threshold-addendum-round2.md`, `wp9-hardening-round2-report.md`
+Verification: 174/174 pass, tsc clean, build ok, CLI --help 0, coverage 23 keys cli.ts
