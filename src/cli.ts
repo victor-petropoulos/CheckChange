@@ -6,7 +6,7 @@ import { buildEvidenceOutput } from './evidence.js';
  * Parses command line arguments.
  * Returns parsed args or prints error and exits.
  */
-function parseCliArgs() {
+export function parseCliArgs() {
     let base = null;
     let json = false;
     let help = false;
@@ -107,7 +107,7 @@ function parseCliArgs() {
 /**
  * Main CLI function
  */
-async function main() {
+export async function main() {
     try {
         const { base, json, crapThreshold, coverageFile, verbose } = parseCliArgs();
         // Validate git repo
@@ -157,4 +157,6 @@ async function main() {
         process.exit(1);
     }
 }
-main();
+if (process.argv[1] && !process.argv[1].includes('vitest')) {
+    main();
+}

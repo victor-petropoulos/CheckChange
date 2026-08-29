@@ -28,20 +28,14 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 ---
 ## Current Step
 
-**WP9 — Evidence-Driven Evolution — COMPLETE AWAITING HUMAN REVIEW (2026-08-28), executed per plan `.opencode/plans/2026-08-28T17:36:20Z-wp9-evidence-driven-evolution.md` (approved:true, 5 tasks) after human CONTINUE WITH CONSTRAINTS on WP8.**
-
-Artifacts:
-- `experiments/wp9/prioritization.md`
-- `experiments/wp9/threshold-guidance.md`
-- `experiments/wp9/evidence/external-pilot.json`
-- `experiments/wp9/repro.md`
-- `experiments/wp9/wp9-report.md`
-
-Verification: 149/149 pass, tsc clean, build ok, WP8 baseline preserved, contract 0.2.0 frozen, invariants INV-01..04 preserved, no src code change (diagnosis: CLI gap correct per INV-01, external pilot fallback due to adapter mismatch).
-
-Summarize WP9 evidence: Prioritization SELECTED 3 (CLI diagnosis, external pilot, threshold guidance) DEFERRED 4 hypotheses; CLI gap diagnosed as correct skipped (needs unit tests, not path hack); external pilot attempted 2 (nanoid bnt, clsx uvu) deferred, fallback local hardening PASS (3 funcs, same as WP8 case1, artifact 157230); threshold-guidance reduces friction; gate proposal CONTINUE WITH CONSTRAINTS awaiting human.
+**WP9 — COMPLETE — Human gate 2026-08-29: CONTINUE WITH CONSTRAINTS (approved). WP9 proposal (reliability strong, external diversity limited, threshold guidance) accepted. No autonomous classification.**
 
 ---
 ## Next Step
 
-**NEXT — AWAITING HUMAN REVIEW of WP9 packet. Per Roadmap WP9 forks handling. If not supplied, ends AWAITING HUMAN REVIEW. No autonomous classification.**
+**WP9 Hardening — CLI unit coverage + external pilot retry (CONTINUE WITH CONSTRAINTS) — ACTIVE per plan `.opencode/plans/2026-08-29T00:42:47Z-wp9-hardening-cli-coverage.md` (approved:true, 4 tasks). Single narrow slice only.**
+
+Scope: Task1 tester adds CLI unit tests `test/cli.unit.spec.ts` for parseCliArgs (no src change, INV-01 preserved); Task2 implementer retries external pilot with vitest-native TS repo (/tmp) or documents fallback; Task3 documenter addendum; Task4 verification report ending AWAITING HUMAN REVIEW. Constraints: contract 0.2.0 frozen, no CRAP/threshold change, no new languages/DB/service, reversible via git revert.
+
+Artifacts pending: `experiments/wp9-hardening/*`
+Verification target: 150+ tests pass, tsc clean, build ok, INV-01..04 preserved.
