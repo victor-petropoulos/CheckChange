@@ -1,0 +1,247 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "869a053effb7b1bf49a1635e1bb211840daa589e",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/_utils.ts",
+      "method": "isPlainObject",
+      "lineStart": 3,
+      "lineEnd": 26,
+      "cc": 8,
+      "crap": 8,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/defu.ts",
+      "method": "_defu",
+      "lineStart": 5,
+      "lineEnd": 42,
+      "cc": 14,
+      "crap": 14,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/defu.ts",
+      "method": "createDefu",
+      "lineStart": 45,
+      "lineEnd": 49,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/defu.test.ts",
+      "method": "Test.constructor",
+      "lineStart": 55,
+      "lineEnd": 55,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/defu.test.ts",
+      "method": "fn",
+      "lineStart": 70,
+      "lineEnd": 70,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/defu.test.ts",
+      "method": "num",
+      "lineStart": 199,
+      "lineEnd": 199,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/defu.test.ts",
+      "method": "ignore",
+      "lineStart": 203,
+      "lineEnd": 203,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/defu.test.ts",
+      "method": "num",
+      "lineStart": 221,
+      "lineEnd": 221,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/defu.test.ts",
+      "method": "arr",
+      "lineStart": 225,
+      "lineEnd": 225,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 30
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/_utils.ts",
+      "method": "isPlainObject",
+      "crap": 8,
+      "threshold": 30,
+      "cc": 8,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/defu.ts",
+      "method": "_defu",
+      "crap": 14,
+      "threshold": 30,
+      "cc": 14,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/defu.ts",
+      "method": "createDefu",
+      "crap": 1,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/defu.test.ts",
+      "method": "Test.constructor",
+      "crap": null,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/defu.test.ts",
+      "method": "fn",
+      "crap": null,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/defu.test.ts",
+      "method": "num",
+      "crap": null,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/defu.test.ts",
+      "method": "ignore",
+      "crap": null,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/defu.test.ts",
+      "method": "num",
+      "crap": null,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/defu.test.ts",
+      "method": "arr",
+      "crap": null,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": null
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "INCOMPLETE"
+}

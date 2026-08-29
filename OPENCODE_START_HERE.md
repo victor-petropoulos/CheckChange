@@ -28,14 +28,14 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 ---
 ## Current Step
 
-**WP9 Hardening Round 1 — COMPLETE 2026-08-29 (166/166 pass, cli.ts parseCliArgs 61% CRAP54, defu external pilot PASS, threshold addendum, reviewer ACCEPTED). Human gate 2026-08-29: CONTINUE WITH CONSTRAINTS (second, approved).**
+**WP9 Hardening Round 2 — COMPLETE 2026-08-29 (174/174 pass 58 files, cli.ts 86/98 87.8% main 8 hits, main integration 8 tests, round2 addendum+report, reviewer ACCEPTED). Human gate 2026-08-29: CONTINUE WITH CONSTRAINTS (third, approved).**
 
 ---
 ## Next Step
 
-**WP9 Hardening Round 2 — COMPLETE 2026-08-29 (174/174 pass 58 files, cli.ts 86/98 87.8% main 8 hits parseCliArgs 25 hits, main integration 8 tests, round2 addendum+report, reviewer ACCEPTED) — AWAITING HUMAN REVIEW for CONTINUE/STOP fork.**
+**WP9 Hardening Round 3 — COMPLETE 2026-08-29 (174/174 pass 58 files, no src change, external matrix Jest/Istanbul attempted defu variant2 fallback 12673 bytes PASS, threshold addendum round3, report, reviewer ACCEPTED) — AWAITING HUMAN REVIEW for CONTINUE/STOP fork.**
 
-Scope completed: main() 0%→87.8% measured, both funcs now non-null CRAP (27/12 PASS at 30), external pilot defu PASS still valid, contract 0.2 frozen INV-01..04 preserved, reversible.
+Scope completed: Jest/Istanbul provider search deferred due to suitable TS Jest repo scarcity (type-fest/guideline no TS diffs), fallback defu 869a053→HEAD variant validates determinism across base SHAs, external diversity still n=1 provider (v8) + 2 variants, contract 0.2 frozen INV-01..04 preserved, reversible.
 
-Artifacts: `experiments/wp9-hardening-round2/threshold-addendum-round2.md`, `wp9-hardening-round2-report.md`
-Verification: 174/174 pass, tsc clean, build ok, CLI --help 0, coverage 23 keys cli.ts
+Artifacts: `experiments/wp9-hardening-round3/evidence/external-pilot-jest.json`, `repro-jest.md`, `threshold-addendum-round3.md`, `wp9-hardening-round3-report.md`
+Verification: 174/174 pass, tsc clean, build ok, second provider evidence valid per contract, no src change
