@@ -35,7 +35,7 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 
 **WP9 Hardening — CLI unit coverage + external pilot retry (CONTINUE WITH CONSTRAINTS) — ACTIVE per plan `.opencode/plans/2026-08-29T00:42:47Z-wp9-hardening-cli-coverage.md` (approved:true, 4 tasks). Single narrow slice only.**
 
-Scope: Task1 tester adds CLI unit tests `test/cli.unit.spec.ts` for parseCliArgs (no src change, INV-01 preserved); Task2 implementer retries external pilot with vitest-native TS repo (/tmp) or documents fallback; Task3 documenter addendum; Task4 verification report ending AWAITING HUMAN REVIEW. Constraints: contract 0.2.0 frozen, no CRAP/threshold change, no new languages/DB/service, reversible via git revert.
+Scope: Task1 tester added 17 CLI unit tests `test/cli.unit.spec.ts` (direct import, parseCliArgs exported, vitest guard), src/cli.ts now 61% stmt coverage CC23 CRAP54; Task2 external pilot retry succeeded unjs/defu v6.1.7 vitest-native 12673 bytes PASS (vs prior 2 deferred); Task3 threshold-addendum before/after; Task4 hardening report. Constraints preserved: contract 0.2.0 frozen, no CRAP/threshold change, INV-01..04 preserved, reversible.
 
-Artifacts pending: `experiments/wp9-hardening/*`
-Verification target: 150+ tests pass, tsc clean, build ok, INV-01..04 preserved.
+Artifacts: `experiments/wp9-hardening/evidence/external-pilot-retry.json`, `repro-retry.md`, `threshold-addendum.md`, `wp9-hardening-report.md`
+Verification: 166/166 pass (57 files, was 149), tsc clean, build ok, CLI --help exit 0, src/cli.ts in coverage 23 keys, external pilot gate PASS
