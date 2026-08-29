@@ -28,14 +28,14 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 ---
 ## Current Step
 
-**WP9 — COMPLETE — Human gate 2026-08-29: CONTINUE WITH CONSTRAINTS (approved). WP9 proposal (reliability strong, external diversity limited, threshold guidance) accepted. No autonomous classification.**
+**WP9 Hardening Round 1 — COMPLETE 2026-08-29 (166/166 pass, cli.ts parseCliArgs 61% CRAP54, defu external pilot PASS, threshold addendum, reviewer ACCEPTED). Human gate 2026-08-29: CONTINUE WITH CONSTRAINTS (second, approved).**
 
 ---
 ## Next Step
 
-**WP9 Hardening — CLI unit coverage + external pilot retry (CONTINUE WITH CONSTRAINTS) — ACTIVE per plan `.opencode/plans/2026-08-29T00:42:47Z-wp9-hardening-cli-coverage.md` (approved:true, 4 tasks). Single narrow slice only.**
+**WP9 Hardening Round 2 — main() integration + coverage densification (CONTINUE WITH CONSTRAINTS) — ACTIVE per plan `.opencode/plans/2026-08-29T19:30:00Z-wp9-hardening-round2-main-integration.md` (approved:true, 3 tasks). Single narrow slice only.**
 
-Scope: Task1 tester added 17 CLI unit tests `test/cli.unit.spec.ts` (direct import, parseCliArgs exported, vitest guard), src/cli.ts now 61% stmt coverage CC23 CRAP54; Task2 external pilot retry succeeded unjs/defu v6.1.7 vitest-native 12673 bytes PASS (vs prior 2 deferred); Task3 threshold-addendum before/after; Task4 hardening report. Constraints preserved: contract 0.2.0 frozen, no CRAP/threshold change, INV-01..04 preserved, reversible.
+Scope: Task1 tester adds main() integration `test/cli.integration.spec.ts` via vi.mock git/evidence, covers PASS/WARN/FAILED/malformed/gits error paths, asserts exit codes; Task2 addendum round2 main() before/after; Task3 round2 report ending AWAITING HUMAN REVIEW. Constraints: contract 0.2.0 frozen, no CRAP/threshold change, INV-01..04 preserved, reversible, Low/Medium.
 
-Artifacts: `experiments/wp9-hardening/evidence/external-pilot-retry.json`, `repro-retry.md`, `threshold-addendum.md`, `wp9-hardening-report.md`
-Verification: 166/166 pass (57 files, was 149), tsc clean, build ok, CLI --help exit 0, src/cli.ts in coverage 23 keys, external pilot gate PASS
+Artifacts pending: `experiments/wp9-hardening-round2/*`
+Verification target: 170+ tests pass, tsc clean, build ok, main() coverage >0%
