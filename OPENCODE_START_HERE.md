@@ -28,16 +28,14 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 ---
 ## Current Step
 
-**WP9 Hardening Round 5 — IN PROGRESS (gate 2026-08-30: CONTINUE WITH CONSTRAINTS, fifth human gate). Prior Round4 COMPLETE 2026-08-29 (174/174 pass 58 files, ts-jest eb135eb→b1a97ac 277177 bytes PASS n=2 providers v8+Istanbul/babel) committed b50f977, reviewer ACCEPTED, contract 0.2 frozen INV-01..04 preserved.**
+**WP9 Hardening Round 5 — COMPLETE 2026-08-30 (178/178 pass 59 files, real-git main 4 tests PASS, tsc clean, build ok, FM-D10 real-git proven distinct ENOENT vs not-a-repo, schema 0.2 contract, threshold 30/15 frozen, reviewer ACCEPTED). Human gate 2026-08-30: CONTINUE WITH CONSTRAINTS (fifth, approved → Round5 executed as A first).**
 
-Scope Round4: Genuine Jest/Istanbul (kulshekhar/ts-jest babel) validates per-repo hypothesis, external diversity n=2 (v8 defu 12673 + Istanbul 277177) both PASS, threshold 30/15 unchanged, no src change, reversible.
+Scope completed: Real-git main without mocks (valid repo PASS exit 0, not-a-repo, invalid base, ENOENT via execute stub) validates FM-D10/INV-03 truthful without vi.mock on git/evidence. No src change, contract 0.2 frozen, reversible. A first done, B (microsoft/tsdoc n=3) deferred to Round6 per grill.
 
-Artifacts Round4: `experiments/wp9-hardening-round4/evidence/external-pilot-jest-genuine.json`, `repro-jest-genuine.md`, `threshold-addendum-round4.md`, `wp9-hardening-round4-report.md`
-Verification Round4: 174/174 pass, tsc clean, build ok, gate PASS, genuine provider
+Artifacts: `test/cli.real-git.spec.ts` (4 tests), `experiments/wp9-hardening-round5/threshold-addendum-round5.md`, `wp9-hardening-round5-report.md`
+Verification: 178/178 pass (174+4), tsc 0, build ok, 4 real-git cases PASS
 
 ---
 ## Next Step
 
-**WP9 Hardening Round 5 — narrow constrained (per gate CONTINUE WITH CONSTRAINTS). Candidates: (A) real-git main() without mocks, (B) additional Jest repo microsoft/tsdoc genuine provider (n=3). Both Low/Medium cost; deferred: monorepo/history/languages/security Candidate 7 still deferred. Awaiting planner grill + plan approval before implementation.**
-
-Prior rounds: R1 cli unit 87.8% parseCliArgs, R2 main integration, R3 fallback variant2, R4 genuine Jest n=2.
+**AWAITING HUMAN REVIEW for CONTINUE / CONTINUE WITH CONSTRAINTS / STOP — next candidate B: additional Jest repo microsoft/tsdoc genuine provider (n=2→n=3, Low/Medium cost). Deferred: monorepo/history/languages/security Candidate 7 still deferred.**
