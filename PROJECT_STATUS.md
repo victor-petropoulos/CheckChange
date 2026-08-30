@@ -38,12 +38,18 @@ Version: v2.1 WP9 Hardening Round 8 complete (history/delta)
 ## Current state (2026-08-30)
 
 - Branch: `main`
-- Engine: see latest git log (post-WP9 hardening round8)
+- Commit: `2972e5e` + staged OPENCODE_START_HERE docs
+- Engine: WP9 Hardening Rounds 1–8 complete, no source changes since Round 5
 - Tests: 178/178 pass (59 files)
-- WP9 frozen contract: preserved (history/delta validated, coverage fallback)
-- WP9.6 corpus: 2-point history (00203d4 vs e11ec0b) validated
-- Build: ok
-- Node 24, tsc 0
+- Typecheck: `npx tsc --noEmit` → 0 errors
+- Build: `npm run build` → ok, `dist/cli.js` 6K
+- WP9 contract: schema 0.2 frozen, threshold 30/15 frozen, INV-01..04 preserved
+- WP9 Round 8: 2-point historical/delta on tsdoc (00203d4 base c908cc8, e11ec0b base cc1dbc6) — complexity delta real (plugin 5→6, +getRoot cc12), gate PASS→WARN demonstrated, coverage fallback (Round 7 full-union 1,621,110 bytes 64 entries reused for both commits), Node/Rush blocker (env Node 24.18.1 vs rush.json 16/18/20) documented as external limitation, not engine defect
+- Provider diversity: n=3 fresh (defu vitest v8 12K, ts-jest babel 277K, tsdoc Jest v8 29K + full union 1.62M merged), 2 frameworks (vitest/Jest)
+- Monorepo: validated at 55× scale (29K 3 entries → 1.62M 64 entries), endsWith + normalizeCoveragePaths rebases 64 keys, single Rush repo
+- Language: TS-only (deferred per roadmap)
+- Limitations: partial historical coverage (reuse), single monorepo, n=3 providers, TS-only — all acceptable per documented scope
+- Human gate: **AWAITING HUMAN REVIEW** — CONTINUE / CONTINUE WITH CONSTRAINTS / STOP
 
 ## Current question (resolved at WP5.6)
 
@@ -53,10 +59,10 @@ WP5.6 recorded narrowly: deterministic evidence with truthful semantics (INV-01.
 
 ## Next work package
 
-**WP6 — Strategic Direction and Minimal Proof** (begin in new session).
+**WP9 CLOSURE PENDING HUMAN APPROVAL**
 
-Per Roadmap WP6: "WP6 should answer: What is the smallest useful engineering capability justified by WP5 evidence?"
+Per `experiments/wp9-hardening-round8/wp9-cumulative-closure-assessment-through-round8.md` §15 recommendation: **OPTION A — CLOSE WP9** under scoped claims. Historical coverage partial is not WP9 blocker per documented scope (Candidate 6 deferred). If human review requires historical coverage claim, then **OPTION B — ONE EXPERIMENT: Fresh Historical Per-Commit Coverage Rerun (Node 20.9)** per §14.
 
 See `OPENCODE_START_HERE.md` for full handoff + decision forks.
 
-Production is frozen; WP6 may unfreeze specific layers for the selected proof, but the deterministic evidence contract (status taxonomy, threshold policy, frozen methodology) is preserved.
+Production is frozen; WP9 closure decision will determine next step.
