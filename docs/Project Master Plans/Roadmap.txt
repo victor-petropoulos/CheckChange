@@ -3,8 +3,8 @@
 ## Expanded LLM Execution Edition — Planning, Evidence, Forks, Examples, and Exit Criteria
 
 STATUS: PROVISIONAL / CONTROLLED ROADMAP
-CURRENT POSITION: WP5.4
-NEXT AUTHORIZED STEP: WP5.5, ONLY AFTER WP5.4 CLOSURE
+CURRENT POSITION: WP9 Hardening Round 8 COMPLETE (history/delta 2-point 00203d4 vs e11ec0b validated, coverage fallback)
+NEXT AUTHORIZED STEP: AWAITING HUMAN REVIEW for CONTINUE/CONTINUE WITH CONSTRAINTS/STOP
 TARGET PLANNING HORIZON: WP5.4 THROUGH WP9
 
 PURPOSE
@@ -2301,7 +2301,15 @@ WP9:
 - next-roadmap document.
 
 These documents remain provisional until their work package is reached.
-
+WP6 — WP9 HARDENING EXECUTION (2026-08-27 through 2026-08-30, COMPLETED)
+- R1 parseCliArgs
+- R2 main
+- R3 defu variant2
+- R4 ts-jest
+- R5 real-git
+- R6 tsdoc
+- R7 monorepo full union
+- R8 history/delta
 
 PRODUCTION ARCHITECTURE PRINCIPLE
 

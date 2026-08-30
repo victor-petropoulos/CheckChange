@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {"base": "cc1dbc604dd056d250879138407596cd23d42f8d","target":"current"},
+  "capabilities": {"git":"available","complexity":"available","coverageArtifact":"available"},
+  "changedFunctions": [
+    {"file":"eslint-plugin/src/index.ts","method":"getRootDirectoryFromContext","lineStart":24,"lineEnd":42,"cc":12,"crap":116.976,"coverage":10,"coverageKind":"branch","analyzerStatus":"passed"},
+    {"file":"eslint-plugin/src/index.ts","method":"plugin.rules.syntax.create","lineStart":64,"lineEnd":156,"cc":6,"crap":18.348,"coverage":30,"coverageKind":"branch","analyzerStatus":"passed"}
+  ],
+  "policy": {"crapThreshold":30},
+  "ruleResults": [
+    {"ruleId":"changed-function-high-crap","result":"WARN","file":"eslint-plugin/src/index.ts","method":"getRootDirectoryFromContext","crap":116.976,"threshold":30,"cc":12,"coverage":10},
+    {"ruleId":"changed-function-high-crap","result":"PASS","file":"eslint-plugin/src/index.ts","method":"plugin.rules.syntax.create","crap":18.348,"threshold":30,"cc":6,"coverage":30}
+  ],
+  "analysisStatus":"SUCCESS","gate":"WARN","completeness":"COMPLETE"
+}

@@ -1,0 +1,297 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "c908cc830b18c2bedb56ee93f436066a51822b2d",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "eslint-plugin/src/ConfigCache.ts",
+      "method": "ConfigCache.getForSourceFile",
+      "lineStart": 39,
+      "lineEnd": 111,
+      "cc": 12,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "eslint-plugin/src/index.ts",
+      "method": "plugin.rules.syntax.create",
+      "lineStart": 43,
+      "lineEnd": 133,
+      "cc": 5,
+      "crap": 15.546875,
+      "coverage": 25,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "playground/src/CodeEditor.tsx",
+      "method": "CodeEditor._getEditorModel",
+      "lineStart": 87,
+      "lineEnd": 95,
+      "cc": 3,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "playground/src/CodeEditor.tsx",
+      "method": "CodeEditor.componentDidMount",
+      "lineStart": 97,
+      "lineEnd": 101,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "playground/src/CodeEditor.tsx",
+      "method": "CodeEditor.componentDidUpdate",
+      "lineStart": 112,
+      "lineEnd": 146,
+      "cc": 10,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "playground/src/CodeEditor.tsx",
+      "method": "CodeEditor._applySyntaxStyling",
+      "lineStart": 191,
+      "lineEnd": 242,
+      "cc": 7,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "playground/src/CodeEditor.tsx",
+      "method": "CodeEditor._createEditor",
+      "lineStart": 254,
+      "lineEnd": 309,
+      "cc": 6,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "playground/src/CodeEditor.tsx",
+      "method": "CodeEditor.run",
+      "lineStart": 296,
+      "lineEnd": 298,
+      "cc": 3,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "tsdoc/src/beta/DeclarationReference.ts",
+      "method": "Parser.parseNavigation",
+      "lineStart": 1174,
+      "lineEnd": 1195,
+      "cc": 4,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "tsdoc/src/beta/DeclarationReference.ts",
+      "method": "Parser.tryParseMeaning",
+      "lineStart": 1197,
+      "lineEnd": 1269,
+      "cc": 15,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "tsdoc/src/parser/ParagraphSplitter.ts",
+      "method": "ParagraphSplitter._splitParagraph",
+      "lineStart": 53,
+      "lineEnd": 119,
+      "cc": 13,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 30
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "eslint-plugin/src/ConfigCache.ts",
+      "method": "ConfigCache.getForSourceFile",
+      "crap": null,
+      "threshold": 30,
+      "cc": 12,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "eslint-plugin/src/index.ts",
+      "method": "plugin.rules.syntax.create",
+      "crap": 15.546875,
+      "threshold": 30,
+      "cc": 5,
+      "coverage": 25
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "playground/src/CodeEditor.tsx",
+      "method": "CodeEditor._getEditorModel",
+      "crap": null,
+      "threshold": 30,
+      "cc": 3,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "playground/src/CodeEditor.tsx",
+      "method": "CodeEditor.componentDidMount",
+      "crap": null,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "playground/src/CodeEditor.tsx",
+      "method": "CodeEditor.componentDidUpdate",
+      "crap": null,
+      "threshold": 30,
+      "cc": 10,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "playground/src/CodeEditor.tsx",
+      "method": "CodeEditor._applySyntaxStyling",
+      "crap": null,
+      "threshold": 30,
+      "cc": 7,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "playground/src/CodeEditor.tsx",
+      "method": "CodeEditor._createEditor",
+      "crap": null,
+      "threshold": 30,
+      "cc": 6,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "playground/src/CodeEditor.tsx",
+      "method": "CodeEditor.run",
+      "crap": null,
+      "threshold": 30,
+      "cc": 3,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "tsdoc/src/beta/DeclarationReference.ts",
+      "method": "Parser.parseNavigation",
+      "crap": null,
+      "threshold": 30,
+      "cc": 4,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "tsdoc/src/beta/DeclarationReference.ts",
+      "method": "Parser.tryParseMeaning",
+      "crap": null,
+      "threshold": 30,
+      "cc": 15,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "tsdoc/src/parser/ParagraphSplitter.ts",
+      "method": "ParagraphSplitter._splitParagraph",
+      "crap": null,
+      "threshold": 30,
+      "cc": 13,
+      "coverage": null
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "INCOMPLETE"
+}
