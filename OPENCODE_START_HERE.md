@@ -28,14 +28,16 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 ---
 ## Current Step
 
-**WP9 Hardening Round 2 — COMPLETE 2026-08-29 (174/174 pass 58 files, cli.ts 86/98 87.8% main 8 hits, main integration 8 tests, round2 addendum+report, reviewer ACCEPTED). Human gate 2026-08-29: CONTINUE WITH CONSTRAINTS (third, approved).**
+**WP9 Hardening Round 4 — COMPLETE 2026-08-29 (174/174 pass 58 files, genuine Jest/Istanbul ts-jest eb135eb→b1a97ac 277177 bytes PASS 6 funcs 3 PASS crap 4.37/7.11/5.03, threshold addendum round4, report, reviewer ACCEPTED). Human gate 2026-08-29: CONTINUE WITH CONSTRAINTS (fourth, approved).**
+
+Scope completed: Genuine Jest/Istanbul provider success (kulshekhar/ts-jest babel Istanbul) validates per-repo hypothesis, external diversity now n=2 providers (v8 defu 12673 + Istanbul ts-jest 277177) both PASS, contract 0.2 frozen INV-01..04 preserved, no src change, reversible.
+
+Artifacts: `experiments/wp9-hardening-round4/evidence/external-pilot-jest-genuine.json`, `repro-jest-genuine.md`, `threshold-addendum-round4.md`, `wp9-hardening-round4-report.md`
+Verification: 174/174 pass, tsc clean, build ok, genuine provider evidence valid per contract 0.2, no src change
 
 ---
 ## Next Step
 
-**WP9 Hardening Round 3 — COMPLETE 2026-08-29 (174/174 pass 58 files, no src change, external matrix Jest/Istanbul attempted defu variant2 fallback 12673 bytes PASS, threshold addendum round3, report, reviewer ACCEPTED) — AWAITING HUMAN REVIEW for CONTINUE/STOP fork.**
+**AWAITING HUMAN REVIEW for CONTINUE / CONTINUE WITH CONSTRAINTS / STOP fork per Roadmap WP9 evidence-driven evolution.**
 
-Scope completed: Jest/Istanbul provider search deferred due to suitable TS Jest repo scarcity (type-fest/guideline no TS diffs), fallback defu 869a053→HEAD variant validates determinism across base SHAs, external diversity still n=1 provider (v8) + 2 variants, contract 0.2 frozen INV-01..04 preserved, reversible.
-
-Artifacts: `experiments/wp9-hardening-round3/evidence/external-pilot-jest.json`, `repro-jest.md`, `threshold-addendum-round3.md`, `wp9-hardening-round3-report.md`
-Verification: 174/174 pass, tsc clean, build ok, second provider evidence valid per contract, no src change
+Prior rounds: R1 cli unit 87.8% parseCliArgs, R2 main integration, R3 fallback variant2, R4 genuine Jest. Next narrow options if CONTINUE: real-git main without mocks or additional Jest repo (microsoft/tsdoc) — both Low/Medium cost, deferred monorepo/history/languages/security per prioritization Candidate 7 still deferred.

@@ -1,0 +1,172 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "eb135ebe819991b1e10c998915cc6db2057c4de1",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "e2e/typescript-compatibility/src/source-map.ts",
+      "method": "throwMappedError",
+      "lineStart": 1,
+      "lineEnd": 3,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/legacy/compiler/ts-compiler.ts",
+      "method": "TsCompiler._transpileOutput",
+      "lineStart": 469,
+      "lineEnd": 497,
+      "cc": 4,
+      "crap": 4.373177842565598,
+      "coverage": 71.42857142857143,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/legacy/compiler/ts-compiler.ts",
+      "method": "TsCompiler._filterDiagnosticsFromTsJestDefaults",
+      "lineStart": 505,
+      "lineEnd": 519,
+      "cc": 7,
+      "crap": 7.116148148148148,
+      "coverage": 86.66666666666667,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/importer.ts",
+      "method": "Importer.typescript",
+      "lineStart": 37,
+      "lineEnd": 54,
+      "cc": 5,
+      "crap": 5.034293552812072,
+      "coverage": 88.88888888888889,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/importer.spec.ts",
+      "method": "modules.typescript",
+      "lineStart": 130,
+      "lineEnd": 130,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/importer.spec.ts",
+      "method": "modules.typescript",
+      "lineStart": 137,
+      "lineEnd": 137,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 30
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "e2e/typescript-compatibility/src/source-map.ts",
+      "method": "throwMappedError",
+      "crap": null,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/legacy/compiler/ts-compiler.ts",
+      "method": "TsCompiler._transpileOutput",
+      "crap": 4.373177842565598,
+      "threshold": 30,
+      "cc": 4,
+      "coverage": 71.42857142857143
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/legacy/compiler/ts-compiler.ts",
+      "method": "TsCompiler._filterDiagnosticsFromTsJestDefaults",
+      "crap": 7.116148148148148,
+      "threshold": 30,
+      "cc": 7,
+      "coverage": 86.66666666666667
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/importer.ts",
+      "method": "Importer.typescript",
+      "crap": 5.034293552812072,
+      "threshold": 30,
+      "cc": 5,
+      "coverage": 88.88888888888889
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/utils/importer.spec.ts",
+      "method": "modules.typescript",
+      "crap": null,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/utils/importer.spec.ts",
+      "method": "modules.typescript",
+      "crap": null,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": null
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "INCOMPLETE"
+}
