@@ -1,6 +1,6 @@
 # Project Status
 
-Version: v2.1 WP9 Hardening Round 8 complete (history/delta)
+Version: v2.2 WP10 Capability Definition complete (doc-only, no src change)
 
 **WP5 = COMPLETE / ACCEPTED.** WP5.6 usefulness/robustness/freeze accepted 2026-08-27. WP5.6 defect remediation (F-03/F-04/D-APOLLO) accepted 2026-08-27.
 
@@ -35,10 +35,12 @@ Version: v2.1 WP9 Hardening Round 8 complete (history/delta)
 - WP9.7: monorepo full union — DONE
 - WP9.8: history/delta — DONE
 
-## Current state (2026-08-30)
+- **WP10: Capability and Product Definition — DONE 2026-08-30 (doc-only, 269 lines, no src change, schema 0.2 frozen)**
+
+## Current state (2026-08-30 WP10)
 
 - Branch: `main`
-- Commit: `2972e5e` + staged OPENCODE_START_HERE docs
+- Commit: `2972e5e` + staged docs (WP9 R8) + `docs/10_WP10_CAPABILITY_DEFINITION.md` added (no src change)
 - Engine: WP9 Hardening Rounds 1–8 complete, no source changes since Round 5
 - Tests: 178/178 pass (59 files)
 - Typecheck: `npx tsc --noEmit` → 0 errors
@@ -49,7 +51,7 @@ Version: v2.1 WP9 Hardening Round 8 complete (history/delta)
 - Monorepo: validated at 55× scale (29K 3 entries → 1.62M 64 entries), endsWith + normalizeCoveragePaths rebases 64 keys, single Rush repo
 - Language: TS-only (deferred per roadmap)
 - Limitations: partial historical coverage (reuse), single monorepo, n=3 providers, TS-only — all acceptable per documented scope
-- Human gate: **AWAITING HUMAN REVIEW** — CONTINUE / CONTINUE WITH CONSTRAINTS / STOP
+- **WP10 deliverable:** `docs/10_WP10_CAPABILITY_DEFINITION.md` 19K 9 sections — problem statement, target users, evidence consumed/produced/refusals, supported-claim matrix (C1–C24 narrowed), non-goals, success metrics, product-shape recommendation (C long-term, A immediate), 6 prioritized research questions, provisional next branch (WP11/12 integration highest priority)
 
 ## Current question (resolved at WP5.6)
 
@@ -59,10 +61,6 @@ WP5.6 recorded narrowly: deterministic evidence with truthful semantics (INV-01.
 
 ## Next work package
 
-**WP9 CLOSURE PENDING HUMAN APPROVAL**
+**WP10 COMPLETE — Next: WP11/12 Integration Validation per provisional branch (highest priority: caller-owned coverage UX / Rush jest.custom.json friction) — AWAITING HUMAN REVIEW for next WP authorization. No src change, reversible.**
 
-Per `experiments/wp9-hardening-round8/wp9-cumulative-closure-assessment-through-round8.md` §15 recommendation: **OPTION A — CLOSE WP9** under scoped claims. Historical coverage partial is not WP9 blocker per documented scope (Candidate 6 deferred). If human review requires historical coverage claim, then **OPTION B — ONE EXPERIMENT: Fresh Historical Per-Commit Coverage Rerun (Node 20.9)** per §14.
-
-See `OPENCODE_START_HERE.md` for full handoff + decision forks.
-
-Production is frozen; WP9 closure decision will determine next step.
+Per `docs/10_WP10_CAPABILITY_DEFINITION.md` §9: The immediate UX blocker is caller-owned coverage burden (4.96s, path rebasing via F-03, jest.custom.json friction for Rush/Heft). WP11/12 should define stable input/output contract and validate in 2 real CI pipelines. If integration proves reliable → proceed toward real-world validation (WP15). If fragile → diagnose caller-side vs engine contract vs provider format before any engine change.
