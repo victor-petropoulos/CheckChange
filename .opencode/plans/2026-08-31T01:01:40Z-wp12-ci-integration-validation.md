@@ -28,9 +28,9 @@ tasks:
     acceptance: "Both files exist, packet contains all required sections ending with 'AWAITING HUMAN REVIEW', results file contains raw JSON outputs and timings, diagnosis section identifies whether any failures are caller-side (coverage generation), contract (engine behavior), or provider (crap-typescript-core/coverage-v8), measurement data maps to WP12_MEASUREMENT_SPEC.md rubric"
     depends_on: ["2", "3"]
   - id: "5"
-    description: "Regression guard -- verify WP11 baseline preserved: run npx tsc --noEmit (0 errors), npx vitest run (188/188 pass, 60 files), git diff src/ (clean), npx vitest run test/contract/wp11.contract.spec.ts --no-coverage (10 pass, INV-01..04 + F-03 assertions green). Document results in WP12_HUMAN_REVIEW_PACKET.md appendix."
+    description: "Regression guard -- verify WP11 baseline preserved: run npx tsc --noEmit (0 errors), npx vitest run (191/191 pass, 61 files), git diff src/ (clean), npx vitest run test/contract/wp11.contract.spec.ts --no-coverage (10 pass, INV-01..04 + F-03 assertions green). Document results in WP12_HUMAN_REVIEW_PACKET.md appendix."
     agent: "tester"
     files: ["docs/closure/WP12_HUMAN_REVIEW_PACKET.md"]
-    acceptance: "All four verification commands pass (tsc 0 errors, 188/188 tests pass, src/ diff clean, wp11 contract tests 10/10 pass), results appended to packet appendix"
+    acceptance: "All four verification commands pass (tsc 0 errors, 191/191 tests pass, src/ diff clean, wp11 contract tests 10/10 pass), results appended to packet appendix"
     depends_on: ["4"]
 ---

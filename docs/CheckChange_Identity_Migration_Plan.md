@@ -36,7 +36,7 @@ The latest project-state material establishes:
 - Schema 0.2 is frozen.
 - Thresholds 30/15 are frozen.
 - INV-01 through INV-04 are preserved.
-- WP11 contract tests are 10/10, with 188/188 repository tests passing.
+- WP11 contract tests are 10/10, with 191/191 repository tests passing.
 - TypeScript passes.
 - Build passes.
 - No source changes were made by WP11.
@@ -254,7 +254,7 @@ It should accurately reflect:
     src/ clean
 
     WP11 regression baseline:
-    188/188 tests passing
+    191/191 tests passing
     TypeScript: 0 errors
     Build: passing
 
@@ -422,7 +422,7 @@ The WP11 contract test suite must remain semantically unchanged.
 
 Current baseline:
 
-- 188/188 repository tests;
+- 191/191 repository tests;
 - 10/10 WP11 contract tests;
 - TypeScript 0 errors;
 - build passes.
@@ -530,7 +530,7 @@ Run:
 
 Then verify that the WP11 baseline remains:
 
-    188/188
+    191/191
     tsc = 0 errors
     build = pass
     contract = schema 0.2
@@ -680,7 +680,7 @@ Do not rename CheckChange as an Engram component.
 
 ### Technical Integrity
 
-- [ ] 188/188 tests pass.
+- [ ] 191/191 tests pass.
 - [ ] WP11 contract tests pass.
 - [ ] TypeScript passes with 0 errors.
 - [ ] build passes.

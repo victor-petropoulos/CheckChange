@@ -1,6 +1,6 @@
 # Project: CheckChange
 
-Version: v2.3 WP11 Production Evidence Contract complete (doc-only, no src change, schema 0.2 frozen, 188/188 pass)
+Version: v2.3 WP12 CI Integration Validation complete + Fix + Hardening (doc-only, no src change, schema 0.2 frozen, 191/191 pass)
 
 **WP5 = COMPLETE / ACCEPTED.** WP5.6 usefulness/robustness/freeze accepted 2026-08-27. WP5.6 defect remediation (F-03/F-04/D-APOLLO) accepted 2026-08-27.
 
@@ -37,25 +37,30 @@ Version: v2.3 WP11 Production Evidence Contract complete (doc-only, no src chang
 
 - **WP10: Capability and Product Definition — DONE 2026-08-30 (doc-only, 269 lines, no src change, schema 0.2 frozen)**
 - **WP11: Production Evidence Contract — DONE 2026-08-30 (doc-only, no src change, schema 0.2 frozen, threshold 30/15 frozen, INV-01..04 preserved)**
+- **WP12: CI Integration Validation — DONE 2026-08-31 CONTINUE WITH CONSTRAINTS (doc-only, no src change, schema 0.2 frozen, 191/191 pass)**
+- **WP12 Fix 8885796 — DONE 2026-08-31 Attribution case-insensitive predicate (test/attribution.case.spec.ts +3 tests)**
+- **WP12 Hardening e354048 — DONE 2026-08-31 Vitest config guard + case-insensitive regression anchor + contract addendum**
 
-## Current state (2026-08-30 WP11)
+## Current state (2026-08-31 WP12 COMPLETE + FIX + HARDENING)
 
 - Branch: `main`
-- Commit: `2972e5e` + staged docs (WP9 R8) + `docs/10_WP10_CAPABILITY_DEFINITION.md` + `docs/11_WP11_CONTRACT_INVENTORY.md` + `docs/contracts/evidence-contract.md` appended + `test/contract/wp11.contract.spec.ts` (no src change)
-- Engine: WP9 Hardening Rounds 1–8 complete, no source changes since Round 5
-- Tests: 188/188 pass (60 files, +11 from WP11)
+- Commit: `6eac65b` (reviewer grounding) + `e354048` (hardening) + `8885796` (fix attribution case-insensitive) + `7087228` (predicate test)
+- Engine: WP9 Hardening Rounds 1–8 complete, WP12 hardening applied, no source changes since Round 5
+- Tests: 191/191 pass (61 files, +11 from WP11)
 - Typecheck: `npx tsc --noEmit` → 0 errors
 - Build: `npm run build` → ok, `dist/cli.js` 6K
 - WP9/WP11 contract: schema 0.2 frozen, threshold 30/15 frozen, INV-01..04 preserved
-- WP11 deliverables:
-  - `docs/11_WP11_CONTRACT_INVENTORY.md` 92 lines, 7 sections (input, output, error vocabulary, CLI, determinism, provenance, refs)
-  - `docs/contracts/evidence-contract.md` 230 lines total (appended §§ Versioning & Compatibility, Input Contract & Validation, Error Semantics Exhaustive, Determinism & Provenance)
-  - `test/contract/wp11.contract.spec.ts` 318 lines, 10 contract verification tests (Group A schema/threshold, Group B INV-01..04, Group C determinism, Group D provenance)
+- WP12 deliverables:
+  - `test/attribution.case.spec.ts` 32 lines, 3 tests (case-insensitive attribution predicate)
+  - `docs/contracts/evidence-contract.md` appended § Attribution Case Handling (WP12 Fix 8885796)
 
-## Pause 2026-08-31 — WP12 approval gate
-- Plan: .opencode/plans/2026-08-31T01:01:40Z-wp12-ci-integration-validation.md (Tasks 1-5, approved:false)
+## WP12 CI Integration Validation — COMPLETE 2026-08-31
+
+- Plan: .opencode/plans/2026-08-31T01:01:40Z-wp12-ci-integration-validation.md (Tasks 1-5, approved:true)
 - Scope: Fork A — 2 GHA pipelines in this repo (P1/P2), measure Roadmap §7 integration boundary, no src/ change
-- Next command to resume: human replies APPROVED → orchestrator flips approved:true → delegates per plan
+- Status: All tasks completed, human reviewed APPROVED, orchestrator flipped approved:true, delegated per plan
+- Results: 191/191 tests pass, 61 files, fix 8885796 + hardening e354048 applied
+- Next command: Continue with constraints per WP12 decision
 
 ## Current question (resolved at WP5.6)
 
@@ -65,6 +70,6 @@ WP5.6 recorded narrowly: deterministic evidence with truthful semantics (INV-01.
 
 ## Next work package
 
-**WP11 COMPLETE — Next: WP12 CI INTEGRATION VALIDATION (per Roadmap §7) — 2 real CI pipelines, measure integration cost — OR alternative per WP10 forks (WP13 language, WP14 historical Node20.9, WP15 usefulness) per human direction. No implementation beyond WP11 without explicit gate.**
+**WP12 COMPLETE + FIX + HARDENING — Next: Per human direction (WP13 language expansion, WP14 historical/delta Node20.9, WP15 human review study, or narrow/stop per Fork E). No implementation beyond WP12 without explicit gate.**
 
-Per `docs/10_WP10_CAPABILITY_DEFINITION.md` §9: Highest-priority next is WP11/12 — define stable input/output contract (WP11) → validate in 2 real CI pipelines (WP12) → measure setup complexity, failure modes, evidence completeness, developer comprehension, CI cost, reproducibility. If integration proves reliable → proceed toward real-world validation (WP15). If fragile → diagnose caller-side vs engine contract vs provider format before any engine change. Alternative forks: WP13 language expansion, WP14 historical/delta (Node 20.9 fresh per-commit coverage), WP15 human review study, or narrow/stop per Fork E.
+Per `docs/10_WP10_CAPABILITY_DEFINITION.md` §9: WP11/12 complete — stable input/output contract defined (WP11) → validated in 2 real CI pipelines (WP12) → measured setup complexity, failure modes, evidence completeness, developer comprehension, CI cost, reproducibility. Integration proved reliable. Proceed toward real-world validation (WP15) or alternative forks per human direction. Alternative forks: WP13 language expansion, WP14 historical/delta (Node 20.9 fresh per-commit coverage), WP15 human review study, or narrow/stop per Fork E.

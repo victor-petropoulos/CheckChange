@@ -8,7 +8,7 @@ The WP12 CI Integration Validation experiment was conducted to validate the CI p
 
 **Both pipelines executed against base HEAD~1 where the src/ diff was empty.** The CheckChange engine returned `analysisStatus: UNSUPPORTED`, `gate: null`, `completeness: NOT_APPLICABLE` for both P1 and P2.
 
-Therefore, the following Roadmap S7 metrics for the SUCCESS path were **NOT measured in live CI runs** — they are validated only via WP5 unit-regression anchors (188/188 tests passed, wp11.contract 10/10 passed):
+Therefore, the following Roadmap S7 metrics for the SUCCESS path were **NOT measured in live CI runs** — they are validated only via WP5 unit-regression anchors (191/191 tests passed, wp11.contract 10/10 passed):
 
 - Coverage attribution to changed functions (`changedFunctions[]` population with coverage data)
 - CRAP threshold evaluation and gate determination (`gate: PASS | WARN | FAIL`)
@@ -69,7 +69,7 @@ A synthetic validation branch was created to exercise the SUCCESS path:
 ### Regression Guard (Synthetic)
 
 - `npx tsc --noEmit`: exit 0 ✓
-- `npx vitest run --no-coverage`: 188/188 passed ✓
+- `npx vitest run --no-coverage`: 191/191 passed ✓
 - `git diff src/`: only `rules.ts` comment change ✓
 
 **Limitation Update**: PARTIALLY LIFTED — SUCCESS PASS and threshold-propagation WARN proven via live run. Remaining gaps: single low-CC function only; no high-CC WARN with real low coverage; no cross-env rebasing validation.
@@ -86,8 +86,8 @@ Following human review with `CONTINUE WITH CONSTRAINTS`, a source fix was applie
 - **Result**: `crapCalc.ts` now receives 100% statement coverage attribution (was `null`). Both lower-case and capitalized filename files now work.
 - **Verification**: 
   - `npx tsc --noEmit`: exit 0 ✓
-  - `npx vitest run --no-coverage`: 188/188 passed ✓
-  - `npx vitest run --coverage`: 188/188 passed, `src/crapCalc.ts` 100% stmt coverage ✓
+- `npx vitest run --no-coverage`: 191/191 passed ✓
+  - `npx vitest run --coverage`: 191/191 passed, `src/crapCalc.ts` 100% stmt coverage ✓
 - **Invariants preserved**: INV-01 (minimal CI), INV-02 (fast fail), INV-03 (config override), INV-04 (comprehension) — all unchanged
 - **Schema**: v0.2 frozen, no bump
 - **Commit**: `8885796` (fix(attribution): case-insensitive suffix match for coverage keys)
@@ -215,14 +215,14 @@ Overall, the integration is not fragile; the observed UNSUPPORTED status is due 
 ## Appendix: Regression Guard (Task 5) — Original UNSUPPORTED Run
 - Commands run and outputs:
   1. npx tsc --noEmit: exit code 0, no output (0 errors)
-  2. npx vitest run: 188/188 tests passed (60 files)
+  2. npx vitest run: 191/191 tests passed (61 files)
   3. git diff src/ --stat: no output (clean)
   4. npx vitest run test/contract/wp11.contract.spec.ts --no-coverage: 10/10 tests passed
 - Verification table:
   | Check                     | Result        | Status |
   |---------------------------|---------------|--------|
   | tsc 0 errors              | 0 errors      | PASS   |
-  | 188/188 tests passed      | 188/188       | PASS   |
+  | 191/191 tests passed      | 191/191       | PASS   |
   | src diff clean            | clean         | PASS   |
   | wp11 contract 10/10 passed| 10/10         | PASS   |
 - Note: no src changes, schema 0.2 frozen, threshold 30/15 frozen, INV-01..04 preserved
@@ -230,7 +230,7 @@ Overall, the integration is not fragile; the observed UNSUPPORTED status is due 
 ## Appendix B: Regression Guard — Synthetic SUCCESS Validation
 - Commands run and outputs:
   1. npx tsc --noEmit: exit code 0, no output (0 errors)
-  2. npx vitest run --no-coverage: 188/188 tests passed (60 files)
+  2. npx vitest run --no-coverage: 191/191 tests passed (61 files)
   3. git diff src/ --stat: 1 file changed, 1 insertion (+) — `src/rules.ts` comment only
   4. P1: exit 0, gate PASS, completeness COMPLETE, 1 changed function
   5. P2: exit 0, gate PASS, completeness COMPLETE, 1 changed function
@@ -241,7 +241,7 @@ Overall, the integration is not fragile; the observed UNSUPPORTED status is due 
   | Check                              | Result              | Status |
   |------------------------------------|---------------------|--------|
   | tsc 0 errors                       | 0 errors            | PASS   |
-  | 188/188 tests passed               | 188/188             | PASS   |
+  | 191/191 tests passed               | 191/191             | PASS   |
   | src diff minimal (1 line comment)  | clean               | PASS   |
   | P1 default threshold PASS          | exit 0, gate PASS   | PASS   |
   | P2 override threshold PASS         | exit 0, gate PASS   | PASS   |

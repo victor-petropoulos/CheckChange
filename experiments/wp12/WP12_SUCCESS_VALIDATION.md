@@ -150,7 +150,7 @@ $ node dist/cli.js check --base nonexistent --json
 ## Regression Guard
 - In the worktree after the change:
   - `tsc --noEmit`: exit 0
-  - `vitest run --no-coverage`: 188/188 tests pass
+  - `vitest run --no-coverage`: 191/191 tests pass (61 files)
   - `git diff src/`: only shows the 1-line insertion in src/rules.ts, otherwise clean.
 
 ## Updated Fork Diagnosis

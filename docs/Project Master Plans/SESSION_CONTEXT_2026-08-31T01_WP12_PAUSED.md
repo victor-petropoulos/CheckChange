@@ -30,7 +30,7 @@
 | **F-03 normalizeCoveragePaths** | `coverage.ts:38-75` rebases absolute Istanbul keys onto cwd; validated at 1.62M LOC, 64 entries |
 | **Coverage Burden** | Caller-owned: `vitest run --coverage` → 4.96s wall-clock (`experiments/wp8/dx-operational.md`) |
 | **Current CI State** | No `.github/` dir, no workflows — zero GitHub Actions config |
-| **Verified Baseline** | Node 24.18.1, `dist/cli.js` bin, 188/188 tests pass (60 files), `src/` diff clean |
+| **Verified Baseline** | Node 24.18.1, `dist/cli.js` bin, 191/191 tests pass (61 files), `src/` diff clean |
 
 ---
 
@@ -42,7 +42,7 @@
 | 2 | Local dry-run harness | documenter | `docs/experiments/wp12/LOCAL_DRYRUN.md` | Step-by-step `HEAD~1` commands for P1/P2, expected schema 0.2 JSON + exit matrix, F-03 note, failure recovery |
 | 3 | Measurement spec — Roadmap §7 rubric | documenter | `docs/experiments/wp12/WP12_MEASUREMENT_SPEC.md` | Table for all 9 metrics linked to INV-01..04/F-03 |
 | 4 | Run pipelines + collect evidence | tester | `docs/closure/WP12_HUMAN_REVIEW_PACKET.md`, `experiments/wp12/WP12_RESULTS.md` | Packet with results, gate/completeness, timings, JSON samples, ends `AWAITING HUMAN REVIEW`; diagnosis if fragile |
-| 5 | Regression guard | tester | packet appendix | `tsc --noEmit` 0, `vitest run` 188/188, `src/` clean, `wp11.contract.spec.ts` 10/10 |
+| 5 | Regression guard | tester | packet appendix | `tsc --noEmit` 0, `vitest run` 191/191, `src/` clean, `wp11.contract.spec.ts` 10/10 |
 
 ---
 
@@ -51,7 +51,7 @@
 ```bash
 npx tsc --noEmit                    # → 0 errors
 npm run build                       # → ok, dist/cli.js 6K
-npx vitest run --no-coverage        # → 188/188 pass (60 files)
+npx vitest run --no-coverage        # → 191/191 pass (61 files)
 git --no-pager diff -- src/         # → clean
 npx vitest run test/contract/wp11.contract.spec.ts --no-coverage  # → 10 pass
 ```
