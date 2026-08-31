@@ -24,9 +24,9 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 
 ---
 ## Current Step
-**WP12 COMPLETE 2026-08-31 — SUCCESS PATH LIVE-VALIDATED, AWAITING HUMAN REVIEW**
-Details: include .github workflows, LOCAL_DRYRUN schema-corrected, MEASUREMENT_SPEC, PACKET with SUCCESS supplement (P1 PASS 0.31s, P2 PASS, WARN WARN, supplement WP12_SUCCESS_VALIDATION.md real JSON), 188/188 tsc0 src clean, .gitignore .worktrees, commit d27f868+.
+**WP12 COMPLETE + FIX APPLIED 2026-08-31 — CONTINUE WITH CONSTRAINTS**
+Details: src fix applied (attribution.ts:62 case-insensitive suffix match), 188/188 tests pass, tsc 0 errors, crapCalc.ts now 100% stmt coverage (was null), supplement PASS/WARN proven, capital-file bug resolved. Commit 8885796.
 
 ## Next Step
-**HUMAN REVIEW GATE: CONTINUE/CONSTRAINTS/STOP** per Forks A-E, SUCCESS supplement lifts UNSUPPORTED limitation partially; if CONTINUE recommend WP13 language or WP14 historical per WP10 §9, or finalize WP12 closure.
+**CONSTRAINED NEXT: Select WP13 language OR WP14 historical OR WP15 usefulness OR WP12 closure finalization per Roadmap, minimal scope, no schema bump without proven gap, keep experiments excluded from coverage**
 

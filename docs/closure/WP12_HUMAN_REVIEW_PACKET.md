@@ -76,6 +76,23 @@ A synthetic validation branch was created to exercise the SUCCESS path:
 
 Reference: `experiments/wp12/WP12_SUCCESS_VALIDATION.md` for full raw data.
 
+## Fix Applied (CONTINUE WITH CONSTRAINTS 2026-08-31)
+
+Following human review with `CONTINUE WITH CONSTRAINTS`, a source fix was applied to resolve the capital-file rebasing bug and coverage attribution gap:
+
+- **File**: `src/attribution.ts` line 62
+- **Change**: Case-insensitive suffix match — both `coverageKey` and `changedFunction.path` converted to lowercase before `endsWith` comparison
+- **Root cause**: Provider (crapCalc.ts) emits capitalized filename `crapCalc.ts` in complexity map; coverage-v8 emits lowercase paths. Suffix match failed for capital-C file, causing `crapCalc.ts` to show `null` coverage instead of actual 100% statement coverage.
+- **Result**: `crapCalc.ts` now receives 100% statement coverage attribution (was `null`). Both lower-case and capitalized filename files now work.
+- **Verification**: 
+  - `npx tsc --noEmit`: exit 0 ✓
+  - `npx vitest run --no-coverage`: 188/188 passed ✓
+  - `npx vitest run --coverage`: 188/188 passed, `src/crapCalc.ts` 100% stmt coverage ✓
+- **Invariants preserved**: INV-01 (minimal CI), INV-02 (fast fail), INV-03 (config override), INV-04 (comprehension) — all unchanged
+- **Schema**: v0.2 frozen, no bump
+- **Commit**: `8885796` (fix(attribution): case-insensitive suffix match for coverage keys)
+- **Supplement status**: Previously documented capital-file bug in synthetic SUCCESS validation is now resolved; both lower-case and capitalized files work correctly. Supplement remains valid with expanded coverage.
+
 ## Pipeline Results Table
 
 | Pipeline | Exit Code | Gate   | Completeness     | Vitest Duration (s) | CLI Duration (s) | Total Duration (s) |
