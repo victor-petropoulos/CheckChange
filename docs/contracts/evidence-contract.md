@@ -6,7 +6,7 @@
 
 ### Schema Version 0.2
 
-The evidence contract defines the deterministic output of the code-risk evidence engine.
+The evidence contract defines the deterministic output of the CheckChange evidence engine.
 
 #### Top-Level Structure
 

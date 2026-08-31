@@ -83,7 +83,7 @@ export function parseCliArgs() {
         i++;
     }
     if (help) {
-        console.log('Usage: code-risk check --base <ref> [--json] [--crap-threshold <number>] [--coverage-file <path>] [--verbose]');
+        console.log('Usage: checkchange check --base <ref> [--json] [--crap-threshold <number>] [--coverage-file <path>] [--verbose]');
         console.log('Options:');
         console.log('  --base <ref>             Git base reference to compare against (required)');
         console.log('  --json                   Output JSON (default: false)');
