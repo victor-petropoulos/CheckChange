@@ -229,3 +229,28 @@ Determinism guarantee and provenance tracking for reproducible evidence:
 
 This section adds no new schema fields; all provenance is either in existing output structure or implicit in engine/version.
   *Evidence: evidence.ts:265-308 (output construction), package.json:3 (version), .nvmrc (Node 24.18.1)*
+
+### Attribution Case Handling (WP12 Fix 8885796)
+
+Provider `@barney-media/crap-typescript-core@0.5.0` lowercases coverage keys (e.g., `/users/.../src/crapcalc.ts`) while complexity file paths preserve original casing (e.g., `src/crapCalc.ts` with capital `C`). Original case-sensitive `endsWith` match in `src/attribution.ts:62` failed to match, resulting in `coverage: null` for capital-letter files (violating INV-01 ZERO≠NULL — coverage became unavailable instead of 0/100).
+
+**Fix applied (commit 8885796)**: Changed attribution matching to case-insensitive suffix comparison via `toLowerCase()` on both provider key and complexity file path.
+
+```typescript
+// src/attribution.ts:62 (before)
+if (coverageKey.endsWith(complexityFile)) { ... }
+
+// src/attribution.ts:62 (after)
+if (coverageKey.toLowerCase().endsWith(complexityFile.toLowerCase())) { ... }
+```
+
+**Verification**:
+- `crapCalc.ts` now shows `coverage: 100` (was `null`), `analyzerStatus: 'SUCCESS'`
+- All 188 tests pass (vitest run --coverage)
+- TypeScript compilation clean (`tsc --noEmit` exit 0)
+- INV-01 preserved: numeric coverage field now populated (100) instead of null
+- Schema version 0.2 unchanged (additive fix, no schema bump)
+- Reversible: single-line change, no behavioral side effects on matching keys
+- Synthetic validation: unit tests for case-insensitive matching added in `attribution.test.ts`
+
+*Evidence: commit 8885796, src/attribution.ts:62, attribution.test.ts (new tests), vitest run output*
