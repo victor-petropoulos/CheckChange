@@ -24,9 +24,9 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 
 ---
 ## Current Step
-**WP12 COMPLETE + FIX APPLIED 2026-08-31 — CONTINUE WITH CONSTRAINTS**
-Details: src fix applied (attribution.ts:62 case-insensitive suffix match), 188/188 tests pass, tsc 0 errors, crapCalc.ts now 100% stmt coverage (was null), supplement PASS/WARN proven, capital-file bug resolved. Commit 8885796.
+**WP12 COMPLETE + FIX + HARDENING 2026-08-31 — CONTINUE WITH CONSTRAINTS (A+B+C+D DONE)**
+Src fix 8885796 case-insensitive, hardening e354048 vitest.config.ts guard + attribution.case 2 tests + contract addendum, reviewer PASS, security PASS 0 vuln, 190/190 pass (61 files) tsc0 wp11 10/10, crapCalc 100% now, SUCCESS PASS/WARN proven (supplement WP12_SUCCESS_VALIDATION.md), .worktrees ignored, coverage clean 174KB 11 src files.
 
 ## Next Step
-**CONSTRAINED NEXT: Select WP13 language OR WP14 historical OR WP15 usefulness OR WP12 closure finalization per Roadmap, minimal scope, no schema bump without proven gap, keep experiments excluded from coverage**
+**NEXT WIP: Await human selection of constrained WP13 language OR WP14 historical OR WP15 usefulness OR WP12 closure finalization** — minimal scope, no schema bump without proven gap, no claim without basis, experiments/.worktrees excluded per vitest.config.ts
 
