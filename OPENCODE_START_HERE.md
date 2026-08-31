@@ -24,9 +24,9 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 
 ---
 ## Current Step
-**WP12 COMPLETE 2026-08-31 — AWAITING HUMAN REVIEW**
+**WP12 COMPLETE 2026-08-31 — SUCCESS PATH LIVE-VALIDATED, AWAITING HUMAN REVIEW**
+Details: include .github workflows, LOCAL_DRYRUN schema-corrected, MEASUREMENT_SPEC, PACKET with SUCCESS supplement (P1 PASS 0.31s, P2 PASS, WARN WARN, supplement WP12_SUCCESS_VALIDATION.md real JSON), 188/188 tsc0 src clean, .gitignore .worktrees, commit d27f868+.
 
-Details: .github/workflows/ci-evidence-{default,explicit}.yml (Node24, fetch base ref, vitest --coverage, evidence.json upload), docs/experiments/wp12/LOCAL_DRYRUN.md (schema-corrected, exit matrix per cli.ts:143-151) + WP12_MEASUREMENT_SPEC.md (9 metrics rubric, fixed top-level fields) + docs/closure/WP12_HUMAN_REVIEW_PACKET.md (executive summary, limitation NO_CHANGED_FUNCTION_SUCCESS_PATH, pipeline table exit0 gate null, measurement data) + experiments/wp12/WP12_RESULTS.md (P1 3.681/0.271, P2 3.679/0.276, JSON samples). Partial validation: UNSUPPORTED path + error path + infra validated; SUCCESS path unit-validated only (188/188). Commits 407315b/859b885/48ce965 on main. tsc 0, 188/188 pass, src clean, wp11 10/10. Packet ends AWAITING HUMAN REVIEW.
----
 ## Next Step
-**HUMAN REVIEW GATE: Select CONTINUE / CONTINUE WITH CONSTRAINTS / STOP** per Roadmap Forks A-E. If CONTINUE → validate SUCCESS path via synthetic changed-function branch (trivial TS change, re-run both pipelines to observe PASS/WARN+ruleResults), then WP13 language or WP14 historical or WP15 usefulness per WP10 §9 priority. Correct drift: LOCAL_DRYRUN now lists gate PASS|WARN|null not boolean. No src/ change unless proven gap.
+**HUMAN REVIEW GATE: CONTINUE/CONSTRAINTS/STOP** per Forks A-E, SUCCESS supplement lifts UNSUPPORTED limitation partially; if CONTINUE recommend WP13 language or WP14 historical per WP10 §9, or finalize WP12 closure.
+
