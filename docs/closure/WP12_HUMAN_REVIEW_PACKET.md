@@ -20,6 +20,62 @@ Therefore, the following Roadmap S7 metrics for the SUCCESS path were **NOT meas
 
 **Characterization:** This is a *partial validation* — infrastructure, error paths, and the UNSUPPORTED path are validated in live CI. The SUCCESS path remains *unit-test-validated only*.
 
+## ✅ SUCCESS Path Supplement (2026-08-31 Synthetic Branch)
+
+A synthetic validation branch was created to exercise the SUCCESS path:
+
+- **Branch**: `synthetic/wp12-success-validation` (base commit `4c9744d`)
+- **Change**: Single-line comment added to `src/rules.ts` before `evaluateHighCrap` function
+- **Result**: 1 changed function (`evaluateHighCrap`) with cc=1, crap=1, coverage=100%, passed
+
+### Synthetic Pipeline Results
+
+| Pipeline | Exit Code | Gate  | Completeness | Changed Functions | Rule Results |
+|----------|-----------|-------|--------------|-------------------|--------------|
+| P1 (default, threshold 30) | 0 | PASS | COMPLETE | 1 | 1 (PASS) |
+| P2 (explicit, threshold 15) | 0 | PASS | COMPLETE | 1 | 1 (PASS) |
+| WARN probe (threshold 1) | 1 | WARN | COMPLETE | 1 | 1 (WARN) |
+
+### Error Path Validation
+
+| Scenario | Exit Code | Error Message |
+|----------|-----------|---------------|
+| Missing explicit file (`--coverage-file missing.json`) | 1 | "coverage artifact missing" |
+| Unresolvable base (`--base nonexistent`) | 1 | "Cannot resolve base reference: nonexistent" |
+
+### Reproducibility
+
+- P1 run twice: identical JSON (excluding `analysis.base`)
+- P2 run twice: identical JSON (excluding `analysis.base`)
+
+### Schema v0.2 Compliance (SUCCESS path)
+
+- `schemaVersion: "0.2"` ✓
+- `analysis.base`: valid commit SHA ✓
+- `capabilities`: `{ git: "available", complexity: "available", coverageArtifact: "available" }` ✓
+- `changedFunctions.length ≥ 1` ✓
+- `ruleResults.length ≥ 1` ✓
+- `analysisStatus: "SUCCESS"` ✓
+- `gate: "PASS" | "WARN"` ✓
+- `completeness: "COMPLETE"` ✓
+- `policy.crapThreshold` matches CLI arg ✓
+- F-03 paths repo-relative ✓
+
+### F-03 Rebasing Note
+
+- Works correctly for lower-case filenames
+- **Capital-file bug**: `crapCalc.ts` path rebasing incorrect (known issue, not in synthetic change scope)
+
+### Regression Guard (Synthetic)
+
+- `npx tsc --noEmit`: exit 0 ✓
+- `npx vitest run --no-coverage`: 188/188 passed ✓
+- `git diff src/`: only `rules.ts` comment change ✓
+
+**Limitation Update**: PARTIALLY LIFTED — SUCCESS PASS and threshold-propagation WARN proven via live run. Remaining gaps: single low-CC function only; no high-CC WARN with real low coverage; no cross-env rebasing validation.
+
+Reference: `experiments/wp12/WP12_SUCCESS_VALIDATION.md` for full raw data.
+
 ## Pipeline Results Table
 
 | Pipeline | Exit Code | Gate   | Completeness     | Vitest Duration (s) | CLI Duration (s) | Total Duration (s) |
@@ -139,7 +195,7 @@ The integration was evaluated for fragility across the three dimensions: caller-
 
 Overall, the integration is not fragile; the observed UNSUPPORTED status is due to the lack of changed functions, which is a contract-expected state.
 
-## Appendix: Regression Guard (Task 5)
+## Appendix: Regression Guard (Task 5) — Original UNSUPPORTED Run
 - Commands run and outputs:
   1. npx tsc --noEmit: exit code 0, no output (0 errors)
   2. npx vitest run: 188/188 tests passed (60 files)
@@ -153,5 +209,30 @@ Overall, the integration is not fragile; the observed UNSUPPORTED status is due 
   | src diff clean            | clean         | PASS   |
   | wp11 contract 10/10 passed| 10/10         | PASS   |
 - Note: no src changes, schema 0.2 frozen, threshold 30/15 frozen, INV-01..04 preserved
+
+## Appendix B: Regression Guard — Synthetic SUCCESS Validation
+- Commands run and outputs:
+  1. npx tsc --noEmit: exit code 0, no output (0 errors)
+  2. npx vitest run --no-coverage: 188/188 tests passed (60 files)
+  3. git diff src/ --stat: 1 file changed, 1 insertion (+) — `src/rules.ts` comment only
+  4. P1: exit 0, gate PASS, completeness COMPLETE, 1 changed function
+  5. P2: exit 0, gate PASS, completeness COMPLETE, 1 changed function
+  6. WARN probe: exit 1, gate WARN, completeness COMPLETE, 1 changed function
+  7. Missing file: exit 1, "coverage artifact missing"
+  8. Unresolvable base: exit 1, "Cannot resolve base reference: nonexistent"
+- Verification table:
+  | Check                              | Result              | Status |
+  |------------------------------------|---------------------|--------|
+  | tsc 0 errors                       | 0 errors            | PASS   |
+  | 188/188 tests passed               | 188/188             | PASS   |
+  | src diff minimal (1 line comment)  | clean               | PASS   |
+  | P1 default threshold PASS          | exit 0, gate PASS   | PASS   |
+  | P2 override threshold PASS         | exit 0, gate PASS   | PASS   |
+  | WARN probe threshold WARN          | exit 1, gate WARN   | PASS   |
+  | Missing file error                 | exit 1, msg match   | PASS   |
+  | Unresolvable base error            | exit 1, msg match   | PASS   |
+  | Schema v0.2 compliance (SUCCESS)   | all fields present  | PASS   |
+  | Reproducibility (P1/P2 x2)         | identical JSON      | PASS   |
+- Note: synthetic change isolated to `src/rules.ts` comment; schema 0.2 frozen; thresholds 30/15/1 frozen; INV-01..04 preserved; capital-file rebasing bug documented separately
 
 ## AWAITING HUMAN REVIEW
