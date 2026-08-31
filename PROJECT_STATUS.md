@@ -1,6 +1,6 @@
 # Project Status
 
-Version: v2.2 WP10 Capability Definition complete (doc-only, no src change)
+Version: v2.3 WP11 Production Evidence Contract complete (doc-only, no src change, schema 0.2 frozen, 188/188 pass)
 
 **WP5 = COMPLETE / ACCEPTED.** WP5.6 usefulness/robustness/freeze accepted 2026-08-27. WP5.6 defect remediation (F-03/F-04/D-APOLLO) accepted 2026-08-27.
 
@@ -36,22 +36,21 @@ Version: v2.2 WP10 Capability Definition complete (doc-only, no src change)
 - WP9.8: history/delta — DONE
 
 - **WP10: Capability and Product Definition — DONE 2026-08-30 (doc-only, 269 lines, no src change, schema 0.2 frozen)**
+- **WP11: Production Evidence Contract — DONE 2026-08-30 (doc-only, no src change, schema 0.2 frozen, threshold 30/15 frozen, INV-01..04 preserved)**
 
-## Current state (2026-08-30 WP10)
+## Current state (2026-08-30 WP11)
 
 - Branch: `main`
-- Commit: `2972e5e` + staged docs (WP9 R8) + `docs/10_WP10_CAPABILITY_DEFINITION.md` added (no src change)
+- Commit: `2972e5e` + staged docs (WP9 R8) + `docs/10_WP10_CAPABILITY_DEFINITION.md` + `docs/11_WP11_CONTRACT_INVENTORY.md` + `docs/contracts/evidence-contract.md` appended + `test/contract/wp11.contract.spec.ts` (no src change)
 - Engine: WP9 Hardening Rounds 1–8 complete, no source changes since Round 5
-- Tests: 178/178 pass (59 files)
+- Tests: 188/188 pass (60 files, +11 from WP11)
 - Typecheck: `npx tsc --noEmit` → 0 errors
 - Build: `npm run build` → ok, `dist/cli.js` 6K
-- WP9 contract: schema 0.2 frozen, threshold 30/15 frozen, INV-01..04 preserved
-- WP9 Round 8: 2-point historical/delta on tsdoc (00203d4 base c908cc8, e11ec0b base cc1dbc6) — complexity delta real (plugin 5→6, +getRoot cc12), gate PASS→WARN demonstrated, coverage fallback (Round 7 full-union 1,621,110 bytes 64 entries reused for both commits), Node/Rush blocker (env Node 24.18.1 vs rush.json 16/18/20) documented as external limitation, not engine defect
-- Provider diversity: n=3 fresh (defu vitest v8 12K, ts-jest babel 277K, tsdoc Jest v8 29K + full union 1.62M merged), 2 frameworks (vitest/Jest)
-- Monorepo: validated at 55× scale (29K 3 entries → 1.62M 64 entries), endsWith + normalizeCoveragePaths rebases 64 keys, single Rush repo
-- Language: TS-only (deferred per roadmap)
-- Limitations: partial historical coverage (reuse), single monorepo, n=3 providers, TS-only — all acceptable per documented scope
-- **WP10 deliverable:** `docs/10_WP10_CAPABILITY_DEFINITION.md` 19K 9 sections — problem statement, target users, evidence consumed/produced/refusals, supported-claim matrix (C1–C24 narrowed), non-goals, success metrics, product-shape recommendation (C long-term, A immediate), 6 prioritized research questions, provisional next branch (WP11/12 integration highest priority)
+- WP9/WP11 contract: schema 0.2 frozen, threshold 30/15 frozen, INV-01..04 preserved
+- WP11 deliverables:
+  - `docs/11_WP11_CONTRACT_INVENTORY.md` 92 lines, 7 sections (input, output, error vocabulary, CLI, determinism, provenance, refs)
+  - `docs/contracts/evidence-contract.md` 230 lines total (appended §§ Versioning & Compatibility, Input Contract & Validation, Error Semantics Exhaustive, Determinism & Provenance)
+  - `test/contract/wp11.contract.spec.ts` 318 lines, 10 contract verification tests (Group A schema/threshold, Group B INV-01..04, Group C determinism, Group D provenance)
 
 ## Current question (resolved at WP5.6)
 
@@ -61,6 +60,6 @@ WP5.6 recorded narrowly: deterministic evidence with truthful semantics (INV-01.
 
 ## Next work package
 
-**WP10 COMPLETE — Next: WP11/12 Integration Validation per provisional branch (highest priority: caller-owned coverage UX / Rush jest.custom.json friction) — AWAITING HUMAN REVIEW for next WP authorization. No src change, reversible.**
+**WP11 COMPLETE — Next: WP12 CI INTEGRATION VALIDATION (per Roadmap §7) — 2 real CI pipelines, measure integration cost — OR alternative per WP10 forks (WP13 language, WP14 historical Node20.9, WP15 usefulness) per human direction. No implementation beyond WP11 without explicit gate.**
 
-Per `docs/10_WP10_CAPABILITY_DEFINITION.md` §9: The immediate UX blocker is caller-owned coverage burden (4.96s, path rebasing via F-03, jest.custom.json friction for Rush/Heft). WP11/12 should define stable input/output contract and validate in 2 real CI pipelines. If integration proves reliable → proceed toward real-world validation (WP15). If fragile → diagnose caller-side vs engine contract vs provider format before any engine change.
+Per `docs/10_WP10_CAPABILITY_DEFINITION.md` §9: Highest-priority next is WP11/12 — define stable input/output contract (WP11) → validate in 2 real CI pipelines (WP12) → measure setup complexity, failure modes, evidence completeness, developer comprehension, CI cost, reproducibility. If integration proves reliable → proceed toward real-world validation (WP15). If fragile → diagnose caller-side vs engine contract vs provider format before any engine change. Alternative forks: WP13 language expansion, WP14 historical/delta (Node 20.9 fresh per-commit coverage), WP15 human review study, or narrow/stop per Fork E.

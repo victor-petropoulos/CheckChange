@@ -1,5 +1,5 @@
 export function calculateCrap(cc: number, coveragePercent: number | null): number | null {
-  if (coveragePercent === null) {
+  if (coveragePercent == null) {
     return null;
   }
   const fraction = coveragePercent / 100.0;
