@@ -11,6 +11,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - name: Setup Node 24
         uses: actions/setup-node@v4
         with:

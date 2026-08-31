@@ -30,6 +30,8 @@ describe('cli.real-git.spec.ts', () => {
     await fs.mkdir(path.join(tempDir, 'src'));
     await fs.writeFile(path.join(tempDir, 'src', 'index.ts'), 'console.log("hello");');
     execSync('git init', { stdio: 'ignore' });
+    execSync('git config user.email "ci@example.com"', { stdio: 'ignore' });
+    execSync('git config user.name "CI"', { stdio: 'ignore' });
     execSync('git add src/index.ts', { stdio: 'ignore' });
     execSync('git commit -m "initial commit"', { stdio: 'ignore' });
 
@@ -92,6 +94,8 @@ describe('cli.real-git.spec.ts', () => {
     await fs.mkdir(path.join(tempDir, 'src'));
     await fs.writeFile(path.join(tempDir, 'src', 'index.ts'), 'console.log("hello");');
     execSync('git init', { stdio: 'ignore' });
+    execSync('git config user.email "ci@example.com"', { stdio: 'ignore' });
+    execSync('git config user.name "CI"', { stdio: 'ignore' });
     execSync('git add src/index.ts', { stdio: 'ignore' });
     execSync('git commit -m "initial commit"', { stdio: 'ignore' });
 
