@@ -1,4 +1,4 @@
-# Project Status
+# Project: CheckChange
 
 Version: v2.3 WP11 Production Evidence Contract complete (doc-only, no src change, schema 0.2 frozen, 188/188 pass)
 
@@ -51,6 +51,11 @@ Version: v2.3 WP11 Production Evidence Contract complete (doc-only, no src chang
   - `docs/11_WP11_CONTRACT_INVENTORY.md` 92 lines, 7 sections (input, output, error vocabulary, CLI, determinism, provenance, refs)
   - `docs/contracts/evidence-contract.md` 230 lines total (appended §§ Versioning & Compatibility, Input Contract & Validation, Error Semantics Exhaustive, Determinism & Provenance)
   - `test/contract/wp11.contract.spec.ts` 318 lines, 10 contract verification tests (Group A schema/threshold, Group B INV-01..04, Group C determinism, Group D provenance)
+
+## Pause 2026-08-31 — WP12 approval gate
+- Plan: .opencode/plans/2026-08-31T01:01:40Z-wp12-ci-integration-validation.md (Tasks 1-5, approved:false)
+- Scope: Fork A — 2 GHA pipelines in this repo (P1/P2), measure Roadmap §7 integration boundary, no src/ change
+- Next command to resume: human replies APPROVED → orchestrator flips approved:true → delegates per plan
 
 ## Current question (resolved at WP5.6)
 

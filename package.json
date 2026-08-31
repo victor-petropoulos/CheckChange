@@ -1,11 +1,14 @@
 {
-  "name": "code-risk-prototype",
+  "name": "checkchange",
   "version": "0.2.0",
   "type": "module",
   "bin": {
+    "checkchange": "./dist/cli.js",
     "code-risk": "./dist/cli.js"
   },
-  "files": ["dist/"],
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
@@ -27,5 +30,14 @@
   "allowScripts": {
     "esbuild@0.28.2": true,
     "fsevents@2.3.3": true
+  },
+  "description": "Independent, deterministic evidence and verification layer for AI-assisted software development.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/checkchange/checkchange"
+  },
+  "homepage": "https://github.com/checkchange/checkchange",
+  "bugs": {
+    "url": "https://github.com/checkchange/checkchange/issues"
   }
 }

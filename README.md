@@ -1,6 +1,8 @@
-# Deterministic Code-Risk Prototype v0.2
+# CheckChange
+Independent, deterministic evidence for AI-assisted software development.
+AI writes. We check the change.
 
-**Status:** research/prototype planning. No production implementation yet.
+CheckChange provides deterministic evidence around code changes: it analyzes changed functions, their complexity, test coverage, deterministic CRAP scores, evidence completeness and status, and provenance of the evidence.
 
 ## Direction
 
@@ -37,3 +39,7 @@ Initial rules:
 No custom analysis engine, AST quality analysis, coverage instrumentation, security scanner, plugin framework, multi-language framework, dashboard, SaaS, LLM, MCP, IDE extension, or Engram integration.
 
 The project is primarily a research and learning project. It only needs to be useful, understandable, free to run, and clean enough that another developer could use it if desired.
+
+Additionally, CheckChange does NOT claim to prove correctness, predict defects, replace human review, or certify production readiness. CRAP is one signal, not the entire product.
+
+Because "trust me, I tested it" isn't evidence.
