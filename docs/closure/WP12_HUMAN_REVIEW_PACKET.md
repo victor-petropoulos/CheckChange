@@ -4,6 +4,22 @@
 
 The WP12 CI Integration Validation experiment was conducted to validate the CI pipelines for the CheckChange tool against the Roadmap S7 measurement criteria. The experiment involved running two pipeline variants (P1: default coverage artifact location, P2: explicit coverage file and crap-threshold override) via the local dry-run harness. Due to no changes in the source code between the base commit (HEAD~1) and the current working tree, the CheckChange engine returned an analysis status of UNSUPPORTED, resulting in gate outcomes of null and completeness of NOT_APPLICABLE for both pipelines. All measured criteria within the control of the pipeline setup (setup complexity, failure modes for missing base ref, evidence completeness, developer comprehension, CI cost, reproducibility, path handling, artifact handling, and config burden) were evaluated and meet or exceed the defined thresholds where applicable. No failures attributable to the CheckChange engine (contract) were observed; the UNSUPPORTED status is expected behavior when there are no changed functions to analyze.
 
+## ⚠️ Limitation: No Changed-Function SUCCESS Path Exercised
+
+**Both pipelines executed against base HEAD~1 where the src/ diff was empty.** The CheckChange engine returned `analysisStatus: UNSUPPORTED`, `gate: null`, `completeness: NOT_APPLICABLE` for both P1 and P2.
+
+Therefore, the following Roadmap S7 metrics for the SUCCESS path were **NOT measured in live CI runs** — they are validated only via WP5 unit-regression anchors (188/188 tests passed, wp11.contract 10/10 passed):
+
+- Coverage attribution to changed functions (`changedFunctions[]` population with coverage data)
+- CRAP threshold evaluation and gate determination (`gate: PASS | WARN | FAIL`)
+- F-03 `normalizeCoveragePaths` rebasing with real changed functions (live base-ref shift)
+- `ruleResults[]` population with per-function evaluations
+- `analysisStatus: SUCCESS` path behavior end-to-end
+
+**Recommendation for follow-up:** Create a synthetic branch with one trivial changed TS function (e.g., modify `src/rules.ts` or `src/crapCalc.ts`), push it, and re-run both pipelines to observe `gate: PASS/WARN`, `ruleResults[]` population, and F-03 rebasing under `analysisStatus: SUCCESS`.
+
+**Characterization:** This is a *partial validation* — infrastructure, error paths, and the UNSUPPORTED path are validated in live CI. The SUCCESS path remains *unit-test-validated only*.
+
 ## Pipeline Results Table
 
 | Pipeline | Exit Code | Gate   | Completeness     | Vitest Duration (s) | CLI Duration (s) | Total Duration (s) |
