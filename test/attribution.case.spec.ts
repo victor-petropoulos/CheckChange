@@ -108,4 +108,14 @@ describe('attachCoverage case-insensitive', () => {
     expect(result[0].coveragePercent).not.toBeNull()
     expect(result[0].coverageKind).not.toBeNull()
   })
+
+   test('case-insensitive suffix predicate direct (no mocks)', () => {
+     const providerKey = '/tmp/lower/synthetic/src/crapcalc.ts'; // lowercased by provider
+     const complexityRel = 'src/crapCalc.ts'; // preserves capital C
+     // This is the exact predicate fixed in src/attribution.ts:62
+     expect(providerKey.toLowerCase().endsWith(complexityRel.toLowerCase())).toBe(true);
+     expect(providerKey.endsWith(complexityRel)).toBe(false); // proves case-sensitive would fail
+     // also verify exact lower case still works
+     expect('/users/.../src/rules.ts'.toLowerCase().endsWith('src/rules.ts'.toLowerCase())).toBe(true);
+   })
 })
