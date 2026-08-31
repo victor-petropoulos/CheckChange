@@ -1,7 +1,7 @@
 ---
 task: "WP12 CI Integration Validation"
 created: "2026-08-31T01:01:40Z"
-approved: false
+approved: true
 tasks:
   - id: "1"
     description: "Scaffold .github/workflows/ with two CI pipelines per Fork A spec — ci-evidence-default.yml (P1: vitest run --coverage -> node dist/cli.js check --base origin/main --json using default coverage/coverage-final.json) and ci-evidence-explicit.yml (P2: same but with explicit --coverage-file <path> + --crap-threshold override). Include: on pull_request + push to main, Node 24 via actions/setup-node@v4 with cache, npm ci, npm run build, fetch base ref (git fetch --depth=1 origin main || fallback HEAD~1), run vitest --coverage, invoke engine, upload JSON artifact, assert exit codes (0=PASS/UNSUPPORTED+NOT_APPLICABLE, 1=FAILED/WARN). No src/ changes."

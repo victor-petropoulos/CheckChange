@@ -1,0 +1,36 @@
+name: ci-evidence-explicit
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - name: Fetch base ref
+        run: |
+          if git fetch --depth=1 origin main; then
+            echo "BASE_REF=origin/main" >> $GITHUB_ENV
+          else
+            echo "BASE_REF=HEAD~1" >> $GITHUB_ENV
+          fi
+      - run: npx vitest run --coverage
+      - name: Run evidence check
+        run: node dist/cli.js check --base $BASE_REF --coverage-file coverage/coverage-final.json --crap-threshold 15 --json | tee evidence.json
+      - name: Upload evidence artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-json
+          path: evidence.json
