@@ -59,7 +59,8 @@ export async function attachCoverage(
       const matches: { rel: string; list: ComplexityInfo[] }[] = [];
       for (const [rel, list] of complexityByFile.entries()) {
         const normalizedRel = rel.replace(/\\/g, '/');
-        if (normalizedFilePath.endsWith(normalizedRel)) {
+        // case-insensitive suffix match to handle provider lowercasing (e.g., crapCalc.ts)
+        if (normalizedFilePath.toLowerCase().endsWith(normalizedRel.toLowerCase())) {
           matches.push({ rel, list });
         }
       }
