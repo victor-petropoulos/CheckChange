@@ -24,9 +24,9 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 
 ---
 ## Current Step
-**WP13 Python language expansion COMPLETE 2026-09-01 — AWAITING HUMAN REVIEW (commit 5256bb1)**
+**WP13 Python language expansion COMPLETE 2026-09-01 — CONTINUE WITH CONSTRAINTS (human review supplied 2026-09-01, commits 5256bb1+dca22c9)**
 WP13 lizard+coverage.py adapter, synthetic fixture 3 fns cc2/9/16 crap2.1/11.2/23.2 PASS@30 WARN@15 at threshold 15, schema 0.2 frozen, thresholds 30/15 frozen, INV-01..04 preserved, 191/191 pass tsc0, Engram approved rev-1788280837977-1, adapter experiments/wp13/adapter.
 
 ## Next Step
-**NEXT WIP: Awaiting human review CONTINUE / CONTINUE WITH CONSTRAINTS / STOP for WP13** — no schema bump without proven gap, no claim without basis, n=1 synthetic limitation documented.
+**NEXT WIP: Awaiting human selection of WP14 historical (Node 20.9 fresh per-commit coverage) OR WP15 usefulness OR STOP/NARROW** — no schema bump without proven gap, n=1 synthetic limitation acknowledged.
 

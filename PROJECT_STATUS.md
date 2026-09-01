@@ -46,7 +46,7 @@ Version: v2.5 WP13 Python adapter complete (additive, no src core change except 
 - **N3 2026-09-01: Malformed coverage UNSUPPORTED vs FAILED addendum — DONE (docs-only, evidence-contract.md + WP12_RESULTS.md, no engine fix, isUnsupportedIntervals precedence)**
 - **N4 2026-09-01: README drift sync — DONE (191/191, schema 0.2, INV-01..04, packet link)**
 - **Human Review 2026-09-01: CONTINUE WITH CONSTRAINTS** — N1/N3/N4 remediation approved, WP12 packet approved, awaiting constrained fork selection
-- **Human Review 2026-09-01: AWAITING HUMAN REVIEW** — WP13 Python adapter complete, synthetic fixture n=1 limitation, gate CONTINUE/CONTINUE WITH CONSTRAINTS/STOP pending
+- **Human Review 2026-09-01: CONTINUE WITH CONSTRAINTS** — WP13 approved, synthetic n=1 limitation acknowledged, next fork WP14/WP15/STOP pending
 
 ## Current state (2026-09-01 WP13 adapter complete)
 
