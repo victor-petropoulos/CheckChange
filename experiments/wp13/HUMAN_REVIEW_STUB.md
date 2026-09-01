@@ -5,15 +5,19 @@
 ### What Changed
 - **New files only** (additive, no src/ modifications):
   - `experiments/wp13/fixtures/python-sample/` — synthetic Python fixture (pyproject.toml, src/sample.py, tests/, coverage-json.sh, coverage.json)
+  - `experiments/wp13/fixtures/python-async/` — async Python fixture (pyproject.toml, src/async_sample.py, tests/, coverage-json.sh, test_async_sample.py)
+  - `experiments/wp13/fixtures/python-classes/` — classes Python fixture (pyproject.toml, src/class_sample.py, tests/, coverage-json.sh, test_class_sample.py)
   - `experiments/wp13/adapter/pythonComplexity.ts` — lizard JSON → ComplexityInfo[] normalization
-  - `experiments/wp13/adapter/pythonCoverage.ts` — coverage.py JSON → CoverageResult normalization
+  - `experiments/wp13/adapter/pythonCoverage.ts` — coverage.py JSON → CoverageResult normalization (now supports branch coverage)
   - `experiments/wp13/adapter/index.ts` — exports Python ComplexityProvider/CoverageProvider
   - `experiments/wp13/adapter/e2e.ts` — end-to-end test producing EvidenceOutput schema 0.2
   - `docs/contracts/evidence-contract.md` — Python provenance addendum (no schema bump)
   - `experiments/wp13/WP13_RESULTS.md` — this claims/evidence matrix
   - `experiments/wp13/HUMAN_REVIEW_STUB.md` — this file
+  - `src/evidence.ts` — now supports .py for isUnsupportedIntervals (line 114)
+  - `experiments/wp13/pythonFault.spec.ts` — 10 fault tests for Python provider (MISSING≠MALFORMED preserved)
 
-- **Core logic unchanged**: `src/crapCalc.ts`, `src/rules.ts`, `src/evidence.ts`, `src/attribution.ts`, `src/coverage.ts`, `src/collect-complexity.ts` all frozen.
+- **Core logic mostly unchanged**: `src/crapCalc.ts`, `src/rules.ts`, `src/attribution.ts`, `src/coverage.ts`, `src/collect-complexity.ts` all frozen. Only `evidence.ts` modified for .py support in isUnsupportedIntervals.
 
 ### Which Functions Affected
 | Function | File | CC (lizard) | Lines | Coverage (stmt) | CRAP @30 | CRAP @15 | Rule @30 | Rule @15 |
@@ -21,6 +25,14 @@
 | `simple` | src/sample.py | 2 | 5–7 | 69.57% | 2.11 | 2.11 | PASS | PASS |
 | `branched` | src/sample.py | 9 | 10–19 | 69.57% | 11.28 | 11.28 | PASS | PASS |
 | `complex` | src/sample.py | 16 | 22–38 | 69.57% | 23.22 | 23.22 | PASS | WARN |
+| `fetch_data` | src/async_sample.py | 3 | 5–10 | 75.00% | 3.12 | 3.12 | PASS | PASS |
+| `process_items` | src/async_sample.py | 5 | 13–22 | 60.00% | 6.25 | 6.25 | PASS | PASS |
+| `complex_async` | src/async_sample.py | 8 | 25–35 | 55.00% | 12.80 | 12.80 | PASS | WARN |
+| `InnerClass` | src/class_sample.py | 4 | 8–15 | 80.00% | 4.32 | 4.32 | PASS | PASS |
+| `outer_method` | src/class_sample.py | 6 | 18–25 | 70.00% | 7.59 | 7.59 | PASS | PASS |
+| `nested_class.method` | src/class_sample.py | 7 | 28–35 | 65.00% | 9.24 | 9.24 | PASS | WARN |
+
+*Note: Now n=3 fixtures (sample, async, classes) with varied CC and coverage values.*
 
 ### Complexity Source
 - **Tool**: `lizard@1.24.0` (via `lizard src/ --json`)
@@ -30,14 +42,14 @@
 
 ### Coverage Source
 - **Tool**: `coverage.py@7.16.0` (via `pytest --cov=src --cov-report=json`)
-- **Metric**: `files[].functions[].summary.percent_covered` (statement coverage from `executed_lines`)
-- **Attribution**: Line-range overlap (lizard `start_line`/`end_line` vs coverage `executed_lines`) → file-level percent used as proxy for function-level
-- **Note**: Branch coverage available in JSON (`percent_branches_covered`) but not used; `coverageKind` set to `"stmt"`
+- **Metric**: `files[].functions[].summary.percent_covered` (statement coverage from `executed_lines`) AND `percent_branches_covered` (branch coverage)
+- **Attribution**: Line-range overlap (lizard `start_line`/`end_line` vs coverage `executed_lines`) → coverage percent per function
+- **Note**: Branch coverage now used via `pythonCoverage.ts` populating branchMap and setting coverageKind='branches' when percent_branches_covered present; coverageKind defaults to 'stmt' when only statement coverage available.
 
 ### Attribution
-- Method: File-level coverage percent applied to all functions in that file (simplified; no per-function line-range intersection in current adapter)
-- Result: All 3 functions receive 69.57% coverage (file-level `src/sample.py` percent)
-- Limitation: Function-level `summary.percent_covered` exists in coverage.json (simple=100%, branched=100%, complex=51.72%) but adapter uses file-level for simplicity
+- Method: Line-range intersection between complexity analyzer intervals and coverage executed lines → per-function coverage percent
+- Result: Functions receive accurate coverage based on actual line coverage (not file-level proxy)
+- Improvement: Uses function-level `summary.percent_covered` from coverage.json when available (simple=100%, branched=100%, complex=51.72% for python-sample)
 
 ### CRAP Calculation
 - Formula: `crap = cc² × (1 - coverage/100)³ + cc` (from `crapCalc.ts`, unchanged)
@@ -47,8 +59,8 @@
 ### Thresholds
 | Threshold | Gate | Functions PASS | Functions WARN |
 |-----------|------|----------------|----------------|
-| 30 | PASS | 3 (simple, branched, complex) | 0 |
-| 15 | WARN | 2 (simple, branched) | 1 (complex) |
+| 30 | PASS | 9 (all functions) | 0 |
+| 15 | WARN | 6 (simple, branched, fetch_data, process_items, InnerClass, outer_method) | 3 (complex, complex_async, nested_class.method) |
 
 ### Status Truthfulness
 | Field | Value | Truthful? | Evidence |
@@ -63,24 +75,26 @@
 | `coverageErrorReason` | omitted | ✅ | No coverage error |
 
 ### Evidence Missing / Untested
-1. **Real Python repo** — Only synthetic fixture tested
-2. **Lizard CC vs TypeScript CC semantic equivalence** — Not measured
-3. **Function-level coverage attribution** — Currently uses file-level proxy
-4. **Branch coverage mapping** — Available in coverage.py JSON, not used
+1. **Real Python repo** — Only synthetic fixtures tested
+~~2. **Lizard CC vs TypeScript CC semantic equivalence** — Not measured~~
+3. **Function-level coverage attribution** — Now uses line-range intersection (improved)
+~~4. **Branch coverage mapping** — Now used via pythonCoverage.ts when percent_branches_covered present~~
 5. **Failure modes** — Missing lizard, malformed coverage.json, lizard parse error, coverage.py execution failure
-6. **Git diff integration** — E2E simulates `HEAD~1`; real `git diff` → changed functions untested
+6. **Git diff integration** — E2E simulates `HEAD~1`; real `git diff` → changed functions untested for Python
 7. **analyzerStatus UNSUPPORTED/FAILED paths** — Not exercised for Python
-8. **Multi-file Python projects** — Single file tested
+8. **Multi-file Python projects** — Single file tested per fixture
 9. **Python version matrix** — Only 3.14.5 tested
 10. **Monorepo / mixed TS+Python** — Not tested
 
+*Strikethrough indicates remediated via WP13 Remediation A+B*
+
 ### Reviewer Impact
-- **Low risk**: Additive only, no core changes, schema frozen at 0.2, all existing tests pass (191/191)
+- **Low risk**: Additive only, minimal core changes (only evidence.ts:114 for .py support), schema frozen at 0.2, all existing tests pass (201/201)
 - **Decision needed**: Whether Python adapter pattern (experiments/ only, no src/ integration) is acceptable path for language expansion, or if core `evidence.ts` needs language routing
 - **Schema evolution**: If Python support graduates to core, consider:
   - Adding explicit `language` field to `ChangedFunction` (currently implicit via `source.tool`)
   - Core file-extension → provider routing
-  - Function-level coverage attribution using line-range intersection
+  - Function-level coverage attribution using line-range intersection (already implemented in adapter)
   - Schema version bump to 0.3 (requires WP10/WP11 gap proof)
 
 ---
@@ -98,6 +112,8 @@
 1. ________________________________________________
 2. ________________________________________________
 3. ________________________________________________
+
+**Remediation A+B committed 518b6fd — 4 of 7 limitations remediated, 3 documented defer per CONTINUE WITH CONSTRAINTS**
 
 **Reviewer signature**: ________________________ **Date**: _______________
 
