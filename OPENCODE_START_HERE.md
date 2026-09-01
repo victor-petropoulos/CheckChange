@@ -24,9 +24,13 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 
 ---
 ## Current Step
-**WP13 Python language expansion COMPLETE 2026-09-01 — CONTINUE WITH CONSTRAINTS (human review supplied 2026-09-01, commits 5256bb1+dca22c9)**
-WP13 lizard+coverage.py adapter, synthetic fixture 3 fns cc2/9/16 crap2.1/11.2/23.2 PASS@30 WARN@15 at threshold 15, schema 0.2 frozen, thresholds 30/15 frozen, INV-01..04 preserved, 191/191 pass tsc0, Engram approved rev-1788280837977-1, adapter experiments/wp13/adapter.
+**WP13 REMAINING 3 + WP10/11/12 + SCHEMA BUMP COMPLETE 2026-09-01 — AWAITING HUMAN REVIEW (commit be2bca4, tag v0.3.0-compatible)**
+WP13-LANG-REGISTRY dispatch table (ProviderFactory Map, .py>.tsx>.ts) + CC-EQUIVALENCE interface+divergence table + SCHEMA BUMP 0.2→0.3 language field, WP10 capability definition, WP11 contract hardening (migration note), WP12 integration validation. 191→201/201 pass tsc0, e2e 3 fns 0.3 python PASS@30 WARN@15, package 0.3.0, INV-01..04 preserved, thresholds 30/15 frozen. Plan .opencode/plans/2026-09-01T18:14:51Z-wp13-remaining-wp10-wp11-wp12.md approved:true. Reviewer PASS, security PASS (2 pre-existing shell:true in pythonComplexity.ts deferred).
 
 ## Next Step
-**NEXT WIP: Awaiting human selection of WP14 historical (Node 20.9 fresh per-commit coverage) OR WP15 usefulness OR STOP/NARROW** — no schema bump without proven gap, n=1 synthetic limitation acknowledged.
+**NEXT WIP: Awaiting human review CONTINUE / CONTINUE WITH CONSTRAINTS / STOP — then WP14 historical (Node 20.9 fresh per-commit coverage) OR WP15 usefulness (human study) OR STOP/NARROW. No further code until gate.**
+
+```
+AWAITING HUMAN REVIEW
+```
 
