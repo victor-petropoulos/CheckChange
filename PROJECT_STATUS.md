@@ -1,6 +1,6 @@
 # Project: CheckChange
 
-Version: v2.4 N1/N3/N4 remediation complete (doc-only, no src change, schema 0.2 frozen, 191/191 pass)
+Version: v2.5 WP13 Python adapter complete (additive, no src core change except src/index.ts newline, schema 0.2 frozen, 191/191 pass)
 
 **WP5 = COMPLETE / ACCEPTED.** WP5.6 usefulness/robustness/freeze accepted 2026-08-27. WP5.6 defect remediation (F-03/F-04/D-APOLLO) accepted 2026-08-27.
 
@@ -40,28 +40,31 @@ Version: v2.4 N1/N3/N4 remediation complete (doc-only, no src change, schema 0.2
 - **WP12: CI Integration Validation — DONE 2026-08-31 CONTINUE WITH CONSTRAINTS (doc-only, no src change, schema 0.2 frozen, 191/191 pass)**
 - **WP12 Fix 8885796 — DONE 2026-08-31 Attribution case-insensitive predicate (test/attribution.case.spec.ts +3 tests)**
 - **WP12 Hardening e354048 — DONE 2026-08-31 Vitest config guard + case-insensitive regression anchor + contract addendum**
+- **WP13: Python language expansion (lizard + coverage.py) — COMPLETE 2026-09-01 synthetic fixture n=1, PASS@30 WARN@15, schema 0.2 frozen**
 
 - **N1 2026-09-01: High-CC WARN + capital-file live validation — DONE (synthetic/n1-highcc-verify, cc8 cov0 crap72 WARN at thresholds 30/15, /tmp/N1_P1.json, capital-C fix exercised)**
 - **N3 2026-09-01: Malformed coverage UNSUPPORTED vs FAILED addendum — DONE (docs-only, evidence-contract.md + WP12_RESULTS.md, no engine fix, isUnsupportedIntervals precedence)**
 - **N4 2026-09-01: README drift sync — DONE (191/191, schema 0.2, INV-01..04, packet link)**
 - **Human Review 2026-09-01: CONTINUE WITH CONSTRAINTS** — N1/N3/N4 remediation approved, WP12 packet approved, awaiting constrained fork selection
+- **Human Review 2026-09-01: AWAITING HUMAN REVIEW** — WP13 Python adapter complete, synthetic fixture n=1 limitation, gate CONTINUE/CONTINUE WITH CONSTRAINTS/STOP pending
 
-## Current state (2026-09-01 WP12 COMPLETE + FIX + HARDENING + N1/N3/N4 REMEDIATION)
+## Current state (2026-09-01 WP13 adapter complete)
 
 - Branch: `main`
-- Commit: `539d3fd` (N1/N3/N4 remediation) + `6eac65b` (reviewer grounding) + `e354048` (hardening) + `8885796` (fix attribution case-insensitive) + `7087228` (predicate test)
-- Engine: WP9 Hardening Rounds 1–8 complete, WP12 hardening applied, no source changes since Round 5
-- Tests: 191/191 pass (61 files, +11 from WP11)
+- Commit: `5256bb1` (WP13 Python adapter complete)
+- Engine: WP13 adapter complete (additive, no src core change except src/index.ts newline)
+- Tests: 191/191 pass (61 files)
 - Typecheck: `npx tsc --noEmit` → 0 errors
-- Build: `npm run build` → ok, `dist/cli.js` 6K
-- WP9/WP11 contract: schema 0.2 frozen, threshold 30/15 frozen, INV-01..04 preserved
-- WP12 deliverables:
-  - `test/attribution.case.spec.ts` 32 lines, 3 tests (case-insensitive attribution predicate)
-  - `docs/contracts/evidence-contract.md` appended § Attribution Case Handling (WP12 Fix 8885796)
-  - `experiments/wp12/WP12_SUCCESS_VALIDATION.md` updated with N1 high-CC WARN evidence
-  - `docs/closure/WP12_HUMAN_REVIEW_PACKET.md` updated with APPROVED footer and limitation LIFTED
-  - `README.md` synced to reflect 191/191, schema 0.2, INV-01..04, packet link (N4)
-  - `experiments/wp12/WP12_RESULTS.md` + `docs/contracts/evidence-contract.md` UNSUPPORTED/FAILED addendum (N3)
+- Build: `npm run build` → ok
+- WP9/WP11/WP13 contract: schema 0.2 frozen, threshold 30/15 frozen, INV-01..04 preserved
+- WP13 deliverables:
+  - `experiments/wp13/fixtures/python-sample/` synthetic fixture (3 functions cc2/9/16)
+  - `experiments/wp13/adapter/` lizard+coverage.py provider adapters (pythonComplexity.ts, pythonCoverage.ts, index.ts)
+  - `experiments/wp13/adapter/e2e.ts` end-to-end validation producing EvidenceOutput schema 0.2 with language:python provenance
+  - `docs/contracts/evidence-contract.md` Python provenance addendum (no schema bump)
+  - `experiments/wp13/WP13_RESULTS.md` claims/evidence matrix with verification table
+  - `experiments/wp13/HUMAN_REVIEW_STUB.md` scope/boundary/constraints for review
+  - Engram review: rev-1788280837977-1 approved
 
 ## WP12 CI Integration Validation — COMPLETE 2026-08-31
 

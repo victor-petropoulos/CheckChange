@@ -24,9 +24,9 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 
 ---
 ## Current Step
-**WP12 + N1/N3/N4 REMEDIATION COMPLETE 2026-09-01 — CONTINUE WITH CONSTRAINTS (human review supplied 2026-09-01)**
-WP12 COMPLETE + FIX + HARDENING + N1 high-CC WARN + capital-file live verified (synthetic/n1-highcc-verify cc8 crap72 WARN /tmp/N1_P1.json), N3 UNSUPPORTED vs FAILED addendum docs-only, N4 README sync 191/191. Schema 0.2 frozen, thresholds 30/15 frozen, INV-01..04 preserved, 191/191 pass (61 files) tsc0. All docs verified.
+**WP13 Python language expansion COMPLETE 2026-09-01 — AWAITING HUMAN REVIEW (commit 5256bb1)**
+WP13 lizard+coverage.py adapter, synthetic fixture 3 fns cc2/9/16 crap2.1/11.2/23.2 PASS@30 WARN@15 at threshold 15, schema 0.2 frozen, thresholds 30/15 frozen, INV-01..04 preserved, 191/191 pass tsc0, Engram approved rev-1788280837977-1, adapter experiments/wp13/adapter.
 
 ## Next Step
-**NEXT WIP: Awaiting human selection of constrained WP13 language OR WP14 historical (Node 20.9 fresh per-commit coverage) OR WP15 usefulness OR STOP/NARROW** — no schema bump without proven gap, no claim without basis, experiments/.worktrees excluded per vitest.config.ts.
+**NEXT WIP: Awaiting human review CONTINUE / CONTINUE WITH CONSTRAINTS / STOP for WP13** — no schema bump without proven gap, no claim without basis, n=1 synthetic limitation documented.
 
