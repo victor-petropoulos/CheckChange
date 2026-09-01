@@ -24,9 +24,9 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 
 ---
 ## Current Step
-**WP12 COMPLETE + FIX + HARDENING 2026-08-31 — CONTINUE WITH CONSTRAINTS (A+B+C+D DONE)**
-Src fix 8885796 case-insensitive, hardening e354048 vitest.config.ts guard + attribution.case 3 tests + contract addendum, reviewer grounding 6eac65b PASS, security PASS 0 vuln, 191/191 pass (61 files) tsc0 wp11 10/10, crapCalc 100% now, SUCCESS PASS/WARN proven (supplement WP12_SUCCESS_VALIDATION.md), .worktrees ignored, coverage clean 174KB 11 src files.
+**WP12 + N1/N3/N4 REMEDIATION COMPLETE 2026-09-01 — CONTINUE WITH CONSTRAINTS (human review supplied 2026-09-01)**
+WP12 COMPLETE + FIX + HARDENING + N1 high-CC WARN + capital-file live verified (synthetic/n1-highcc-verify cc8 crap72 WARN /tmp/N1_P1.json), N3 UNSUPPORTED vs FAILED addendum docs-only, N4 README sync 191/191. Schema 0.2 frozen, thresholds 30/15 frozen, INV-01..04 preserved, 191/191 pass (61 files) tsc0. All docs verified.
 
 ## Next Step
-**NEXT WIP: Await human selection of constrained WP13 language OR WP14 historical OR WP15 usefulness OR WP12 closure finalization** — minimal scope, no schema bump without proven gap, no claim without basis, experiments/.worktrees excluded per vitest.config.ts
+**NEXT WIP: Awaiting human selection of constrained WP13 language OR WP14 historical (Node 20.9 fresh per-commit coverage) OR WP15 usefulness OR STOP/NARROW** — no schema bump without proven gap, no claim without basis, experiments/.worktrees excluded per vitest.config.ts.
 

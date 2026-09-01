@@ -164,6 +164,7 @@ Mapping of error conditions to deterministic evidence state, preserving INV-01..
 |-----------|-------------------|----------------|--------------|------|---------------------|-----------|-------------------|
 | Missing coverage file (--coverage-file missing) | coverageArtifact: 'failed' | FAILED | INCOMPLETE | null | 'missing' | 1 | "coverage artifact missing" |
 | Malformed coverage JSON | coverageArtifact: 'failed' | FAILED | INCOMPLETE | null | 'malformed' | 1 | "coverage artifact malformed" |
+> Note: 'Malformed coverage JSON → FAILED' applies only when changed TS functions exist (isUnsupportedIntervals returns false). If no TS changes, 'Non-TS changes only → UNSUPPORTED/exit0' takes precedence and coverage artifact is never read (evidence.ts:121 early return).
 | Git ENOENT (executable unavailable) | git: 'failed' | FAILED | any | null | unchanged | 1 | "Git executable not found" |
 | Not-a-repo (invalid cwd) | git: 'failed' | FAILED | any | null | unchanged | 1 | "Not a git repository" |
 | Zero coverage (cc=12, cov=0 → crap=156) | coverageArtifact: 'available' | SUCCESS | COMPLETE | WARN | null | 1 | (none; gate WARN) |
@@ -171,6 +172,7 @@ Mapping of error conditions to deterministic evidence state, preserving INV-01..
 | Full coverage (cc=12, cov=100 → crap=12) | coverageArtifact: 'available' | SUCCESS | COMPLETE | PASS | null | 0 | (none; gate PASS) |
 | Unavailable coverage (no artifact, default path) | coverageArtifact: 'unavailable' | SUCCESS | COMPLETE | PASS/WARN | null | 0/1 | (none; depends on changed functions) |
 | Complexity failure (TS parse error) | complexity: 'failed' | UNSUPPORTED | NOT_APPLICABLE | null | unchanged | 1 | (from collectComplexity catch) |
+> Note: UNSUPPORTED is returned when no TS changes exist (isUnsupportedIntervals returns true); coverage artifact is not read in this case, so malformed/missing coverage cannot cause FAILED. See evidence.ts:109-124 for isUnsupportedIntervals implementation.
 | Non-TS changes only | git: 'available' | UNSUPPORTED | NOT_APPLICABLE | null | unchanged | 0 | (none; special case) |
 
 Truthful propagation examples:

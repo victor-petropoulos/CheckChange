@@ -111,3 +111,5 @@ Output:
 
 During the runs, there were no changed functions in the src/ tree between base HEAD~1 and current, hence the engine returned analysisStatus: UNSUPPORTED and gate: null, completeness: NOT_APPLICABLE.
 
+> Note: This test had no changed TS functions (intervals contained only non-TS files or was empty), so `isUnsupportedIntervals` returned true and coverage file was never read. Result correctly matches "Non-TS changes only" contract row (UNSUPPORTED, exit 0), not "Malformed coverage" row. Scenario (b) — malformed coverage with non-empty TS intervals — would correctly return FAILED/exit1 and remains untested in WP12 (gap documented).
+

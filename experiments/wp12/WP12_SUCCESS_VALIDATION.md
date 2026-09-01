@@ -171,3 +171,82 @@ SUCCESS path is now live-validated. The original WP12 limitation (no changed-fun
   - We have proven a SUCCESS PASS with a changed function.
   - We have proven WARN gate via threshold manipulation.
   - Remaining gaps: high-complexity changed function, real-world coverage scenarios, and ensuring worktree isolation in coverage.
+
+## N1 Extension 2026-09-01 — High-CC WARN + Capital-File Live (VERIFIED)
+
+### Branch and Change
+- Branch: synthetic/n1-highcc-verify (ephemeral, base 6eac65b = HEAD~1 of main 539d3fd, cleaned after run)
+- Change: src/crapCalc.ts added syntheticHighRiskProbe(a,b,c) — 8 branches (cc=8 per crap-typescript), lines ~12-30
+- Effect: 1 changed function, cc=8, coverage 0% (uncovered), crap=72 (72>30 => WARN). Exercises fix 8885796 src/attribution.ts:63 case-insensitive (capital-C file).
+
+### Pipeline Results (live, reproduced)
+| Pipeline | Command | Exit | Gate | Completeness | changedFunctions |
+|---|---|---|---|---|---|
+| P1 default 30 | node dist/cli.js check --base HEAD~1 --json | 1 | WARN | COMPLETE | 1 src/crapCalc.ts cc8 crap72 cov0 |
+| P2 threshold 15 | node dist/cli.js check --base HEAD~1 --coverage-file coverage/coverage-final.json --crap-threshold 15 --json | 1 | WARN | COMPLETE | 1 same |
+| WARN probe 1 | node dist/cli.js check --base HEAD~1 --crap-threshold 1 --json | 1 | WARN | COMPLETE | 1 same |
+
+### JSON Sample P1 (threshold 30 -> WARN) — from /tmp/N1_P1.json
+```json
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "6eac65b91330ac68f6dd919585800e14f082213f",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/crapCalc.ts",
+      "method": "syntheticHighRiskProbe",
+      "lineStart": 12,
+      "lineEnd": 30,
+      "cc": 8,
+      "crap": 72,
+      "coverage": 0,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 30
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "WARN",
+      "file": "src/crapCalc.ts",
+      "method": "syntheticHighRiskProbe",
+      "crap": 72,
+      "threshold": 30,
+      "cc": 8,
+      "coverage": 0
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "WARN",
+  "completeness": "COMPLETE"
+}
+```
+
+### Evidence Highlights
+- High-CC WARN: cc8 cov0 crap72 >30 => WARN exit1 proven live
+- Capital-file live: src/crapCalc.ts fix 8885796 exercised (lowercase coverage key vs capital-C path)
+- Threshold propagation: P2 15 => policy 15, rule threshold 15 => WARN proven
+- P1/P2 consistent WARN
+
+### Regression Guard
+- tsc --noEmit 0, vitest 191/191, git diff src clean after restore
+
+### Limitation Update for N1
+PARTIALLY LIFTED => LIFTED for high-CC WARN + capital-file dimensions. Remaining gap: cross-env rebasing (not in scope).
+
+Reference: /tmp/N1_P1.json, /tmp/N1_P2.json on host, plus WP12 packet.

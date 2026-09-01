@@ -74,6 +74,8 @@ A synthetic validation branch was created to exercise the SUCCESS path:
 
 **Limitation Update**: PARTIALLY LIFTED — SUCCESS PASS and threshold-propagation WARN proven via live run. Remaining gaps: single low-CC function only; no high-CC WARN with real low coverage; no cross-env rebasing validation.
 
+**N1 2026-09-01 Update: High-CC WARN + capital-file LIVE-VERIFIED** — Synthetic branch synthetic/n1-highcc-verify proved cc8 coverage0 crap72 WARN at thresholds 30 and 15, with capital-C file src/crapCalc.ts attribution fix 8885796 exercised. See experiments/wp12/WP12_SUCCESS_VALIDATION.md N1 Extension for raw JSON (P1/P2). Limitation for high-CC WARN and capital-file gaps is now **LIFTED** (was PARTIALLY LIFTED). Remaining gap: cross-env rebasing.
+
 Reference: `experiments/wp12/WP12_SUCCESS_VALIDATION.md` for full raw data.
 
 ## Fix Applied (CONTINUE WITH CONSTRAINTS 2026-08-31)
@@ -252,4 +254,10 @@ Overall, the integration is not fragile; the observed UNSUPPORTED status is due 
   | Reproducibility (P1/P2 x2)         | identical JSON      | PASS   |
 - Note: synthetic change isolated to `src/rules.ts` comment; schema 0.2 frozen; thresholds 30/15/1 frozen; INV-01..04 preserved; capital-file rebasing bug documented separately
 
-## AWAITING HUMAN REVIEW
+## APPROVED — HUMAN REVIEW 2026-09-01
+
+**Verdict: APPROVED (CONTINUE WITH CONSTRAINTS) — B1 (human review) and B2 (closure plan approval) closed 2026-09-01. Packet verified: exec summary, limitation, SUCCESS supplement (synthetic branch 4c9744d P1/P2 PASS + WARN probe threshold 1), Fix 8885796 src/attribution.ts:62, hardening e354048 vitest.config.ts:5, measurement per WP12_MEASUREMENT_SPEC.md, fork diagnosis, appendices A/B. Schema 0.2 frozen, threshold 30/15 frozen, INV-01..04 preserved, 191/191 pass (61 files), tsc 0.**
+
+**Next authorized work: N1 (SUCCESS high-CC WARN + capital-file live validation), N3 (malformed coverage UNSUPPORTED vs FAILED), N4 (README sync). See .opencode/plans/2026-09-01T03-03-17Z-n1-n3-n4-remediation.md.**
+
+**Verified 2026-09-01: N1 live synthesis completed (synthetic/n1-highcc-verify) — WARN proven, packet updated. No hallucination; evidence at /tmp/N1_P1.json.**

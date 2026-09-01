@@ -1,6 +1,6 @@
 # Project: CheckChange
 
-Version: v2.3 WP12 CI Integration Validation complete + Fix + Hardening (doc-only, no src change, schema 0.2 frozen, 191/191 pass)
+Version: v2.4 N1/N3/N4 remediation complete (doc-only, no src change, schema 0.2 frozen, 191/191 pass)
 
 **WP5 = COMPLETE / ACCEPTED.** WP5.6 usefulness/robustness/freeze accepted 2026-08-27. WP5.6 defect remediation (F-03/F-04/D-APOLLO) accepted 2026-08-27.
 
@@ -41,10 +41,15 @@ Version: v2.3 WP12 CI Integration Validation complete + Fix + Hardening (doc-onl
 - **WP12 Fix 8885796 — DONE 2026-08-31 Attribution case-insensitive predicate (test/attribution.case.spec.ts +3 tests)**
 - **WP12 Hardening e354048 — DONE 2026-08-31 Vitest config guard + case-insensitive regression anchor + contract addendum**
 
-## Current state (2026-08-31 WP12 COMPLETE + FIX + HARDENING)
+- **N1 2026-09-01: High-CC WARN + capital-file live validation — DONE (synthetic/n1-highcc-verify, cc8 cov0 crap72 WARN at thresholds 30/15, /tmp/N1_P1.json, capital-C fix exercised)**
+- **N3 2026-09-01: Malformed coverage UNSUPPORTED vs FAILED addendum — DONE (docs-only, evidence-contract.md + WP12_RESULTS.md, no engine fix, isUnsupportedIntervals precedence)**
+- **N4 2026-09-01: README drift sync — DONE (191/191, schema 0.2, INV-01..04, packet link)**
+- **Human Review 2026-09-01: CONTINUE WITH CONSTRAINTS** — N1/N3/N4 remediation approved, WP12 packet approved, awaiting constrained fork selection
+
+## Current state (2026-09-01 WP12 COMPLETE + FIX + HARDENING + N1/N3/N4 REMEDIATION)
 
 - Branch: `main`
-- Commit: `6eac65b` (reviewer grounding) + `e354048` (hardening) + `8885796` (fix attribution case-insensitive) + `7087228` (predicate test)
+- Commit: `539d3fd` (N1/N3/N4 remediation) + `6eac65b` (reviewer grounding) + `e354048` (hardening) + `8885796` (fix attribution case-insensitive) + `7087228` (predicate test)
 - Engine: WP9 Hardening Rounds 1–8 complete, WP12 hardening applied, no source changes since Round 5
 - Tests: 191/191 pass (61 files, +11 from WP11)
 - Typecheck: `npx tsc --noEmit` → 0 errors
@@ -53,6 +58,10 @@ Version: v2.3 WP12 CI Integration Validation complete + Fix + Hardening (doc-onl
 - WP12 deliverables:
   - `test/attribution.case.spec.ts` 32 lines, 3 tests (case-insensitive attribution predicate)
   - `docs/contracts/evidence-contract.md` appended § Attribution Case Handling (WP12 Fix 8885796)
+  - `experiments/wp12/WP12_SUCCESS_VALIDATION.md` updated with N1 high-CC WARN evidence
+  - `docs/closure/WP12_HUMAN_REVIEW_PACKET.md` updated with APPROVED footer and limitation LIFTED
+  - `README.md` synced to reflect 191/191, schema 0.2, INV-01..04, packet link (N4)
+  - `experiments/wp12/WP12_RESULTS.md` + `docs/contracts/evidence-contract.md` UNSUPPORTED/FAILED addendum (N3)
 
 ## WP12 CI Integration Validation — COMPLETE 2026-08-31
 
@@ -62,6 +71,14 @@ Version: v2.3 WP12 CI Integration Validation complete + Fix + Hardening (doc-onl
 - Results: 191/191 tests pass, 61 files, fix 8885796 + hardening e354048 applied
 - Next command: Continue with constraints per WP12 decision
 
+## N1/N3/N4 Remediation Verification (2026-09-01)
+
+- Task 6 verification: **PASS**
+  - `npx tsc --noEmit`: 0 errors ✓
+  - `npx vitest run --no-coverage`: 191/191 pass (61 files) ✓
+  - `git diff --stat src/`: empty (docs-only) ✓
+  - Graphify: 3482 nodes rebuilt ✓
+
 ## Current question (resolved at WP5.6)
 
 > Does changed-function CRAP provide useful real-world review signal?
@@ -70,6 +87,6 @@ WP5.6 recorded narrowly: deterministic evidence with truthful semantics (INV-01.
 
 ## Next work package
 
-**WP12 COMPLETE + FIX + HARDENING — Next: Per human direction (WP13 language expansion, WP14 historical/delta Node20.9, WP15 human review study, or narrow/stop per Fork E). No implementation beyond WP12 without explicit gate.**
+**NEXT WIP: Awaiting human selection of constrained WP13 language OR WP14 historical (Node 20.9 fresh per-commit coverage) OR WP15 usefulness OR STOP/NARROW** — no schema bump without proven gap, no claim without basis, experiments/.worktrees excluded per vitest.config.ts.
 
 Per `docs/10_WP10_CAPABILITY_DEFINITION.md` §9: WP11/12 complete — stable input/output contract defined (WP11) → validated in 2 real CI pipelines (WP12) → measured setup complexity, failure modes, evidence completeness, developer comprehension, CI cost, reproducibility. Integration proved reliable. Proceed toward real-world validation (WP15) or alternative forks per human direction. Alternative forks: WP13 language expansion, WP14 historical/delta (Node 20.9 fresh per-commit coverage), WP15 human review study, or narrow/stop per Fork E.
