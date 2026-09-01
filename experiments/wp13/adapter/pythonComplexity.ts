@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { relative, resolve } from 'node:path';
+import { relative, resolve, isAbsolute } from 'node:path';
 
 export interface ComplexityInfo {
   file: string;
@@ -16,8 +16,7 @@ export async function collectPythonComplexity(
   const complexityInfo: ComplexityInfo[] = [];
   
   try {
-    const findCmd = `find . -path "*/src/*.py" -type f 2>/dev/null | head -100`;
-    const result = spawnSync(findCmd, { cwd, shell: true, encoding: 'utf8' });
+    const result = spawnSync('find', ['.', '-path', '*/src/*.py', '-type', 'f'], { cwd, encoding: 'utf8', stderr: 'ignore' });
     
     if (result.status !== 0) {
       return [];
@@ -35,8 +34,9 @@ export async function collectPythonComplexity(
     
     for (const file of files) {
       const absPath = resolve(cwd, file);
-      const cmd = `lizard --csv "${absPath}"`;
-      const cmdResult = spawnSync(cmd, { shell: true, encoding: 'utf8' });
+      const rel = relative(cwd, absPath);
+      if (rel.startsWith('..') || isAbsolute(rel)) continue;
+      const cmdResult = spawnSync('lizard', ['--csv', absPath], { encoding: 'utf8' });
       
       if (cmdResult.status !== 0) {
         continue;
