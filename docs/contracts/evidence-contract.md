@@ -1,10 +1,16 @@
 # Evidence Contract
 
-## Version: 0.2.0
-## Date: 2026-08-28
+## Version: 0.3.0
+## Date: 2026-09-01
 ## Status: FROZEN (WP5.6 freeze at commit 21daa57, F-03 additive compatible)
 
-### Schema Version 0.2
+### Migration 0.2→0.3
+
+- Added optional `language` field to `changedFunctions[]` entries (values: "typescript" | "python").
+- This is an additive change; consumers ignoring unknown fields remain compatible (forward compatibility).
+- Schema version bump from 0.2 to 0.3 reflects proven multi-language gap (WP10) and language-registry implementation (WP13-LANG-REGISTRY).
+
+### Schema Version 0.3
 
 The evidence contract defines the deterministic output of the CheckChange evidence engine.
 
@@ -32,7 +38,8 @@ interface EvidenceOutput {
     coverage: number | null;    // Coverage percentage (0-100) or null if unavailable
     coverageKind: 'statements' | 'branches' | 'functions' | 'lines' | null;
     analyzerStatus: 'SUCCESS' | 'FAILED' | 'UNSUPPORTED';
-    source: string;             // Analyzer tool/version (e.g., 'crap-typescript-core@0.5.0')
+    source: string;             // Analyzer tool/version (e.g., 'crap-typescript-core@0.5.0');
+    language?: string;          // Language of the function (e.g., "typescript" | "python")
   }[];
   policy: {
     crapThreshold: number;      // CRAP threshold for WARN/PASS gate
@@ -51,7 +58,7 @@ interface EvidenceOutput {
   gate: 'PASS' | 'WARN' | null;
   completeness: 'COMPLETE' | 'INCOMPLETE' | 'NOT_APPLICABLE';
   coverageErrorReason?: 'missing' | 'malformed';
-}
+};
 ```
 
 ### Invariants Preserved
@@ -104,7 +111,7 @@ Evidence is produced through a deterministic pipeline:
 
 Following semantic versioning given the contract stability, with WP11 additions for explicit versioning policy:
 
-- **Schema Version 0.2 Lifecycle**: Currently frozen per WP5.6; no breaking changes permitted without demonstrated gap requiring engine evolution.
+- **Schema Version 0.3 Lifecycle**: Currently frozen per WP5.6; no breaking changes permitted without demonstrated gap requiring engine evolution.
 - **Forward Compatibility**: Additive fields (new optional properties) allowed in minor/patch versions; consumers must ignore unknown fields.
 - **Backward Compatibility**: Removal or type changes of existing fields constitute breaking changes requiring major version bump.
 - **Breaking-Change Policy**: Major schema version bump (e.g., 0.2 → 0.3) requires:
@@ -115,48 +122,106 @@ Following semantic versioning given the contract stability, with WP11 additions 
 - **Version Detection**:
   - Caller detects version via `schemaVersion` field in JSON output
   - Engine signals version via `package.json` version + `evidence-contract.md` header
-- **Current State**: No bump to 0.3 now; gap must be proven via WP10 §9 (caller-owned coverage burden 4.96s) or WP11 roadmap validation before any engine change.
+- **Current State**: Bumped to 0.3.0 as of 2026-09-01, with language field added to ChangedFunction interface.
   *Evidence: evidence-contract.md:3-5 (frozen status), Post_WP9_Detailed_Roadmap.md:135-160 (WP11 §6)*
 
-### Input Contract & Validation (WP11)
+### 11.1 Input Contract
 
-Validation rules for CLI inputs and their deterministic effects on evidence output:
+The engine accepts the following CLI inputs, each with deterministic validation and effect on evidence output:
 
-- **--base (required)**:
-  - Valid: Non-empty string resolving via `git rev-parse` → `capabilities.git = 'available'`, `analysisStatus` proceeds
-  - Invalid (empty/null/unresolvable): `capabilities.git = 'failed'`, `analysisStatus = 'FAILED'`, `gate = null`, exit code 1, stderr: "Cannot resolve base reference: <ref>"
-  *Evidence: cli.ts:21-27 (parse), cli.ts:95-99 (required), cli.ts:154-158 (git errors)*
+| Input | Required | Default | Validation | Effect on Evidence |
+|-------|----------|---------|------------|-------------------|
+| `--base <ref>` | Yes | — | Non-empty, resolvable via `git rev-parse` | `capabilities.git = 'available'` if valid; `'failed'` + `analysisStatus='FAILED'` + exit 1 if invalid |
+| `--coverage-file <path>` | No | `coverage/coverage-final.json` | Path readable, valid JSON, Istanbul shape (`statementMap`, `fnMap`, `branchMap`) | `coverageErrorReason='missing'|'malformed'` + `capabilities.coverageArtifact='failed'` + `analysisStatus='FAILED'` if invalid; `available=false` if absent default |
+| `--crap-threshold <T>` | No | `30` | Finite non-negative number | Used in `policy.crapThreshold`; invalid → exit 1, stderr |
+| Repository path (`process.cwd()`) | Implicit | — | Valid git repo (`validateGitRepo()`) | `capabilities.git='failed'` + `analysisStatus='FAILED'` + exit 1 if not repo |
+| Engine version | Implicit | Node 24.18.1, `@barney-media/crap-typescript-core@0.5.0` | Fixed per WP10 §3 | Recorded in `changedFunctions[].source` and implicit in `schemaVersion` |
 
-- **--coverage-file (optional)**:
-  - If supplied:
-    - Path existence: `access(path, R_OK)` → if fails: `coverageErrorReason = 'missing'`, `capabilities.coverageArtifact = 'failed'`, `analysisStatus = 'FAILED'`, exit 1
-    - JSON parse: `parseCoverageReport()` → if throws: `coverageErrorReason = 'malformed'`, `capabilities.coverageArtifact = 'failed'`, `analysisStatus = 'FAILED'`, exit 1
-    - Istanbul shape: Must contain `statementMap`, `fnMap`, `branchMap` → if missing: `coverageErrorReason = 'malformed'`, same failure path
-    - Absolute keys: Rebased via `normalizeCoveragePaths()` per F-03 (evidence.ts:148-160, coverage.ts:38-75)
-  - If not supplied: Uses default `coverage/coverage-final.json`; missing default → `available = false` (not error) per WP5.6
-  *Evidence: coverage.ts:77-108 (readCoverage), cli.ts:57-75 (coverageFile parsing)*
+*Evidence: cli.ts:21-99 (parsing), evidence.ts:92 (cwd usage), coverage.ts:77-108 (readCoverage), package.json:3,16*
 
-- **--crap-threshold (optional, default 30)**:
-  - Valid: `parseFloat()` → finite ≥ 0 (integer or float)
-  - Invalid (NaN/negative): exit 1, stderr: "Error: --crap-threshold must be a finite non-negative number"
-  *Evidence: cli.ts:37-55 (threshold parsing), cli.ts:51-53 (validation error)*
+### 11.2 Output Contract
 
-- **Repository Path (`process.cwd()`)**:
-  - Must be valid git repo (validated via `validateGitRepo()` in cli.ts:114)
-  - If not repo: `capabilities.git = 'failed'`, `analysisStatus = 'FAILED'`, exit 1, stderr: "Not a git repository"
-  *Evidence: cli.ts:114 (validateGitRepo), evidence.ts:92 (cwd usage)*
+The top-level `EvidenceOutput` structure (schema 0.2) is stable and frozen:
 
-- **Engine Version**:
-  - Node 24.18.1 baseline (from `.node-version`/`.nvmrc`)
-  - Package version from `package.json` (currently 0.2.0)
-  - Complexity analyzer: `@barney-media/crap-typescript-core@0.5.0` (fixed per WP10 §3 refusal)
-  *Evidence: package.json:3,16, evidence.ts:221-225 (source setting)*
+```typescript
+interface EvidenceOutput {
+  analysis: { base: string; target: string };
+  capabilities: {
+    git: 'available' | 'unavailable' | 'failed';
+    complexity: 'available' | 'unavailable' | 'failed';
+    coverageArtifact: 'available' | 'unavailable' | 'failed';
+    crapTypescript?: 'available' | 'unavailable' | 'failed';
+  };
+  changedFunctions: {
+    file: string;
+    method: string;
+    lineStart: number;
+    lineEnd: number;
+    cc: number;
+    crap: number;
+    coverage: number | null;
+    coverageKind: 'statements' | 'branches' | 'functions' | 'lines' | null;
+    analyzerStatus: 'SUCCESS' | 'FAILED' | 'UNSUPPORTED';
+    source: { tool: string; version: string };
+  }[];
+  policy: { crapThreshold: number };
+  ruleResults: {
+    ruleId: string;
+    result: 'PASS' | 'WARN' | 'FAIL' | 'NOT_EVALUATED';
+    file: string;
+    method: string;
+    crap: number;
+    threshold: number;
+    cc: number;
+    coverage: number | null;
+  }[];
+  analysisStatus: 'SUCCESS' | 'FAILED' | 'UNSUPPORTED';
+  gate: 'PASS' | 'WARN' | null;
+  completeness: 'COMPLETE' | 'INCOMPLETE' | 'NOT_APPLICABLE';
+  coverageErrorReason?: 'missing' | 'malformed';
+}
+```
 
-For each invalid input, the engine preserves truthful propagation:
-  raw condition → internal evidence (capabilities/coverageErrorReason) → function result (empty arrays) → analyzerStatus → gate/completeness → JSON → CLI → exit code
-  *Evidence: evidence.ts:92-308 (buildEvidenceOutput flow)*
+**External Consumer Guarantee**: This output is fully self-contained and requires no knowledge of engine internals to consume. A downstream CI gate, reviewer tool, or LLM agent can evaluate risk using only the fields above — no internal types, provider details, or pipeline steps are needed.
 
-### Error Semantics Exhaustive (WP11)
+**Minimal Valid JSON Example** (single changed function, full coverage):
+```json
+{
+  "schemaVersion": "0.2",
+  "analysis": { "base": "abc123", "target": "current" },
+  "capabilities": { "git": "available", "complexity": "available", "coverageArtifact": "available" },
+  "changedFunctions": [{
+    "file": "src/foo.ts",
+    "method": "calculateRisk",
+    "lineStart": 10,
+    "lineEnd": 25,
+    "cc": 3,
+    "crap": 12.5,
+    "coverage": 85,
+    "coverageKind": "statements",
+    "analyzerStatus": "SUCCESS",
+    "source": { "tool": "@barney-media/crap-typescript-core", "version": "0.5.0" }
+  }],
+  "policy": { "crapThreshold": 30 },
+  "ruleResults": [{
+    "ruleId": "changed-function-high-crap",
+    "result": "PASS",
+    "file": "src/foo.ts",
+    "method": "calculateRisk",
+    "crap": 12.5,
+    "threshold": 30,
+    "cc": 3,
+    "coverage": 85
+  }],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "COMPLETE"
+}
+```
+
+*Evidence: evidence.ts:265-308 (output construction), rules.ts:20-56 (ruleResults), crapCalc.ts:1-10 (CRAP formula)*
+
+### 11.3 Error Semantics
 
 Mapping of error conditions to deterministic evidence state, preserving INV-01..04:
 
@@ -175,62 +240,56 @@ Mapping of error conditions to deterministic evidence state, preserving INV-01..
 > Note: UNSUPPORTED is returned when no TS changes exist (isUnsupportedIntervals returns true); coverage artifact is not read in this case, so malformed/missing coverage cannot cause FAILED. See evidence.ts:109-124 for isUnsupportedIntervals implementation.
 | Non-TS changes only | git: 'available' | UNSUPPORTED | NOT_APPLICABLE | null | unchanged | 0 | (none; special case) |
 
-Truthful propagation examples:
-- **missing coverage file**: `--coverage-file missing.json` → `access()` fails → `coverageErrorReason='missing'` → `coverageArtifact='failed'` → `analysisStatus='FAILED'` → `gate=null` → exit 1
-  *Evidence: coverage.ts:91-96 (missing file handling), evidence.ts:195-200 (failed coverage → FAILED status)*
-- **malformed JSON**: invalid `{` in coverage file → `parseCoverageReport()` throws → `coverageErrorReason='malformed'` → same failure path
-  *Evidence: coverage.ts:104-107 (malformed catch), evidence.ts:195-200*
-- **git ENOENT**: `validateGitRepo()` catches ENOENT from git command → exits before evidence build
-  *Evidence: cli.ts:154-158 (git error handling)*
-- **zero vs low coverage**: CC=12, cov=0 → crap=12²×(1-0/100)³+12=156 → WARN if threshold=150; cov=10 → crap≈124.2 → WARN; cov=100 → crap=12 → PASS
-  *Evidence: crapCalc.ts:1-10 (CRAP formula), rules.ts:20-56 (threshold comparison)*
-- **unavailable coverage**: No coverage file → `readCoverage()` returns `{available:false, error:false}` → `coverageArtifact='unavailable'` → `analyzerStatus='SUCCESS'` → gate based on rule results
-  *Evidence: coverage.ts:94-97 (default missing), evidence.ts:153-155 (available=false handling)*
+Truthful propagation: raw condition → internal evidence (capabilities/coverageErrorReason) → function result → analyzerStatus → gate/completeness → JSON → CLI → exit code
+*Evidence: evidence-contract.md:61-71 (invariants), evidence.ts:216 (analyzer truthfulness), evidence.ts:92-308 (buildEvidenceOutput flow)*
 
-All mappings preserve INV-01..04:
-  - INV-01: Numeric fields use 0 for measured zero (cc=0 possible), null for unavailable (coverage=null when unavailable)
-  - INV-02: `coverageErrorReason` distinguishes 'missing' (no file) vs 'malformed' (invalid JSON)
-  - INV-03: `capabilities.git` reflects repo access ability, unaffected by monorepo structure
-  - INV-04: `analyzerStatus` accurately reflects provider success/failure/unsupported state
-  *Evidence: evidence-contract.md:61-71 (invariants), evidence.ts:216 (analyzer truthfulness)*
+### 11.4 Versioning
 
-### Determinism & Provenance (WP11)
+See "Versioning & Compatibility (WP11)" section above. Schema 0.2 is frozen. No breaking changes without WP10 gap proof.
 
-Determinism guarantee and provenance tracking for reproducible evidence:
+### 11.5 Determinism
 
-- **Determinism Guarantee**: Same inputs → equivalent output (excluding timestamps/durations)
-  - Inputs: evidence (git diff output, complexity intervals, coverage artifact) + config (--crap-threshold) + engine commit
-  - Equivalent: Identical `EvidenceOutput` JSON when serialized (schemaVersion, analysis, capabilities, changedFunctions, policy, ruleResults, analysisStatus, gate, completeness, coverageErrorReason)
-  - Excluded: Any timing-dependent fields (none currently in schema 0.2)
-  *Evidence: evidence-contract.md:74-101 (provenance pipeline), Post_WP9_Detailed_Roadmap.md:135-160 (WP11 §6)*
+**Determinism Guarantee**: Same inputs → equivalent output (excluding timestamps/durations).
 
-- **Provenance Fields** (included in evidence output):
-  - `analysis.base`/`analysis.target`: Resolved Git SHAs from `--base` and HEAD
-  - `changedFunctions[]`: Each entry contains:
-    - `file`/`method`/`lineStart`/`lineEnd`: Function location from complexity analyzer
-    - `cc`: Cyclomatic complexity from `@barney-media/crap-typescript-core@0.5.0`
-    - `crap`/`coverage`/`coverageKind`: Derived from CC and coverage
-    - `analyzerStatus`: 'SUCCESS'/'FAILED'/'UNSUPPORTED' per function
-    - `source`: `{tool:'@barney-media/crap-typescript-core', version:'0.5.0'}`
-  - `policy.crapThreshold`: Value from `--crap-threshold` (default 30)
-  - `ruleResults[]`: Includes `crap`, `threshold`, `cc`, `coverage` per function evaluation
-  - Implicit provenance (engine/environment):
-    - Complexity source: `@barney-media/crap-typescript-core@0.5.0` (evidence.ts:221-225)
-    - Coverage source: Caller-provided path (via `--coverage-file`) + artifact size bytes + provider family (Istanbul/v8)
-    - Config: `crapThreshold` value used (evidence.ts:92, rules.ts:10,29)
-    - Engine commit: Git SHA of evidence engine (current: bd6bb3e... from package.json version 0.2.0)
-    - Node version: `process.version` (baseline: 24.18.1 from .nvmrc)
-    - Repository path: `process.cwd()` (evidence.ts:92)
+- **Inputs**: Evidence (git diff output, complexity intervals, coverage artifact) + config (`--crap-threshold`) + engine commit
+- **Equivalent**: Identical `EvidenceOutput` JSON when serialized (schemaVersion, analysis, capabilities, changedFunctions, policy, ruleResults, analysisStatus, gate, completeness, coverageErrorReason)
+- **Excluded**: Any timing-dependent fields (none currently in schema 0.2)
 
-- **Reproducibility Steps** (WP9-style):
-  1. Git diff command: `git diff --base <ref> HEAD --name-only` (via git.ts)
-  2. Coverage generation command: `vitest run --coverage` (caller responsibility)
-  3. Engine invocation: `node dist/cli.js check --base <ref> [--crap-threshold <T>] [--coverage-file <path>]`
-  4. Environment: Node 24.18.1, current workspace, deterministic dependencies (package-lock.json)
-  *Evidence: Post_WP9_Detailed_Roadmap.md §16 (repro steps pattern), WP10 §24 (engine commit), WP10 §3 (refusals)*
+This means: same git base, same coverage artifact, same threshold, same engine commit → identical JSON output. No non-deterministic ordering, no random seeds, no environment-dependent paths in output.
 
-This section adds no new schema fields; all provenance is either in existing output structure or implicit in engine/version.
-  *Evidence: evidence.ts:265-308 (output construction), package.json:3 (version), .nvmrc (Node 24.18.1)*
+*Evidence: evidence.ts:265-308 (output construction), Post_WP9_Detailed_Roadmap.md:135-160 (WP11 §6)*
+
+### 11.6 Provenance
+
+**Provenance Fields** (included in evidence output):
+
+- `analysis.base` / `analysis.target`: Resolved Git SHAs from `--base` and HEAD
+- `changedFunctions[]` each entry contains:
+  - `file` / `method` / `lineStart` / `lineEnd`: Function location from complexity analyzer
+  - `cc`: Cyclomatic complexity from provider
+  - `crap` / `coverage` / `coverageKind`: Derived from CC and coverage
+  - `analyzerStatus`: 'SUCCESS'/'FAILED'/'UNSUPPORTED' per function
+  - `source`: `{ tool: string; version: string }` — e.g., `{tool:'@barney-media/crap-typescript-core', version:'0.5.0'}`
+- `policy.crapThreshold`: Value from `--crap-threshold` (default 30)
+- `ruleResults[]`: Includes `crap`, `threshold`, `cc`, `coverage` per function evaluation
+
+**Implicit Provenance** (engine/environment):
+
+- Complexity source: `@barney-media/crap-typescript-core@0.5.0` (default TS) or `lizard@1.24.0` (Python via adapter)
+- Coverage source: Caller-provided path (via `--coverage-file`) + artifact size bytes + provider family (Istanbul/v8 or coverage.py)
+- Config: `crapThreshold` value used
+- Engine commit: Git SHA of evidence engine
+- Node version: `process.version` (baseline: 24.18.1 from .nvmrc)
+- Repository path: `process.cwd()`
+
+**Reproducibility Steps**:
+
+1. Git diff command: `git diff --base <ref> HEAD --name-only` (via git.ts)
+2. Coverage generation command: `vitest run --coverage` (caller responsibility)
+3. Engine invocation: `node dist/cli.js check --base <ref> [--crap-threshold <T>] [--coverage-file <path>]`
+4. Environment: Node 24.18.1, current workspace, deterministic dependencies (package-lock.json)
+
+*Evidence: evidence.ts:265-308 (output construction), package.json:3 (version), .nvmrc (Node 24.18.1), Post_WP9_Detailed_Roadmap.md §16 (repro steps pattern), WP10 §24 (engine commit)*
 
 ### Attribution Case Handling (WP12 Fix 8885796)
 
@@ -259,7 +318,7 @@ if (coverageKey.toLowerCase().endsWith(complexityFile.toLowerCase())) { ... }
 
 ### Python Provider Extension (WP13, 2026-09-01)
 
-This contract supports an optional Python complexity/coverage provider extension through the existing provenance fields. No schema version bump (remains 0.2).
+This contract supports an optional Python complexity/coverage provider extension through the existing provenance fields, including the explicit `language` field. Schema version bumped to 0.3 to reflect this additive change.
 
 #### Provenance Field Mapping
 
@@ -268,7 +327,7 @@ This contract supports an optional Python complexity/coverage provider extension
 | `changedFunctions[i].language` | implicit `typescript` | explicit `"python"` |
 | `changedFunctions[i].source.tool` | `@barney-media/crap-typescript-core` | `lizard@1.8.0+coverage.py` |
 | `changedFunctions[i].source.version` | `0.5.0` | `7.16.0` (coverage.py) / `1.24.0` (lizard) |
-| `changedFunctions[i].cc` | `crap-typescript-core` CC | `lizard` CC (token-based, equivalent semantics) |
+| `changedFunctions[i].cc` | `crap-typescript-core` CC | `lizard` CC (token-based, **see divergence table below**) |
 | `changedFunctions[i].coverage` | Istanbul/v8 statement/branch | `coverage.py` executed_lines → line-range attribution |
 | `changedFunctions[i].coverageKind` | `statements`/`branches` | `stmt` (statement coverage from executed_lines) |
 | `changedFunctions[i].analyzerStatus` | `SUCCESS`/`FAILED`/`UNSUPPORTED` | same semantics |
@@ -280,7 +339,7 @@ This contract supports an optional Python complexity/coverage provider extension
 3. **Attribution**: Line-range overlap (lizard `start_line`/`end_line` vs coverage `executed_lines`) → coverage percent per function
 4. **CRAP Calculation**: Reuse `crapCalc.ts` unchanged: `crap = cc² × (1 - coverage/100)³ + cc`
 5. **Rules**: Reuse `rules.ts` unchanged: thresholds 30 (default) and 15 (tight)
-6. **Output**: `EvidenceOutput` schema 0.2 with `language: "python"` provenance in each `changedFunctions` entry
+6. **Output**: `EvidenceOutput` schema 0.3 with `language: "python"` provenance in each `changedFunctions` entry
 
 #### Invariant Preservation
 
@@ -289,6 +348,45 @@ This contract supports an optional Python complexity/coverage provider extension
 - **INV-03 GIT≠REPO**: Unchanged — git capability reflects repo access
 - **INV-04 ANALYZER TRUTHFUL**: `analyzerStatus` reflects lizard/coverage.py success/failure
 
+#### Complexity Provider Interface
+
+The engine defines a `ComplexityProvider` interface in `src/complexity-providers.ts` and a `ProviderFactory` in `src/evidence.ts` for language-specific dispatch:
+
+```typescript
+// src/complexity-providers.ts
+export interface ComplexityProvider {
+  collectComplexity(cwd: string): Promise<ComplexityInfo[]>;
+  readCoverage(cwd: string, coverageFile?: string): Promise<CoverageResult>;
+}
+
+// src/evidence.ts
+export interface ProviderFactory {
+  collectComplexity: (cwd: string) => Promise<ComplexityInfo[]>;
+  readCoverage: (cwd: string, coverageFile?: string) => Promise<CoverageResult>;
+}
+```
+
+Providers are registered via `registerProvider(extension: string, factory: ProviderFactory)` and selected by file extension from git diff intervals.
+
+#### CC Divergence Table (Token vs AST)
+
+**⚠️ HYPOTHESIS — NOT YET MEASURED**. The following reflects documented design differences between Lizard (token-based) and crap-typescript-core (AST-based). Actual values require empirical correlation testing on synthetic fixtures (WP13-CC-EQUIVALENCE).
+
+| Construct | Lizard CC (token) | crap-typescript-core CC (AST) | Status |
+|-----------|-------------------|------------------------------|--------|
+| Ternary expression (`condition ? expr1 : expr2`) | 1 (counts `?` as branch) | 2 (counts true/false branches) | Hypothesis — needs measurement |
+| Logical AND (`expr1 && expr2`) | 1 (often missed by token scan) | 2 (each `&&` = branch) | Hypothesis — needs measurement |
+| Logical OR (`expr1 || expr2`) | 1 (often missed by token scan) | 2 (each `||` = branch) | Hypothesis — needs measurement |
+| Try-except / try-catch block | 1 (may not count `except`/`catch`) | 2 (each handler = branch) | Hypothesis — needs measurement |
+| Async function / await | 1 (suspension points ignored) | 2 (`await` may count as yield) | Hypothesis — needs measurement |
+| Simple if/else | 2 | 2 | Expected equivalent |
+| For/while loop | 2 | 2 | Expected equivalent |
+| Switch/match statement | N/A (Python) | N (cases) | Language-specific |
+
+**Correction Factor**: None applied currently. Cross-language CRAP comparison not recommended until correlation ≥ 0.95 on benchmark suite.
+
+*Source: experiments/wp13/REMAINING_LIMITATIONS_DEFERRED.md:22-45 (Limitation #2)*
+
 #### Reversibility
 
 Extension is additive: Python adapter lives in `experiments/wp13/adapter/`, imports core (`crapCalc.ts`, `rules.ts`, `evidence.ts`) without modification. Removing the adapter restores TypeScript-only behavior. No changes to `src/` logic.
@@ -296,7 +394,7 @@ Extension is additive: Python adapter lives in `experiments/wp13/adapter/`, impo
 #### Limitations
 
 - Single synthetic fixture (`n=1`), no external real Python repo validation
-- Lizard CC semantics (token-based) may differ from `crap-typescript-core` AST-based CC
+- Lizard CC semantics (token-based) differ from `crap-typescript-core` AST-based CC — see divergence table above
 - `coverage.py` line coverage vs branch coverage — only statement coverage (`executed_lines`) used
 - File-extension detection (`.py` vs `.ts`) not in core `evidence.ts`; adapter handles language routing
 - `analyzerStatus: 'UNSUPPORTED'` path untested for Python

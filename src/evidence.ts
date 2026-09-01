@@ -5,6 +5,13 @@ import { readCoverage } from './coverage.js';
 import { attachCoverage } from './attribution.js';
 import { calculateCrap } from './crapCalc.js';
 
+export interface ProviderFactory { 
+  collectComplexity: (cwd:string)=>Promise<any[]>; 
+  readCoverage: (cwd:string, file?:string)=>Promise<any> 
+}
+const providers = new Map<string, ProviderFactory>()
+export function registerProvider(ext:string, factory:ProviderFactory){providers.set(ext,factory)}
+
 export interface ChangedFunction {
   file: string;
   method: string;
@@ -16,6 +23,7 @@ export interface ChangedFunction {
   coverageKind: string;
   analyzerStatus: 'passed' | 'failed' | 'skipped';
   source: { tool: string; version: string; };
+  language?: string;
 }
 
 export function correlate(methodEvidence, intervals) {
@@ -94,10 +102,29 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
     // We'll set the git capability to 'available' (if we got here, git is working)
     const gitCapability = 'available';
     // Step 1: Collect complexity
+    // Extension detection: prioritize .py > .tsx > .ts
+    let detectedExtension = '.ts';
+    let hasPy = false, hasTsx = false;
+    for (const [filePath] of intervals) {
+      if (filePath.endsWith('.py')) {
+        hasPy = true;
+        break;
+      }
+      if (filePath.endsWith('.tsx')) {
+        hasTsx = true;
+      }
+    }
+    if (hasPy) detectedExtension = '.py';
+    else if (hasTsx) detectedExtension = '.tsx';
     let complexityInfo = [];
     let complexityCapability = 'available';
     try {
-        complexityInfo = await collectComplexity(cwd);
+        const provider = providers.get(detectedExtension);
+        if (provider) {
+            complexityInfo = await provider.collectComplexity(cwd);
+        } else {
+            complexityInfo = await collectComplexity(cwd);
+        }
     }
     catch (error) {
         complexityCapability = 'failed';
@@ -120,7 +147,7 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
     // If intervals indicate unsupported source (non-TS files only), return UNSUPPORTED
     if (isUnsupportedIntervals(intervals)) {
         return {
-            schemaVersion: '0.2',
+            schemaVersion: '0.3',
             analysis: {
                 base: base,
                 target: 'current'
@@ -145,19 +172,24 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
     let coverageCapability = 'available';
     let coverageErrorReason;
     try {
+        const provider = providers.get(detectedExtension);
+        if (provider) {
+            coverageResult = await provider.readCoverage(cwd, coverageFile);
+        } else {
         coverageResult = await readCoverage(cwd, coverageFile);
+        }
         if (coverageResult.error) {
-            coverageCapability = 'failed';
-            coverageErrorReason = coverageResult.reason;
+        coverageCapability = 'failed';
+    coverageErrorReason = coverageResult.reason;
         }
         if (!coverageResult.available && !coverageResult.error) {
-            coverageCapability = 'absent';
-        }
-    } catch (error) {
-        coverageCapability = 'failed';
-        coverageErrorReason = 'malformed';
-        coverageResult = { available: false, coverageMap: null, error: true, reason: 'malformed' };
+        coverageCapability = 'absent';
     }
+} catch (error) {
+coverageCapability = 'failed';
+coverageErrorReason = 'malformed';
+coverageResult = { available: false, coverageMap: null, error: true, reason: 'malformed' };
+}
     // Determine analysisStatus, gate, and completeness based on provider failures
     let analysisStatus = 'SUCCESS';
     let gate = null;
@@ -171,7 +203,7 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
         completeness = 'NOT_APPLICABLE';
         // We'll return early with empty changedFunctions.
         return {
-            schemaVersion: '0.2',
+            schemaVersion: '0.3',
             analysis: {
                 base: base,
                 target: 'current'
@@ -261,41 +293,55 @@ completeness = 'INCOMPLETE';
         // We don't have a way to detect unsupported source yet. We'll assume it's supported.
         // We'll leave analysisStatus as SUCCESS.
     }
-    // Step 10: Build and return the OutputJson
-    return {
-        schemaVersion: '0.2',
-        analysis: {
-            base: base,
-            target: 'current'
-        },
-        capabilities: {
-            git: gitCapability,
-            complexity: complexityCapability,
-            coverageArtifact: coverageCapability
-        },
-        changedFunctions: changedFunctions,
-        policy: {
-            crapThreshold: threshold
-        },
-        ruleResults: ruleResults,
-        analysisStatus: analysisStatus,
-        gate: gateValue,
-        completeness: completenessValue
-    };
+// Step 10: Build and return the OutputJson
+     // Map language to changedFunctions based on file extension
+     const languageMap = {
+       '.py': 'python',
+       '.ts': 'typescript',
+       '.tsx': 'typescript'
+     };
+     const getLanguageForFile = (filePath) => {
+       const ext = Object.keys(languageMap).find(key => filePath.endsWith(key));
+       return ext ? languageMap[ext] : undefined;
+     };
+     const changedFunctionsWithLanguage = changedFunctions.map(fn => ({
+       ...fn,
+       language: getLanguageForFile(fn.file)
+     }));
+     return {
+         schemaVersion: '0.3',
+         analysis: {
+             base: base,
+             target: 'current'
+         },
+         capabilities: {
+             git: gitCapability,
+             complexity: complexityCapability,
+             coverageArtifact: coverageCapability
+         },
+         changedFunctions: changedFunctionsWithLanguage,
+         policy: {
+             crapThreshold: threshold
+         },
+         ruleResults: ruleResults,
+         analysisStatus: analysisStatus,
+         gate: gateValue,
+         completeness: completenessValue
+     };
 }
 // Helper function to build output when there is a provider failure
 function buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason) {
-    return {
-        schemaVersion: '0.2',
-        analysis: {
-            base: base,
-            target: 'current'
-        },
-        capabilities: {
-            git: gitCapability,
-            complexity: complexityCapability,
-            coverageArtifact: coverageCapability
-        },
+     return {
+         schemaVersion: '0.3',
+         analysis: {
+             base: base,
+             target: 'current'
+         },
+         capabilities: {
+             git: gitCapability,
+             complexity: complexityCapability,
+             coverageArtifact: coverageCapability
+         },
         changedFunctions: [],
         policy: {
             crapThreshold: threshold

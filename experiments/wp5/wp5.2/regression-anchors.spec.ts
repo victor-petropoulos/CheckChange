@@ -162,54 +162,54 @@ describe('Regression anchors for WP5.2', () => {
   });
 
   // Anchor 4: Schema Compatibility: v0.2 envelope shape (capabilities, changedFunctions, policy, ruleResults, analysisStatus, gate, completeness); legacy v0.1 retained.
-  test('Anchor 4: Schema v0.2 compatibility', async () => {
-    // Arrange: a simple successful case
-    const srcFile = join(tempDir.srcDir, 'index.ts');
-    const sourceContent = `export function main() { return 1; }`;
-    writeSourceFile(srcFile, sourceContent);
+test('Anchor 4: Schema v0.3 compatibility', async () => {
+     // Arrange: a simple successful case
+     const srcFile = join(tempDir.srcDir, 'index.ts');
+     const sourceContent = `export function main() { return 1; }`;
+     writeSourceFile(srcFile, sourceContent);
 
-    const coverageData = {
-      statementMap: {
-        '0': {
-          start: { line: 2, column: 0 },
-          end: { line: 2, column: 100 }
-        }
-      },
-      fnMap: {
-        '0': {
-          name: 'main',
-          line: 1
-        }
-      },
-      branchMap: {},
-      s: { '0': 1 },
-      f: { '0': 1 },
-      b: {},
-      _coverageSchema: '3.3.2'
-    };
+     const coverageData = {
+       statementMap: {
+         '0': {
+           start: { line: 2, column: 0 },
+           end: { line: 2, column: 100 }
+         }
+       },
+       fnMap: {
+         '0': {
+           name: 'main',
+           line: 1
+         }
+       },
+       branchMap: {},
+       s: { '0': 1 },
+       f: { '0': 1 },
+       b: {},
+       _coverageSchema: '3.3.2'
+     };
 
-    const coverageMap = new Map<string, any>();
-    coverageMap.set(resolve(srcFile), coverageData);
-    writeCoverageFile(tempDir.coverageDir, coverageMap);
+     const coverageMap = new Map<string, any>();
+     coverageMap.set(resolve(srcFile), coverageData);
+     writeCoverageFile(tempDir.coverageDir, coverageMap);
 
-    const intervals = new Map<string, { start: number; end: number }[]>();
-    intervals.set('src/index.ts', [{ start: 2, end: 2 }]);
+     const intervals = new Map<string, { start: number; end: number }[]>();
+     intervals.set('src/index.ts', [{ start: 2, end: 2 }]);
 
-    const base = 'HEAD';
-    const threshold = 30;
-    const output = await callBuildEvidenceOutput(base, intervals, tempDir.tempDir, threshold);
+     const base = 'HEAD';
+     const threshold = 30;
+     const output = await callBuildEvidenceOutput(base, intervals, tempDir.tempDir, threshold);
 
-    // Assert: the output has the required v0.2 fields
-    expect(output).toBeDefined();
-    expect(output.schemaVersion).toBe('0.2');
-    expect(output.analysis).toBeDefined();
-    expect(output.capabilities).toBeDefined();
-    expect(output.changedFunctions).toBeDefined();
-    expect(output.policy).toBeDefined();
-    expect(output.ruleResults).toBeDefined();
-    expect(output.analysisStatus).toBeDefined();
-    expect(output.gate).toBeDefined();
-    expect(output.completeness).toBeDefined();
+     // Assert: the output has the required v0.3 fields
+     expect(output).toBeDefined();
+     expect(output.schemaVersion).toBe('0.3');
+     expect(output.analysis).toBeDefined();
+     expect(output.capabilities).toBeDefined();
+     expect(output.changedFunctions).toBeDefined();
+     expect(output.policy).toBeDefined();
+     expect(output.ruleResults).toBeDefined();
+     expect(output.analysisStatus).toBeDefined();
+     expect(output.gate).toBeDefined();
+     expect(output.completeness).toBeDefined();
   });
 
   // Anchor 5: Threshold 30 Default: --crap-threshold default 30.

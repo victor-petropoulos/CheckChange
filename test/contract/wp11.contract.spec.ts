@@ -22,22 +22,22 @@ describe('Contract verification tests (WP11)', () => {
   afterEach(() => vi.restoreAllMocks());
   // Prevent mock leakage across tests (Engram F0)
   // Group A — Schema & threshold
-  describe('Schema & threshold', () => {
-    test('buildEvidenceOutput returns schemaVersion 0.2', async () => {
-      const base = 'abc123'
-      const cwd = '/tmp'
-      const intervals = new Map() // empty intervals
-      // Mock the git functions to avoid actual git calls
-      vi.spyOn(git, 'validateGitRepo').mockResolvedValue(undefined)
-      vi.spyOn(git, 'resolveBaseRef').mockResolvedValue(base)
-      vi.spyOn(git, 'getChangedIntervals').mockResolvedValue({ intervals })
-      // Mock complexity and coverage to return empty
-      vi.spyOn(complexity, 'collectComplexity').mockResolvedValue([])
-      vi.spyOn(coverage, 'readCoverage').mockResolvedValue({ available: false, coverageMap: null, error: false })
-      vi.spyOn(attribution, 'attachCoverage').mockResolvedValue([])
+describe('Schema & threshold', () => {
+     test('buildEvidenceOutput returns schemaVersion 0.3', async () => {
+       const base = 'abc123'
+       const cwd = '/tmp'
+       const intervals = new Map() // empty intervals
+       // Mock the git functions to avoid actual git calls
+       vi.spyOn(git, 'validateGitRepo').mockResolvedValue(undefined)
+       vi.spyOn(git, 'resolveBaseRef').mockResolvedValue(base)
+       vi.spyOn(git, 'getChangedIntervals').mockResolvedValue({ intervals })
+       // Mock complexity and coverage to return empty
+       vi.spyOn(complexity, 'collectComplexity').mockResolvedValue([])
+       vi.spyOn(coverage, 'readCoverage').mockResolvedValue({ available: false, coverageMap: null, error: false })
+       vi.spyOn(attribution, 'attachCoverage').mockResolvedValue([])
 
-      const output = await buildEvidenceOutput(base, intervals, cwd, 30)
-      expect(output.schemaVersion).toBe('0.2')
+       const output = await buildEvidenceOutput(base, intervals, cwd, 30)
+       expect(output.schemaVersion).toBe('0.3')
     })
 
     test('default crapThreshold 30, policy reflects it', async () => {

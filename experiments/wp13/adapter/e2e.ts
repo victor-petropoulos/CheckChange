@@ -36,6 +36,7 @@ interface ChangedFunction {
   coverageKind: string;
   analyzerStatus: 'passed' | 'failed' | 'skipped';
   source: { tool: string; version: string; };
+  language?: string;
 }
 
 interface RuleResult {
@@ -135,19 +136,21 @@ async function runE2E(cwd: string, thresholds: number[]): Promise<void> {
       console.log(`  ${r.result}: ${r.file}:${r.method} (crap=${r.crap?.toFixed(2)}, threshold=${r.threshold}, cc=${r.cc}, cov=${r.coverage}%)`);
     }
 
-    // Build EvidenceOutput (schema 0.2)
+    // Build EvidenceOutput (schema 0.3 with explicit language)
     const gate = ruleResults.some((r: RuleResult) => r.result === 'WARN') ? 'WARN' : 'PASS';
     const completeness = ruleResults.some((r: RuleResult) => r.result === 'NOT_EVALUATED') ? 'INCOMPLETE' : 'COMPLETE';
 
+    const crappedWithLang = crapped.map(c => ({ ...c, language: 'python' }));
+
     const output: EvidenceOutput = {
-      schemaVersion: '0.2',
+      schemaVersion: '0.3',
       analysis: { base: 'HEAD~1', target: 'current' },
       capabilities: {
         git: 'available',
         complexity: 'available',
         coverageArtifact: coverageResult.available && !coverageResult.error ? 'available' : 'absent'
       },
-      changedFunctions: crapped as ChangedFunction[],
+      changedFunctions: crappedWithLang as ChangedFunction[],
       policy: { crapThreshold: threshold },
       ruleResults: ruleResults as RuleResult[],
       analysisStatus: 'SUCCESS',

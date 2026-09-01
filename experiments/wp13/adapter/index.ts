@@ -1,5 +1,6 @@
 import { collectPythonComplexity } from './pythonComplexity.js';
 import { readPythonCoverage } from './pythonCoverage.js';
+import { registerProvider } from '../../../src/evidence.ts';
 
 import type { ComplexityInfo } from './pythonComplexity.js';
 import type { CoverageResult } from './pythonCoverage.js';
@@ -14,3 +15,8 @@ export function getPythonProviders(cwd: string) {
     }
   };
 }
+
+registerProvider('.py', {
+  collectComplexity: (cwd) => collectPythonComplexity(cwd),
+  readCoverage: (cwd, coverageFile) => readPythonCoverage(cwd, coverageFile)
+});
