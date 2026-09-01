@@ -256,3 +256,49 @@ if (coverageKey.toLowerCase().endsWith(complexityFile.toLowerCase())) { ... }
 - Synthetic validation: unit tests for case-insensitive matching added in `attribution.test.ts`
 
 *Evidence: commit 8885796, src/attribution.ts:62, attribution.test.ts (new tests), vitest run output*
+
+### Python Provider Extension (WP13, 2026-09-01)
+
+This contract supports an optional Python complexity/coverage provider extension through the existing provenance fields. No schema version bump (remains 0.2).
+
+#### Provenance Field Mapping
+
+| Field | TypeScript Provider | Python Provider (WP13) |
+|-------|---------------------|------------------------|
+| `changedFunctions[i].language` | implicit `typescript` | explicit `"python"` |
+| `changedFunctions[i].source.tool` | `@barney-media/crap-typescript-core` | `lizard@1.8.0+coverage.py` |
+| `changedFunctions[i].source.version` | `0.5.0` | `7.16.0` (coverage.py) / `1.24.0` (lizard) |
+| `changedFunctions[i].cc` | `crap-typescript-core` CC | `lizard` CC (token-based, equivalent semantics) |
+| `changedFunctions[i].coverage` | Istanbul/v8 statement/branch | `coverage.py` executed_lines → line-range attribution |
+| `changedFunctions[i].coverageKind` | `statements`/`branches` | `stmt` (statement coverage from executed_lines) |
+| `changedFunctions[i].analyzerStatus` | `SUCCESS`/`FAILED`/`UNSUPPORTED` | same semantics |
+
+#### Python Pipeline (adapter only, no core changes)
+
+1. **Complexity**: `lizard src/ --json` → parse `CCN` (cyclomatic complexity number) per function → `ComplexityInfo[]`
+2. **Coverage**: `python -m pytest --cov=src --cov-report=json:coverage.json` → parse `files[].functions[].summary.percent_covered` per function
+3. **Attribution**: Line-range overlap (lizard `start_line`/`end_line` vs coverage `executed_lines`) → coverage percent per function
+4. **CRAP Calculation**: Reuse `crapCalc.ts` unchanged: `crap = cc² × (1 - coverage/100)³ + cc`
+5. **Rules**: Reuse `rules.ts` unchanged: thresholds 30 (default) and 15 (tight)
+6. **Output**: `EvidenceOutput` schema 0.2 with `language: "python"` provenance in each `changedFunctions` entry
+
+#### Invariant Preservation
+
+- **INV-01 ZERO≠NULL**: Python `coverage = 0` when measured zero lines covered; `null` when no coverage artifact
+- **INV-02 MISSING≠MALFORMED**: Missing `coverage.json` vs malformed JSON distinguished via `coverageErrorReason`
+- **INV-03 GIT≠REPO**: Unchanged — git capability reflects repo access
+- **INV-04 ANALYZER TRUTHFUL**: `analyzerStatus` reflects lizard/coverage.py success/failure
+
+#### Reversibility
+
+Extension is additive: Python adapter lives in `experiments/wp13/adapter/`, imports core (`crapCalc.ts`, `rules.ts`, `evidence.ts`) without modification. Removing the adapter restores TypeScript-only behavior. No changes to `src/` logic.
+
+#### Limitations
+
+- Single synthetic fixture (`n=1`), no external real Python repo validation
+- Lizard CC semantics (token-based) may differ from `crap-typescript-core` AST-based CC
+- `coverage.py` line coverage vs branch coverage — only statement coverage (`executed_lines`) used
+- File-extension detection (`.py` vs `.ts`) not in core `evidence.ts`; adapter handles language routing
+- `analyzerStatus: 'UNSUPPORTED'` path untested for Python
+
+*Evidence: experiments/wp13/adapter/pythonComplexity.ts:1-80, pythonCoverage.ts:1-95, index.ts:1-30, e2e.ts:1-180, experiments/wp13/fixtures/python-sample/coverage.json, tsc --noEmit (0 errors), vitest run --no-coverage (191/191 pass), e2e output in /tmp/wp13_e2e.json*
