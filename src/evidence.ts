@@ -111,8 +111,8 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
             return false; // empty intervals -> not unsupported (could be no changes)
         }
         for (const [filePath] of intervals) {
-            if (filePath.endsWith('.ts') || filePath.endsWith('.tsx')) {
-                return false; // at least one TS file -> supported
+            if (filePath.endsWith('.ts') || filePath.endsWith('.tsx') || filePath.endsWith('.py')) {
+                return false; // at least one supported file -> supported
             }
         }
         return true; // all files are non-TS and intervals non-empty

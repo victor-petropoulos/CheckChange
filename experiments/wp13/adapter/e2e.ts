@@ -98,13 +98,14 @@ async function runE2E(cwd: string, thresholds: number[]): Promise<void> {
   }
 
   // Step 3: Skip coverage attribution for Python (TS analyzer won't parse Python)
-  // For demo, use summary coverage % directly from coverageMap
+  // For demo, use summary coverage % and coverageKind directly from coverageMap
   console.log('\nStep 3: Skipping attribution - Python files not supported by TS analyzer');
   const summaryCoverage = coverageResult.coverageMap?.get('src/sample.py')?.coverageData?.percent || null;
+  const coverageKind = coverageResult.coverageMap?.get('src/sample.py')?.coverageData?.coverageKind || 'stmt';
   const attributed = complexityInfo.map(info => ({
     info,
     coveragePercent: summaryCoverage,
-    coverageKind: 'stmt'
+    coverageKind
   }));
   for (const ac of attributed) {
     console.log(`  ${ac.info.method}: cov=${ac.coveragePercent}%, kind=${ac.coverageKind}`);

@@ -60,21 +60,44 @@ export async function readPythonCoverage(
         };
       }
       
+      const percentBranchesCovered = fileDataTyped.summary?.percent_branches_covered;
+      const executedBranches = fileDataTyped.executed_branches || [];
+      const missingBranches = fileDataTyped.missing_branches || [];
+      
+      const branchMap: Record<string, any> = {};
+      
+      for (const [fnName, fnData] of Object.entries(functions)) {
+        if (fnName === '' || !fnData) continue;
+        const fnDataTyped = fnData as any;
+        
+        const fnExecutedBranches = fnDataTyped.executed_branches || [];
+        const fnMissingBranches = fnDataTyped.missing_branches || [];
+        
+        if (fnExecutedBranches.length > 0 || fnMissingBranches.length > 0) {
+          branchMap[fnName] = {
+            type: 'branch',
+            locations: fnExecutedBranches.map((b: number[]) => ({ source: b })),
+            lines: fnExecutedBranches[0] || []
+          };
+        }
+      }
+      
       coverageMap.set(relPath, {
         statementMap,
-        branchMap: {},
+        branchMap,
         fnMap: {},
         allLines: executedLines.length > 0 ? new Set<number>(executedLines) : new Set<number>(),
-        allBranches: [],
+        allBranches: executedBranches.length > 0 ? executedBranches : [],
         allFunctions: {},
         coverageData: {
           executedLines,
           missingLines,
           percent: fileDataTyped.summary?.percent_covered || null,
+          coverageKind: percentBranchesCovered != null ? 'branches' : 'stmt',
           branchCoverage: {
-            percent: fileDataTyped.summary?.percent_branches_covered || null,
-            executedBranches: fileDataTyped.executed_branches || [],
-            missingBranches: fileDataTyped.missing_branches || []
+            percent: percentBranchesCovered || null,
+            executedBranches,
+            missingBranches
           }
         }
       });

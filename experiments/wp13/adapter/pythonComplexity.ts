@@ -69,6 +69,8 @@ export async function collectPythonComplexity(
     
     return complexityInfo;
   } catch (error) {
-    throw new Error(`Failed to collect Python complexity: ${error instanceof Error ? error.message : String(error)}`);
+    // On unexpected error (e.g., ENOENT from shell), return empty array gracefully
+    // Preserve INV: available false not crash
+    return [];
   }
 }
