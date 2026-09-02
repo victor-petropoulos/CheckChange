@@ -17,6 +17,65 @@
 - Both additive; consumers ignoring unknown values remain compatible.
 - Schema version bump 0.3→0.4 reflects proven JS gap
 
+### Hardening B Addendum (2026-09-02)
+
+#### P0-1 Parser Persistence
+- Patched `@barney-media/crap-typescript-core@0.5.0` via `pnpm patch` (committed `patches/crap-typescript-core+0.5.0.patch`, `package.json:patchedDependencies`, `pnpm-lock.yaml`).
+- Changes in patch:
+  - `dist/fileSelection.js`: `ANALYZABLE_EXTENSIONS = [".ts",".tsx",".js",".jsx",".mjs",".cjs"]`
+  - `dist/utils.js`: `resolveScriptKind` returns `"tsx"` for `.tsx`/`.jsx`, `"ts"` for `.ts`, `"js"` for `.js`/`.mjs`/`.cjs` (jsx maps to tsx to handle TS JSX with destructuring)
+  - `dist/parser.js`: `scriptKindMap = { "ts": TS, "tsx": TSX, "js": JS, "jsx": TSX }` with fallback
+- Verification:
+  - `rm -rf node_modules && pnpm install` → grep `ANALYZABLE_EXTENSIONS` shows `.js` etc., utils returns `tsx` for `.jsx`
+  - `npx tsc --noEmit` 0, `npx vitest run` 225 pass (71 files, includes cc-bench)
+- Persistence: pnpm patch survives clean checkout. Reversible via `git revert` or `pnpm patch --reverse`.
+- Supersedes previous local `node_modules` edit.
+
+#### P0-3 Registry
+- Minimal dispatch table in `src/evidence.ts` for `.ts`/`.tsx`/`.js`/`.jsx`/`.mjs`/`.cjs` + `.py` delegation.
+- Uses arrow delegation (`collectComplexity: (...args) => collectComplexity(...args)`) to preserve `vi.spyOn` mocks.
+- No schema bump required (additive change only).
+
+#### P1-4 CC Benchmark
+- Benchmark of 10 synthetic functions (empty, if/else, ternary, logical AND, logical OR, try/except, for loop, while loop, switch, async/await).
+- Measured correlation: 0.626 (Lizard vs crap-typescript-core CC values).
+- Divergence table:
+  | Construct | Lizard CC (Python) | crap-typescript-core CC (TypeScript) |
+  |-----------|-------------------|--------------------------------------|
+  | Empty | 0 | 0 |
+  | If/Else | 2 | 2 |
+  | Ternary | 1 | 2 |
+  | Logical AND | 1 | 2 |
+  | Logical OR | 1 | 2 |
+  | Try/Except | 1 | 2 |
+  | For Loop | 2 | 2 |
+  | While Loop | 2 | 2 |
+  | Switch | 2-3 | 2-3 |
+  | Async/Await | 1 | 2 |
+- Conclusion: Correlation < 0.95, no correction factor applied. Documented divergence for transparency.
+
+#### Resolved Limitations
+1. **Real-repo coverage format mismatch**: 
+   - `c8`/`nyc` → Istanbul JSON via `c8 --reporter=json` or `vitest --coverage`.
+   - Path normalization via `coverage.ts`.
+   - Verified for p-queue (1.2MB), zustand, and next-sample (1.4K).
+   - Synthetic null coverage still valid for dispatch.
+
+2. **Temp malformed file robustness**:
+   - Skip-on-error in `collectComplexity` (`getGitTrackedCodeFiles` try/catch, `continue` on parse error).
+   - `.gitignore` temp/ directory.
+   - Verified via `collect.test` and `jsFault`.
+
+3. **Framework detection**:
+   - `.tsx` requires `package.json` react dep.
+   - `.jsx` auto react.
+   - PeerDeps checked.
+   - Next>React priority.
+   - Verified via nextDispatcher (5/5 tests pass).
+
+4. **Parser persistence**: 
+   - As documented in P0-1 (pnpm patch persistence).
+
 ### Schema Version 0.4
 
 The evidence contract defines the deterministic output of the CheckChange evidence engine. Schema 0.4 adds `language: "javascript"` and optional `framework: "react"` to ChangedFunction.

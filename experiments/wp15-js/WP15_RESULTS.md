@@ -100,3 +100,18 @@ npx tsx /path/to/src/cli.ts check --base HEAD~1 --coverage-file coverage/coverag
 
 ---
 **HUMAN_REVIEW** required before closing. Confirm language/framework additive, no overclaim beyond synthetic + provisional real-repo.
+
+## Real-repo Verification: zustand
+
+| Repo | Clone Path | Install Command | Coverage Command | Artifact Size | Language | Framework | CRAP | TSC | Vitest |
+|------|------------|-----------------|------------------|---------------|----------|-----------|------|-----|--------|
+| zustand | /tmp/zustand | `pnpm install` | `pnpm run test:spec -- --coverage` | 94K | typescript | react | 1 | 0 (exit code) | 224 passed |
+
+### Details
+- The coverage artifact is in Istanbul JSON format (`/tmp/zustand/coverage/coverage-final.json`) containing `statementMap`, `fnMap`, `branchMap`.
+- Using `buildEvidenceOutput` with a known file (`src/vanilla.ts`) and interval covering functions yields:
+  - First function (`createStoreImpl`): `language: typescript`, `framework: react`, `crap: 1`, `coverage: 100%`.
+- Typecheck: `pnpm run test:types` (equivalent to `tsc --noEmit`) exits with 0.
+- Tests: `pnpm run test:spec` runs 224 tests, all passed.
+- No schema version change (remains at 0.4).
+
