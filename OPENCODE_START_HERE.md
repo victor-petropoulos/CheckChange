@@ -24,13 +24,12 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 
 ---
 ## Current Step
-**WP13 REMAINING 3 + WP10/11/12 + SCHEMA BUMP COMPLETE 2026-09-01 — AWAITING HUMAN REVIEW (commit be2bca4, tag v0.3.0-compatible)**
-WP13-LANG-REGISTRY dispatch table (ProviderFactory Map, .py>.tsx>.ts) + CC-EQUIVALENCE interface+divergence table + SCHEMA BUMP 0.2→0.3 language field, WP10 capability definition, WP11 contract hardening (migration note), WP12 integration validation. 191→201/201 pass tsc0, e2e 3 fns 0.3 python PASS@30 WARN@15, package 0.3.0, INV-01..04 preserved, thresholds 30/15 frozen. Plan .opencode/plans/2026-09-01T18:14:51Z-wp13-remaining-wp10-wp11-wp12.md approved:true. Reviewer PASS, security PASS (2 pre-existing shell:true in pythonComplexity.ts deferred).
+**WP14 historical fresh per-commit coverage APPROVED 2026-09-01 — COMPLETE (commits 00203d4/e11ec0b, Node 20.10.0, schema 0.3, gate WARN/WARN, coverage 24k/29k distinct, hashes 8acc60fa/0053189c)**
+WP14: TSDoc/Rush eslint-plugin, fresh coverage per-commit via worktrees + heft test --config jest.coverage.config.json under Node 20.10.0, engine @barney-media/crap-typescript-core@0.5.0, schema 0.3 language typescript, delta CRAP 54.67 vs 116.98 coverage-aware (not complexity-only), closes Round8 reuse gap (1.62M reused → distinct 24k/29k). WP13-LANG-REGISTRY + CC-EQUIVALENCE + SCHEMA 0.3 + WP10/11/12 preserved. 201/201 pass tsc0, npm audit 0 vulns. Plan .opencode/plans/2026-09-01T19:30:00Z-wp14-historical-fresh-coverage.md approved:true. Reviewer PASS, security PASS, 3 limitations documented provisional/2-point/branch-only. Human review APPROVED.
 
 ## Next Step
-**NEXT WIP: Awaiting human review CONTINUE / CONTINUE WITH CONSTRAINTS / STOP — then WP14 historical (Node 20.9 fresh per-commit coverage) OR WP15 usefulness (human study) OR STOP/NARROW. No further code until gate.**
+**NEXT: WP15 usefulness (human study) OR WP16 hardening OR STOP — evidence-driven per Post_WP9 §10-16. No code until next plan approved. Provisional limitations (single-env, 2-point, branch-only) deferred unless WP15 requires expansion.**
 
 ```
-AWAITING HUMAN REVIEW
+CONTINUE — WP14 APPROVED
 ```
-
