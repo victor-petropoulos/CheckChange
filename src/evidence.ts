@@ -319,18 +319,49 @@ completeness = 'INCOMPLETE';
         const ext = Object.keys(languageMap).find(key => filePath.endsWith(key));
         return ext ? languageMap[ext] : undefined;
       };
-      const detectFramework = (cwd, filePath) => {
+      const detectNextFramework = (cwd, filePath) => {
+        // 1. package.json next dep
         try {
           const pkg = JSON.parse(fs.readFileSync(path.resolve(cwd, 'package.json'), 'utf8'));
-          if (pkg.dependencies?.react || pkg.devDependencies?.react) return 'react';
-          if (pkg.peerDependencies?.react) return 'react';
+          const deps = { ...pkg.dependencies, ...pkg.devDependencies, ...pkg.peerDependencies };
+          if (deps.next) return 'next';
+        } catch {}
+        // 2. next.config.* at root
+        const configNames = ['next.config.js', 'next.config.mjs', 'next.config.ts'];
+        for (const name of configNames) {
+          if (fs.existsSync(path.resolve(cwd, name))) return 'next';
+        }
+        // 3. App Router markers
+        const appMarkers = ['app/page.tsx', 'app/layout.tsx'];
+        for (const marker of appMarkers) {
+          if (fs.existsSync(path.resolve(cwd, marker))) return 'next';
+        }
+        // Check app/**/route.ts (any depth) — bounded scan
+        const appDir = path.resolve(cwd, 'app');
+        if (fs.existsSync(appDir)) {
+          const routeFiles = fs.readdirSync(appDir, { recursive: true })
+            .filter(f => f.endsWith('route.ts') || f.endsWith('route.tsx'));
+          if (routeFiles.length > 0) return 'next';
+        }
+        // 4. Pages Router markers
+        const pagesDir = path.resolve(cwd, 'pages');
+        if (fs.existsSync(pagesDir)) {
+          const pageFiles = fs.readdirSync(pagesDir, { recursive: true })
+            .filter(f => f.endsWith('.tsx') || f.endsWith('.ts'));
+          if (pageFiles.length > 0) return 'next';
+        }
+        // 5. React fallback
+        try {
+          const pkg = JSON.parse(fs.readFileSync(path.resolve(cwd, 'package.json'), 'utf8'));
+          const deps = { ...pkg.dependencies, ...pkg.devDependencies, ...pkg.peerDependencies };
+          if (deps.react) return 'react';
         } catch {}
         if (filePath.endsWith('.jsx')) return 'react';
         return undefined;
       };
       const changedFunctionsWithLanguage = changedFunctions.map(fn => {
         const lang = getLanguageForFile(fn.file);
-        const fw = detectFramework(cwd, fn.file);
+        const fw = detectNextFramework(cwd, fn.file);
         return {
           ...fn,
           language: lang,

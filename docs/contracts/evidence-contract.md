@@ -13,7 +13,7 @@
 ### Migration 0.3→0.4
 
 - Added optional `language` value `"javascript"` to `changedFunctions[]` entries.
-- Added optional `framework?: string` field (values: `"react"`).
+- Added optional `framework?: string` field (values: `"react" | "next"`).
 - Both additive; consumers ignoring unknown values remain compatible.
 - Schema version bump 0.3→0.4 reflects proven JS gap
 
@@ -47,7 +47,7 @@ interface EvidenceOutput {
     analyzerStatus: 'SUCCESS' | 'FAILED' | 'UNSUPPORTED';
     source: string;             // Analyzer tool/version (e.g., 'crap-typescript-core@0.5.0');
     language?: string;          // Language of the function (e.g., "typescript" | "python" | "javascript")
-    framework?: string;         // Framework of the function (e.g., "react")
+    framework?: string;         // Framework of the function (e.g., "react" | "next")
   }[];
   policy: {
     crapThreshold: number;      // CRAP threshold for WARN/PASS gate
