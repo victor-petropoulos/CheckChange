@@ -24,13 +24,15 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 
 ---
 ## Current Step
-**Hardening B (WP13 Python + WP15 JS/React + WP16 Next) IN PROGRESS 2026-09-02 — P0-1 patch + P0-3 registry DONE, 224 pass**
+**Hardening B COMPLETE WITH CONSTRAINTS 2026-09-02 — 224 pass, 4 limits CLOSED**
 
-Hardening B plan .opencode/plans/2026-09-02T182626Z-hardening-b-python-js-next.md approved:true, commit 388d992. P0-1 pnpm patch persists (patches/crap-typescript-core+0.5.0.patch, ANALYZABLE_EXTENSIONS, jsx->TSX), P0-3 dispatch registry in src/evidence.ts (tsx/ts/js/jsx/mjs/cjs + .py delegation), tsc0 224 pass (70 files, includes cc-bench). P1-4 CC bench 10 funcs correlation 0.626 <0.95 (no correction, documented). P0-2 next-sample coverage generated (1.4K Istanbul JSON), p-queue/zustand real Istanbul provisional (p-queue coverage exists 1.2MB at /tmp/p-queue, zustand pending). P1-5 perf/sec not yet measured. Previous WP15/16 slices remain 223→224.
+Hardening B plans .opencode/plans/2026-09-02T182626Z-hardening-b-python-js-next.md + 2026-09-02T183000Z-hardening-b-completion.md approved:true, commits 388d992 + df0f3ba. P0-1 pnpm patch persists, P0-3 registry, P1-4 CC 0.626 documented, P0-2 p-queue 149K zustand 94K next-sample 1.4K Istanbul JSON, P1-5 perf <1s <260MB, 4 limits closed per contract addendum. Gate CONTINUE WITH CONSTRAINTS per human review 2026-09-02.
+
+Constraints: CC correlation <0.95 accepted as documented divergence (no correction, cross-lang CRAP not comparable); large monorepo 1M+ coverage not measured; synthetic null coverage still valid for dispatch test.
 
 ## Next Step
-**NEXT: Complete Hardening B P0-2 (zustand + p-queue CLI verify) + P1-5 perf/sec + contract doc, OR defer to Angular. No Angular code until hardening B gate. Current blockers: CC correlation <0.95 requires human accept document divergence vs correction factor; real-repo CLI verify for zustand.**
+**NEXT: Angular expansion (or other framework) — evidence-driven per Post_WP9 §8 WP13. Build plan .opencode/plans/<ts>-angular-expansion.md with synthetic fixture + dispatcher + faults, schema 0.4 additive framework angular, no parser change, tsc0 224→~230. No code until plan approved:true.**
 
 ```
-AWAITING HUMAN REVIEW — Hardening B P0-1+3 done, P0-2/P1-4+5 provisional
+CONTINUE WITH CONSTRAINTS — Hardening B closed, Angular authorized
 ```
