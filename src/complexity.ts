@@ -10,20 +10,20 @@ export interface ComplexityInfo {
   cc: number;
 }
 
-function getGitTrackedTsFiles(cwd: string): string[] {
+function getGitTrackedCodeFiles(cwd: string): string[] {
   try {
     // Get list of tracked files, one per line
     const output = execSync('git ls-files --cached --others --exclude-standard', { cwd, encoding: 'utf8' });
     const lines = output.trim().split('\n');
-    const tsFiles: string[] = [];
+    const codeFiles: string[] = [];
     for (const line of lines) {
       const trimmed = line.trim();
-      if (trimmed.endsWith('.ts')) {
+      if (/\.(ts|tsx|js|jsx|mjs|cjs)$/.test(trimmed)) {
         // Convert to absolute path
-        tsFiles.push(resolve(cwd, trimmed));
+        codeFiles.push(resolve(cwd, trimmed));
       }
     }
-    return tsFiles;
+    return codeFiles;
   } catch (_) {
     // If git fails (not a repo, or any error), return empty array
     return [];
@@ -33,15 +33,15 @@ function getGitTrackedTsFiles(cwd: string): string[] {
 export async function collectComplexity(cwd: string): Promise<ComplexityInfo[]> {
   // Find all TypeScript files under the source roots
   const sourceRootFiles = await findAllTypeScriptFilesUnderSourceRoots(cwd);
-  // Get all tracked TS files in the repo (respects .gitignore)
-  const gitTrackedTs = getGitTrackedTsFiles(cwd);
+  // Get all tracked code files in the repo (respects .gitignore)
+  const gitTrackedCode = getGitTrackedCodeFiles(cwd);
   
   // Union of both lists, deduplicated
   const fileSet = new Set<string>();
   for (const f of sourceRootFiles) {
     fileSet.add(f);
   }
-  for (const f of gitTrackedTs) {
+  for (const f of gitTrackedCode) {
     fileSet.add(f);
   }
   const filePaths = Array.from(fileSet);
