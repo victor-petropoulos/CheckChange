@@ -24,13 +24,13 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 
 ---
 ## Current Step
-**WP15 JS+React expansion APPROVED 2026-09-02 — COMPLETE (schema 0.4, language javascript + framework react, synthetic 3 JS + 2 JSX, 10 faults, 216 pass, parser allowJs)**
+**WP15 JS+React + WP16 Next.js slice COMPLETE 2026-09-02 — schema 0.4, JS+React 216 pass + Next.js 223 pass (next > react)**
 
-WP15: JS (.js/.jsx/.mjs/.cjs) via patched @barney-media/crap-typescript-core allowJs + ANALYZABLE_EXTENSIONS, dispatcher language javascript + framework react (package.json react dep), collector getGitTrackedCodeFiles, schema 0.4 additive, synthetic js-sample high CC13 med6 low1 + jsx-sample Component/useHook, dispatcher 2 PASS, jsPatch/jsxTest 2 PASS, collect 1 PASS, jsFault 10 PASS, 216/216 pass tsc0, real-repo p-queue/zustand provisional (c8 format mismatch). Fallback Approach2 documented. Plan .opencode/plans/2026-09-02T080000Z-js-react-expansion.md approved:true. Reviewer Task1 PASS rev-1788360897777-2, Task2 medium PATCH_NOTE, 3 limitations provisional (real-repo, parser persistence, framework .tsx). Human review CONTINUE WITH CONSTRAINTS 2026-09-02.
+WP15: JS (.js/.jsx/.mjs/.cjs) via patched core allowJs, dispatcher javascript + framework react, collector getGitTrackedCodeFiles, synthetic js-sample high CC13 + jsx-sample, faults 10 PASS, 216 pass tsc0. WP16-Next: app/page.tsx + next.config.js via detectNextFramework next>react priority, synthetic next-sample framework next verified, dispatcher 5 + faults 2 PASS, 223/223 pass tsc0, provisional real-repo deferred. Plans .opencode/plans/2026-09-02T080000Z-js-react-expansion.md + 2026-09-02T090000Z-next-js-expansion.md approved:true. Human review AWAITING for Next.js slice.
 
 ## Next Step
-**NEXT: Next.js/Angular expansion (WP16) OR WP15 usefulness human study OR WP16 hardening — evidence-driven per Post_WP9 §10-16. No code until next plan approved. Provisional constraints carry forward: real-repo coverage format (c8→Istanbul conversion), parser persistence via pnpm patch/fork, framework detection for .tsx non-React. Narrow next WP to one framework slice.**
+**NEXT: Angular expansion OR WP15/16 usefulness human study OR hardening — evidence-driven per Post_WP9 §10-16. No code until next plan approved. WP16-Next provisional constraints: real-repo Istanbul coverage + parser persistence via pnpm patch.**
 
 ```
-CONTINUE WITH CONSTRAINTS — WP15 0.4 APPROVED
+AWAITING HUMAN REVIEW — WP16 Next.js 0.4
 ```
