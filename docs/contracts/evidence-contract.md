@@ -1,8 +1,8 @@
 # Evidence Contract
 
-## Version: 0.3.0
-## Date: 2026-09-01
-## Status: FROZEN (WP5.6 freeze at commit 21daa57, F-03 additive compatible)
+## Version: 0.4.0
+## Date: 2026-09-02
+## Status: FROZEN (WP15 JS+React schema 0.4, additive language javascript + framework react)
 
 ### Migration 0.2→0.3
 
@@ -17,9 +17,9 @@
 - Both additive; consumers ignoring unknown values remain compatible.
 - Schema version bump 0.3→0.4 reflects proven JS gap
 
-### Schema Version 0.3
+### Schema Version 0.4
 
-The evidence contract defines the deterministic output of the CheckChange evidence engine.
+The evidence contract defines the deterministic output of the CheckChange evidence engine. Schema 0.4 adds `language: "javascript"` and optional `framework: "react"` to ChangedFunction.
 
 #### Top-Level Structure
 

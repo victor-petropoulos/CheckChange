@@ -24,12 +24,13 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 
 ---
 ## Current Step
-**WP14 historical fresh per-commit coverage APPROVED 2026-09-01 — COMPLETE (commits 00203d4/e11ec0b, Node 20.10.0, schema 0.3, gate WARN/WARN, coverage 24k/29k distinct, hashes 8acc60fa/0053189c)**
-WP14: TSDoc/Rush eslint-plugin, fresh coverage per-commit via worktrees + heft test --config jest.coverage.config.json under Node 20.10.0, engine @barney-media/crap-typescript-core@0.5.0, schema 0.3 language typescript, delta CRAP 54.67 vs 116.98 coverage-aware (not complexity-only), closes Round8 reuse gap (1.62M reused → distinct 24k/29k). WP13-LANG-REGISTRY + CC-EQUIVALENCE + SCHEMA 0.3 + WP10/11/12 preserved. 201/201 pass tsc0, npm audit 0 vulns. Plan .opencode/plans/2026-09-01T19:30:00Z-wp14-historical-fresh-coverage.md approved:true. Reviewer PASS, security PASS, 3 limitations documented provisional/2-point/branch-only. Human review APPROVED.
+**WP15 JS+React expansion APPROVED 2026-09-02 — COMPLETE (schema 0.4, language javascript + framework react, synthetic 3 JS + 2 JSX, 10 faults, 216 pass, parser allowJs)**
+
+WP15: JS (.js/.jsx/.mjs/.cjs) via patched @barney-media/crap-typescript-core allowJs + ANALYZABLE_EXTENSIONS, dispatcher language javascript + framework react (package.json react dep), collector getGitTrackedCodeFiles, schema 0.4 additive, synthetic js-sample high CC13 med6 low1 + jsx-sample Component/useHook, dispatcher 2 PASS, jsPatch/jsxTest 2 PASS, collect 1 PASS, jsFault 10 PASS, 216/216 pass tsc0, real-repo p-queue/zustand provisional (c8 format mismatch). Fallback Approach2 documented. Plan .opencode/plans/2026-09-02T080000Z-js-react-expansion.md approved:true. Reviewer Task1 PASS rev-1788360897777-2, Task2 medium PATCH_NOTE, 3 limitations provisional (real-repo, parser persistence, framework .tsx). Human review REQUIRED.
 
 ## Next Step
-**NEXT: WP15 usefulness (human study) OR WP16 hardening OR STOP — evidence-driven per Post_WP9 §10-16. No code until next plan approved. Provisional limitations (single-env, 2-point, branch-only) deferred unless WP15 requires expansion.**
+**NEXT: Next.js/Angular expansion OR WP15 usefulness human study OR WP16 hardening OR STOP — evidence-driven per Post_WP9. No code until next plan approved. Provisional real-repo + persistence deferred unless next WP requires.**
 
 ```
-CONTINUE — WP14 APPROVED
+AWAITING HUMAN REVIEW — WP15 0.4
 ```
