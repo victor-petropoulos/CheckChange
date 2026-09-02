@@ -201,7 +201,7 @@ test('Anchor 4: Schema v0.3 compatibility', async () => {
 
      // Assert: the output has the required v0.3 fields
      expect(output).toBeDefined();
-     expect(output.schemaVersion).toBe('0.3');
+     expect(output.schemaVersion).toBe('0.4');
      expect(output.analysis).toBeDefined();
      expect(output.capabilities).toBeDefined();
      expect(output.changedFunctions).toBeDefined();

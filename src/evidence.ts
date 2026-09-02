@@ -4,6 +4,8 @@ import { collectComplexity } from './complexity.js';
 import { readCoverage } from './coverage.js';
 import { attachCoverage } from './attribution.js';
 import { calculateCrap } from './crapCalc.js';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export interface ProviderFactory { 
   collectComplexity: (cwd:string)=>Promise<any[]>; 
@@ -103,9 +105,9 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
     // We'll set the git capability to 'available' (if we got here, git is working)
     const gitCapability = 'available';
     // Step 1: Collect complexity
-    // Extension detection: prioritize .py > .tsx > .ts
+    // Extension detection: prioritize .py > .tsx > .ts > .jsx > .js/.mjs/.cjs
     let detectedExtension = '.ts';
-    let hasPy = false, hasTsx = false;
+    let hasPy = false, hasTsx = false, hasJsx = false, hasJs = false;
     for (const [filePath] of intervals) {
       if (filePath.endsWith('.py')) {
         hasPy = true;
@@ -114,9 +116,17 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
       if (filePath.endsWith('.tsx')) {
         hasTsx = true;
       }
+      if (filePath.endsWith('.jsx')) {
+        hasJsx = true;
+      }
+      if (filePath.endsWith('.js') || filePath.endsWith('.mjs') || filePath.endsWith('.cjs')) {
+        hasJs = true;
+      }
     }
     if (hasPy) detectedExtension = '.py';
     else if (hasTsx) detectedExtension = '.tsx';
+    else if (hasJsx) detectedExtension = '.jsx';
+    else if (hasJs) detectedExtension = '.js';
     let complexityInfo = [];
     let complexityCapability = 'available';
     try {
@@ -133,22 +143,22 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
         // We'll set complexityInfo to empty and continue.
         complexityInfo = [];
     }
-    // Helper to check if intervals contain only non-TS files
+    // Helper to check if intervals contain only non-supported files
     const isUnsupportedIntervals = (intervals) => {
         if (intervals.size === 0) {
             return false; // empty intervals -> not unsupported (could be no changes)
         }
         for (const [filePath] of intervals) {
-            if (filePath.endsWith('.ts') || filePath.endsWith('.tsx') || filePath.endsWith('.py')) {
+            if (filePath.endsWith('.ts') || filePath.endsWith('.tsx') || filePath.endsWith('.js') || filePath.endsWith('.jsx') || filePath.endsWith('.mjs') || filePath.endsWith('.cjs') || filePath.endsWith('.py')) {
                 return false; // at least one supported file -> supported
             }
         }
-        return true; // all files are non-TS and intervals non-empty
+        return true; // all files are non-supported and intervals non-empty
     };
-    // If intervals indicate unsupported source (non-TS files only), return UNSUPPORTED
+    // If intervals indicate unsupported source (non-code files only), return UNSUPPORTED
     if (isUnsupportedIntervals(intervals)) {
         return {
-            schemaVersion: '0.3',
+            schemaVersion: '0.4',
             analysis: {
                 base: base,
                 target: 'current'
@@ -204,7 +214,7 @@ coverageResult = { available: false, coverageMap: null, error: true, reason: 'ma
         completeness = 'NOT_APPLICABLE';
         // We'll return early with empty changedFunctions.
         return {
-            schemaVersion: '0.3',
+            schemaVersion: '0.4',
             analysis: {
                 base: base,
                 target: 'current'
@@ -295,22 +305,40 @@ completeness = 'INCOMPLETE';
         // We'll leave analysisStatus as SUCCESS.
     }
 // Step 10: Build and return the OutputJson
-     // Map language to changedFunctions based on file extension
-     const languageMap = {
-       '.py': 'python',
-       '.ts': 'typescript',
-       '.tsx': 'typescript'
-     };
-     const getLanguageForFile = (filePath) => {
-       const ext = Object.keys(languageMap).find(key => filePath.endsWith(key));
-       return ext ? languageMap[ext] : undefined;
-     };
-     const changedFunctionsWithLanguage = changedFunctions.map(fn => ({
-       ...fn,
-       language: getLanguageForFile(fn.file)
-     }));
-     return {
-         schemaVersion: '0.3',
+      // Map language to changedFunctions based on file extension
+      const languageMap = {
+        '.py': 'python',
+        '.ts': 'typescript',
+        '.tsx': 'typescript',
+        '.js': 'javascript',
+        '.jsx': 'javascript',
+        '.mjs': 'javascript',
+        '.cjs': 'javascript'
+      };
+      const getLanguageForFile = (filePath) => {
+        const ext = Object.keys(languageMap).find(key => filePath.endsWith(key));
+        return ext ? languageMap[ext] : undefined;
+      };
+      const detectFramework = (cwd, filePath) => {
+        try {
+          const pkg = JSON.parse(fs.readFileSync(path.resolve(cwd, 'package.json'), 'utf8'));
+          if (pkg.dependencies?.react || pkg.devDependencies?.react) return 'react';
+          if (pkg.peerDependencies?.react) return 'react';
+        } catch {}
+        if (filePath.endsWith('.jsx')) return 'react';
+        return undefined;
+      };
+      const changedFunctionsWithLanguage = changedFunctions.map(fn => {
+        const lang = getLanguageForFile(fn.file);
+        const fw = detectFramework(cwd, fn.file);
+        return {
+          ...fn,
+          language: lang,
+          ...(fw ? { framework: fw } : {})
+        };
+      });
+      return {
+          schemaVersion: '0.4',
          analysis: {
              base: base,
              target: 'current'
@@ -333,7 +361,7 @@ completeness = 'INCOMPLETE';
 // Helper function to build output when there is a provider failure
 function buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason) {
      return {
-         schemaVersion: '0.3',
+         schemaVersion: '0.4',
          analysis: {
              base: base,
              target: 'current'

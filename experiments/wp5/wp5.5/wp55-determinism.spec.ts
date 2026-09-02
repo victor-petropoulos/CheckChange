@@ -261,7 +261,7 @@ it('condition 2: valid coverage WARN', async () => {
           execSync('git add .', { cwd: repo.tempDir, stdio: 'ignore' });
           execSync('git commit -m "initial"', { cwd: repo.tempDir, stdio: 'ignore' });
         },
-        new Map([['script.js', [{ start: 1, end: 1 }]]]), // Non-TS file
+        new Map([['notes.md', [{ start: 1, end: 1 }]]]), // Non-TS file
         undefined
       );
       expect(output.analysisStatus).toBe('UNSUPPORTED');

@@ -1,0 +1,1 @@
+export function Card({t}){ if(!t) return null; return <div>{t}</div>}

@@ -86,11 +86,11 @@ it('CLI exits with 1 and stderr \"Not a git repository\" when run in non-git dir
       const { createTempRepo, writeSourceFile } = await import('../wp5.2/fixtures/helpers.ts');
       const repo = createTempRepo();
       try {
-        // Write a JavaScript file (non-TS)
-        writeSourceFile(join(repo.srcDir, 'test.js'), 'function foo() { return 1; }');
-        // intervals map with .js file
+        // Write a markdown file (unsupported)
+        writeSourceFile(join(repo.tempDir, 'notes.md'), '# Notes dummy');
+        // intervals map with .md file (unsupported)
         const intervals = new Map();
-        intervals.set('test.js', [{ start: 1, end: 1 }]);
+        intervals.set('notes.md', [{ start: 1, end: 1 }]);
 
         const output = await buildEvidenceOutput('HEAD', intervals, repo.tempDir, 30);
         expect(output.analysisStatus).toBe('UNSUPPORTED');

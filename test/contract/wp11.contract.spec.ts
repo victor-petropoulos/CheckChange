@@ -23,7 +23,7 @@ describe('Contract verification tests (WP11)', () => {
   // Prevent mock leakage across tests (Engram F0)
   // Group A — Schema & threshold
 describe('Schema & threshold', () => {
-     test('buildEvidenceOutput returns schemaVersion 0.3', async () => {
+     test('buildEvidenceOutput returns schemaVersion 0.4', async () => {
        const base = 'abc123'
        const cwd = '/tmp'
        const intervals = new Map() // empty intervals
@@ -37,7 +37,7 @@ describe('Schema & threshold', () => {
        vi.spyOn(attribution, 'attachCoverage').mockResolvedValue([])
 
        const output = await buildEvidenceOutput(base, intervals, cwd, 30)
-       expect(output.schemaVersion).toBe('0.3')
+       expect(output.schemaVersion).toBe('0.4')
     })
 
     test('default crapThreshold 30, policy reflects it', async () => {

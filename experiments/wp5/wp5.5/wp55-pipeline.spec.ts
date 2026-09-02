@@ -169,17 +169,16 @@ describe('WP5.5 T2: End-to-end composed pipeline tests (using buildEvidenceOutpu
   // Scenario C: complexity provider failure (simulate via empty intervals? Or mock complexity? Check evidence.ts unsupported path: intervals with only non-TS files → analysisStatus 'UNSUPPORTED', gate null, completeness 'NOT_APPLICABLE')
   it('scenario C: complexity provider failure (non-TS files only)', async () => {
     // Create a JavaScript file (non-TS)
-    const srcFile = `${tempDir.srcDir}/simple.js`;
+    const srcFile = `${tempDir.tempDir}/notes.md`;
     const content = `
-    function simple() {
-      return 1;
-    }
+    # Notes
+    dummy content
     `;
     writeSourceFile(srcFile, content);
 
     // Intervals for the JS file
     const intervals = new Map<string, { start: number; end: number }[]>();
-    intervals.set('src/simple.js', [{ start: 1, end: 5 }]);
+    intervals.set('notes.md', [{ start: 1, end: 5 }]);
 
     // We do not write a coverage file (or we can write one, but it shouldn't matter because unsupported)
 
