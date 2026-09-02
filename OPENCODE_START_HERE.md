@@ -26,11 +26,11 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 ## Current Step
 **WP15 JS+React expansion APPROVED 2026-09-02 — COMPLETE (schema 0.4, language javascript + framework react, synthetic 3 JS + 2 JSX, 10 faults, 216 pass, parser allowJs)**
 
-WP15: JS (.js/.jsx/.mjs/.cjs) via patched @barney-media/crap-typescript-core allowJs + ANALYZABLE_EXTENSIONS, dispatcher language javascript + framework react (package.json react dep), collector getGitTrackedCodeFiles, schema 0.4 additive, synthetic js-sample high CC13 med6 low1 + jsx-sample Component/useHook, dispatcher 2 PASS, jsPatch/jsxTest 2 PASS, collect 1 PASS, jsFault 10 PASS, 216/216 pass tsc0, real-repo p-queue/zustand provisional (c8 format mismatch). Fallback Approach2 documented. Plan .opencode/plans/2026-09-02T080000Z-js-react-expansion.md approved:true. Reviewer Task1 PASS rev-1788360897777-2, Task2 medium PATCH_NOTE, 3 limitations provisional (real-repo, parser persistence, framework .tsx). Human review REQUIRED.
+WP15: JS (.js/.jsx/.mjs/.cjs) via patched @barney-media/crap-typescript-core allowJs + ANALYZABLE_EXTENSIONS, dispatcher language javascript + framework react (package.json react dep), collector getGitTrackedCodeFiles, schema 0.4 additive, synthetic js-sample high CC13 med6 low1 + jsx-sample Component/useHook, dispatcher 2 PASS, jsPatch/jsxTest 2 PASS, collect 1 PASS, jsFault 10 PASS, 216/216 pass tsc0, real-repo p-queue/zustand provisional (c8 format mismatch). Fallback Approach2 documented. Plan .opencode/plans/2026-09-02T080000Z-js-react-expansion.md approved:true. Reviewer Task1 PASS rev-1788360897777-2, Task2 medium PATCH_NOTE, 3 limitations provisional (real-repo, parser persistence, framework .tsx). Human review CONTINUE WITH CONSTRAINTS 2026-09-02.
 
 ## Next Step
-**NEXT: Next.js/Angular expansion OR WP15 usefulness human study OR WP16 hardening OR STOP — evidence-driven per Post_WP9. No code until next plan approved. Provisional real-repo + persistence deferred unless next WP requires.**
+**NEXT: Next.js/Angular expansion (WP16) OR WP15 usefulness human study OR WP16 hardening — evidence-driven per Post_WP9 §10-16. No code until next plan approved. Provisional constraints carry forward: real-repo coverage format (c8→Istanbul conversion), parser persistence via pnpm patch/fork, framework detection for .tsx non-React. Narrow next WP to one framework slice.**
 
 ```
-AWAITING HUMAN REVIEW — WP15 0.4
+CONTINUE WITH CONSTRAINTS — WP15 0.4 APPROVED
 ```
