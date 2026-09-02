@@ -1,6 +1,6 @@
 # Project: CheckChange
 
-Version: v2.5 WP13 Python adapter complete (additive, no src core change except src/index.ts newline, schema 0.2 frozen, 191/191 pass)
+Version: v3.0 WP13 remaining 3 + WP10/11/12 + schema bump 0.2→0.3 COMPLETE (commits be2bca4 + 60d5dab + 9cc6b30, tag v0.3.0-compatible)
 
 **WP5 = COMPLETE / ACCEPTED.** WP5.6 usefulness/robustness/freeze accepted 2026-08-27. WP5.6 defect remediation (F-03/F-04/D-APOLLO) accepted 2026-08-27.
 
@@ -40,31 +40,40 @@ Version: v2.5 WP13 Python adapter complete (additive, no src core change except 
 - **WP12: CI Integration Validation — DONE 2026-08-31 CONTINUE WITH CONSTRAINTS (doc-only, no src change, schema 0.2 frozen, 191/191 pass)**
 - **WP12 Fix 8885796 — DONE 2026-08-31 Attribution case-insensitive predicate (test/attribution.case.spec.ts +3 tests)**
 - **WP12 Hardening e354048 — DONE 2026-08-31 Vitest config guard + case-insensitive regression anchor + contract addendum**
-- **WP13: Python language expansion (lizard + coverage.py) — COMPLETE 2026-09-01 synthetic fixture n=1, PASS@30 WARN@15, schema 0.2 frozen**
+- **WP13: Python language expansion (lizard + coverage.py) — COMPLETE 2026-09-01 synthetic fixture n=3, PASS@30 WARN@15, schema 0.2 frozen**
+- **WP13-LANG-REGISTRY: Language registry + complexity-providers.ts — DONE 2026-09-01 (src/complexity-providers.ts, registry pattern, language field in EvidenceOutput)**
+- **WP13-CC-EQUIVALENCE: CC equivalence documentation + hypothesis table — DONE 2026-09-01 (docs-only, schema 0.3 language field)**
+- **Hygiene A+B: shell:true fix + gitignore — DONE 2026-09-01 (experiments/wp13/adapter/pythonComplexity.ts shell injection fix, .gitignore updated, 0 shell:true remaining)**
 
 - **N1 2026-09-01: High-CC WARN + capital-file live validation — DONE (synthetic/n1-highcc-verify, cc8 cov0 crap72 WARN at thresholds 30/15, /tmp/N1_P1.json, capital-C fix exercised)**
 - **N3 2026-09-01: Malformed coverage UNSUPPORTED vs FAILED addendum — DONE (docs-only, evidence-contract.md + WP12_RESULTS.md, no engine fix, isUnsupportedIntervals precedence)**
 - **N4 2026-09-01: README drift sync — DONE (191/191, schema 0.2, INV-01..04, packet link)**
 - **Human Review 2026-09-01: CONTINUE WITH CONSTRAINTS** — N1/N3/N4 remediation approved, WP12 packet approved, awaiting constrained fork selection
 - **Human Review 2026-09-01: CONTINUE WITH CONSTRAINTS** — WP13 approved, synthetic n=1 limitation acknowledged, next fork WP14/WP15/STOP pending
+- **WP13 Remaining 3 + WP10/11/12 + Schema Bump + Hygiene — COMPLETE 2026-09-01 (commits be2bca4+60d5dab+9cc6b30, tag v0.3.0-compatible, 201/201 tests, schema 0.3)
 
-## Current state (2026-09-01 WP13 adapter complete)
+## Current state (2026-09-01 WP13 remaining 3 + WP10/11/12 + schema bump + hygiene COMPLETE)
 
 - Branch: `main`
-- Commit: `5256bb1` (WP13 Python adapter complete)
-- Engine: WP13 adapter complete (additive, no src core change except src/index.ts newline)
-- Tests: 191/191 pass (61 files)
+- Commit: `9cc6b30` (WP13 remaining 3 + WP10/11/12 + schema bump + hygiene)
+- Engine: WP13 language registry + schema 0.3 + hygiene fix (src/complexity-providers.ts, language field, shell:true removed)
+- Tests: 201/201 pass (62 files)
 - Typecheck: `npx tsc --noEmit` → 0 errors
 - Build: `npm run build` → ok
-- WP9/WP11/WP13 contract: schema 0.2 frozen, threshold 30/15 frozen, INV-01..04 preserved
+- WP9/WP11/WP13 contract: schema 0.3, threshold 30/15 frozen, INV-01..04 preserved, explicit language field
 - WP13 deliverables:
   - `experiments/wp13/fixtures/python-sample/` synthetic fixture (3 functions cc2/9/16)
-  - `experiments/wp13/adapter/` lizard+coverage.py provider adapters (pythonComplexity.ts, pythonCoverage.ts, index.ts)
-  - `experiments/wp13/adapter/e2e.ts` end-to-end validation producing EvidenceOutput schema 0.2 with language:python provenance
-  - `docs/contracts/evidence-contract.md` Python provenance addendum (no schema bump)
-  - `experiments/wp13/WP13_RESULTS.md` claims/evidence matrix with verification table
-  - `experiments/wp13/HUMAN_REVIEW_STUB.md` scope/boundary/constraints for review
+  - `experiments/wp13/fixtures/python-async/` + `python-classes/` fixtures (n=3 total)
+  - `experiments/wp13/adapter/` lizard+coverage.py provider adapters (pythonComplexity.ts, pythonCoverage.ts, index.ts) — shell:true fixed
+  - `experiments/wp13/adapter/e2e.ts` end-to-end validation producing EvidenceOutput schema 0.3 with language:python provenance
+  - `src/complexity-providers.ts` language registry + ComplexityProvider/CoverageProvider interfaces
+  - `docs/contracts/evidence-contract.md` Python provenance addendum (schema 0.3)
+  - `experiments/wp13/WP13_RESULTS.md` claims/evidence matrix with verification table (updated)
+  - `experiments/wp13/HUMAN_REVIEW_STUB.md` scope/boundary/constraints for review (updated)
   - Engram review: rev-1788280837977-1 approved
+- Hygiene:
+  - `experiments/wp13/adapter/pythonComplexity.ts`: shell:true removed, spawnSync array form, path traversal guard
+  - `.gitignore`: **/__pycache__/, **/.coverage, experiments/wp13/fixtures/**/coverage.json, computeCC.cjs, test*.py, test*.ts
 
 ## WP12 CI Integration Validation — COMPLETE 2026-08-31
 
@@ -90,6 +99,6 @@ WP5.6 recorded narrowly: deterministic evidence with truthful semantics (INV-01.
 
 ## Next work package
 
-**NEXT WIP: Awaiting human selection of constrained WP13 language OR WP14 historical (Node 20.9 fresh per-commit coverage) OR WP15 usefulness OR STOP/NARROW** — no schema bump without proven gap, no claim without basis, experiments/.worktrees excluded per vitest.config.ts.
+**NEXT WIP: AWAITING HUMAN REVIEW for WP14 historical (Node 20.9 fresh per-commit coverage) OR WP15 usefulness OR STOP/NARROW** — via OPENCODE_START_HERE.md. Schema 0.3 complete (tag v0.3.0-compatible), no further schema bump without proven gap.
 
-Per `docs/10_WP10_CAPABILITY_DEFINITION.md` §9: WP11/12 complete — stable input/output contract defined (WP11) → validated in 2 real CI pipelines (WP12) → measured setup complexity, failure modes, evidence completeness, developer comprehension, CI cost, reproducibility. Integration proved reliable. Proceed toward real-world validation (WP15) or alternative forks per human direction. Alternative forks: WP13 language expansion, WP14 historical/delta (Node 20.9 fresh per-commit coverage), WP15 human review study, or narrow/stop per Fork E.
+Per `docs/10_WP10_CAPABILITY_DEFINITION.md` §9: WP11/12 complete — stable input/output contract defined (WP11) → validated in 2 real CI pipelines (WP12) → measured setup complexity, failure modes, evidence completeness, developer comprehension, CI cost, reproducibility. Integration proved reliable. Proceed toward real-world validation (WP15) or alternative forks per human direction. Alternative forks: WP14 historical/delta (Node 20.9 fresh per-commit coverage), WP15 human review study, or narrow/stop per Fork E.

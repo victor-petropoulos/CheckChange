@@ -124,3 +124,24 @@ For development with OpenCode, also read the repository-root `OPENCODE_START_HER
 - `implementation/WP4R_FINAL_USEFULNESS_RERUN.md` — **current experiment**
 - `implementation/WP4R_FINAL_EXECUTION_PLAYBOOK.md`
 - `research/WP4R_FINAL_HUMAN_REVIEW_TEMPLATE.md`
+
+---
+
+## WP13 — Current (2026-09-01)
+
+- `experiments/wp13/WP13_RESULTS.md` — Python language expansion + remaining 3 + schema bump + hygiene COMPLETE (schema 0.3, 201/201 tests, tag v0.3.0-compatible)
+- `experiments/wp13/HUMAN_REVIEW_STUB.md` — Scope/boundary/constraints for review (schema 0.3, all 9 limitations resolved)
+- `experiments/wp13/adapter/` — Python adapters (lizard+coverage.py) with shell:true fix
+- `src/complexity-providers.ts` — Language registry + ComplexityProvider/CoverageProvider interfaces
+- `docs/contracts/evidence-contract.md` — Python provenance addendum (schema 0.3)
+- `experiments/wp13/fixtures/` — python-sample, python-async, python-classes (n=3)
+
+---
+
+## Next Work Package (Awaiting Human Review)
+
+- WP14: Historical Node 20.9 fresh per-commit coverage
+- WP15: Usefulness study
+- STOP/NARROW
+
+Via OPENCODE_START_HERE.md

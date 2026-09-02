@@ -46,13 +46,15 @@ Because "trust me, I tested it" isn't evidence.
 
 ## Status
 
-**Current state (2026-09-01):** WP12 CI Integration Validation complete + Fix + Hardening (doc-only, no src change, schema 0.2 frozen, 191/191 pass).
+**Current state (2026-09-01):** WP13 remaining 3 + WP10/11/12 + schema bump + hygiene COMPLETE (schema 0.3, 201/201 pass 62 files, package 0.3.0).
 
-- Tests: 191/191 pass (61 files)
+- Tests: 201/201 pass (62 files)
 - Typecheck: `npx tsc --noEmit` → 0 errors
 - Build: `npm run build` → ok, `dist/cli.js` 6K
-- WP12 contract: schema 0.2 frozen, thresholds 30/15 frozen, INV-01..04 preserved
+- WP9/WP11/WP13 contract: schema 0.3, thresholds 30/15 frozen, INV-01..04 preserved, explicit language field
 - WP12 Fix 8885796: attribution case-insensitive suffix match (src/attribution.ts:62)
 - WP12 Hardening e354048: vitest.config.ts guard + case-insensitive regression anchor
-- Evidence contract: `docs/contracts/evidence-contract.md`
+- WP13 deliverables: `src/complexity-providers.ts` (language registry), `experiments/wp13/adapter/` (Python adapters, shell:true fixed), e2e schema 0.3 PASS
+- Evidence contract: `docs/contracts/evidence-contract.md` (schema 0.3, Python addendum)
 - Human review packet: `docs/closure/WP12_HUMAN_REVIEW_PACKET.md` (APPROVED 2026-09-01)
+- Tag: v0.3.0-compatible
