@@ -1,7 +1,7 @@
 ---
 task: "JS+React expansion — javascript language + react framework, schema 0.4, medium bar"
 created: 2026-09-02T08:00:00Z
-approved: false
+approved: true
 tasks:
   - id: "1"
     description: "Schema 0.4 + contract prep — add language javascript + framework react to evidence contract, ChangedFunction interface"
@@ -420,4 +420,4 @@ git push
 - [x] Reversibility documented per task, fallback Approach 2 noted
 - [x] Thresholds frozen, INV preserved, additive schema
 
-Ready for approval gate. Flip `approved: false` → `true` only after human explicit approve.
+Ready for approval gate. Flip `approved: true` → `true` only after human explicit approve.
