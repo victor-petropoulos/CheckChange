@@ -14,6 +14,15 @@ export interface ProviderFactory {
 const providers = new Map<string, ProviderFactory>()
 export function registerProvider(ext:string, factory:ProviderFactory){providers.set(ext,factory)}
 
+// Register TypeScript provider for JS/TS extensions (delegation preserves vi.spyOn mocks)
+const typescriptProvider: ProviderFactory = {
+  collectComplexity: (...args: Parameters<typeof collectComplexity>) => collectComplexity(...args),
+  readCoverage: (...args: Parameters<typeof readCoverage>) => readCoverage(...args),
+};
+for (const ext of ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'] as const) {
+  registerProvider(ext, typescriptProvider);
+}
+
 export interface ChangedFunction {
   file: string;
   method: string;

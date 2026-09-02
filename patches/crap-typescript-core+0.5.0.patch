@@ -1,0 +1,38 @@
+--- dist/fileSelection.js
++++ dist/fileSelection.js
+@@ -2,7 +2,7 @@
+ import path from "node:path";
+ import { IGNORED_DIRECTORIES, IGNORED_SOURCE_ROOT_DISCOVERY_DIRECTORIES } from "./constants.js";
+ import { normalizeSlashes, runCommand, toRelativePath } from "./utils.js";
+-const ANALYZABLE_EXTENSIONS = [".ts", ".tsx"];
++const ANALYZABLE_EXTENSIONS = [".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs"];
+ const TEST_FILE_MARKERS = [".test.", ".spec."];
+ const BUILD_OUTPUT_SOURCE_ROOT_SEGMENTS = new Set(["build", "out", "target"]);
+ const EXCLUDED_PATH_SEGMENTS = [
+--- dist/utils.js
++++ dist/utils.js
+@@ -136,7 +136,11 @@
+     return value.toFixed(1);
+ }
+ export function resolveScriptKind(filePath) {
+-    return filePath.toLowerCase().endsWith(".tsx") ? "tsx" : "ts";
++  const lower = filePath.toLowerCase();
++  if (lower.endsWith(".tsx")) return "tsx";
++  if (lower.endsWith(".ts")) return "ts";
++  if (lower.endsWith(".jsx")) return "tsx";
++  return "js"; // for .js, .mjs, .cjs
+ }
+ export class DefaultCommandExecutor {
+     async execute(command) {
+--- dist/parser.js
++++ dist/parser.js
+@@ -44,7 +44,8 @@
+ ]);
+ export async function parseFileMethods(filePath) {
+     const sourceText = await readFile(filePath, "utf8");
+-    const scriptKind = resolveScriptKind(filePath) === "tsx" ? ts.ScriptKind.TSX : ts.ScriptKind.TS;
++    const scriptKindMap = { "ts": ts.ScriptKind.TS, "tsx": ts.ScriptKind.TSX, "js": ts.ScriptKind.JS, "jsx": ts.ScriptKind.TSX };
++    const scriptKind = scriptKindMap[resolveScriptKind(filePath)] ?? ts.ScriptKind.TS;
+     const sourceFile = ts.createSourceFile(filePath, sourceText, ts.ScriptTarget.Latest, true, scriptKind);
+     throwIfParseDiagnostics(sourceFile);
+     const methods = [];

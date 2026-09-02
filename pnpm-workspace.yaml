@@ -1,2 +1,4 @@
 allowBuilds:
   esbuild: set this to true or false
+patchedDependencies:
+  '@barney-media/crap-typescript-core@0.5.0': patches/@barney-media__crap-typescript-core@0.5.0.patch

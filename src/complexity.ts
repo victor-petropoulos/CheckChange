@@ -35,7 +35,7 @@ export async function collectComplexity(cwd: string): Promise<ComplexityInfo[]> 
   const sourceRootFiles = await findAllTypeScriptFilesUnderSourceRoots(cwd);
   // Get all tracked code files in the repo (respects .gitignore)
   const gitTrackedCode = getGitTrackedCodeFiles(cwd);
-  
+   
   // Union of both lists, deduplicated
   const fileSet = new Set<string>();
   for (const f of sourceRootFiles) {
@@ -45,9 +45,9 @@ export async function collectComplexity(cwd: string): Promise<ComplexityInfo[]> 
     fileSet.add(f);
   }
   const filePaths = Array.from(fileSet);
-  
+   
   const complexityInfo: ComplexityInfo[] = [];
-
+ 
   for (const filePath of filePaths) {
     try {
       const methodDescriptors = await parseFileMethods(filePath);
@@ -71,6 +71,6 @@ export async function collectComplexity(cwd: string): Promise<ComplexityInfo[]> 
       continue;
     }
   }
-
+ 
   return complexityInfo;
 }

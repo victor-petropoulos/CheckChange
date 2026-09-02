@@ -42,8 +42,8 @@ describe('Next dispatcher', () => {
     const dir = mkTempDir('react-only-');
     fs.writeFileSync(path.join(dir,'package.json'), JSON.stringify({dependencies:{react:'18.0.0'}}));
     fs.mkdirSync(path.join(dir,'src'),{recursive:true});
-    fs.writeFileSync(path.join(dir,'src','d.jsx'), 'export function D(){ return <div/>}');
-    const intervals = new Map([['src/d.jsx',[{start:1,end:3}]]]);
+    fs.writeFileSync(path.join(dir,'src','d.tsx'), 'export function D(){ return <div/>}');
+    const intervals = new Map([['src/d.tsx',[{start:1,end:3}]]]);
     const out = await buildEvidenceOutput('HEAD', intervals, dir, 30);
     expect(out.changedFunctions[0]?.framework).toBe('react');
     fs.rmSync(dir,{recursive:true,force:true});
