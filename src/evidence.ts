@@ -24,6 +24,7 @@ export interface ChangedFunction {
   analyzerStatus: 'passed' | 'failed' | 'skipped';
   source: { tool: string; version: string; };
   language?: string;
+  framework?: string;
 }
 
 export function correlate(methodEvidence, intervals) {

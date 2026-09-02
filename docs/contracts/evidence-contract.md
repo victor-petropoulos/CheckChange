@@ -10,6 +10,13 @@
 - This is an additive change; consumers ignoring unknown fields remain compatible (forward compatibility).
 - Schema version bump from 0.2 to 0.3 reflects proven multi-language gap (WP10) and language-registry implementation (WP13-LANG-REGISTRY).
 
+### Migration 0.3→0.4
+
+- Added optional `language` value `"javascript"` to `changedFunctions[]` entries.
+- Added optional `framework?: string` field (values: `"react"`).
+- Both additive; consumers ignoring unknown values remain compatible.
+- Schema version bump 0.3→0.4 reflects proven JS gap
+
 ### Schema Version 0.3
 
 The evidence contract defines the deterministic output of the CheckChange evidence engine.
@@ -39,7 +46,8 @@ interface EvidenceOutput {
     coverageKind: 'statements' | 'branches' | 'functions' | 'lines' | null;
     analyzerStatus: 'SUCCESS' | 'FAILED' | 'UNSUPPORTED';
     source: string;             // Analyzer tool/version (e.g., 'crap-typescript-core@0.5.0');
-    language?: string;          // Language of the function (e.g., "typescript" | "python")
+    language?: string;          // Language of the function (e.g., "typescript" | "python" | "javascript")
+    framework?: string;         // Framework of the function (e.g., "react")
   }[];
   policy: {
     crapThreshold: number;      // CRAP threshold for WARN/PASS gate
