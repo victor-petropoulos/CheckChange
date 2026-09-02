@@ -1,7 +1,7 @@
 ---
 task: "Next.js expansion — framework next metadata, pure, config+app, next>react"
 created: 2026-09-02T09:00:00Z
-approved: false
+approved: true
 tasks:
   - id: "1"
     description: "Detector src/evidence.ts detectNextFramework + contract"
