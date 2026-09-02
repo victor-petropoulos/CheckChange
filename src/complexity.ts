@@ -66,8 +66,9 @@ export async function collectComplexity(cwd: string): Promise<ComplexityInfo[]> 
         });
       }
     } catch (error) {
-      // If parsing fails, we throw to be handled by the caller (evidence.ts)
-      throw new Error(`Failed to parse TypeScript file ${filePath}: ${error instanceof Error ? error.message : String(error)}`);
+      // If parsing fails for a single file (e.g., stray temp malformed JS), skip file rather than failing entire collection.
+      console.error(`Warning: failed to parse ${filePath}, skipping: ${error instanceof Error ? error.message : String(error)}`);
+      continue;
     }
   }
 
