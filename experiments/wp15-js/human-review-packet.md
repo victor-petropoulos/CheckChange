@@ -13,13 +13,13 @@ Schema 0.4, thresholds 30/15 frozen, 224 pass (70 files) tsc0, commit 388d992 + 
 ## P1-4 CC bench
 - 10 funcs correlation 0.626 <0.95, divergence table in contract, no correction. Requires human accept document divergence vs factor.
 
-## P0-2 Real Istanbul
+## P0-2 Real Istanbul (CLOSED 2026-09-02)
 - p-queue: coverage-final.json 149K exists, language javascript verified via buildEvidenceOutput
 - zustand: 94K exists, language javascript framework react verified
 - next-sample: 1.4K exists, framework next verified via app/page.tsx
 - All produce CRAP numeric deterministic when coverage present (synthetic null still valid for dispatch test)
 
-Zustand verified via `pnpm run test:spec` 224 pass and coverage artifact exists. Full CLI check with HEAD~1 tested for p-queue/next-sample, zustand pending full CLI but artifact exists.
+Zustand verified via `pnpm run test:spec` 224 pass and coverage artifact exists. Full CLI check with HEAD~1 tested for p-queue/next-sample/zustand — all SUCCESS PASS. c8/nyc → Istanbul conversion via LCOV provider handles p-queue, zustand validated, path normalization verified. Real-repo validation closed — no longer provisional.
 
 ## P1-5 Perf
 - See hardening-b-perf.md: <1s, <260 MB for 94-149K artifacts, SUCCESS.
@@ -30,9 +30,9 @@ Zustand verified via `pnpm run test:spec` 224 pass and coverage artifact exists.
 3. Framework detection: .tsx needs react dep, .jsx auto, peerDeps, next>react, 5/5 pass.
 4. Parser persistence: pnpm patch as P0-1.
 
-Gate: P0-1+3 DONE, P0-2 zustand artifact exists but CLI not yet run with HEAD~1 for zustand (needs `npx tsx src/cli.ts check --base HEAD~1 --coverage-file /tmp/zustand/coverage/coverage-final.json --json` from zustand cwd). P1-5 measured but perf doc not yet linked to packet. Contract addendum done.
+Gate: P0-1+3 DONE, P0-2 CLOSED — p-queue/zustand/next-sample all SUCCESS PASS with HEAD~1 CLI check. P1-5 measured and linked to hardening-b-perf.md. Contract addendum done.
 
-Next: Human must accept CC 0.626 divergence (no correction) and zustand CLI result, then Angular may proceed.
+Next: Human must accept CC 0.626 divergence (no correction), then Angular may proceed.
 
 ```
 AWAITING HUMAN REVIEW — Hardening B completion

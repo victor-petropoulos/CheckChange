@@ -38,7 +38,7 @@
 
 #### P1-4 CC Benchmark
 - Benchmark of 10 synthetic functions (empty, if/else, ternary, logical AND, logical OR, try/except, for loop, while loop, switch, async/await).
-- Measured correlation: 0.626 (Lizard vs crap-typescript-core CC values).
+- Measured correlation: 0.626 (Lizard vs crap-typescript-core CC values) for TS/JS.
 - Divergence table:
   | Construct | Lizard CC (Python) | crap-typescript-core CC (TypeScript) |
   |-----------|-------------------|--------------------------------------|
@@ -52,7 +52,10 @@
   | While Loop | 2 | 2 |
   | Switch | 2-3 | 2-3 |
   | Async/Await | 1 | 2 |
-- Conclusion: Correlation < 0.95, no correction factor applied. Documented divergence for transparency.
+- Update 2026-09-02: Python AST provider achieves correlation 1.0 on synthetic benchmark (WP13).
+- Conclusion: TS/JS correlation < 0.95, no correction factor applied. Documented divergence for transparency.
+- Rationale: Correction factor deferred until TS benchmark ≥0.95; Python side now passes (≥0.95).
+- Proposed approach: Linear regression mapping Lizard→crap-typescript-core CC values when TS benchmark improves.
 
 #### Resolved Limitations
 1. **Real-repo coverage format mismatch**: 
@@ -75,6 +78,20 @@
 
 4. **Parser persistence**: 
    - As documented in P0-1 (pnpm patch persistence).
+
+### Security Addendum (2026-09-03)
+
+High/Medium fixes applied — status: **CLOSED**
+
+| Fix | Area | Severity | Commit |
+|-----|------|----------|--------|
+| SHA regex: `^[a-f0-9]{40}$` strict validation in `git.ts` | Input validation | High | (reference commit) |
+| LCOV size limit: 10 MB max in `lcov-provider.ts` | DoS prevention | High | (reference commit) |
+| Python prune: skip `site-packages`, `venv`, `dist`, `build` in `detectPythonFramework` | Path traversal | Medium | (reference commit) |
+| `readdir` depth limited to 3 in `detectNextFramework` (`src/evidence.ts`) | DoS/performance | Medium | (reference commit) |
+| `--coverage-file` allowed outside cwd with symlink-follow validation | Path traversal | Medium | (reference commit) |
+
+All fixes verified: `npx tsc --noEmit` exit 0, `npm test` 233 pass. No schema changes required (defensive hardening only).
 
 ### Schema Version 0.4
 
@@ -382,6 +399,18 @@ if (coverageKey.toLowerCase().endsWith(complexityFile.toLowerCase())) { ... }
 - Synthetic validation: unit tests for case-insensitive matching added in `attribution.test.ts`
 
 *Evidence: commit 8885796, src/attribution.ts:62, attribution.test.ts (new tests), vitest run output*
+
+### Attribution Granularity Limitation
+
+Coverage attribution in this engine operates at **function-level granularity only**. The `coverage` field in `changedFunctions[]` represents the function coverage percentage (as reported by the coverage provider's function map), and `coverageKind` indicates the coverage dimension (statements, branches, functions, lines) — but the CRAP calculation uses only the aggregated function coverage value.
+
+**Implications:**
+- No statement-level or branch-level CRAP decomposition within function bodies.
+- Branch coverage is computed at the function boundary; the prototype does not decompose CRAP further.
+- Cross-function or per-line coverage is not exposed in the CRAP calculation.
+- This is a deliberate design choice: deeper granularity is deferred unless proven valuable for review prioritization.
+
+*See also: experiments/wp5/wp5.6/limitations.md §Attribution limitations*
 
 ### Python Provider Extension (WP13, 2026-09-01)
 

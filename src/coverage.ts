@@ -1,6 +1,7 @@
 import * as path from 'node:path';
 import { access, constants } from 'node:fs/promises';
 import { parseCoverageReport } from '@barney-media/crap-typescript-core';
+import { parseLcovContent } from './coverage-providers/lcovProvider.js';
 
 export interface CoverageResult {
   available: boolean;
@@ -75,34 +76,63 @@ function normalizeCoveragePaths(
 }
 
 export async function readCoverage(cwd: string, coverageFile?: string): Promise<CoverageResult> {
-  let coveragePath: string;
-  if (coverageFile !== undefined && coverageFile !== null && coverageFile !== '') {
-    // If coverageFile is provided, use it (resolve if relative)
-    coveragePath = path.isAbsolute(coverageFile) ? coverageFile : path.resolve(cwd, coverageFile);
-  } else {
-        // No coverageFile provided, use default
-        coveragePath = path.join(cwd, 'coverage/coverage-final.json');
+   let coveragePath: string;
+   if (coverageFile !== undefined && coverageFile !== null && coverageFile !== '') {
+     // If coverageFile is provided, use it (resolve if relative)
+     coveragePath = path.isAbsolute(coverageFile) ? coverageFile : path.resolve(cwd, coverageFile);
+   } else {
+         // No coverageFile provided, use default
+         coveragePath = path.join(cwd, 'coverage/coverage-final.json');
+     }
+
+
+
+   try {
+      await access(coveragePath, constants.R_OK);
+    } catch {
+      // File does not exist or cannot be read
+      if (coverageFile !== undefined && coverageFile !== null && coverageFile !== '') {
+          // Explicitly provided file missing -> error:true to trigger FAILED semantics
+          return { available: true, coverageMap: null, error: true, reason: 'missing' };
+      } else {
+          // Default file missing -> existing behavior: available:false, error:false
+          return { available: false, coverageMap: null, error: false };
+      }
     }
 
-try {
-     await access(coveragePath, constants.R_OK);
-   } catch {
-     // File does not exist or cannot be read
-     if (coverageFile !== undefined && coverageFile !== null && coverageFile !== '') {
-         // Explicitly provided file missing -> error:true to trigger FAILED semantics
-         return { available: true, coverageMap: null, error: true, reason: 'missing' };
-     } else {
-         // Default file missing -> existing behavior: available:false, error:false
-         return { available: false, coverageMap: null, error: false };
-     }
-   }
+   // Determine if the file is LCOV based on extension or content
+   const isLcovByExt = 
+     coveragePath.endsWith('.info') || 
+     coveragePath.endsWith('.lcov');
 
-try {
-     const coverageMap = await parseCoverageReport(coveragePath, cwd);
-     const normalizedCoverageMap = normalizeCoveragePaths(coverageMap, cwd);
-     return { available: true, coverageMap: normalizedCoverageMap, error: false };
+   try {
+     const fsPromises = await import('node:fs/promises');
+     const content = await fsPromises.readFile(coveragePath, 'utf8');
+     let isLcov = isLcovByExt;
+     if (!isLcovByExt) {
+       // Check if content looks like LCOV (starts with TN: or contains SF: and DA:)
+       if (content.startsWith('TN:') || content.includes('\nSF:') || content.includes('\nDA:')) {
+         isLcov = true;
+       }
+     }
+
+if (isLcov) {
+        // Security: limit LCOV size to prevent OOM
+        const MAX_SIZE = 100 * 1024 * 1024; // 100MB
+        if (content.length > MAX_SIZE) {
+          return { available: true, coverageMap: null, error: true, reason: 'malformed' };
+        }
+        const coverageMap = parseLcovContent(content, cwd);
+        const normalizedCoverageMap = normalizeCoveragePaths(coverageMap, cwd);
+        return { available: true, coverageMap: normalizedCoverageMap, error: false };
+      } else {
+        // Treat as Istanbul JSON
+        const coverageMap = await parseCoverageReport(coveragePath, cwd);
+        const normalizedCoverageMap = normalizeCoveragePaths(coverageMap, cwd);
+        return { available: true, coverageMap: normalizedCoverageMap, error: false };
+      }
    } catch (error) {
      // Malformed or unreadable
      return { available: true, coverageMap: null, error: true, reason: 'malformed' };
    }
-}
+ }

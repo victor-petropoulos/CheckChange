@@ -4,24 +4,28 @@ import { collectComplexity } from './complexity.js';
 import { readCoverage } from './coverage.js';
 import { attachCoverage } from './attribution.js';
 import { calculateCrap } from './crapCalc.js';
+import { pythonASTComplexityProvider } from './complexity-providers/pythonASTComplexityProvider.js';
 import * as fs from 'fs';
 import * as path from 'path';
 
 export interface ProviderFactory { 
-  collectComplexity: (cwd:string)=>Promise<any[]>; 
-  readCoverage: (cwd:string, file?:string)=>Promise<any> 
-}
-const providers = new Map<string, ProviderFactory>()
-export function registerProvider(ext:string, factory:ProviderFactory){providers.set(ext,factory)}
+   collectComplexity: (cwd:string)=>Promise<any[]>; 
+   readCoverage: (cwd:string, file?:string)=>Promise<any> 
+ }
+ const providers = new Map<string, ProviderFactory>()
+ export function registerProvider(ext:string, factory:ProviderFactory){providers.set(ext,factory)}
 
 // Register TypeScript provider for JS/TS extensions (delegation preserves vi.spyOn mocks)
-const typescriptProvider: ProviderFactory = {
-  collectComplexity: (...args: Parameters<typeof collectComplexity>) => collectComplexity(...args),
-  readCoverage: (...args: Parameters<typeof readCoverage>) => readCoverage(...args),
-};
-for (const ext of ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'] as const) {
-  registerProvider(ext, typescriptProvider);
-}
+ const typescriptProvider: ProviderFactory = {
+   collectComplexity: (...args: Parameters<typeof collectComplexity>) => collectComplexity(...args),
+   readCoverage: (...args: Parameters<typeof readCoverage>) => readCoverage(...args),
+ };
+ for (const ext of ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'] as const) {
+   registerProvider(ext, typescriptProvider);
+ }
+
+// Register Python provider for .py extension
+ registerProvider('.py', pythonASTComplexityProvider);
 
 export interface ChangedFunction {
   file: string;
@@ -328,46 +332,61 @@ completeness = 'INCOMPLETE';
         const ext = Object.keys(languageMap).find(key => filePath.endsWith(key));
         return ext ? languageMap[ext] : undefined;
       };
-      const detectNextFramework = (cwd, filePath) => {
-        // 1. package.json next dep
-        try {
-          const pkg = JSON.parse(fs.readFileSync(path.resolve(cwd, 'package.json'), 'utf8'));
-          const deps = { ...pkg.dependencies, ...pkg.devDependencies, ...pkg.peerDependencies };
-          if (deps.next) return 'next';
-        } catch {}
-        // 2. next.config.* at root
-        const configNames = ['next.config.js', 'next.config.mjs', 'next.config.ts'];
-        for (const name of configNames) {
-          if (fs.existsSync(path.resolve(cwd, name))) return 'next';
-        }
-        // 3. App Router markers
-        const appMarkers = ['app/page.tsx', 'app/layout.tsx'];
-        for (const marker of appMarkers) {
-          if (fs.existsSync(path.resolve(cwd, marker))) return 'next';
-        }
-        // Check app/**/route.ts (any depth) — bounded scan
-        const appDir = path.resolve(cwd, 'app');
-        if (fs.existsSync(appDir)) {
-          const routeFiles = fs.readdirSync(appDir, { recursive: true })
-            .filter(f => f.endsWith('route.ts') || f.endsWith('route.tsx'));
-          if (routeFiles.length > 0) return 'next';
-        }
-        // 4. Pages Router markers
-        const pagesDir = path.resolve(cwd, 'pages');
-        if (fs.existsSync(pagesDir)) {
-          const pageFiles = fs.readdirSync(pagesDir, { recursive: true })
-            .filter(f => f.endsWith('.tsx') || f.endsWith('.ts'));
-          if (pageFiles.length > 0) return 'next';
-        }
-        // 5. React fallback
-        try {
-          const pkg = JSON.parse(fs.readFileSync(path.resolve(cwd, 'package.json'), 'utf8'));
-          const deps = { ...pkg.dependencies, ...pkg.devDependencies, ...pkg.peerDependencies };
-          if (deps.react) return 'react';
-        } catch {}
-        if (filePath.endsWith('.jsx')) return 'react';
-        return undefined;
-      };
+const detectNextFramework = (cwd, filePath) => {
+         // 1. package.json next dep
+         try {
+           const pkg = JSON.parse(fs.readFileSync(path.resolve(cwd, 'package.json'), 'utf8'));
+           const deps = { ...pkg.dependencies, ...pkg.devDependencies, ...pkg.peerDependencies };
+           if (deps.next) return 'next';
+         } catch {}
+         // 2. next.config.* at root
+         const configNames = ['next.config.js', 'next.config.mjs', 'next.config.ts'];
+         for (const name of configNames) {
+           if (fs.existsSync(path.resolve(cwd, name))) return 'next';
+         }
+         // 3. App Router markers
+         const appMarkers = ['app/page.tsx', 'app/layout.tsx'];
+         for (const marker of appMarkers) {
+           if (fs.existsSync(path.resolve(cwd, marker))) return 'next';
+         }
+         // Helper for depth-limited directory walk (max depth 3)
+         const walkDir = (dir, depth) => {
+           if (depth > 3) return [];
+           const entries = fs.readdirSync(dir, { withFileTypes: true });
+           let files = [];
+           for (const entry of entries) {
+             const fullPath = path.join(dir, entry.name);
+             if (entry.isDirectory()) {
+               files = files.concat(walkDir(fullPath, depth + 1));
+             } else {
+               files.push(fullPath);
+             }
+           }
+           return files;
+         };
+         // Check app/**/route.ts (any depth) — bounded scan
+         const appDir = path.resolve(cwd, 'app');
+         if (fs.existsSync(appDir)) {
+           const routeFiles = walkDir(appDir, 0)
+             .filter(f => f.endsWith('route.ts') || f.endsWith('route.tsx'));
+           if (routeFiles.length > 0) return 'next';
+         }
+         // 4. Pages Router markers
+         const pagesDir = path.resolve(cwd, 'pages');
+         if (fs.existsSync(pagesDir)) {
+           const pageFiles = walkDir(pagesDir, 0)
+             .filter(f => f.endsWith('.tsx') || f.endsWith('.ts'));
+           if (pageFiles.length > 0) return 'next';
+         }
+         // 5. React fallback
+         try {
+           const pkg = JSON.parse(fs.readFileSync(path.resolve(cwd, 'package.json'), 'utf8'));
+           const deps = { ...pkg.dependencies, ...pkg.devDependencies, ...pkg.peerDependencies };
+           if (deps.react) return 'react';
+         } catch {}
+         if (filePath.endsWith('.jsx')) return 'react';
+         return undefined;
+       };
       const changedFunctionsWithLanguage = changedFunctions.map(fn => {
         const lang = getLanguageForFile(fn.file);
         const fw = detectNextFramework(cwd, fn.file);

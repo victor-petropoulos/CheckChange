@@ -18,7 +18,7 @@ Per Roadmap WP5.6 §LIMITATIONS TO EXPECT and project-wide methodology disciplin
 
 ## Attribution limitations
 
-- **Function-level coverage, not statement-level or branch-level within functions.** Branch coverage is computed at the function boundary; the prototype does not decompose CRAP further.
+- **Function-level coverage, not statement-level or branch-level within functions.** Branch coverage is computed at the function boundary; the prototype does not decompose CRAP further. Coverage attribution operates at function granularity only — there is no statement-level or branch-level CRAP decomposition within function bodies. This is a deliberate design choice: deeper granularity is deferred unless proven valuable for review prioritization.
 - **Path matching uses `endsWith()`.** Works for same-repo paths. Fails (or requires path coupling) for cross-environment artifact replay (see F-03).
 - **Container-method identity is `${containerName}.${functionName}:${startLine}`** (post-WP5.3 A07). Functions in unkeyed anonymous contexts may collapse to identity conflicts.
 
