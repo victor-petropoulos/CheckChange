@@ -39,6 +39,52 @@ export async function resolveBaseRef(base: string, cwd: string = process.cwd()):
 }
 
 /**
+ * Attempts to auto-detect the default base branch.
+ * @param verbose If true, logs the detected base to stderr
+ * @param cwd The current working directory (defaults to process.cwd())
+ * @returns The detected base reference (e.g., 'origin/master') or null if undetectable
+ */
+export async function detectDefaultBase(verbose: boolean = false, cwd: string = process.cwd()): Promise<string | null> {
+// Helper to run a git command and return stdout if successful, null otherwise
+   const tryGitRevParse = async (ref: string): Promise<boolean> => {
+     const result = await execute('git', ['rev-parse', '--verify', `${ref}^{commit}`], { cwd });
+     return result.exitCode === 0;
+   };
+
+  // 1. Try `git symbolic-ref refs/remotes/origin/HEAD`
+  const symRefResult = await execute('git', ['symbolic-ref', 'refs/remotes/origin/HEAD'], { cwd });
+  if (symRefResult.exitCode === 0) {
+    // Output is like "refs/remotes/origin/master"
+    let ref = symRefResult.stdout.trim();
+    // Remove the "refs/remotes/" prefix to get "origin/master"
+    if (ref.startsWith('refs/remotes/')) {
+      ref = ref.substring('refs/remotes/'.length);
+    }
+    // Verify the ref is resolvable
+    if (await tryGitRevParse(ref)) {
+      if (verbose) {
+        process.stderr.write(`[verbose] auto-detected base: ${ref}\n`);
+      }
+      return ref;
+    }
+  }
+
+  // 2. Fallback candidates
+  const candidates = ['origin/master', 'origin/main', 'master', 'main'];
+  for (const candidate of candidates) {
+    if (await tryGitRevParse(candidate)) {
+      if (verbose) {
+        process.stderr.write(`[verbose] auto-detected base: ${candidate}\n`);
+      }
+      return candidate;
+    }
+  }
+
+  // Nothing worked
+  return null;
+}
+
+/**
  * Parses the output of `git diff --unified=0` to extract changed line intervals per file.
  * @param diffText The output of `git diff --unified=0`
  * @returns A map from file path to an array of {start, end} intervals (1-based, inclusive)

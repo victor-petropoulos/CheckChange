@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // @ts-nocheck
 // Restored WP4.2.1 cli
-import { validateGitRepo, resolveBaseRef, getChangedIntervals } from './git.js';
+import { validateGitRepo, resolveBaseRef, getChangedIntervals, detectDefaultBase } from './git.js';
 import { buildEvidenceOutput } from './evidence.js';
 /**
  * Parses command line arguments.
@@ -83,21 +83,17 @@ export function parseCliArgs() {
         }
         i++;
     }
-    if (help) {
-        console.log('Usage: checkchange check --base <ref> [--json] [--crap-threshold <number>] [--coverage-file <path>] [--verbose]');
-        console.log('Options:');
-        console.log('  --base <ref>             Git base reference to compare against (required)');
-        console.log('  --json                   Output JSON (default: false)');
-        console.log('  --crap-threshold <number> CRAP threshold for WARN (default: 30)');
-        console.log('  --coverage-file <path>   Istanbul coverage JSON file path');
-        console.log('  --verbose                Print diagnostic info to stderr');
-        process.exit(0);
-    }
-    // Validate explicit --base required
-    if (!base) {
-        console.error('Error: --base is required');
-        process.exit(1);
-    }
+if (help) {
+         console.log('Usage: checkchange check [--base <ref>] [--json] [--crap-threshold <number>] [--coverage-file <path>] [--verbose]');
+         console.log('Options:');
+         console.log('  --base <ref>             Git base reference to compare against (optional, default: auto-detect)');
+         console.log('  --json                   Output JSON (default: false)');
+         console.log('  --crap-threshold <number> CRAP threshold for WARN (default: 30)');
+         console.log('  --coverage-file <path>   Istanbul coverage JSON file path');
+         console.log('  --verbose                Print diagnostic info to stderr');
+         process.exit(0);
+     }
+
     // Validate positional command must be exactly "check"
     if (positionals.length !== 1 || positionals[0] !== 'check') {
         console.error('Error: Command must be "check"');
@@ -110,8 +106,17 @@ export function parseCliArgs() {
  */
 export async function main() {
     try {
-        const { base, json, crapThreshold, coverageFile, verbose } = parseCliArgs();
-        // Validate git repo
+        let { base, json, crapThreshold, coverageFile, verbose } = parseCliArgs();
+// Auto-detect base if not provided
+         if (base === null) {
+             const detectedBase = await detectDefaultBase(verbose);
+             if (detectedBase === null) {
+                 console.error('Error: Cannot auto-detect base branch (tried origin/master, origin/main, master, main). Provide --base <ref> explicitly.');
+                 process.exit(1);
+             }
+             base = detectedBase;
+         }
+         // Validate git repo
         await validateGitRepo();
         // Resolve base ref
         const resolvedBase = await resolveBaseRef(base);

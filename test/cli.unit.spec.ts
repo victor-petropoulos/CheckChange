@@ -114,11 +114,16 @@ describe('parseCliArgs', () => {
     expect(exitSpy).not.toHaveBeenCalled();
   });
 
-  test('validation missing --base exits with error', () => {
+test('missing --base returns null base and does not exit', () => {
     setArgv(['check']);
-    parseCliArgs();
-    expectExit(1);
-  });
+    const result = parseCliArgs();
+    expect(result.base).toBeNull();
+    expect(result.json).toBe(false);
+    expect(result.crapThreshold).toBe(30);
+    expect(result.coverageFile).toBeUndefined();
+    expect(result.verbose).toBe(false);
+    expect(exitSpy).not.toHaveBeenCalled();
+});
 
   test('validation missing positional "check" exits with error', () => {
     setArgv(['--base', 'HEAD', 'other']);
