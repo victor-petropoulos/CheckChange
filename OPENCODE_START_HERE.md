@@ -3,10 +3,12 @@
 Read, do not skip this:
 
 1. `docs/Project Master Plans/EXECUTION GUIDANCE FOR FUTURE LLMS.txt`
-2. `docs/Project Master Plans/Roadmap.txt`
-3. `docs/Project Master Plans/SESSION_CONTEXT_2026-08-26.txt`
-4. `experiments/wp5/wp5.6/WP5_6_REMEDIATION_CLOSURE.md` (2026-08-27)
-5. `docs/Project Master Plans/Post_WP9_Detailed_Roadmap.md` (post-WP9 provisional)
+2. `docs/Project Master Plans/SESSION_CONTEXT_2026-09-03.txt`
+
+Reference (not required, grep if needed):
+- `docs/Project Master Plans/Roadmap.txt` (WP5.4→WP9 historical)
+- `docs/Project Master Plans/Post_WP9_Detailed_Roadmap.md` (WP10→WP17 strategic)
+- `experiments/wp5/wp5.6/WP5_6_REMEDIATION_CLOSURE.md` (redundant, summarized in session context §14)
 
 Execute the next project step in the roadmap only. Record in this document which step you are currently working on and what step is next.
 
