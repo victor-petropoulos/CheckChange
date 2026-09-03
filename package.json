@@ -10,7 +10,7 @@
     "dist/"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && chmod +x dist/cli.js",
     "test": "vitest run",
     "check": "node dist/cli.js check",
     "prepare": "npm run build"

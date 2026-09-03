@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // @ts-nocheck
 // Restored WP4.2.1 cli
 import { validateGitRepo, resolveBaseRef, getChangedIntervals } from './git.js';
