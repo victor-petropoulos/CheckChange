@@ -1,6 +1,6 @@
 # Project: CheckChange
 
-Version: v3.1 full close pre-Angular COMPLETE (LCOV+Python, 233 pass, be9f97a, CI both SUCCESS)
+Version: v0.4.0 — v3.1 full close pre-Angular COMPLETE (LCOV+Python, 233 pass, be9f97a, CI both SUCCESS)
 
 **WP5 = COMPLETE / ACCEPTED.** WP5.6 usefulness/robustness/freeze accepted 2026-08-27. WP5.6 defect remediation (F-03/F-04/D-APOLLO) accepted 2026-08-27.
 
@@ -66,7 +66,7 @@ Version: v3.1 full close pre-Angular COMPLETE (LCOV+Python, 233 pass, be9f97a, C
 - Engine: WP15 JS/React + LCOV + Python + Hardening B + Security addendum (schema 0.4, language:javascript/python, framework:react/next)
 - Tests: 233/233 pass (72 files)
 - Typecheck: `npx tsc --noEmit` → 0 errors
-- Build: `npm run build` → ok
+- Build: `npm run build` → ok (runs `tsc && chmod +x dist/cli.js`)
 - WP9/WP11/WP13/WP15 contract: schema 0.4, threshold 30/15 frozen, INV-01..04 preserved, explicit language + framework fields
 - WP15 deliverables:
   - `experiments/wp15-js/` JS/React dispatcher, framework detection, nextDispatcher (5/5 tests)
@@ -82,6 +82,10 @@ Version: v3.1 full close pre-Angular COMPLETE (LCOV+Python, 233 pass, be9f97a, C
   - `detectNextFramework` (`src/evidence.ts`): `readdir` depth limited to 3
   - `--coverage-file`: allowed outside cwd with symlink-follow validation
   - All fixes verified: `npx tsc --noEmit` exit 0, `npm test` 233 pass. No schema changes required.
+- Global install: `npm link` → `checkchange` + `code-risk` binaries on PATH (6f26f95)
+- Auto-detect base: `--base` optional, fallback chain `origin/HEAD` → `origin/master`/`main` → `master`/`main` (0c6ea37)
+- Engram coverage config: vitest.config.ts uses `@vitest/coverage-v8`, artifact at `coverage/coverage-final.json`, gate WARN/PASS active
+- Skill: `using-checkchange` wired to `reviewer`, `tester`, `orchestrator` agents (bbbcc63)
 
 ## WP12 CI Integration Validation — COMPLETE 2026-08-31
 

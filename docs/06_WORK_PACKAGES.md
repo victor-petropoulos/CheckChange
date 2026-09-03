@@ -17,7 +17,7 @@ What is the smallest JSON representation needed to explain findings? Include too
 Implement only test failure, changed high-CRAP function, and changed high-risk function with inadequate coverage.
 
 ## WP4 — CLI
-One simple command, human output, JSON option, sensible exit codes.
+One simple command: `checkchange check [--base <ref>] [--json] [--verbose]`. `--base` auto-detects fallback chain (origin/HEAD → origin/master/main → master/main). WARN gate blocks merge (exit 1). Human output + JSON option, sensible exit codes.
 
 ## WP5 — Reality check
 Try a small set of ordinary TypeScript repos: npm, pnpm/yarn, Jest, Vitest, coverage present/absent, ESLint present/absent, perhaps a monorepo, and tool failures.

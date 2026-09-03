@@ -50,7 +50,7 @@ Because "trust me, I tested it" isn't evidence.
 
 - Tests: 233/233 pass (72 files)
 - Typecheck: `npx tsc --noEmit` → 0 errors
-- Build: `npm run build` → ok, `dist/cli.js` 6K
+- Build: `npm run build` → ok (runs `tsc && chmod +x dist/cli.js`), `dist/cli.js` 6K, bin entries: `checkchange` + `code-risk`
 - WP9/WP11/WP13/WP15 contract: schema 0.4, thresholds 30/15 frozen, INV-01..04 preserved, explicit language + framework fields
 - WP12 Fix 8885796: attribution case-insensitive suffix match (src/attribution.ts:62)
 - WP12 Hardening e354048: vitest.config.ts guard + case-insensitive regression anchor
@@ -61,6 +61,43 @@ Because "trust me, I tested it" isn't evidence.
 - Human review packet: `docs/closure/WP12_HUMAN_REVIEW_PACKET.md` (APPROVED 2026-09-01), Engram rev-1788397101053-2 approved
 - Corpus: 17 fixtures (WP15 corpus expansion)
 - Tag: v0.3.0-compatible (schema 0.3), schema 0.4 unreleased
+
+## Installation
+
+```bash
+npm link
+```
+
+Makes `checkchange` globally available (requires Node 24 via `nvm use`). Verify:
+
+```bash
+which checkchange
+checkchange --help
+```
+
+## Usage
+
+```bash
+checkchange check [--base <ref>] [--json] [--verbose]
+```
+
+- `--base` optional — auto-detects: `origin/HEAD` → `origin/master`/`main` → `master`/`main` (Engram uses `master`, most others `main`)
+- `--json` — machine-readable output for CI/programmatic use
+- `--verbose` — detailed evidence breakdown
+
+Examples:
+
+```bash
+checkchange check --verbose
+checkchange check --base main --json | jq
+pnpm vitest run --coverage && checkchange check --json
+```
+
+**Coverage artifact required** for CRAP score calculation. Without coverage, gate returns `INCOMPLETE`.
+
+## Skill for AI Agents
+
+`.agents/skills/using-checkchange/SKILL.md` (422 words) — wired to `reviewer`, `tester`, `orchestrator` agents. Any IDE/LLM with opencode can invoke `checkchange check` deterministically.
 
 ## Next
 

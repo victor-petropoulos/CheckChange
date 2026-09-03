@@ -43,6 +43,8 @@ A synthetic validation branch was created to exercise the SUCCESS path:
 | Missing explicit file (`--coverage-file missing.json`) | 1 | "coverage artifact missing" |
 | Unresolvable base (`--base nonexistent`) | 1 | "Cannot resolve base reference: nonexistent" |
 
+> **Note**: `--base` is now optional — auto-detects fallback chain (origin/HEAD → origin/master/main → master/main) when omitted. The invalid-base test above still validates explicit unresolvable refs fail correctly.
+
 ### Reproducibility
 
 - P1 run twice: identical JSON (excluding `analysis.base`)

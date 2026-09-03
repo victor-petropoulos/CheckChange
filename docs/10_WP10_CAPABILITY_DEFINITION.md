@@ -30,10 +30,12 @@ Source: `docs/01_REVISED_PROJECT_THESIS.md` (core boundary: "consumes analysis, 
 
 ```
 PR → git diff → run tests → generate Istanbul JSON coverage (caller-owned)
-    → deterministic engine (check --base <ref> --json --coverage-file <path>)
+    → deterministic engine (checkchange check [--base <ref>] --json --coverage-file <path>)
     → JSON/CLI output → CI gate (exit code) + reviewer report
     → human/LLM interprets evidence (CC, coverage, CRAP, PASS/WARN)
 ```
+
+> `--base` is optional — auto-detects fallback: origin/HEAD → origin/master/main → master/main. If omitted, engine resolves base automatically.
 
 **Evidence in (caller provides):**
 - Git baseline/target refs

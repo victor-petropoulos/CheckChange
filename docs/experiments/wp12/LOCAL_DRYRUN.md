@@ -4,13 +4,17 @@
 
 ### P1: Default (threshold 30)
 ```bash
-vitest run --coverage && node dist/cli.js check --base HEAD~1 --json
+vitest run --coverage && checkchange check --base HEAD~1 --json
 ```
+
+> `checkchange` available globally via `npm link` (or `npx checkchange` from repo root). `--base` now optional — auto-detects fallback chain if omitted.
 
 ### P2: Explicit (threshold 15 override)
 ```bash
-vitest run --coverage && node dist/cli.js check --base HEAD~1 --coverage-file coverage/coverage-final.json --crap-threshold 15 --json
+vitest run --coverage && checkchange check --base HEAD~1 --coverage-file coverage/coverage-final.json --crap-threshold 15 --json
 ```
+
+> `--base` optional; auto-detect fallback if omitted.
 
 ## Expected JSON Output (Schema 0.2)
 
