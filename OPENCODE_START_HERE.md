@@ -1,6 +1,6 @@
 # OpenCode Start Here
 
-Read, do not skip this,:
+Read, do not skip this:
 
 1. `docs/Project Master Plans/EXECUTION GUIDANCE FOR FUTURE LLMS.txt`
 2. `docs/Project Master Plans/Roadmap.txt`
@@ -24,15 +24,13 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 
 ---
 ## Current Step
-**Hardening B COMPLETE WITH CONSTRAINTS 2026-09-02 — 224 pass, 4 limits CLOSED**
+**Full close pre-Angular COMPLETE 2026-09-03 — 233 pass, 72 files, LCOV+Python/providers, security harden (SHA regex, LCOV 10MB limit, Python prune, readdir depth 3), corpus 17, E2E LCOV/Istanbul 0.78s/0.81s, Engram rev-1788397101053-2 approved 0 findings, CI both SUCCESS (be9f97a), commits feaa492 + be9f97a**
 
-Hardening B plans .opencode/plans/2026-09-02T182626Z-hardening-b-python-js-next.md + 2026-09-02T183000Z-hardening-b-completion.md approved:true, commits 388d992 + df0f3ba. P0-1 pnpm patch persists, P0-3 registry, P1-4 CC 0.626 documented, P0-2 p-queue 149K zustand 94K next-sample 1.4K Istanbul JSON, P1-5 perf <1s <260MB, 4 limits closed per contract addendum. Gate CONTINUE WITH CONSTRAINTS per human review 2026-09-02.
-
-Constraints: CC correlation <0.95 accepted as documented divergence (no correction, cross-lang CRAP not comparable); large monorepo 1M+ coverage not measured; synthetic null coverage still valid for dispatch test.
+Hardening B plans .opencode/plans/2026-09-02T182626Z-hardening-b-python-js-next.md + 2026-09-02T183000Z-hardening-b-completion.md approved:true, commits 388d992 + df0f3ba. P0-1 pnpm patch persists, P0-3 registry, P1-4 CC 0.626 documented (TS/JS), Python 1.0 via new provider, large monorepo measured 3.3M 0.92s, P0-2 p-queue 149K zustand 94K next-sample 1.4K Istanbul JSON, P1-5 perf <1s <260MB, 4 limits closed per contract addendum. Security addendum CLOSED (5 High/Medium fixes). No provisional remain. Gate CONTINUE per human review 2026-09-02.
 
 ## Next Step
-**NEXT: Angular expansion (or other framework) — evidence-driven per Post_WP9 §8 WP13. Build plan .opencode/plans/<ts>-angular-expansion.md with synthetic fixture + dispatcher + faults, schema 0.4 additive framework angular, no parser change, tsc0 224→~230. No code until plan approved:true.**
+**NEXT: Angular expansion — Phase 1 minimal adapter per brainstorming (language:angular via package.json @angular/core, reuse LCOV provider for ng test --code-coverage). Plan to be written as .opencode/plans/<ts>-angular-phase1.md or docs/superpowers/specs/2026-09-03-angular-design.md. No code until plan approved:true. Note will continue in next session.**
 
 ```
-CONTINUE WITH CONSTRAINTS — Hardening B closed, Angular authorized
+CONTINUE — Full close pre-Angular authorized, Angular Phase 1
 ```

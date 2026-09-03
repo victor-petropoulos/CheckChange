@@ -1,6 +1,6 @@
 # Project: CheckChange
 
-Version: v3.0 WP13 remaining 3 + WP10/11/12 + schema bump 0.2→0.3 COMPLETE (commits be2bca4 + 60d5dab + 9cc6b30, tag v0.3.0-compatible)
+Version: v3.1 full close pre-Angular COMPLETE (LCOV+Python, 233 pass, be9f97a, CI both SUCCESS)
 
 **WP5 = COMPLETE / ACCEPTED.** WP5.6 usefulness/robustness/freeze accepted 2026-08-27. WP5.6 defect remediation (F-03/F-04/D-APOLLO) accepted 2026-08-27.
 
@@ -34,6 +34,7 @@ Version: v3.0 WP13 remaining 3 + WP10/11/12 + schema bump 0.2→0.3 COMPLETE (co
 - WP9.6: tsdoc — DONE
 - WP9.7: monorepo full union — DONE
 - WP9.8: history/delta — DONE
+- **WP9-R8: LCOV provider + Python coverage.py — DONE 2026-09-03 (experiments/wp9-r8, schema 0.4)**
 
 - **WP10: Capability and Product Definition — DONE 2026-08-30 (doc-only, 269 lines, no src change, schema 0.2 frozen)**
 - **WP11: Production Evidence Contract — DONE 2026-08-30 (doc-only, no src change, schema 0.2 frozen, threshold 30/15 frozen, INV-01..04 preserved)**
@@ -50,30 +51,37 @@ Version: v3.0 WP13 remaining 3 + WP10/11/12 + schema bump 0.2→0.3 COMPLETE (co
 - **N4 2026-09-01: README drift sync — DONE (191/191, schema 0.2, INV-01..04, packet link)**
 - **Human Review 2026-09-01: CONTINUE WITH CONSTRAINTS** — N1/N3/N4 remediation approved, WP12 packet approved, awaiting constrained fork selection
 - **Human Review 2026-09-01: CONTINUE WITH CONSTRAINTS** — WP13 approved, synthetic n=1 limitation acknowledged, next fork WP14/WP15/STOP pending
-- **WP13 Remaining 3 + WP10/11/12 + Schema Bump + Hygiene — COMPLETE 2026-09-01 (commits be2bca4+60d5dab+9cc6b30, tag v0.3.0-compatible, 201/201 tests, schema 0.3)
+- **WP13 Remaining 3 + WP10/11/12 + Schema Bump + Hygiene — COMPLETE 2026-09-01 (commits be2bca4+60d5dab+9cc6b30, tag v0.3.0-compatible, 201/201 tests, schema 0.3)**
 
-## Current state (2026-09-01 WP13 remaining 3 + WP10/11/12 + schema bump + hygiene COMPLETE)
+- **WP9-R8 Historical Coverage (LCOV) — DONE 2026-09-02 (experiments/wp9-r8/, LCOV E2E 0.78s/255 MB SUCCESS PASS, synthetic Istanbul 0.81s/260 MB SUCCESS PASS, schema 0.4)**
+- **WP15-JS/React: JS+React monorepo + LCOV + corpus 17 — DONE 2026-09-02 (experiments/wp15-js/, dispatcher, framework detection, schema 0.4 language:javascript + framework:react)**
+- **Hardening B P1-5 — DONE 2026-09-02 (pnpm patch parser persistence, registry dispatch, CC bench correlation 0.626 TS/JS, 1.0 Python, security hardening)**
+- **WP15 Hardening B Security Addendum — DONE 2026-09-03 (5 High/Medium fixes: SHA regex, LCOV 10MB limit, Python prune, readdir depth 3, coverage-file SF validation — CLOSED)**
+- **WP13 #2: Python coverage.py E2E + adapter fixes — DONE 2026-09-03 (experiments/wp13/adapter/ cc-bench lizard guard, CI lizard install)**
+
+## Current state (2026-09-03 v3.1 full close pre-Angular COMPLETE)
 
 - Branch: `main`
-- Commit: `9cc6b30` (WP13 remaining 3 + WP10/11/12 + schema bump + hygiene)
-- Engine: WP13 language registry + schema 0.3 + hygiene fix (src/complexity-providers.ts, language field, shell:true removed)
-- Tests: 201/201 pass (62 files)
+- Commit: `be9f97a` (fix(ci): chdir hardcode + lizard install for cc-bench — make GitHub jobs green)
+- Engine: WP15 JS/React + LCOV + Python + Hardening B + Security addendum (schema 0.4, language:javascript/python, framework:react/next)
+- Tests: 233/233 pass (72 files)
 - Typecheck: `npx tsc --noEmit` → 0 errors
 - Build: `npm run build` → ok
-- WP9/WP11/WP13 contract: schema 0.3, threshold 30/15 frozen, INV-01..04 preserved, explicit language field
-- WP13 deliverables:
-  - `experiments/wp13/fixtures/python-sample/` synthetic fixture (3 functions cc2/9/16)
-  - `experiments/wp13/fixtures/python-async/` + `python-classes/` fixtures (n=3 total)
-  - `experiments/wp13/adapter/` lizard+coverage.py provider adapters (pythonComplexity.ts, pythonCoverage.ts, index.ts) — shell:true fixed
-  - `experiments/wp13/adapter/e2e.ts` end-to-end validation producing EvidenceOutput schema 0.3 with language:python provenance
+- WP9/WP11/WP13/WP15 contract: schema 0.4, threshold 30/15 frozen, INV-01..04 preserved, explicit language + framework fields
+- WP15 deliverables:
+  - `experiments/wp15-js/` JS/React dispatcher, framework detection, nextDispatcher (5/5 tests)
+  - `experiments/wp9-r8/` LCOV provider + historical coverage fixtures (p-queue, zustand, next-sample)
   - `src/complexity-providers.ts` language registry + ComplexityProvider/CoverageProvider interfaces
-  - `docs/contracts/evidence-contract.md` Python provenance addendum (schema 0.3)
-  - `experiments/wp13/WP13_RESULTS.md` claims/evidence matrix with verification table (updated)
-  - `experiments/wp13/HUMAN_REVIEW_STUB.md` scope/boundary/constraints for review (updated)
-  - Engram review: rev-1788280837977-1 approved
-- Hygiene:
-  - `experiments/wp13/adapter/pythonComplexity.ts`: shell:true removed, spawnSync array form, path traversal guard
-  - `.gitignore`: **/__pycache__/, **/.coverage, experiments/wp13/fixtures/**/coverage.json, computeCC.cjs, test*.py, test*.ts
+  - `docs/contracts/evidence-contract.md` (schema 0.4, Security Addendum 2026-09-03 CLOSED, Python + JS/React provenance)
+  - `docs/superpowers/plans/hardening-b-perf.md` (E2E validation: LCOV 0.78s/255MB, Istanbul 0.81s/260MB)
+  - Engram review: rev-1788397101053-2 approved
+- Security:
+  - `git.ts`: SHA regex `^[a-f0-9]{40}$` strict validation
+  - `lcov-provider.ts`: 10 MB max size limit (DoS prevention)
+  - `detectPythonFramework`: skip `site-packages`, `venv`, `dist`, `build`
+  - `detectNextFramework` (`src/evidence.ts`): `readdir` depth limited to 3
+  - `--coverage-file`: allowed outside cwd with symlink-follow validation
+  - All fixes verified: `npx tsc --noEmit` exit 0, `npm test` 233 pass. No schema changes required.
 
 ## WP12 CI Integration Validation — COMPLETE 2026-08-31
 
@@ -99,6 +107,6 @@ WP5.6 recorded narrowly: deterministic evidence with truthful semantics (INV-01.
 
 ## Next work package
 
-**NEXT WIP: AWAITING HUMAN REVIEW for WP14 historical (Node 20.9 fresh per-commit coverage) OR WP15 usefulness OR STOP/NARROW** — via OPENCODE_START_HERE.md. Schema 0.3 complete (tag v0.3.0-compatible), no further schema bump without proven gap.
+**NEXT: Angular integration awaiting spec** — via OPENCODE_START_HERE.md. Schema 0.4 complete (language: javascript/python, framework: react/next), no further schema bump without proven gap.
 
-Per `docs/10_WP10_CAPABILITY_DEFINITION.md` §9: WP11/12 complete — stable input/output contract defined (WP11) → validated in 2 real CI pipelines (WP12) → measured setup complexity, failure modes, evidence completeness, developer comprehension, CI cost, reproducibility. Integration proved reliable. Proceed toward real-world validation (WP15) or alternative forks per human direction. Alternative forks: WP14 historical/delta (Node 20.9 fresh per-commit coverage), WP15 human review study, or narrow/stop per Fork E.
+Per `docs/10_WP10_CAPABILITY_DEFINITION.md` §9: WP11/12 complete — stable input/output contract defined (WP11) → validated in 2 real CI pipelines (WP12) → measured setup complexity, failure modes, evidence completeness, developer comprehension, CI cost, reproducibility. Integration proved reliable. Proceed toward real-world validation (WP15) or alternative forks per human direction. Alternative forks: WP14 historical/delta (Node 20.9 fresh per-commit coverage), WP15 human review study, or narrow/stop per Fork E. Angular fork authorized per Hardening B human review (2026-09-02), awaiting spec.

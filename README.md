@@ -46,15 +46,22 @@ Because "trust me, I tested it" isn't evidence.
 
 ## Status
 
-**Current state (2026-09-01):** WP13 remaining 3 + WP10/11/12 + schema bump + hygiene COMPLETE (schema 0.3, 201/201 pass 62 files, package 0.3.0).
+**Current state (2026-09-03):** v3.1 full close pre-Angular COMPLETE (schema 0.4, 233/233 pass 72 files, LCOV+Python, CI both SUCCESS).
 
-- Tests: 201/201 pass (62 files)
+- Tests: 233/233 pass (72 files)
 - Typecheck: `npx tsc --noEmit` → 0 errors
 - Build: `npm run build` → ok, `dist/cli.js` 6K
-- WP9/WP11/WP13 contract: schema 0.3, thresholds 30/15 frozen, INV-01..04 preserved, explicit language field
+- WP9/WP11/WP13/WP15 contract: schema 0.4, thresholds 30/15 frozen, INV-01..04 preserved, explicit language + framework fields
 - WP12 Fix 8885796: attribution case-insensitive suffix match (src/attribution.ts:62)
 - WP12 Hardening e354048: vitest.config.ts guard + case-insensitive regression anchor
-- WP13 deliverables: `src/complexity-providers.ts` (language registry), `experiments/wp13/adapter/` (Python adapters, shell:true fixed), e2e schema 0.3 PASS
-- Evidence contract: `docs/contracts/evidence-contract.md` (schema 0.3, Python addendum)
-- Human review packet: `docs/closure/WP12_HUMAN_REVIEW_PACKET.md` (APPROVED 2026-09-01)
-- Tag: v0.3.0-compatible
+- WP13 deliverables: `src/complexity-providers.ts` (language registry), `experiments/wp13/adapter/` (Python adapters, shell:true fixed), e2e schema 0.4 PASS
+- WP15 deliverables: `experiments/wp15-js/` (JS/React dispatcher, framework detection, nextDispatcher 5/5), `experiments/wp9-r8/` (LCOV provider, historical fixtures p-queue/zustand/next-sample)
+- Evidence contract: `docs/contracts/evidence-contract.md` (schema 0.4, Security Addendum 2026-09-03 CLOSED — 5 High/Medium fixes)
+- Hardening B perf: LCOV synthetic E2E 0.78s/255 MB SUCCESS PASS, Istanbul synthetic 0.81s/260 MB SUCCESS PASS
+- Human review packet: `docs/closure/WP12_HUMAN_REVIEW_PACKET.md` (APPROVED 2026-09-01), Engram rev-1788397101053-2 approved
+- Corpus: 17 fixtures (WP15 corpus expansion)
+- Tag: v0.3.0-compatible (schema 0.3), schema 0.4 unreleased
+
+## Next
+
+Angular integration awaiting spec (Hardening B human review 2026-09-02 authorized fork).
