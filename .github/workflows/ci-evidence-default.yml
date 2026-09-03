@@ -17,6 +17,8 @@ jobs:
         with:
           node-version: 24
           cache: 'npm'
+      - name: Install Python deps
+        run: pip install lizard || true
       - run: npm ci
       - run: npm run build
       - name: Fetch base ref
