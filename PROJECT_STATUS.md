@@ -1,6 +1,15 @@
 # Project: CheckChange
 
-Version: v0.4.0 — v3.1 full close pre-Angular COMPLETE (LCOV+Python, 233 pass, be9f97a, CI both SUCCESS)
+Version: v0.4.1 — WP14 approved + WP15 accepted 2026-09-08 (no src change since 0c6ea37)
+
+## Post-close polish
+
+- 0c6ea37 auto-detect base
+- bbbcc63 using-checkchange skill
+- 3d0e761 docs
+- 991ed4c start_here 5→2 reads
+- 27cb67d track plans
+
 
 **WP5 = COMPLETE / ACCEPTED.** WP5.6 usefulness/robustness/freeze accepted 2026-08-27. WP5.6 defect remediation (F-03/F-04/D-APOLLO) accepted 2026-08-27.
 
@@ -59,15 +68,15 @@ Version: v0.4.0 — v3.1 full close pre-Angular COMPLETE (LCOV+Python, 233 pass,
 - **WP15 Hardening B Security Addendum — DONE 2026-09-03 (5 High/Medium fixes: SHA regex, LCOV 10MB limit, Python prune, readdir depth 3, coverage-file SF validation — CLOSED)**
 - **WP13 #2: Python coverage.py E2E + adapter fixes — DONE 2026-09-03 (experiments/wp13/adapter/ cc-bench lizard guard, CI lizard install)**
 
-## Current state (2026-09-03 v3.1 full close pre-Angular COMPLETE)
+## Current state (2026-09-08 main @27cb67d + uncommitted docs)
 
 - Branch: `main`
-- Commit: `be9f97a` (fix(ci): chdir hardcode + lizard install for cc-bench — make GitHub jobs green)
-- Engine: WP15 JS/React + LCOV + Python + Hardening B + Security addendum (schema 0.4, language:javascript/python, framework:react/next)
+- Commit: `27cb67d` (track plans)
+- Uncommitted: START_HERE.md, WP14 stub, WP15 packet, Angular plan (approved:false)
+- Engine: WP14/15 ready (schema 0.3 for WP14, WP15 human review)
 - Tests: 233/233 pass (72 files)
 - Typecheck: `npx tsc --noEmit` → 0 errors
-- Build: `npm run build` → ok (runs `tsc && chmod +x dist/cli.js`)
-- WP9/WP11/WP13/WP15 contract: schema 0.4, threshold 30/15 frozen, INV-01..04 preserved, explicit language + framework fields
+- Build: `npm run build` → ok
 - WP15 deliverables:
   - `experiments/wp15-js/` JS/React dispatcher, framework detection, nextDispatcher (5/5 tests)
   - `experiments/wp9-r8/` LCOV provider + historical coverage fixtures (p-queue, zustand, next-sample)
@@ -86,6 +95,13 @@ Version: v0.4.0 — v3.1 full close pre-Angular COMPLETE (LCOV+Python, 233 pass,
 - Auto-detect base: `--base` optional, fallback chain `origin/HEAD` → `origin/master`/`main` → `master`/`main` (0c6ea37)
 - Engram coverage config: vitest.config.ts uses `@vitest/coverage-v8`, artifact at `coverage/coverage-final.json`, gate WARN/PASS active
 - Skill: `using-checkchange` wired to `reviewer`, `tester`, `orchestrator` agents (bbbcc63)
+- WP9/WP11/WP13/WP15 contract: schema 0.4 (WP14 per-commit outputs historically schema 0.3), threshold 30/15 frozen, INV-01..04 preserved
+- WP14: fresh per-commit coverage (Node 20.10.0, schema 0.3, additive experiments/wp14 only)
+  - A: 24KB WARN 54.67
+  - B: 29KB WARN 116.98
+- WP15: solo reviewer packet (5 reuse cases: WP14 pair + sup-a WARN + hono-03 PASS INCOMPLETE + hono-01 PASS zero-fn)
+  - additive experiments/wp15-human
+  - packet fields, no autonomous classification
 
 ## WP12 CI Integration Validation — COMPLETE 2026-08-31
 
@@ -103,6 +119,20 @@ Version: v0.4.0 — v3.1 full close pre-Angular COMPLETE (LCOV+Python, 233 pass,
   - `git diff --stat src/`: empty (docs-only) ✓
   - Graphify: 3482 nodes rebuilt ✓
 
+## WP14
+
+- Status: approved 2026-09-08 CONTINUE
+- Details: fresh per-commit coverage (Node 20.10.0, schema 0.3)
+- Coverage: A 24KB WARN 54.67 / B 29KB WARN 116.98
+- Scope: additive experiments/wp14 only
+
+## WP15
+
+- Status: solo reviewer packet ACCEPTED 2026-09-08 CONTINUE
+- Reuse cases: 5 (WP14 pair + sup-a WARN + hono-03 PASS INCOMPLETE + hono-01 PASS zero-fn)
+- Scope: additive experiments/wp15-human
+- Packet fields present, no autonomous classification
+
 ## Current question (resolved at WP5.6)
 
 > Does changed-function CRAP provide useful real-world review signal?
@@ -111,6 +141,6 @@ WP5.6 recorded narrowly: deterministic evidence with truthful semantics (INV-01.
 
 ## Next work package
 
-**NEXT: Angular integration awaiting spec** — via OPENCODE_START_HERE.md. Schema 0.4 complete (language: javascript/python, framework: react/next), no further schema bump without proven gap.
+- NEXT: WP16 hardening OR STOP/WP17
+- Angular deferred: plan saved .opencode/plans/2026-09-08T193000Z-angular-phase1.md approved:false
 
-Per `docs/10_WP10_CAPABILITY_DEFINITION.md` §9: WP11/12 complete — stable input/output contract defined (WP11) → validated in 2 real CI pipelines (WP12) → measured setup complexity, failure modes, evidence completeness, developer comprehension, CI cost, reproducibility. Integration proved reliable. Proceed toward real-world validation (WP15) or alternative forks per human direction. Alternative forks: WP14 historical/delta (Node 20.9 fresh per-commit coverage), WP15 human review study, or narrow/stop per Fork E. Angular fork authorized per Hardening B human review (2026-09-02), awaiting spec.

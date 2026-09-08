@@ -1,0 +1,4922 @@
+{
+  "schemaVersion": "0.2",
+  "analysis": {
+    "base": "5e8a31709b28dbebf2f2f8f1a3063250ec799b74",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/rules/cache.ts",
+      "method": "getSetCookies",
+      "lineStart": 41,
+      "lineEnd": 48,
+      "cc": 3,
+      "crap": 6.796875,
+      "coverage": 25,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/cache.ts",
+      "method": "withoutVaryOrigin",
+      "lineStart": 54,
+      "lineEnd": 60,
+      "cc": 2,
+      "crap": 2.0625,
+      "coverage": 75,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/cache.ts",
+      "method": "moveVolatileHeaders",
+      "lineStart": 73,
+      "lineEnd": 127,
+      "cc": 16,
+      "crap": 16.192336589030806,
+      "coverage": 90.9090909090909,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/cache.ts",
+      "method": "strip",
+      "lineStart": 93,
+      "lineEnd": 107,
+      "cc": 5,
+      "crap": 5.1157407407407405,
+      "coverage": 83.33333333333334,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/cache.ts",
+      "method": "setRequestHeaders",
+      "lineStart": 135,
+      "lineEnd": 177,
+      "cc": 6,
+      "crap": 6.288,
+      "coverage": 80,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/cache.ts",
+      "method": "apply",
+      "lineStart": 140,
+      "lineEnd": 149,
+      "cc": 3,
+      "crap": 4.125,
+      "coverage": 50,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/cache.ts",
+      "method": "applied",
+      "lineStart": 150,
+      "lineEnd": 151,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/cache.ts",
+      "method": "withPreservedCacheControl",
+      "lineStart": 186,
+      "lineEnd": 205,
+      "cc": 6,
+      "crap": 6,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/cache.ts",
+      "method": "withRequestHeaderFilter",
+      "lineStart": 211,
+      "lineEnd": 236,
+      "cc": 1,
+      "crap": 1.0007513148009015,
+      "coverage": 90.9090909090909,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/cache.ts",
+      "method": "variableHeaderNames",
+      "lineStart": 239,
+      "lineEnd": 247,
+      "cc": 5,
+      "crap": 5,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/cache.ts",
+      "method": "idStorage",
+      "lineStart": 255,
+      "lineEnd": 262,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/cache.ts",
+      "method": "createOcacheRuleHandler",
+      "lineStart": 270,
+      "lineEnd": 331,
+      "cc": 7,
+      "crap": 7,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/cache.ts",
+      "method": "defineCachedHandler",
+      "lineStart": 279,
+      "lineEnd": 327,
+      "cc": 5,
+      "crap": 5,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/cache.ts",
+      "method": "toResponse",
+      "lineStart": 289,
+      "lineEnd": 299,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/cache.ts",
+      "method": "handleCacheHeaders",
+      "lineStart": 300,
+      "lineEnd": 305,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/codegen.ts",
+      "method": "serializePreMergedRouteRules",
+      "lineStart": 8,
+      "lineEnd": 26,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/codegen.ts",
+      "method": "serializeRouteRuleEntries",
+      "lineStart": 29,
+      "lineEnd": 58,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/codegen.ts",
+      "method": "compileMatcherExport",
+      "lineStart": 64,
+      "lineEnd": 94,
+      "cc": 9,
+      "crap": 9.060856498873028,
+      "coverage": 90.9090909090909,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/codegen.ts",
+      "method": "compileOverridePredicate",
+      "lineStart": 100,
+      "lineEnd": 128,
+      "cc": 8,
+      "crap": 8,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/codegen.ts",
+      "method": "assertHandlerBinding",
+      "lineStart": 131,
+      "lineEnd": 137,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/codegen.ts",
+      "method": "assertSerializableOptions",
+      "lineStart": 144,
+      "lineEnd": 180,
+      "cc": 16,
+      "crap": 16.027642803153007,
+      "coverage": 95.23809523809523,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/compile.ts",
+      "method": "compileRouteRules",
+      "lineStart": 34,
+      "lineEnd": 52,
+      "cc": 5,
+      "crap": 5,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/compile.ts",
+      "method": "toString",
+      "lineStart": 51,
+      "lineEnd": 51,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/compile.ts",
+      "method": "compileFindRouteRules",
+      "lineStart": 60,
+      "lineEnd": 65,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/compile.ts",
+      "method": "compileHandlersImport",
+      "lineStart": 72,
+      "lineEnd": 77,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/compile.ts",
+      "method": "resolveCompileCtx",
+      "lineStart": 116,
+      "lineEnd": 145,
+      "cc": 4,
+      "crap": 4,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/compile.ts",
+      "method": "emitFindRouteRules",
+      "lineStart": 152,
+      "lineEnd": 161,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/compile.ts",
+      "method": "serialize",
+      "lineStart": 156,
+      "lineEnd": 159,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/compile.ts",
+      "method": "emitHandlersImport",
+      "lineStart": 168,
+      "lineEnd": 190,
+      "cc": 4,
+      "crap": 4.03125,
+      "coverage": 87.5,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/compile.ts",
+      "method": "collectRoutes",
+      "lineStart": 197,
+      "lineEnd": 203,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/compile.ts",
+      "method": "usedRuleHandlerNames",
+      "lineStart": 206,
+      "lineEnd": 223,
+      "cc": 7,
+      "crap": 7,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/runtime-rules.ts",
+      "method": "resolveRuntimeRules",
+      "lineStart": 27,
+      "lineEnd": 31,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/runtime-rules.ts",
+      "method": "isRuntimeRule",
+      "lineStart": 34,
+      "lineEnd": 39,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/compiler/runtime-rules.ts",
+      "method": "resolveRuntimeRule",
+      "lineStart": 42,
+      "lineEnd": 50,
+      "cc": 3,
+      "crap": 3.140625,
+      "coverage": 75,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/handlers/_utils.ts",
+      "method": "prepareRuleTarget",
+      "lineStart": 33,
+      "lineEnd": 124,
+      "cc": 13,
+      "crap": 13.384986878553724,
+      "coverage": 86.8421052631579,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/handlers/_utils.ts",
+      "method": "isFinalTargetInScope",
+      "lineStart": 141,
+      "lineEnd": 147,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/handlers/_utils.ts",
+      "method": "isLiterallyInScope",
+      "lineStart": 152,
+      "lineEnd": 154,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/handlers/_utils.ts",
+      "method": "patternSegmentCount",
+      "lineStart": 168,
+      "lineEnd": 187,
+      "cc": 7,
+      "crap": 7,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/handlers/_utils.ts",
+      "method": "countSegments",
+      "lineStart": 190,
+      "lineEnd": 192,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/handlers/_utils.ts",
+      "method": "splitSegments",
+      "lineStart": 196,
+      "lineEnd": 198,
+      "cc": 2,
+      "crap": 2.5,
+      "coverage": 50,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/handlers/_utils.ts",
+      "method": "leadingSegments",
+      "lineStart": 201,
+      "lineEnd": 212,
+      "cc": 4,
+      "crap": 4,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/handlers/cache.ts",
+      "method": "createCacheRuleHandler",
+      "lineStart": 34,
+      "lineEnd": 90,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/handlers/cache.ts",
+      "method": "handler",
+      "lineStart": 49,
+      "lineEnd": 88,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/handlers/cache.ts",
+      "method": "normalizeResult",
+      "lineStart": 103,
+      "lineEnd": 105,
+      "cc": 2,
+      "crap": 2.5,
+      "coverage": 50,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/handlers/cors.ts",
+      "method": "safeCorsOptions",
+      "lineStart": 17,
+      "lineEnd": 29,
+      "cc": 5,
+      "crap": 5,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/handlers/cors.ts",
+      "method": "cors.handler",
+      "lineStart": 41,
+      "lineEnd": 45,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/handlers/headers.ts",
+      "method": "headers.handler",
+      "lineStart": 14,
+      "lineEnd": 26,
+      "cc": 2,
+      "crap": 2.5,
+      "coverage": 50,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/handlers/redirect.ts",
+      "method": "redirect.handler",
+      "lineStart": 14,
+      "lineEnd": 23,
+      "cc": 2,
+      "crap": 2.5,
+      "coverage": 50,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/key.ts",
+      "method": "parseRouteKey",
+      "lineStart": 38,
+      "lineEnd": 47,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/key.ts",
+      "method": "unknownMethodPrefix",
+      "lineStart": 62,
+      "lineEnd": 65,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/key.ts",
+      "method": "formatRouteKey",
+      "lineStart": 68,
+      "lineEnd": 70,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/key.ts",
+      "method": "decodeRoutePattern",
+      "lineStart": 114,
+      "lineEnd": 128,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/nodes.ts",
+      "method": "sharedNodeMethods",
+      "lineStart": 40,
+      "lineEnd": 95,
+      "cc": 14,
+      "crap": 14,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/nodes.ts",
+      "method": "find",
+      "lineStart": 44,
+      "lineEnd": 50,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/nodes.ts",
+      "method": "nodeKeys",
+      "lineStart": 103,
+      "lineEnd": 113,
+      "cc": 3,
+      "crap": 4.125,
+      "coverage": 50,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/premerge.ts",
+      "method": "routeContainmentRanks",
+      "lineStart": 69,
+      "lineEnd": 88,
+      "cc": 6,
+      "crap": 6.010666666666666,
+      "coverage": 93.33333333333333,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/premerge.ts",
+      "method": "preMergeRuleLayers",
+      "lineStart": 100,
+      "lineEnd": 180,
+      "cc": 21,
+      "crap": 21,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/premerge.ts",
+      "method": "mergeChainRule",
+      "lineStart": 182,
+      "lineEnd": 204,
+      "cc": 6,
+      "crap": 6,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/scope.ts",
+      "method": "canonicalPath",
+      "lineStart": 14,
+      "lineEnd": 16,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/scope.ts",
+      "method": "decodedPath",
+      "lineStart": 59,
+      "lineEnd": 79,
+      "cc": 6,
+      "crap": 7.333333333333335,
+      "coverage": 66.66666666666666,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/scope.ts",
+      "method": "needsCanonicalPasses",
+      "lineStart": 102,
+      "lineEnd": 104,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/scope.ts",
+      "method": "mergedCanonicalPath",
+      "lineStart": 125,
+      "lineEnd": 128,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/scope.ts",
+      "method": "isPathInScope",
+      "lineStart": 157,
+      "lineEnd": 166,
+      "cc": 4,
+      "crap": 4,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/scope.ts",
+      "method": "isEveryCanonicalReadingInScope",
+      "lineStart": 168,
+      "lineEnd": 176,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/scope.ts",
+      "method": "isCanonicalInScope",
+      "lineStart": 178,
+      "lineEnd": 180,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/scope.ts",
+      "method": "hasDecodableEscape",
+      "lineStart": 192,
+      "lineEnd": 200,
+      "cc": 4,
+      "crap": 4,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/scope.ts",
+      "method": "flattenNesting",
+      "lineStart": 212,
+      "lineEnd": 228,
+      "cc": 7,
+      "crap": 7.049,
+      "coverage": 90,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/scope.ts",
+      "method": "nestingEnd",
+      "lineStart": 231,
+      "lineEnd": 237,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/scope.ts",
+      "method": "escapeByte",
+      "lineStart": 240,
+      "lineEnd": 244,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/internal/scope.ts",
+      "method": "hexDigit",
+      "lineStart": 246,
+      "lineEnd": 257,
+      "cc": 7,
+      "crap": 7,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/match.ts",
+      "method": "createRulesRouter",
+      "lineStart": 63,
+      "lineEnd": 175,
+      "cc": 27,
+      "crap": 27.03320881924198,
+      "coverage": 96.42857142857143,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/match.ts",
+      "method": "createRouteRulesMatcher",
+      "lineStart": 181,
+      "lineEnd": 222,
+      "cc": 4,
+      "crap": 4,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/match.ts",
+      "method": "findRouteRules",
+      "lineStart": 211,
+      "lineEnd": 212,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/match.ts",
+      "method": "canOverrideRoute",
+      "lineStart": 227,
+      "lineEnd": 233,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/match.ts",
+      "method": "canOverrideRouteShape",
+      "lineStart": 255,
+      "lineEnd": 293,
+      "cc": 12,
+      "crap": 12,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/match.ts",
+      "method": "createMatcherFromFind",
+      "lineStart": 302,
+      "lineEnd": 341,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/match.ts",
+      "method": "toRouteRules",
+      "lineStart": 344,
+      "lineEnd": 350,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/match.ts",
+      "method": "buildRouteRuleMiddleware",
+      "lineStart": 366,
+      "lineEnd": 381,
+      "cc": 4,
+      "crap": 4,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/match.ts",
+      "method": "memoizeRouteRulesMatcher",
+      "lineStart": 387,
+      "lineEnd": 408,
+      "cc": 4,
+      "crap": 4,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/match.ts",
+      "method": "alternateReadings",
+      "lineStart": 443,
+      "lineEnd": 462,
+      "cc": 8,
+      "crap": 8.037037037037038,
+      "coverage": 91.66666666666666,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/match.ts",
+      "method": "pushReading",
+      "lineStart": 464,
+      "lineEnd": 468,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/match.ts",
+      "method": "requireOptInHandler",
+      "lineStart": 471,
+      "lineEnd": 488,
+      "cc": 4,
+      "crap": 4,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/match.ts",
+      "method": "compareRuleOrder",
+      "lineStart": 490,
+      "lineEnd": 491,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/match.ts",
+      "method": "orderWeight",
+      "lineStart": 493,
+      "lineEnd": 495,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/match.ts",
+      "method": "withScopeBase",
+      "lineStart": 497,
+      "lineEnd": 507,
+      "cc": 6,
+      "crap": 6,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/merge.ts",
+      "method": "mergeMatchedRouteRules",
+      "lineStart": 30,
+      "lineEnd": 42,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/merge.ts",
+      "method": "unionLayers",
+      "lineStart": 45,
+      "lineEnd": 67,
+      "cc": 11,
+      "crap": 11,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/merge.ts",
+      "method": "resolveLayers",
+      "lineStart": 69,
+      "lineEnd": 87,
+      "cc": 9,
+      "crap": 9,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/merge.ts",
+      "method": "isMergeableObject",
+      "lineStart": 89,
+      "lineEnd": 91,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/merge.ts",
+      "method": "emptyRouteRules",
+      "lineStart": 94,
+      "lineEnd": 96,
+      "cc": 1,
+      "crap": 1,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/merge.ts",
+      "method": "mergeRuleOptions",
+      "lineStart": 98,
+      "lineEnd": 102,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/merge.ts",
+      "method": "orderedLayers",
+      "lineStart": 121,
+      "lineEnd": 142,
+      "cc": 9,
+      "crap": 9.046875,
+      "coverage": 91.66666666666666,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/merge.ts",
+      "method": "layerRank",
+      "lineStart": 144,
+      "lineEnd": 146,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/merge.ts",
+      "method": "resolvePreMergedLayers",
+      "lineStart": 157,
+      "lineEnd": 195,
+      "cc": 11,
+      "crap": 11,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/merge.ts",
+      "method": "mergeRouteRule",
+      "lineStart": 197,
+      "lineEnd": 223,
+      "cc": 6,
+      "crap": 6,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/middleware.ts",
+      "method": "routeRules",
+      "lineStart": 36,
+      "lineEnd": 63,
+      "cc": 5,
+      "crap": 5,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/middleware.ts",
+      "method": "liftPreflightCors",
+      "lineStart": 69,
+      "lineEnd": 101,
+      "cc": 6,
+      "crap": 6.036,
+      "coverage": 90,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/normalize.ts",
+      "method": "normalizeRouteRules",
+      "lineStart": 21,
+      "lineEnd": 136,
+      "cc": 36,
+      "crap": 36,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/normalize.ts",
+      "method": "validateBuiltinRules",
+      "lineStart": 156,
+      "lineEnd": 169,
+      "cc": 7,
+      "crap": 7,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/rules/proxy.ts",
+      "method": "proxy.handler",
+      "lineStart": 17,
+      "lineEnd": 28,
+      "cc": 2,
+      "crap": 2.5,
+      "coverage": 50,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/cache.ts",
+      "method": "handleCacheHeaders",
+      "lineStart": 32,
+      "lineEnd": 81,
+      "cc": 9,
+      "crap": 9,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/internal/cache.ts",
+      "method": "isCacheMatch",
+      "lineStart": 29,
+      "lineEnd": 49,
+      "cc": 7,
+      "crap": 7,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/internal/path.ts",
+      "method": "withLeadingSlash",
+      "lineStart": 10,
+      "lineEnd": 12,
+      "cc": 3,
+      "crap": 3.140625,
+      "coverage": 75,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/internal/path.ts",
+      "method": "joinURL",
+      "lineStart": 26,
+      "lineEnd": 38,
+      "cc": 6,
+      "crap": 6,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/internal/path.ts",
+      "method": "stripBase",
+      "lineStart": 54,
+      "lineEnd": 59,
+      "cc": 4,
+      "crap": 4,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/internal/path.ts",
+      "method": "getURLPathname",
+      "lineStart": 85,
+      "lineEnd": 91,
+      "cc": 3,
+      "crap": 3,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/internal/path.ts",
+      "method": "decodePreservingSeparators",
+      "lineStart": 281,
+      "lineEnd": 296,
+      "cc": 3,
+      "crap": 4.125,
+      "coverage": 50,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "src/utils/request.ts",
+      "method": "getRouterParams",
+      "lineStart": 205,
+      "lineEnd": 225,
+      "cc": 4,
+      "crap": 4.25,
+      "coverage": 75,
+      "coverageKind": "branch",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/_bundler.ts",
+      "method": "bundleModule",
+      "lineStart": 58,
+      "lineEnd": 67,
+      "cc": 4,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/_bundler.ts",
+      "method": "sizesOf",
+      "lineStart": 70,
+      "lineEnd": 77,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/_bundler.ts",
+      "method": "kb",
+      "lineStart": 79,
+      "lineEnd": 81,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/_bundler.ts",
+      "method": "printModules",
+      "lineStart": 84,
+      "lineEnd": 97,
+      "cc": 3,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/_bundler.ts",
+      "method": "loadRolldown",
+      "lineStart": 112,
+      "lineEnd": 122,
+      "cc": 4,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/_bundler.ts",
+      "method": "resolveVia",
+      "lineStart": 124,
+      "lineEnd": 131,
+      "cc": 2,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/_bundler.ts",
+      "method": "bundleWithRolldown",
+      "lineStart": 133,
+      "lineEnd": 159,
+      "cc": 5,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/_bundler.ts",
+      "method": "resolveId",
+      "lineStart": 142,
+      "lineEnd": 142,
+      "cc": 2,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/_bundler.ts",
+      "method": "bundleWithEsbuild",
+      "lineStart": 161,
+      "lineEnd": 203,
+      "cc": 7,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/_bundler.ts",
+      "method": "setup",
+      "lineStart": 184,
+      "lineEnd": 188,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/_bundler.ts",
+      "method": "shortName",
+      "lineStart": 206,
+      "lineEnd": 212,
+      "cc": 3,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/_rules-fixtures.ts",
+      "method": "snapshotMatch",
+      "lineStart": 157,
+      "lineEnd": 174,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "flag",
+      "lineStart": 51,
+      "lineEnd": 53,
+      "cc": 4,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "compile",
+      "lineStart": 105,
+      "lineEnd": 114,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "console.warn",
+      "lineStart": 108,
+      "lineEnd": 108,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "compiledVariant",
+      "lineStart": 116,
+      "lineEnd": 126,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "invariantsOf",
+      "lineStart": 275,
+      "lineEnd": 289,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "bytesOf",
+      "lineStart": 276,
+      "lineEnd": 277,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "has",
+      "lineStart": 278,
+      "lineEnd": 278,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "stable",
+      "lineStart": 309,
+      "lineEnd": 315,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "loadBundle",
+      "lineStart": 320,
+      "lineEnd": 322,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "matcherSnapshots",
+      "lineStart": 325,
+      "lineEnd": 328,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "appSnapshots",
+      "lineStart": 331,
+      "lineEnd": 343,
+      "cc": 2,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "checkParity",
+      "lineStart": 345,
+      "lineEnd": 384,
+      "cc": 10,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "mark",
+      "lineStart": 425,
+      "lineEnd": 425,
+      "cc": 2,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "readme",
+      "lineStart": 524,
+      "lineEnd": 582,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/_fixture.ts",
+      "method": "snapshotResult",
+      "lineStart": 121,
+      "lineEnd": 142,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/cache.test.ts",
+      "method": "createApp",
+      "lineStart": 10,
+      "lineEnd": 14,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/cache.test.ts",
+      "method": "createInjectedApp",
+      "lineStart": 17,
+      "lineEnd": 20,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/cache.test.ts",
+      "method": "mkApp",
+      "lineStart": 57,
+      "lineEnd": 62,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/cache.test.ts",
+      "method": "mkApp",
+      "lineStart": 73,
+      "lineEnd": 83,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/cache.test.ts",
+      "method": "mkApp",
+      "lineStart": 98,
+      "lineEnd": 108,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/cache.test.ts",
+      "method": "ImmutableHeaders.delete",
+      "lineStart": 214,
+      "lineEnd": 216,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/cache.test.ts",
+      "method": "ImmutableHeaders.set",
+      "lineStart": 217,
+      "lineEnd": 219,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/cache.test.ts",
+      "method": "get",
+      "lineStart": 229,
+      "lineEnd": 229,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/cache.test.ts",
+      "method": "get",
+      "lineStart": 230,
+      "lineEnd": 230,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/cache.test.ts",
+      "method": "blocked.handler",
+      "lineStart": 525,
+      "lineEnd": 526,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/cache.test.ts",
+      "method": "req",
+      "lineStart": 687,
+      "lineEnd": 690,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/cache.test.ts",
+      "method": "defineCachedHandler",
+      "lineStart": 761,
+      "lineEnd": 761,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/cache.test.ts",
+      "method": "defineCachedHandler",
+      "lineStart": 828,
+      "lineEnd": 828,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/compiler.test.ts",
+      "method": "evaluateFind",
+      "lineStart": 28,
+      "lineEnd": 34,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/compiler.test.ts",
+      "method": "evaluateCompiled",
+      "lineStart": 39,
+      "lineEnd": 41,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/compiler.test.ts",
+      "method": "evaluateModule",
+      "lineStart": 48,
+      "lineEnd": 63,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/compiler.test.ts",
+      "method": "bindings",
+      "lineStart": 257,
+      "lineEnd": 258,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/compiler.test.ts",
+      "method": "bindings",
+      "lineStart": 541,
+      "lineEnd": 542,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/compiler.test.ts",
+      "method": "/api/**.proxy.onResponse",
+      "lineStart": 579,
+      "lineEnd": 579,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/compiler.test.ts",
+      "method": "withProto",
+      "lineStart": 607,
+      "lineEnd": 616,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/encoding.test.ts",
+      "method": "decodePreservingSeparators",
+      "lineStart": 24,
+      "lineEnd": 27,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/encoding.test.ts",
+      "method": "target",
+      "lineStart": 335,
+      "lineEnd": 339,
+      "cc": 2,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/encoding.test.ts",
+      "method": "findNothing",
+      "lineStart": 378,
+      "lineEnd": 378,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/match.test.ts",
+      "method": "layer",
+      "lineStart": 18,
+      "lineEnd": 20,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/match.test.ts",
+      "method": "find",
+      "lineStart": 28,
+      "lineEnd": 29,
+      "cc": 2,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/match.test.ts",
+      "method": "upgrade",
+      "lineStart": 46,
+      "lineEnd": 47,
+      "cc": 2,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/match.test.ts",
+      "method": "aliasConfig",
+      "lineStart": 197,
+      "lineEnd": 200,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/match.test.ts",
+      "method": "ruleNames",
+      "lineStart": 202,
+      "lineEnd": 203,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/match.test.ts",
+      "method": "evaluateCompiledMatcher",
+      "lineStart": 208,
+      "lineEnd": 217,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/merge.test.ts",
+      "method": "matcher",
+      "lineStart": 11,
+      "lineEnd": 12,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/merge.test.ts",
+      "method": "mk",
+      "lineStart": 221,
+      "lineEnd": 224,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/merge.test.ts",
+      "method": "handler",
+      "lineStart": 223,
+      "lineEnd": 223,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/merge.test.ts",
+      "method": "restricted.handler",
+      "lineStart": 510,
+      "lineEnd": 510,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/merge.test.ts",
+      "method": "layer",
+      "lineStart": 589,
+      "lineEnd": 596,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/middleware.test.ts",
+      "method": "appWithContextProbe",
+      "lineStart": 16,
+      "lineEnd": 28,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/middleware.test.ts",
+      "method": "get",
+      "lineStart": 75,
+      "lineEnd": 76,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/middleware.test.ts",
+      "method": "get",
+      "lineStart": 128,
+      "lineEnd": 128,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/middleware.test.ts",
+      "method": "preflight",
+      "lineStart": 129,
+      "lineEnd": 138,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/middleware.test.ts",
+      "method": "mk",
+      "lineStart": 221,
+      "lineEnd": 224,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/middleware.test.ts",
+      "method": "handler",
+      "lineStart": 223,
+      "lineEnd": 223,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/middleware.test.ts",
+      "method": "gate.handler",
+      "lineStart": 277,
+      "lineEnd": 277,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/middleware.test.ts",
+      "method": "mk",
+      "lineStart": 293,
+      "lineEnd": 295,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/middleware.test.ts",
+      "method": "handler",
+      "lineStart": 294,
+      "lineEnd": 294,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/normalize.test.ts",
+      "method": "origin",
+      "lineStart": 198,
+      "lineEnd": 198,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/premerge.test.ts",
+      "method": "sub",
+      "lineStart": 262,
+      "lineEnd": 262,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/rules.test.ts",
+      "method": "createApp",
+      "lineStart": 13,
+      "lineEnd": 17,
+      "cc": 2,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/rules.test.ts",
+      "method": "evt",
+      "lineStart": 654,
+      "lineEnd": 655,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/rules.test.ts",
+      "method": "resolve",
+      "lineStart": 656,
+      "lineEnd": 656,
+      "cc": 2,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/rules.test.ts",
+      "method": "blocked",
+      "lineStart": 657,
+      "lineEnd": 667,
+      "cc": 4,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/rules.test.ts",
+      "method": "preflight",
+      "lineStart": 838,
+      "lineEnd": 845,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/rules.test.ts",
+      "method": "handlers.shout.handler",
+      "lineStart": 971,
+      "lineEnd": 973,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/scope.test.ts",
+      "method": "hexOfHex",
+      "lineStart": 108,
+      "lineEnd": 109,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/scope.test.ts",
+      "method": "rand",
+      "lineStart": 290,
+      "lineEnd": 290,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/scope.test.ts",
+      "method": "evt",
+      "lineStart": 321,
+      "lineEnd": 322,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/scope.test.ts",
+      "method": "resolve",
+      "lineStart": 323,
+      "lineEnd": 324,
+      "cc": 2,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/scope.test.ts",
+      "method": "blocked",
+      "lineStart": 325,
+      "lineEnd": 335,
+      "cc": 4,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/scope.test.ts",
+      "method": "rule",
+      "lineStart": 338,
+      "lineEnd": 339,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/treeshake.test.ts",
+      "method": "forceSideEffects.setup",
+      "lineStart": 49,
+      "lineEnd": 68,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/treeshake.test.ts",
+      "method": "bundle",
+      "lineStart": 71,
+      "lineEnd": 110,
+      "cc": 3,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/treeshake.test.ts",
+      "method": "has",
+      "lineStart": 104,
+      "lineEnd": 104,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    },
+    {
+      "file": "test/rules/treeshake.test.ts",
+      "method": "bytesOf",
+      "lineStart": 105,
+      "lineEnd": 108,
+      "cc": 1,
+      "crap": null,
+      "coverage": null,
+      "coverageKind": "N/A",
+      "analyzerStatus": "skipped",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 15
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/cache.ts",
+      "method": "getSetCookies",
+      "crap": 6.796875,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 25
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/cache.ts",
+      "method": "withoutVaryOrigin",
+      "crap": 2.0625,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 75
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "WARN",
+      "file": "src/rules/cache.ts",
+      "method": "moveVolatileHeaders",
+      "crap": 16.192336589030806,
+      "threshold": 15,
+      "cc": 16,
+      "coverage": 90.9090909090909
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/cache.ts",
+      "method": "strip",
+      "crap": 5.1157407407407405,
+      "threshold": 15,
+      "cc": 5,
+      "coverage": 83.33333333333334
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/cache.ts",
+      "method": "setRequestHeaders",
+      "crap": 6.288,
+      "threshold": 15,
+      "cc": 6,
+      "coverage": 80
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/cache.ts",
+      "method": "apply",
+      "crap": 4.125,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 50
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/rules/cache.ts",
+      "method": "applied",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/cache.ts",
+      "method": "withPreservedCacheControl",
+      "crap": 6,
+      "threshold": 15,
+      "cc": 6,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/cache.ts",
+      "method": "withRequestHeaderFilter",
+      "crap": 1.0007513148009015,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": 90.9090909090909
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/cache.ts",
+      "method": "variableHeaderNames",
+      "crap": 5,
+      "threshold": 15,
+      "cc": 5,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/cache.ts",
+      "method": "idStorage",
+      "crap": 2,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/cache.ts",
+      "method": "createOcacheRuleHandler",
+      "crap": 7,
+      "threshold": 15,
+      "cc": 7,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/cache.ts",
+      "method": "defineCachedHandler",
+      "crap": 5,
+      "threshold": 15,
+      "cc": 5,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/cache.ts",
+      "method": "toResponse",
+      "crap": 2,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/cache.ts",
+      "method": "handleCacheHeaders",
+      "crap": 1,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/codegen.ts",
+      "method": "serializePreMergedRouteRules",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/codegen.ts",
+      "method": "serializeRouteRuleEntries",
+      "crap": 1,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/codegen.ts",
+      "method": "compileMatcherExport",
+      "crap": 9.060856498873028,
+      "threshold": 15,
+      "cc": 9,
+      "coverage": 90.9090909090909
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/codegen.ts",
+      "method": "compileOverridePredicate",
+      "crap": 8,
+      "threshold": 15,
+      "cc": 8,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/codegen.ts",
+      "method": "assertHandlerBinding",
+      "crap": 2,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "WARN",
+      "file": "src/rules/compiler/codegen.ts",
+      "method": "assertSerializableOptions",
+      "crap": 16.027642803153007,
+      "threshold": 15,
+      "cc": 16,
+      "coverage": 95.23809523809523
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/compile.ts",
+      "method": "compileRouteRules",
+      "crap": 5,
+      "threshold": 15,
+      "cc": 5,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/compile.ts",
+      "method": "toString",
+      "crap": 1,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/compile.ts",
+      "method": "compileFindRouteRules",
+      "crap": 1,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/compile.ts",
+      "method": "compileHandlersImport",
+      "crap": 1,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/compile.ts",
+      "method": "resolveCompileCtx",
+      "crap": 4,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/compile.ts",
+      "method": "emitFindRouteRules",
+      "crap": 2,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/compile.ts",
+      "method": "serialize",
+      "crap": 2,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/compile.ts",
+      "method": "emitHandlersImport",
+      "crap": 4.03125,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": 87.5
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/compile.ts",
+      "method": "collectRoutes",
+      "crap": 2,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/compile.ts",
+      "method": "usedRuleHandlerNames",
+      "crap": 7,
+      "threshold": 15,
+      "cc": 7,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/runtime-rules.ts",
+      "method": "resolveRuntimeRules",
+      "crap": 2,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/runtime-rules.ts",
+      "method": "isRuntimeRule",
+      "crap": 1,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/compiler/runtime-rules.ts",
+      "method": "resolveRuntimeRule",
+      "crap": 3.140625,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 75
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/handlers/_utils.ts",
+      "method": "prepareRuleTarget",
+      "crap": 13.384986878553724,
+      "threshold": 15,
+      "cc": 13,
+      "coverage": 86.8421052631579
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/handlers/_utils.ts",
+      "method": "isFinalTargetInScope",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/handlers/_utils.ts",
+      "method": "isLiterallyInScope",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/handlers/_utils.ts",
+      "method": "patternSegmentCount",
+      "crap": 7,
+      "threshold": 15,
+      "cc": 7,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/handlers/_utils.ts",
+      "method": "countSegments",
+      "crap": 1,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/handlers/_utils.ts",
+      "method": "splitSegments",
+      "crap": 2.5,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 50
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/handlers/_utils.ts",
+      "method": "leadingSegments",
+      "crap": 4,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/handlers/cache.ts",
+      "method": "createCacheRuleHandler",
+      "crap": 1,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/rules/handlers/cache.ts",
+      "method": "handler",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/handlers/cache.ts",
+      "method": "normalizeResult",
+      "crap": 2.5,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 50
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/handlers/cors.ts",
+      "method": "safeCorsOptions",
+      "crap": 5,
+      "threshold": 15,
+      "cc": 5,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/rules/handlers/cors.ts",
+      "method": "cors.handler",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/handlers/headers.ts",
+      "method": "headers.handler",
+      "crap": 2.5,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 50
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/handlers/redirect.ts",
+      "method": "redirect.handler",
+      "crap": 2.5,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 50
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/key.ts",
+      "method": "parseRouteKey",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/key.ts",
+      "method": "unknownMethodPrefix",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/key.ts",
+      "method": "formatRouteKey",
+      "crap": 2,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/key.ts",
+      "method": "decodeRoutePattern",
+      "crap": 2,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/nodes.ts",
+      "method": "sharedNodeMethods",
+      "crap": 14,
+      "threshold": 15,
+      "cc": 14,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/nodes.ts",
+      "method": "find",
+      "crap": 2,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/nodes.ts",
+      "method": "nodeKeys",
+      "crap": 4.125,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 50
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/premerge.ts",
+      "method": "routeContainmentRanks",
+      "crap": 6.010666666666666,
+      "threshold": 15,
+      "cc": 6,
+      "coverage": 93.33333333333333
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "WARN",
+      "file": "src/rules/internal/premerge.ts",
+      "method": "preMergeRuleLayers",
+      "crap": 21,
+      "threshold": 15,
+      "cc": 21,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/premerge.ts",
+      "method": "mergeChainRule",
+      "crap": 6,
+      "threshold": 15,
+      "cc": 6,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/scope.ts",
+      "method": "canonicalPath",
+      "crap": 1,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/scope.ts",
+      "method": "decodedPath",
+      "crap": 7.333333333333335,
+      "threshold": 15,
+      "cc": 6,
+      "coverage": 66.66666666666666
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/scope.ts",
+      "method": "needsCanonicalPasses",
+      "crap": 1,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/scope.ts",
+      "method": "mergedCanonicalPath",
+      "crap": 2,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/scope.ts",
+      "method": "isPathInScope",
+      "crap": 4,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/scope.ts",
+      "method": "isEveryCanonicalReadingInScope",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/scope.ts",
+      "method": "isCanonicalInScope",
+      "crap": 2,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/scope.ts",
+      "method": "hasDecodableEscape",
+      "crap": 4,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/scope.ts",
+      "method": "flattenNesting",
+      "crap": 7.049,
+      "threshold": 15,
+      "cc": 7,
+      "coverage": 90
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/scope.ts",
+      "method": "nestingEnd",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/scope.ts",
+      "method": "escapeByte",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/internal/scope.ts",
+      "method": "hexDigit",
+      "crap": 7,
+      "threshold": 15,
+      "cc": 7,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "WARN",
+      "file": "src/rules/match.ts",
+      "method": "createRulesRouter",
+      "crap": 27.03320881924198,
+      "threshold": 15,
+      "cc": 27,
+      "coverage": 96.42857142857143
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/match.ts",
+      "method": "createRouteRulesMatcher",
+      "crap": 4,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/match.ts",
+      "method": "findRouteRules",
+      "crap": 1,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/match.ts",
+      "method": "canOverrideRoute",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/match.ts",
+      "method": "canOverrideRouteShape",
+      "crap": 12,
+      "threshold": 15,
+      "cc": 12,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/match.ts",
+      "method": "createMatcherFromFind",
+      "crap": 1,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/match.ts",
+      "method": "toRouteRules",
+      "crap": 2,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/match.ts",
+      "method": "buildRouteRuleMiddleware",
+      "crap": 4,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/match.ts",
+      "method": "memoizeRouteRulesMatcher",
+      "crap": 4,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/match.ts",
+      "method": "alternateReadings",
+      "crap": 8.037037037037038,
+      "threshold": 15,
+      "cc": 8,
+      "coverage": 91.66666666666666
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/match.ts",
+      "method": "pushReading",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/match.ts",
+      "method": "requireOptInHandler",
+      "crap": 4,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/match.ts",
+      "method": "compareRuleOrder",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/match.ts",
+      "method": "orderWeight",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/match.ts",
+      "method": "withScopeBase",
+      "crap": 6,
+      "threshold": 15,
+      "cc": 6,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/merge.ts",
+      "method": "mergeMatchedRouteRules",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/merge.ts",
+      "method": "unionLayers",
+      "crap": 11,
+      "threshold": 15,
+      "cc": 11,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/merge.ts",
+      "method": "resolveLayers",
+      "crap": 9,
+      "threshold": 15,
+      "cc": 9,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/merge.ts",
+      "method": "isMergeableObject",
+      "crap": 2,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/merge.ts",
+      "method": "emptyRouteRules",
+      "crap": 1,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/merge.ts",
+      "method": "mergeRuleOptions",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/merge.ts",
+      "method": "orderedLayers",
+      "crap": 9.046875,
+      "threshold": 15,
+      "cc": 9,
+      "coverage": 91.66666666666666
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/merge.ts",
+      "method": "layerRank",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/merge.ts",
+      "method": "resolvePreMergedLayers",
+      "crap": 11,
+      "threshold": 15,
+      "cc": 11,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/merge.ts",
+      "method": "mergeRouteRule",
+      "crap": 6,
+      "threshold": 15,
+      "cc": 6,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/middleware.ts",
+      "method": "routeRules",
+      "crap": 5,
+      "threshold": 15,
+      "cc": 5,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/middleware.ts",
+      "method": "liftPreflightCors",
+      "crap": 6.036,
+      "threshold": 15,
+      "cc": 6,
+      "coverage": 90
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "WARN",
+      "file": "src/rules/normalize.ts",
+      "method": "normalizeRouteRules",
+      "crap": 36,
+      "threshold": 15,
+      "cc": 36,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/normalize.ts",
+      "method": "validateBuiltinRules",
+      "crap": 7,
+      "threshold": 15,
+      "cc": 7,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/rules/proxy.ts",
+      "method": "proxy.handler",
+      "crap": 2.5,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": 50
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/cache.ts",
+      "method": "handleCacheHeaders",
+      "crap": 9,
+      "threshold": 15,
+      "cc": 9,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/internal/cache.ts",
+      "method": "isCacheMatch",
+      "crap": 7,
+      "threshold": 15,
+      "cc": 7,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/internal/path.ts",
+      "method": "withLeadingSlash",
+      "crap": 3.140625,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 75
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/internal/path.ts",
+      "method": "joinURL",
+      "crap": 6,
+      "threshold": 15,
+      "cc": 6,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/internal/path.ts",
+      "method": "stripBase",
+      "crap": 4,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/internal/path.ts",
+      "method": "getURLPathname",
+      "crap": 3,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 100
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/internal/path.ts",
+      "method": "decodePreservingSeparators",
+      "crap": 4.125,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": 50
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/utils/request.ts",
+      "method": "getRouterParams",
+      "crap": 4.25,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": 75
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/_bundler.ts",
+      "method": "bundleModule",
+      "crap": null,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/_bundler.ts",
+      "method": "sizesOf",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/_bundler.ts",
+      "method": "kb",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/_bundler.ts",
+      "method": "printModules",
+      "crap": null,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/_bundler.ts",
+      "method": "loadRolldown",
+      "crap": null,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/_bundler.ts",
+      "method": "resolveVia",
+      "crap": null,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/_bundler.ts",
+      "method": "bundleWithRolldown",
+      "crap": null,
+      "threshold": 15,
+      "cc": 5,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/_bundler.ts",
+      "method": "resolveId",
+      "crap": null,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/_bundler.ts",
+      "method": "bundleWithEsbuild",
+      "crap": null,
+      "threshold": 15,
+      "cc": 7,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/_bundler.ts",
+      "method": "setup",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/_bundler.ts",
+      "method": "shortName",
+      "crap": null,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/_rules-fixtures.ts",
+      "method": "snapshotMatch",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "flag",
+      "crap": null,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "compile",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "console.warn",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "compiledVariant",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "invariantsOf",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "bytesOf",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "has",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "stable",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "loadBundle",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "matcherSnapshots",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "appSnapshots",
+      "crap": null,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "checkParity",
+      "crap": null,
+      "threshold": 15,
+      "cc": 10,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "mark",
+      "crap": null,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/bench/rules-bundle-inspect.ts",
+      "method": "readme",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/_fixture.ts",
+      "method": "snapshotResult",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/cache.test.ts",
+      "method": "createApp",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/cache.test.ts",
+      "method": "createInjectedApp",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/cache.test.ts",
+      "method": "mkApp",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/cache.test.ts",
+      "method": "mkApp",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/cache.test.ts",
+      "method": "mkApp",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/cache.test.ts",
+      "method": "ImmutableHeaders.delete",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/cache.test.ts",
+      "method": "ImmutableHeaders.set",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/cache.test.ts",
+      "method": "get",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/cache.test.ts",
+      "method": "get",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/cache.test.ts",
+      "method": "blocked.handler",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/cache.test.ts",
+      "method": "req",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/cache.test.ts",
+      "method": "defineCachedHandler",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/cache.test.ts",
+      "method": "defineCachedHandler",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/compiler.test.ts",
+      "method": "evaluateFind",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/compiler.test.ts",
+      "method": "evaluateCompiled",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/compiler.test.ts",
+      "method": "evaluateModule",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/compiler.test.ts",
+      "method": "bindings",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/compiler.test.ts",
+      "method": "bindings",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/compiler.test.ts",
+      "method": "/api/**.proxy.onResponse",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/compiler.test.ts",
+      "method": "withProto",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/encoding.test.ts",
+      "method": "decodePreservingSeparators",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/encoding.test.ts",
+      "method": "target",
+      "crap": null,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/encoding.test.ts",
+      "method": "findNothing",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/match.test.ts",
+      "method": "layer",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/match.test.ts",
+      "method": "find",
+      "crap": null,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/match.test.ts",
+      "method": "upgrade",
+      "crap": null,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/match.test.ts",
+      "method": "aliasConfig",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/match.test.ts",
+      "method": "ruleNames",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/match.test.ts",
+      "method": "evaluateCompiledMatcher",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/merge.test.ts",
+      "method": "matcher",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/merge.test.ts",
+      "method": "mk",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/merge.test.ts",
+      "method": "handler",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/merge.test.ts",
+      "method": "restricted.handler",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/merge.test.ts",
+      "method": "layer",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/middleware.test.ts",
+      "method": "appWithContextProbe",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/middleware.test.ts",
+      "method": "get",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/middleware.test.ts",
+      "method": "get",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/middleware.test.ts",
+      "method": "preflight",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/middleware.test.ts",
+      "method": "mk",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/middleware.test.ts",
+      "method": "handler",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/middleware.test.ts",
+      "method": "gate.handler",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/middleware.test.ts",
+      "method": "mk",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/middleware.test.ts",
+      "method": "handler",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/normalize.test.ts",
+      "method": "origin",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/premerge.test.ts",
+      "method": "sub",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/rules.test.ts",
+      "method": "createApp",
+      "crap": null,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/rules.test.ts",
+      "method": "evt",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/rules.test.ts",
+      "method": "resolve",
+      "crap": null,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/rules.test.ts",
+      "method": "blocked",
+      "crap": null,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/rules.test.ts",
+      "method": "preflight",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/rules.test.ts",
+      "method": "handlers.shout.handler",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/scope.test.ts",
+      "method": "hexOfHex",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/scope.test.ts",
+      "method": "rand",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/scope.test.ts",
+      "method": "evt",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/scope.test.ts",
+      "method": "resolve",
+      "crap": null,
+      "threshold": 15,
+      "cc": 2,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/scope.test.ts",
+      "method": "blocked",
+      "crap": null,
+      "threshold": 15,
+      "cc": 4,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/scope.test.ts",
+      "method": "rule",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/treeshake.test.ts",
+      "method": "forceSideEffects.setup",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/treeshake.test.ts",
+      "method": "bundle",
+      "crap": null,
+      "threshold": 15,
+      "cc": 3,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/treeshake.test.ts",
+      "method": "has",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "test/rules/treeshake.test.ts",
+      "method": "bytesOf",
+      "crap": null,
+      "threshold": 15,
+      "cc": 1,
+      "coverage": null
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "WARN",
+  "completeness": "INCOMPLETE"
+}
