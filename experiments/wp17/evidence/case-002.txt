@@ -1,0 +1,27 @@
+# case-002 evidence
+
+## git show --stat
+commit 6f26f9561edf7b21ab560ad145b3783f26131023
+Author: victorpetropoulos <petropoulos@hotmail.com>
+Date:   Thu Sep 3 06:52:30 2026 -0700
+
+    fix: add shebang to cli for global npm link
+    
+    - src/cli.ts add #!/usr/bin/env node so tsc output is directly executable
+    - build script chmod +x dist/cli.js so checkchange works globally after npm link
+    - verify checkchange --help works from /tmp and Engram
+
+ package.json | 2 +-
+ src/cli.ts   | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+GIT-SHOW-EXIT-CODE: 0
+
+## CLI check --help
+Usage: checkchange check [--base <ref>] [--json] [--crap-threshold <number>] [--coverage-file <path>] [--verbose]
+Options:
+  --base <ref>             Git base reference to compare against (optional, default: auto-detect)
+  --json                   Output JSON (default: false)
+  --crap-threshold <number> CRAP threshold for WARN (default: 30)
+
+CLI-CHECK-HELP-EXIT-CODE: 0

@@ -1,0 +1,7 @@
+[verbose] auto-detected base: origin/main
+Warning: failed to parse /Users/victorpetropoulos/Cursor Projects/code-risk-prototype-v0.3-opencode/experiments/wp15-js/fixtures/jsx-sample/Comp.jsx, skipping: Unable to parse TypeScript source /Users/victorpetropoulos/Cursor Projects/code-risk-prototype-v0.3-opencode/experiments/wp15-js/fixtures/jsx-sample/Comp.jsx: line 1, column 64: Unterminated regular expression literal.
+Warning: failed to parse /Users/victorpetropoulos/Cursor Projects/code-risk-prototype-v0.3-opencode/experiments/wp15-js/fixtures/jsx-sample/Component.jsx, skipping: Unable to parse TypeScript source /Users/victorpetropoulos/Cursor Projects/code-risk-prototype-v0.3-opencode/experiments/wp15-js/fixtures/jsx-sample/Component.jsx: line 7, column 23: Unterminated regular expression literal.
+Warning: failed to parse /Users/victorpetropoulos/Cursor Projects/code-risk-prototype-v0.3-opencode/experiments/wp15-js/fixtures/jsx-sample/useHook.jsx, skipping: Unable to parse TypeScript source /Users/victorpetropoulos/Cursor Projects/code-risk-prototype-v0.3-opencode/experiments/wp15-js/fixtures/jsx-sample/useHook.jsx: line 7, column 20: '>' expected.; line 7, column 27: ';' expected.; line 7, column 55: Expression expected.; line 7, column 64: Unterminated regular expression literal.; line 9, column 17: Unterminated regular expression literal.
+[verbose] analysisStatus=SUCCESS gate=WARN completeness=COMPLETE changedFunctions=1
+Analysis complete. Base: 4fbae48750684c6cee434f426fdd1f853eaffecf, Changed functions: 1
+EXIT:1

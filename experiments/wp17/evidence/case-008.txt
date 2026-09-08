@@ -1,0 +1,37 @@
+# case-008 evidence
+
+## git log -1
+commit 991ed4c66033ae987e76d479f8a99d258e25004c
+Author: victorpetropoulos <petropoulos@hotmail.com>
+Date:   Thu Sep 3 09:59:34 2026 -0700
+
+    docs: simplify OPENCODE_START_HERE required reads 5→2 for token saving
+
+## git show --stat
+commit 991ed4c66033ae987e76d479f8a99d258e25004c
+Author: victorpetropoulos <petropoulos@hotmail.com>
+Date:   Thu Sep 3 09:59:34 2026 -0700
+
+    docs: simplify OPENCODE_START_HERE required reads 5→2 for token saving
+
+    - required: EXECUTION GUIDANCE + SESSION_CONTEXT_2026-09-03.txt (updated 2026-09-03 full close, Rounds 7-8, Hardening B, global link, auto base, Engram coverage, skill)
+    - reference (not required): Roadmap.txt, Post_WP9_Detailed_Roadmap.md, WP5_6_REMEDIATION_CLOSURE.md moved to reference section
+    - saves ~19-22K tokens per session start (roadmap history 76K chars)
+    - fixes fallback timeout by direct bash copy/patch instead of subagent
+
+ OPENCODE_START_HERE.md                             |  12 +-
+ .../SESSION_CONTEXT_2026-09-03.txt                 | 445 +++++++++++++++++++++
+ 2 files changed, 452 insertions(+), 5 deletions(-)
+
+GIT-LOG-EXIT-CODE: 0
+
+GIT-SHOW-EXIT-CODE: 0
+
+## CLI check --help
+Usage: checkchange check [--base <ref>] [--json] [--crap-threshold <number>] [--coverage-file <path>] [--verbose]
+Options:
+  --base <ref>             Git base reference to compare against (optional, default: auto-detect)
+  --json                   Output JSON (default: false)
+  --crap-threshold <number> CRAP threshold for WARN (default: 30)
+
+CLI-CHECK-HELP-EXIT-CODE: 0

@@ -1,0 +1,23 @@
+# case-006 evidence
+
+## Context
+- Branch: wp17-pilot-ai-006 (throwaway, deleted after capture)
+- Edit: src/git.ts — added comment "// AI-generated: wp17 case-006 local var rename" + renamed local `const candidates` -> `const fallbackRefs` (2 sites, +1 comment line, 0-line net range change)
+- No src/ changes left behind after capture (git checkout -- discarded)
+
+## CLI check run 1 (excerpt, full in reproducibility/case-006-run1.txt)
+[verbose] auto-detected base: origin/main
+[verbose] analysisStatus=SUCCESS gate=WARN completeness=COMPLETE changedFunctions=1
+Analysis complete. Base: 4fbae48750684c6cee434f426fdd1f853eaffecf, Changed functions: 1
+EXIT:1
+
+## CLI check run 2 (excerpt)
+[verbose] analysisStatus=SUCCESS gate=WARN completeness=COMPLETE changedFunctions=1
+Analysis complete. Base: 4fbae48750684c6cee434f426fdd1f853eaffecf, Changed functions: 1
+EXIT:1
+
+## Reproducibility
+- reproducibility/case-006-run1-vs-run2.diff: EMPTY (0 lines)
+
+## Gate
+- A comment + local var rename in one src file was attributable (changedFunctions=1)

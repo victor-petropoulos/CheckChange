@@ -1,0 +1,11 @@
+# case-007 evidence
+
+## Context
+- Branch: wp17-pilot-ai-007 (throwaway, deleted after capture)
+- Edit: src/evidence.ts — appended unused stub function `unusedPilotFunction(a) { return a + 1; }` + comment block (never called)
+- No src/ changes left behind after capture (git checkout -- discarded)
+
+## CLI check run (excerpt)
+[verbose] analysisStatus=SUCCESS gate=PASS completeness=INCOMPLETE changedFunctions=2
+Analysis complete. Base: 4fbae48750684c6cee434f426fdd1f853eaffecf, Changed functions: 2
+EXIT:0

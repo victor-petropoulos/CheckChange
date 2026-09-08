@@ -1,0 +1,21 @@
+# WP17 Cost Notes (case-001..008)
+# Date: 2026-09-08
+# Command: node dist/cli.js check --verbose (clean tree, main branch)
+
+## Per-case runtime (single check invocation, bash time)
+0.333s total (0.40s user, 0.07s system, 143% cpu)
+
+## Evidence output size per case (bytes, wc -c)
+case-001: 2029
+case-002: 961
+case-003: 1031
+case-004: 1563
+case-005: 1199
+case-006: 1044
+case-007: 508
+case-008: 1572
+TOTAL: 9907
+
+## Interpretation
+- Clean-tree single check: ~0.33s, evidence 0.5-2KB per case.
+- AI-generated cases (006, 007) evidence produced without dedicated config or extra wiring.

@@ -1,0 +1,27 @@
+# case-003 evidence
+
+## git show --stat
+commit c9b6654e6304cf3a6da844a0de05397e2c1e713b
+Author: victorpetropoulos <petropoulos@hotmail.com>
+Date:   Wed Sep 2 11:02:42 2026 -0700
+
+    test: Next.js dispatcher 5 + fault 2 (Task3+4)
+    
+    - next dep, next.config, next+react priority, react only, app/page marker
+    - missing package fallback, unreadable app no throw
+    - 223/223 pass (69 files), tsc0, framework next priority
+
+ experiments/wp15-js/nextDispatcher.test.ts | 63 ++++++++++++++++++++++++++++++
+ experiments/wp15-js/nextFault.test.ts      | 37 ++++++++++++++++++
+ 2 files changed, 100 insertions(+)
+
+GIT-SHOW-EXIT-CODE: 0
+
+## CLI check --help
+Usage: checkchange check [--base <ref>] [--json] [--crap-threshold <number>] [--coverage-file <path>] [--verbose]
+Options:
+  --base <ref>             Git base reference to compare against (optional, default: auto-detect)
+  --json                   Output JSON (default: false)
+  --crap-threshold <number> CRAP threshold for WARN (default: 30)
+
+CLI-CHECK-HELP-EXIT-CODE: 0

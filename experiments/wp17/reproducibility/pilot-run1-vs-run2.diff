@@ -1,0 +1,6 @@
+# WP17 Reproducibility Pilot — run1 vs run2
+# Command: node dist/cli.js check --help
+# Run 1 exit code: 0
+# Run 2 exit code: 0
+# Result: EMPTY DIFF (0 lines) — outputs byte-identical
+

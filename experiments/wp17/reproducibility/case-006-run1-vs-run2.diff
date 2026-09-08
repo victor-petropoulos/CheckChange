@@ -1,0 +1,6 @@
+# case-006 reproducibility — run1 vs run2
+# Command: node dist/cli.js check --verbose (branch wp17-pilot-ai-006, src/git.ts renamed local var)
+# Run 1: exit 1  (WARN gate)
+# Run 2: exit 1  (WARN gate)
+# Diff: EMPTY (0 lines) — outputs byte-identical
+# Verdict: PASS (deterministic)

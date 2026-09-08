@@ -1,0 +1,40 @@
+# case-001 evidence
+
+## git show --stat
+commit 388d992f2939068fc80dbd8bed5ba746acf2d370
+Author: victorpetropoulos <petropoulos@hotmail.com>
+Date:   Wed Sep 2 12:26:21 2026 -0700
+
+    feat(hardening-b): pnpm patch + dispatch registry + CC bench
+    
+    P0-1: pnpm patch for crap-typescript-core allowJs persists via patches/crap-typescript-core+0.5.0.patch (ANALYZABLE_EXTENSIONS, resolveScriptKind tsx for jsx, parser map)
+    P0-3: minimal dispatch table in src/evidence.ts extension->provider (ts/tsx/js/jsx/mjs/cjs) with delegation preserving vi.spyOn
+    P1-4: CC bench 10 funcs Lizard vs core correlation 0.626 documented, <0.95 no correction
+    P1-2 partial: next-sample coverage verified, p-queue/zustand provisional
+    
+    225 pass tsc0, jsxTest now .tsx, nextDispatcher .tsx
+
+ ...026-09-02T182626Z-hardening-b-python-js-next.md |  50 ++++
+ experiments/wp13/adapter/cc-bench.spec.ts          | 287 +++++++++++++++++++++
+ experiments/wp15-js/PATCH_NOTE.md                  |  19 +-
+ experiments/wp15-js/jsxTest.test.ts                |   4 +-
+ experiments/wp15-js/nextDispatcher.test.ts         |   4 +-
+ package.json                                       |   3 +
+ patches/crap-typescript-core+0.5.0.patch           |  38 +++
+ pnpm-lock.yaml                                     | 179 ++++++-------
+ pnpm-workspace.yaml                                |   2 +
+ src/complexity.ts                                  |   8 +-
+ src/evidence.ts                                    |   9 +
+ src/evidence.ts.backup                             | 124 ---------
+ 12 files changed, 499 insertions(+), 228 deletions(-)
+
+GIT-SHOW-EXIT-CODE: 0
+
+## CLI check --help
+Usage: checkchange check [--base <ref>] [--json] [--crap-threshold <number>] [--coverage-file <path>] [--verbose]
+Options:
+  --base <ref>             Git base reference to compare against (optional, default: auto-detect)
+  --json                   Output JSON (default: false)
+  --crap-threshold <number> CRAP threshold for WARN (default: 30)
+
+CLI-CHECK-HELP-EXIT-CODE: 0

@@ -1,0 +1,35 @@
+# case-005 evidence
+
+## git log -1
+commit 480de63c64891bd957f8c67b5a3b799bc713fd36
+Author: victorpetropoulos <petropoulos@hotmail.com>
+Date:   Wed Sep 2 2026 -0700
+
+    feat: Next.js detector next>react (Task1)
+
+## git show --stat
+commit 480de63c64891bd957f8c67b5a3b799bc713fd36
+Author: victorpetropoulos <petropoulos@hotmail.com>
+Date:   Wed Sep 2 2026 -0700
+
+    feat: Next.js detector next>react (Task1)
+
+    - detectNextFramework 6-step priority: package.json next, next.config.*, app/page|layout|route, pages/**, react fallback
+    - contract framework values react|next, tsc0
+
+ docs/contracts/evidence-contract.md |  4 ++--
+ src/evidence.ts                     | 39 +++++++++++++++++++++++++++++++++----
+ 2 files changed, 37 insertions(+), 6 deletions(-)
+
+GIT-LOG-EXIT-CODE: 0
+
+GIT-SHOW-EXIT-CODE: 0
+
+## CLI check --help
+Usage: checkchange check [--base <ref>] [--json] [--crap-threshold <number>] [--coverage-file <path>] [--verbose]
+Options:
+  --base <ref>             Git base reference to compare against (optional, default: auto-detect)
+  --json                   Output JSON (default: false)
+  --crap-threshold <number> CRAP threshold for WARN (default: 30)
+
+CLI-CHECK-HELP-EXIT-CODE: 0
