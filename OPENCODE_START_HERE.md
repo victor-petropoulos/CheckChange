@@ -30,10 +30,10 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 
 Hardening B plans .opencode/plans/2026-09-02T182626Z-hardening-b-python-js-next.md + 2026-09-02T183000Z-hardening-b-completion.md approved:true, commits 388d992 + df0f3ba. P0-1 pnpm patch persists, P0-3 registry, P1-4 CC 0.626 documented (TS/JS), Python 1.0 via new provider, large monorepo measured 3.3M 0.92s, P0-2 p-queue 149K zustand 94K next-sample 1.4K Istanbul JSON, P1-5 perf <1s <260MB, 4 limits closed per contract addendum. Security addendum CLOSED (5 High/Medium fixes). No provisional remain. Gate CONTINUE per human review 2026-09-02.
 
-WP14 APPROVED 2026-09-08 CONTINUE. WP15 solo packet ACCEPTED 2026-09-08 CONTINUE.
+WP14 APPROVED 2026-09-08 CONTINUE. WP15 solo packet ACCEPTED 2026-09-08 CONTINUE. WP16 assessment CONTINUE WITH CONSTRAINTS 2026-09-08.
 
 ## Next Step
-**NEXT: WP16 hardening OR STOP/WP17 decision — Angular deferred, plan saved .opencode/plans/2026-09-08T193000Z-angular-phase1.md approved:false.**
+**NEXT: WP16 hardening under constraints (perf/security/packaging) OR WP17 product decision prep — no new language without gating criteria met.**
 
 ```
 CONTINUE — WP14 approved, WP15 accepted 2026-09-08; Angular deferred
