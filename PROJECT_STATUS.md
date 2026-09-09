@@ -1,6 +1,6 @@
 # Project: CheckChange
 
-Version: v0.4.1 — WP14 approved + WP15 accepted 2026-09-08 (no src change since 0c6ea37)
+Version: v0.4.1 — WP17 FINAL CONTINUE WITH CONSTRAINTS 2026-09-08 (HEAD 8ad6db7, no src change since 0c6ea37)
 
 ## Post-close polish
 
@@ -68,12 +68,13 @@ Version: v0.4.1 — WP14 approved + WP15 accepted 2026-09-08 (no src change sinc
 - **WP15 Hardening B Security Addendum — DONE 2026-09-03 (5 High/Medium fixes: SHA regex, LCOV 10MB limit, Python prune, readdir depth 3, coverage-file SF validation — CLOSED)**
 - **WP13 #2: Python coverage.py E2E + adapter fixes — DONE 2026-09-03 (experiments/wp13/adapter/ cc-bench lizard guard, CI lizard install)**
 
-## Current state (2026-09-08 main @27cb67d + uncommitted docs)
+## Current state (2026-09-08 main @8ad6db7 WP17 FINAL)
 
 - Branch: `main`
-- Commit: `27cb67d` (track plans)
-- Uncommitted: START_HERE.md, WP14 stub, WP15 packet, Angular plan (approved:false)
-- Engine: WP14/15 ready (schema 0.3 for WP14, WP15 human review)
+- Commit: `8ad6db7` (WP17 8-case validation CONTINUE WITH CONSTRAINTS)
+- Tree: clean
+- Tests: 233/233 pass (72 files)
+- Typecheck: `npx tsc --noEmit` → 0 errors
 - Tests: 233/233 pass (72 files)
 - Typecheck: `npx tsc --noEmit` → 0 errors
 - Build: `npm run build` → ok
@@ -133,6 +134,17 @@ Version: v0.4.1 — WP14 approved + WP15 accepted 2026-09-08 (no src change sinc
 - Scope: additive experiments/wp15-human
 - Packet fields present, no autonomous classification
 
+## WP16
+
+- Status: CONTINUE WITH CONSTRAINTS 2026-09-08 (commit 4fbae48)
+- Assessment: hardening pass, 4 constraints identified
+
+## WP17
+
+- Status: FINAL CONTINUE WITH CONSTRAINTS 2026-09-08 (commit 8ad6db7)
+- 8-case validation, 4 constraints: (a) Q1 single-repo only, (b) Q7 human DRAFTs pending, (c) high-CRAP uncovered, (d) manual sampling only
+- Q7 PENDING — human review sign-off needed on 8 cases in experiments/wp17/human-review/
+
 ## Current question (resolved at WP5.6)
 
 > Does changed-function CRAP provide useful real-world review signal?
@@ -141,6 +153,6 @@ WP5.6 recorded narrowly: deterministic evidence with truthful semantics (INV-01.
 
 ## Next work package
 
-- NEXT: WP16 hardening OR STOP/WP17
+- NEXT: WP17 constraints closure (human review Q7 + 8→12 expansion) OR WP18 definition
 - Angular deferred: plan saved .opencode/plans/2026-09-08T193000Z-angular-phase1.md approved:false
 
