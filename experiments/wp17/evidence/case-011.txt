@@ -1,0 +1,29 @@
+# case-011 evidence
+
+## Context
+- Repository: this-repo (code-risk-prototype-v0.3-opencode), src/ area
+- Branch: wp17-case-011 (throwaway worktree, deleted after capture)
+- Commit: 3876c1a — feat(wp5.3): attribution correctness fixes FM-A08/A07/C03
+- Edit: 32 files changed, +2280/-162, attribution logic fixes
+
+## git show --stat
+commit 3876c1ab6a1b2fa2122e933270ba01c1366f53f3
+Author: victorpetropoulos <petropoulos@hotmail.com>
+Date:   Wed Aug 26 18:54:04 2026 -0700
+  Subject: feat(wp5.3): attribution correctness fixes FM-A08/A07/C03
+  32 files changed, 2280 insertions(+), 162 deletions(-)
+
+## CLI check run 1 (excerpt, full in reproducibility/case-011-run1.txt)
+Analysis complete. Base: 70815579fed157e79cc2c383adb41cdb41449da9, Changed functions: 3
+EXIT:0
+
+## CLI check run 2 (excerpt)
+Analysis complete. Base: 70815579fed157e79cc2c383adb41cdb41449da9, Changed functions: 3
+EXIT:0
+
+## Reproducibility
+- reproducibility/case-011-run1-vs-run2.diff: EMPTY (0 lines)
+
+## Gate
+- Attribution correctness fix change with 3 changed functions attributed
+- Older CLI version (no --verbose flag), minimal output format

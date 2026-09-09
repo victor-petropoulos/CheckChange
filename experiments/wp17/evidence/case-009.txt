@@ -1,0 +1,42 @@
+# case-009 evidence
+
+## Context
+- Repository: engram (separate repo, TypeScript)
+- Branch: wp18-case-009 (throwaway, deleted after capture)
+- Commit: b2c61cf — feat(reviewer): suppress praise hallucinations in review prompt
+- Edit: packages/reviewer-engine/src/prompts/index.ts (+15 lines, SYSTEM_PROMPT praise/compliments ban)
+
+## git show --stat
+commit b2c61cf43c11437b70e7241ea87709029047fdbf
+Author: victorpetropoulos <petropoulos@hotmail.com>
+Date:   Mon Sep 7 09:27:31 2026 -0700
+
+    feat(reviewer): suppress praise hallucinations in review prompt
+    
+    - SYSTEM_PROMPT: defects-only includes praise/compliments ban
+    - Example 2b: praise finding on pure utility maps to []
+
+ packages/reviewer-engine/src/prompts/index.ts | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+GIT-SHOW-EXIT-CODE: 0
+
+## CLI check run 1
+[verbose] auto-detected base: origin/master
+[verbose] analysisStatus=SUCCESS gate=WARN completeness=INCOMPLETE changedFunctions=31
+Analysis complete. Base: 797b341f07a2c07153ba41f4fae473996202c4f7, Changed functions: 31
+EXIT:1
+
+## CLI check run 2
+[verbose] auto-detected base: origin/master
+[verbose] analysisStatus=SUCCESS gate=WARN completeness=INCOMPLETE changedFunctions=31
+Analysis complete. Base: 797b341f07a2c07153ba41f4fae473996202c4f7, Changed functions: 31
+EXIT:1
+
+## Reproducibility
+- reproducibility/case-009-run1-vs-run2.diff: EMPTY (0 lines)
+
+## Gate
+- Multi-repo case (Q1): engram repo (TypeScript) analyzed by checkchange from this repo
+- Changed functions attributed: 31
+- Gate: WARN (completeness=INCOMPLETE — no coverage data in engram repo)

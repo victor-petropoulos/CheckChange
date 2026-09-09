@@ -1,0 +1,33 @@
+# case-010 evidence
+
+## Context
+- Repository: this-repo (code-risk-prototype-v0.3-opencode), experiments/ subarea
+- Branch: wp17-case-010 (throwaway worktree, deleted after capture)
+- Commit: feaa492 — feat: full close pre-Angular limits — LCOV/Python/providers, security harden, corpus 17, E2E validate
+- Edit: 23 files changed, +1639/-93, spans experiments/ and src/
+
+## git show --stat
+commit feaa492a953a5bab62e86974e9dde54b59e05d10
+Author: victorpetropoulos <petropoulos@hotmail.com>
+Date:   Wed Sep 2 18:40:58 2026 -0700
+  Subject: feat: full close pre-Angular limits — LCOV/Python/providers, security harden, corpus 17, E2E validate
+  23 files changed, 1639 insertions(+), 93 deletions(-)
+
+## CLI check run 1 (excerpt, full in reproducibility/case-010-run1.txt)
+Warning: failed to parse /private/tmp/wp17-case-010/experiments/wp15-js/fixtures/jsx-sample/Comp.jsx, skipping: Unable to parse TypeScript source...
+[verbose] analysisStatus=SUCCESS gate=PASS completeness=INCOMPLETE changedFunctions=18
+Analysis complete. Base: 5e394b8a64de6de2655ad35fec538d3787b9cdc7, Changed functions: 18
+EXIT:0
+
+## CLI check run 2 (excerpt)
+Warning: failed to parse /private/tmp/wp17-case-010/experiments/wp15-js/fixtures/jsx-sample/Comp.jsx, skipping: Unable to parse TypeScript source...
+[verbose] analysisStatus=SUCCESS gate=PASS completeness=INCOMPLETE changedFunctions=18
+Analysis complete. Base: 5e394b8a64de6de2655ad35fec538d3787b9cdc7, Changed functions: 18
+EXIT:0
+
+## Reproducibility
+- reproducibility/case-010-run1-vs-run2.diff: EMPTY (0 lines)
+
+## Gate
+- Large multi-area change (experiments/ + src/) with 18 changed functions attributed
+- Completeness INCOMPLETE due to JSX parsing failures in fixtures (expected, fixtures are test data)

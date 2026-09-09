@@ -1,0 +1,32 @@
+# case-012 evidence
+
+## Context
+- Repository: this-repo (code-risk-prototype-v0.3-opencode), CI/config area
+- Branch: wp17-case-012 (throwaway worktree, deleted after capture)
+- Commit: be9f97a — fix(ci): chdir hardcode + lizard install for cc-bench — make GitHub jobs green
+- Edit: 4 files changed, +32/-20, CI workflow fixes only (no src/ logic changes)
+
+## git show --stat
+commit be9f97aea53657fb7c3a9061e8af7c74d15b191a
+Author: victorpetropoulos <petropoulos@hotmail.com>
+Date:   Wed Sep 2 18:45:32 2026 -0700
+  Subject: fix(ci): chdir hardcode + lizard install for cc-bench — make GitHub jobs green
+  4 files changed, 32 insertions(+), 20 deletions(-)
+
+## CLI check run 1 (excerpt, full in reproducibility/case-012-run1.txt)
+Warning: failed to parse /private/tmp/wp17-case-012/experiments/wp15-js/fixtures/jsx-sample/Comp.jsx, skipping: Unable to parse TypeScript source...
+Analysis complete. Base: feaa492a953a5bab62e86974e9dde54b59e05d10, Changed functions: 0
+EXIT:0
+
+## CLI check run 2 (excerpt)
+Warning: failed to parse /private/tmp/wp17-case-012/experiments/wp15-js/fixtures/jsx-sample/Comp.jsx, skipping: Unable to parse TypeScript source...
+Analysis complete. Base: feaa492a953a5bab62e86974e9dde54b59e05d10, Changed functions: 0
+EXIT:0
+
+## Reproducibility
+- reproducibility/case-012-run1-vs-run2.diff: EMPTY (0 lines)
+
+## Gate
+- CI/config-only change (no src/ logic modifications)
+- 0 changed functions correctly attributed (PASS gate)
+- Completeness INCOMPLETE due to JSX parsing failures in fixtures (expected)

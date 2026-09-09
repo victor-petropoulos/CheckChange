@@ -1,9 +1,14 @@
-# WP17 Cost Notes (case-001..008)
-# Date: 2026-09-08
-# Command: node dist/cli.js check --verbose (clean tree, main branch)
+# WP17 Cost Notes (case-001..012)
+# Date: 2026-09-09
+# Command: node dist/cli.js check --verbose (clean tree, main branch) — case-001..009, case-010
+#          node dist/cli.js check --base <ref> (older CLI versions) — case-011, case-012
 
 ## Per-case runtime (single check invocation, bash time)
-0.333s total (0.40s user, 0.07s system, 143% cpu)
+case-001..008 (clean tree): 0.333s total (0.40s user, 0.07s system, 143% cpu)
+case-009 (engram repo): ~0.35s
+case-010 (feaa492, --verbose): 0.32s real (0.39s user, 0.06s sys)
+case-011 (3876c1a, no --verbose): 0.32s real (0.35s user, 0.07s sys)
+case-012 (be9f97a, no --verbose): 0.36s real (0.41s user, 0.08s sys)
 
 ## Evidence output size per case (bytes, wc -c)
 case-001: 2029
@@ -14,8 +19,14 @@ case-005: 1199
 case-006: 1044
 case-007: 508
 case-008: 1572
-TOTAL: 9907
+case-009: 1624
+case-010: 1211
+case-011: 88
+case-012: 1123
+TOTAL: 13853
 
 ## Interpretation
 - Clean-tree single check: ~0.33s, evidence 0.5-2KB per case.
 - AI-generated cases (006, 007) evidence produced without dedicated config or extra wiring.
+- Older CLI versions (case-011, 012) produce minimal output (no --verbose flag).
+- External repo (case-009) comparable runtime to local cases.

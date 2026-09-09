@@ -3,7 +3,7 @@
 **Baseline version:** 0.4.0 (commit 4fbae48)
 **Baseline tests:** 233/233 passing
 **Execution date:** 2026-09-08
-**Scope:** FINAL (8 cases, target 8-12; human review DRAFTs pending, multi-repo + high-complexity unmet)
+**Scope:** FINAL (8 cases, target 8-12; human review ACCEPTED 2026-09-09, multi-repo + high-complexity unmet)
 
 ## Gate Answers (Q1–Q7) — FINAL (evidence-backed)
 
@@ -11,11 +11,11 @@
 |--------|----------------|--------|------------------|
 | **Q1. Repository Selection** | single repo (code-risk-prototype-v0.3-opencode). Audience: AI coding workflow around checkchange CLI used locally. Q1 requires 2-3 repos — partially met. | FINAL | corpus.md (repo candidates table empty) |
 | **Q2. Case Selection Method** | manual sampling from git log window (feature, fix, test-only, mechanical, prod-without-test, docs-only) + 2 AI-generated branches. No random/stratified sampling run. | FINAL | corpus.md case-001..008 |
-| **Q3. Ground Truth Definition** | evidence usefulness judged by: changed-function attribution clarity, gate/completeness classification, CLI stability. Human judgment NOT yet executed (human-review/ drafts only). | FINAL | human-review/case-001..008.md (DRAFT) |
+| **Q3. Ground Truth Definition** | evidence usefulness judged by: changed-function attribution clarity, gate/completeness classification, CLI stability. Human judgment executed 2026-09-09 (human-review/ 8/8 ACCEPTED). | FINAL | human-review/case-001..008.md (ACCEPTED) |
 | **Q4. AI-Agent Independence** | 2 explicit AI-generated cases: case-006 (git.ts local var rename + comment → exit 1 WARN, deterministic), case-007 (evidence.ts unused stub → exit 0 PASS, 2 changed fns). Pipeline ran independently; no CheckChange config changes. | PASS (partial) | evidence/case-006.txt, evidence/case-007.txt |
 | **Q5. Reproducibility Protocol** | pilot `check --help` 2 runs → 0-line diff (PASS). case-006 `check --verbose` 2 runs → 0-line diff (PASS). | PASS | reproducibility/pilot-run1-vs-run2.diff, reproducibility/case-006-run1-vs-run2.diff |
 | **Q6. Workflow Cost Measurement** | check runtime 0.333s; evidence 0.5-2KB/case (total 9907 bytes). No setup cost (already built). | PASS | evidence/cost-notes.txt |
-| **Q7. Human Review Protocol** | NOT EXECUTED — human-review/ has DRAFT skeletons only. Full corpus (Q7 sign-off) requires human reviewer engagement. | PENDING | human-review/ (DRAFT) |
+| **Q7. Human Review Protocol** | ACCEPTED 2026-09-09 (user sign-off 8/8, reviewer user). | ACCEPTED | human-review/ |
 
 ## Cases Overview (8)
 
@@ -51,8 +51,8 @@
 6. **Cost:** ~0.33s per check, evidence small (0.5-2KB/case).
 7. **Missing:** high-CRAP/complex-function coverage, multi-repo (Q1 partially met), human review (Q7).
 
-## Outcome Recommendation — FINAL (signed off 2026-09-08)
+## Outcome Recommendation — FINAL (signed off 2026-09-08) — Q7 CLOSED 2026-09-09; remaining: (a)(c)(d).
 
-**CONTINUE WITH CONSTRAINTS — signed off 2026-09-08** — as in WP16. Core workflow (selection Q2, AI independence Q4, reproducibility Q5, cost Q6) validated with 8 cases. Constraints: (a) Q1 multi-repo target unmet (single repo only), (b) Q7 human review pending — needs human reviewer engagement on human-review/ drafts, (c) high-CRAP/complex-function category uncovered, (d) sampling not random/stratified (manual selection only).
+**CONTINUE WITH CONSTRAINTS — signed off 2026-09-08** — as in WP16. Core workflow (selection Q2, AI independence Q4, reproducibility Q5, cost Q6) validated with 8 cases. Constraints: (a) Q1 multi-repo target unmet (single repo only), (b) Q7 human review CLOSED 2026-09-09 (8/8 ACCEPTED, commit 3f9b9f8), (c) high-CRAP/complex-function category uncovered, (d) sampling not random/stratified (manual selection only).
 
-**Next Steps:** human reviewer sign-off on 8 cases → optionally expand to 12-case target with multi-repo + high-complexity selections.
+**Next Steps:** Q7 done → expand to 12-case target with multi-repo + high-complexity (WP18-2).

@@ -16,34 +16,37 @@
 | case-006 | this-repo (code-risk-prototype-v0.3-opencode) | AI-Generated | AI-generated change; src/git.ts local var rename + comment, branch wp17-pilot-ai-006, check exit 1 WARN gate, deterministic output (0-line diff). |
 | case-007 | this-repo (code-risk-prototype-v0.3-opencode) | AI-Generated | AI-generated change; src/evidence.ts unused stub function, branch wp17-pilot-ai-007, check exit 0 PASS gate, 2 changed functions, deterministic output. |
 | case-008 | this-repo (code-risk-prototype-v0.3-opencode) | Docs-Only | docs-only | commit 991ed4c — docs simplification (2 files, +452/-5). No src/ or test changes. Low-complexity docs change. |
-| case-009 | | | | |
-| case-010 | | | | |
-| case-011 | | | | |
-| case-012 | | | | |
+| case-009 | engram (external) | | Behavioral (prompt change) | commit b2c61cf — feat(reviewer): suppress praise hallucinations in review prompt; 1 file, +15. External TS repo, WARN gate, 31 changedFn. |
+| case-010 | this-repo (code-risk-prototype-v0.3-opencode) | | Behavioral/mechanical feature | commit feaa492 — feat: full close pre-Angular limits; 23 files, +1639/-93. Distinct-area fallback (experiments/), PASS gate, 18 changedFn. |
+| case-011 | this-repo (code-risk-prototype-v0.3-opencode) | | Behavioral (attribution fix) | commit 3876c1a — feat(wp5.3): attribution correctness fixes; 32 files, +2280/-162. High-CC function touched (CC=28), PASS gate, 3 changedFn. |
+| case-012 | this-repo (code-risk-prototype-v0.3-opencode) | | Config/CI only | commit be9f97a — fix(ci): chdir hardcode + lizard install; 4 files, +32/-20. No src/ logic changes, PASS gate, 0 changedFn. |
 
 ---
 
 ## Repository Candidates (select 2–3)
 
-| Repo | Size | Language(s) | Application Type | Notes |
-|------|------|-------------|------------------|-------|
-| | | | | |
-| | | | | |
-| | | | | |
+| Repo | Size | Language(s) | Application Type | Notes | TS/JS Analyzable |
+|------|------|-------------|------------------|-------|------------------|
+| engram | ~15k LOC | TypeScript | MCP server (reviewer engine) | Separate repo, TS analyzable | YES |
+| OICP-MCP | ~8k LOC | Python | MCP server | Python-only, not analyzable by checkchange | NO |
+| omlx-review-mcp | ~5k LOC | Python | MCP server | Python-only, not analyzable by checkchange | NO |
+| Code-Index-MCP | ~12k LOC | Python | MCP server | Python-only, not analyzable by checkchange | NO |
+
+**Honest gap note:** Only **1 external TypeScript repo (engram)** was analyzable by checkchange. OICP-MCP, omlx-review-mcp, Code-Index-MCP are Python-only. case-010 uses this-repo's experiments/ subarea as distinct-area fallback.
 
 ---
 
 ## Change Categories to Cover
 
-- [x] Behavioral change (alters observable behavior) — case-001, case-005
+- [x] Behavioral change (alters observable behavior) — case-001, case-005, case-009, case-010, case-011
 - [x] Mechanical/refactoring (no behavior change) — case-004
 - [x] Test-only modification — case-003
 - [x] Production code without corresponding test change — case-005
-- [ ] Touches already-complex function (high CRAP/cyclomatic) — pending
-- [x] Touches low-complexity function — case-002, case-008
-- [x] Historical change (from git history, not current knowledge) — case-001..005, case-008
+- [x] Touches already-complex function (high CRAP/cyclomatic) — case-011 (CC=28)
+- [x] Touches low-complexity function — case-002, case-008, case-012
+- [x] Historical change (from git history, not current knowledge) — case-001..005, case-008, case-009..012
 - [x] AI-generated change (via coding agent) — case-006, case-007
-- [x] Human-authored change — case-001..005, case-008
+- [x] Human-authored change — case-001..005, case-008, case-009..012
 
 ---
 

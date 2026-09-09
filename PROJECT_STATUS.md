@@ -142,8 +142,8 @@ Version: v0.4.1 — WP17 FINAL CONTINUE WITH CONSTRAINTS 2026-09-08 (HEAD 8ad6db
 ## WP17
 
 - Status: FINAL CONTINUE WITH CONSTRAINTS 2026-09-08 (commit 8ad6db7)
-- 8-case validation, 4 constraints: (a) Q1 single-repo only, (b) Q7 human DRAFTs pending, (c) high-CRAP uncovered, (d) manual sampling only
-- Q7 PENDING — human review sign-off needed on 8 cases in experiments/wp17/human-review/
+- 8-case validation, 4 constraints: (a) Q1 single-repo only, (b) Q7 CLOSED 2026-09-09, (c) high-CRAP uncovered, (d) manual sampling only
+- Q7 CLOSED 2026-09-09 — 8/8 ACCEPTED (commit 3f9b9f8)
 
 ## Current question (resolved at WP5.6)
 
