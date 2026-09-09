@@ -1,6 +1,6 @@
 # Project: CheckChange
 
-Version: v0.4.1 — WP17 FINAL CONTINUE WITH CONSTRAINTS 2026-09-08 (HEAD 8ad6db7, no src change since 0c6ea37)
+Version: v0.4.1 — WP18 CLOSED 12/12 ACCEPTED 2026-09-09 (HEAD 6d6c940+, no src change since 0c6ea37)
 
 ## Post-close polish
 
@@ -68,10 +68,10 @@ Version: v0.4.1 — WP17 FINAL CONTINUE WITH CONSTRAINTS 2026-09-08 (HEAD 8ad6db
 - **WP15 Hardening B Security Addendum — DONE 2026-09-03 (5 High/Medium fixes: SHA regex, LCOV 10MB limit, Python prune, readdir depth 3, coverage-file SF validation — CLOSED)**
 - **WP13 #2: Python coverage.py E2E + adapter fixes — DONE 2026-09-03 (experiments/wp13/adapter/ cc-bench lizard guard, CI lizard install)**
 
-## Current state (2026-09-08 main @8ad6db7 WP17 FINAL)
+## Current state (2026-09-09 main @6d6c940 WP18 CLOSED)
 
 - Branch: `main`
-- Commit: `8ad6db7` (WP17 8-case validation CONTINUE WITH CONSTRAINTS)
+- Commit: `6d6c940` (WP18 12-case validation CLOSED)
 - Tree: clean
 - Tests: 233/233 pass (72 files)
 - Typecheck: `npx tsc --noEmit` → 0 errors
@@ -144,6 +144,12 @@ Version: v0.4.1 — WP17 FINAL CONTINUE WITH CONSTRAINTS 2026-09-08 (HEAD 8ad6db
 - Status: FINAL CONTINUE WITH CONSTRAINTS 2026-09-08 (commit 8ad6db7)
 - 8-case validation, 4 constraints: (a) Q1 single-repo only, (b) Q7 CLOSED 2026-09-09, (c) high-CRAP uncovered, (d) manual sampling only
 - Q7 CLOSED 2026-09-09 — 8/8 ACCEPTED (commit 3f9b9f8)
+- **WP18 expansion 2026-09-09: 009..012 (WARN31/PASS18/PASS3/PASS0), 12/12 ACCEPTED**
+
+## WP18
+
+- Status: CLOSED 2026-09-09 (commit 6d6c940)
+- 4 cases (009-012), remaining (a) thin
 
 ## Current question (resolved at WP5.6)
 
@@ -153,6 +159,5 @@ WP5.6 recorded narrowly: deterministic evidence with truthful semantics (INV-01.
 
 ## Next work package
 
-- NEXT: WP17 constraints closure (human review Q7 + 8→12 expansion) OR WP18 definition
+- NEXT: STOP or TBD — WP18 closed
 - Angular deferred: plan saved .opencode/plans/2026-09-08T193000Z-angular-phase1.md approved:false
-
