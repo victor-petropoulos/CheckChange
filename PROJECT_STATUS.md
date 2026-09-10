@@ -1,6 +1,6 @@
 # Project: CheckChange
 
-Version: v0.4.1 — WP18 CLOSED 12/12 ACCEPTED 2026-09-09 (HEAD 6d6c940+, no src change since 0c6ea37)
+Version: v0.4.1 — WP18 CLOSED 12/12 ACCEPTED 2026-09-09 (HEAD 6d6c940+, no src change since 0c6ea37) — WP16-narrow/WP17-decision docs 2026-09-10
 
 ## Post-close polish
 
@@ -138,6 +138,7 @@ Version: v0.4.1 — WP18 CLOSED 12/12 ACCEPTED 2026-09-09 (HEAD 6d6c940+, no src
 
 - Status: CONTINUE WITH CONSTRAINTS 2026-09-08 (commit 4fbae48)
 - Assessment: hardening pass, 4 constraints identified
+- Narrow re-verify 2026-09-10: `npx tsc --noEmit` 0, `npx vitest run` 259/259, `npm run build` ok, `npm pack` 25.8 kB/38 files, `git diff --stat src/` empty (zero src change) → `experiments/wp16-hardening/REVERIFY.md`
 
 ## WP17
 
@@ -145,6 +146,8 @@ Version: v0.4.1 — WP18 CLOSED 12/12 ACCEPTED 2026-09-09 (HEAD 6d6c940+, no src
 - 8-case validation, 4 constraints: (a) Q1 single-repo only, (b) Q7 CLOSED 2026-09-09, (c) high-CRAP uncovered, (d) manual sampling only
 - Q7 CLOSED 2026-09-09 — 8/8 ACCEPTED (commit 3f9b9f8)
 - **WP18 expansion 2026-09-09: 009..012 (WARN31/PASS18/PASS3/PASS0), 12/12 ACCEPTED**
+- WP17_DECISION.md 2026-09-10: A/B/C/D open, constraints a-d + Q1-thin + Q7-closed cited, AWAITING HUMAN REVIEW
+- Checklist sync: `docs/wp7-release-checklist.md` schema 0.2→0.4, thresholds 30/15, INV-01..04, Hardening B refs added
 
 ## WP18
 
@@ -159,5 +162,5 @@ WP5.6 recorded narrowly: deterministic evidence with truthful semantics (INV-01.
 
 ## Next work package
 
-- NEXT: STOP or TBD — WP18 closed
+- NEXT: Docs landed (WP16 REVERIFY + WP17_DECISION), human review pending on A/B/C/D — no autonomous selection
 - Angular deferred: plan saved .opencode/plans/2026-09-08T193000Z-angular-phase1.md approved:false
