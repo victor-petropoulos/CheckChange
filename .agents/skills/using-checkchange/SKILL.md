@@ -12,7 +12,7 @@ Correct use of `checkchange check`: prevents hallucination, enforces WARN blocks
 - Auto-detecting base or specifying --base.
 
 # What It Entails
-1. `pnpm vitest run --coverage` → `coverage/coverage-final.json` (or jest coverage) — required before check
+1. `npx vitest run --coverage` → `coverage/coverage-final.json` (or jest coverage) — required before check
 2. `checkchange check [--base <ref>] [--json] [--verbose]` — auto-detects base if omitted (origin/HEAD → origin/master/main → master/main)
 3. Read gate + changedFunctions
 
@@ -20,6 +20,7 @@ Correct use of `checkchange check`: prevents hallucination, enforces WARN blocks
 - `checkchange` CLI in PATH.
 - Coverage artifact (JSON with `analysisStatus`, `coverageArtifact`).
 - Git repo with detectable base (origin/master, origin/main, master, main) unless --base.
+- `checkchange` on PATH (verify: `which checkchange || npm link` from repo root).
 
 # Returns
 ```json
