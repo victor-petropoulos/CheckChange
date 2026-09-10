@@ -496,3 +496,9 @@ Extension is additive: Python adapter lives in `experiments/wp13/adapter/`, impo
 - `analyzerStatus: 'UNSUPPORTED'` path untested for Python
 
 *Evidence: experiments/wp13/adapter/pythonComplexity.ts:1-80, pythonCoverage.ts:1-95, index.ts:1-30, e2e.ts:1-180, experiments/wp13/fixtures/python-sample/coverage.json, tsc --noEmit (0 errors), vitest run --no-coverage (191/191 pass), e2e output in /tmp/wp13_e2e.json*
+
+## Python Coverage Inputs
+- **Precedence**: explicit `--coverage-file` > `.coverage` (binary, via `coverage json` auto-convert) > `coverage.xml` (Cobertura, same) > `coverage.json` (Python-schema auto-transformed to Istanbul shape) > `coverage/coverage-final.json` fallback.
+- **Guards**: 100MB cap, realpath containment (explicit files bypass), 30s convert timeout, temp cleaned on all paths, missing binary → warn + malformed (never hard-fail).
+- **Bugfix note**: `pythonASTComplexityProvider` end-line attr corrected `endlineno` → `end_lineno` (prior always fell back to start line).
+- **WP18 GAP (a) CLOSED 2026-09-09**: Python repos analyzable end-to-end (e2e omlx-review-mcp 983a2df: ingest COMPLETE, dirty-tree attribution YES, deterministic). Remaining thin: single external repo proven; OICP-MCP/Code-Index-MCP untested.

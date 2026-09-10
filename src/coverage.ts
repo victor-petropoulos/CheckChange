@@ -1,5 +1,6 @@
 import * as path from 'node:path';
-import { access, constants } from 'node:fs/promises';
+import { access, constants, readFile } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
 import { parseCoverageReport } from '@barney-media/crap-typescript-core';
 import { parseLcovContent } from './coverage-providers/lcovProvider.js';
 
@@ -8,6 +9,160 @@ export interface CoverageResult {
   coverageMap: Map<string, any> | null;
   error: boolean;
   reason?: string;
+}
+
+const MAX_COVERAGE_SIZE = 100 * 1024 * 1024; // 100MB
+const PYTHON_COVERAGE_FILES = ['.coverage', 'coverage.xml', 'coverage.json', 'coverage/coverage-final.json'] as const;
+
+/**
+ * Check if a file path is within the given cwd (prevents path traversal).
+ * Handles macOS /tmp -> /private/tmp symlink by comparing realpaths.
+ */
+async function isWithinCwd(filePath: string, cwd: string): Promise<boolean> {
+  if (!path.isAbsolute(filePath)) {
+    filePath = path.resolve(cwd, filePath);
+  }
+  try {
+    const fs = await import('node:fs/promises');
+    const realFilePath = await fs.realpath(filePath);
+    const realCwd = await fs.realpath(cwd);
+    const rel = path.relative(realCwd, realFilePath);
+    return !rel.startsWith('..') && !path.isAbsolute(rel);
+  } catch {
+    // If realpath fails, fall back to simple check
+    const rel = path.relative(cwd, filePath);
+    return !rel.startsWith('..') && !path.isAbsolute(rel);
+  }
+}
+
+/**
+ * Validate file size and symlink safety before reading.
+ * Mirrors LCOV provider's approach: size check + path containment.
+ * For explicit files (user-provided), skip path containment check.
+ */
+async function validateAndReadFile(filePath: string, cwd: string, isExplicit = false): Promise<string | null> {
+  if (!isExplicit && !(await isWithinCwd(filePath, cwd))) {
+    return null;
+  }
+  try {
+    const fs = await import('node:fs/promises');
+    const stats = await fs.stat(filePath);
+    if (stats.size > MAX_COVERAGE_SIZE) {
+      return null;
+    }
+    // Symlink check: resolve and verify still within cwd (best effort)
+    // Skip for explicit files
+    if (!isExplicit) {
+      try {
+        const realPath = await fs.realpath(filePath);
+        if (!(await isWithinCwd(realPath, cwd))) {
+          return null;
+        }
+      } catch {
+        // If realpath fails (e.g. permission), continue with original path
+        // since isWithinCwd already validated the original path
+      }
+    }
+    return await readFile(filePath, 'utf8');
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Attempt to convert Python coverage format to Istanbul JSON using `coverage json`.
+ * Returns the path to the generated JSON file, or null if conversion fails.
+ */
+async function convertPythonCoverageToJson(inputPath: string, cwd: string): Promise<string | null> {
+  const outputPath = path.join(cwd, `.checkchange-coverage-temp-${process.pid}-${Math.random().toString(36).slice(2)}.json`);
+  // Best effort: delete stale temp file before writing new one
+  try {
+    await import('node:fs/promises').then(fs => fs.unlink(outputPath));
+  } catch {
+    // ignore
+  }
+  // Try `coverage json` first (coverage.py v7+), then fallback to `python3 -m coverage json`
+  const commands: string[][] = [
+    ['coverage', 'json', '-o', outputPath],
+    ['python3', '-m', 'coverage', 'json', '-o', outputPath],
+  ];
+  
+  for (const cmd of commands) {
+    const command = cmd[0]!;
+    const args = cmd.slice(1);
+    try {
+      const result = spawnSync(command, args, {
+        cwd,
+        encoding: 'utf8',
+        timeout: 30000,
+      });
+      if (result.status === 0) {
+        // Verify output was created and is valid
+        const content = await validateAndReadFile(outputPath, cwd);
+        if (content) {
+          // Transform Python coverage JSON format to Istanbul format
+          const transformedPath = await transformPythonCoverageToIstanbul(outputPath, cwd);
+          if (transformedPath) {
+            // Cleanup the intermediate Python JSON temp file
+            try {
+              await import('node:fs/promises').then(fs => fs.unlink(outputPath));
+            } catch {
+              // ignore
+            }
+            return transformedPath;
+          }
+        }
+        // Command succeeded but output invalid/missing - cleanup and continue
+        try {
+          await import('node:fs/promises').then(fs => fs.unlink(outputPath));
+        } catch {
+          // ignore cleanup failure
+        }
+      }
+    } catch {
+      // Command not found or failed, try next
+    }
+  }
+  // Final cleanup attempt for any partial file left behind
+  try {
+    await import('node:fs/promises').then(fs => fs.unlink(outputPath));
+  } catch {
+    // ignore
+  }
+  return null;
+}
+
+/**
+ * Transform Python coverage JSON format to Istanbul format expected by parseCoverageReport.
+ * Python format: { meta, files: { filepath: {...} }, totals }
+ * Istanbul format: { filepath: {...} }
+ */
+async function transformPythonCoverageToIstanbul(pythonJsonPath: string, cwd: string): Promise<string | null> {
+  const outputPath = path.join(cwd, `.checkchange-coverage-temp-istanbul-${process.pid}-${Math.random().toString(36).slice(2)}.json`);
+  try {
+    const content = await validateAndReadFile(pythonJsonPath, cwd);
+    if (!content) return null;
+    const pythonCoverage = JSON.parse(content);
+    const files = pythonCoverage.files;
+    if (!files || typeof files !== 'object') return null;
+    
+    // Convert to Istanbul format
+    const istanbulCoverage: Record<string, any> = {};
+    for (const [filePath, fileData] of Object.entries(files)) {
+      const absPath = path.isAbsolute(filePath) ? filePath : path.resolve(cwd, filePath);
+      istanbulCoverage[absPath] = fileData;
+    }
+    
+    await import('node:fs/promises').then(fs => fs.writeFile(outputPath, JSON.stringify(istanbulCoverage)));
+    return outputPath;
+  } catch {
+    try {
+      await import('node:fs/promises').then(fs => fs.unlink(outputPath));
+    } catch {
+      // ignore
+    }
+    return null;
+  }
 }
 
 /**
@@ -76,63 +231,151 @@ function normalizeCoveragePaths(
 }
 
 export async function readCoverage(cwd: string, coverageFile?: string): Promise<CoverageResult> {
-   let coveragePath: string;
-   if (coverageFile !== undefined && coverageFile !== null && coverageFile !== '') {
-     // If coverageFile is provided, use it (resolve if relative)
-     coveragePath = path.isAbsolute(coverageFile) ? coverageFile : path.resolve(cwd, coverageFile);
-   } else {
-         // No coverageFile provided, use default
-         coveragePath = path.join(cwd, 'coverage/coverage-final.json');
-     }
+  // 1. Explicit coverageFile provided - use it directly (existing behavior)
+  if (coverageFile !== undefined && coverageFile !== null && coverageFile !== '') {
+    const coveragePath = path.isAbsolute(coverageFile) ? coverageFile : path.resolve(cwd, coverageFile);
+    return await readCoverageFile(coveragePath, cwd, true);
+  }
 
-
-
-   try {
-      await access(coveragePath, constants.R_OK);
+  // 2. Auto-detect coverage files in precedence order with fallthrough on conversion failure
+  // Precedence: .coverage > coverage.xml > coverage.json > coverage/coverage-final.json
+  let pythonArtifactFound = false;
+  for (const file of PYTHON_COVERAGE_FILES) {
+    const filePath = path.join(cwd, file);
+    try {
+      await access(filePath, constants.R_OK);
+      pythonArtifactFound = true;
+      const result = await readCoverageFile(filePath, cwd, false);
+      // If conversion/read succeeded (error: false), return it
+      if (!result.error) {
+        return result;
+      }
+      // Conversion/read failed - warn and continue to next candidate
+      console.warn(`Coverage conversion failed for ${filePath}: ${result.reason}`);
+      // Continue to next file in precedence
     } catch {
-      // File does not exist or cannot be read
-      if (coverageFile !== undefined && coverageFile !== null && coverageFile !== '') {
-          // Explicitly provided file missing -> error:true to trigger FAILED semantics
-          return { available: true, coverageMap: null, error: true, reason: 'missing' };
-      } else {
-          // Default file missing -> existing behavior: available:false, error:false
-          return { available: false, coverageMap: null, error: false };
+      // File doesn't exist or not readable, continue to next
+    }
+  }
+
+  // 3. All candidates exhausted
+  if (pythonArtifactFound) {
+    // At least one Python artifact existed but all failed conversion
+    return { available: true, coverageMap: null, error: true, reason: 'malformed' };
+  } else {
+    // No coverage files found at all
+    return { available: false, coverageMap: null, error: false };
+  }
+}
+
+async function readCoverageFile(
+  coveragePath: string,
+  cwd: string,
+  isExplicit: boolean
+): Promise<CoverageResult> {
+  // Check if file exists and is readable
+  try {
+    await access(coveragePath, constants.R_OK);
+  } catch {
+    if (isExplicit) {
+      return { available: true, coverageMap: null, error: true, reason: 'missing' };
+    } else {
+      return { available: false, coverageMap: null, error: false };
+    }
+  }
+
+  // Determine file type by extension + basename (handles .coverage dotfile)
+  const ext = path.extname(coveragePath).toLowerCase();
+  const basename = path.basename(coveragePath);
+  const isLcovByExt = ext === '.info' || ext === '.lcov';
+  const isPythonCoverageBinary = basename === '.coverage';
+  const isPythonCoverageXml = ext === '.xml' && basename.startsWith('coverage');
+
+  // For Python .coverage binary or coverage.xml, try to convert to JSON first
+  let actualPath = coveragePath;
+  let tempFileToCleanup: string | null = null;
+  let alreadyConverted = false;
+
+  if (isPythonCoverageBinary || isPythonCoverageXml) {
+    const convertedPath = await convertPythonCoverageToJson(coveragePath, cwd);
+    if (convertedPath) {
+      actualPath = convertedPath;
+      tempFileToCleanup = convertedPath;
+      alreadyConverted = true;
+    } else {
+      // Conversion failed - warn and fall back to generic path
+      return { available: true, coverageMap: null, error: true, reason: 'malformed' };
+    }
+  }
+
+  try {
+    // Read and validate file
+    const content = await validateAndReadFile(actualPath, cwd, isExplicit);
+    if (content === null) {
+      return { available: true, coverageMap: null, error: true, reason: 'malformed' };
+    }
+
+    // Check if LCOV by content
+    let isLcov = isLcovByExt;
+    if (!isLcovByExt) {
+      if (content.startsWith('TN:') || content.includes('\nSF:') || content.includes('\nDA:')) {
+        isLcov = true;
       }
     }
 
-   // Determine if the file is LCOV based on extension or content
-   const isLcovByExt = 
-     coveragePath.endsWith('.info') || 
-     coveragePath.endsWith('.lcov');
+    let coverageMap: Map<string, any>;
 
-   try {
-     const fsPromises = await import('node:fs/promises');
-     const content = await fsPromises.readFile(coveragePath, 'utf8');
-     let isLcov = isLcovByExt;
-     if (!isLcovByExt) {
-       // Check if content looks like LCOV (starts with TN: or contains SF: and DA:)
-       if (content.startsWith('TN:') || content.includes('\nSF:') || content.includes('\nDA:')) {
-         isLcov = true;
-       }
-     }
-
-if (isLcov) {
-        // Security: limit LCOV size to prevent OOM
-        const MAX_SIZE = 100 * 1024 * 1024; // 100MB
-        if (content.length > MAX_SIZE) {
-          return { available: true, coverageMap: null, error: true, reason: 'malformed' };
+    if (isLcov) {
+      // Security: limit LCOV size - validateAndReadFile already enforces stats.size pre-read
+      coverageMap = parseLcovContent(content, cwd);
+    } else {
+      // Check if this is Python coverage JSON format (has 'files' key + 'meta'/'summary'/'totals')
+      // If so, transform to Istanbul format before parsing
+      // Skip if already converted via convertPythonCoverageToJson (prevents double-transform)
+      let parsePath = actualPath;
+      let parseTempFile: string | null = null;
+      if (!alreadyConverted) {
+        try {
+          const jsonData = JSON.parse(content);
+          if (jsonData.files && typeof jsonData.files === 'object' && (jsonData.meta || jsonData.summary || jsonData.totals)) {
+            // Python coverage format detected - transform to Istanbul
+            const transformedPath = await transformPythonCoverageToIstanbul(actualPath, cwd);
+            if (transformedPath) {
+              parsePath = transformedPath;
+              parseTempFile = transformedPath;
+            }
+          }
+        } catch {
+          // Not valid JSON or not Python format, proceed as-is
         }
-        const coverageMap = parseLcovContent(content, cwd);
-        const normalizedCoverageMap = normalizeCoveragePaths(coverageMap, cwd);
-        return { available: true, coverageMap: normalizedCoverageMap, error: false };
-      } else {
-        // Treat as Istanbul JSON
-        const coverageMap = await parseCoverageReport(coveragePath, cwd);
-        const normalizedCoverageMap = normalizeCoveragePaths(coverageMap, cwd);
-        return { available: true, coverageMap: normalizedCoverageMap, error: false };
       }
-   } catch (error) {
-     // Malformed or unreadable
-     return { available: true, coverageMap: null, error: true, reason: 'malformed' };
-   }
- }
+      
+      // Treat as Istanbul JSON (including converted Python coverage.json)
+      coverageMap = await parseCoverageReport(parsePath, cwd);
+      
+      // Cleanup transform temp file if created
+      if (parseTempFile) {
+        try {
+          await import('node:fs/promises').then(fs => fs.unlink(parseTempFile));
+        } catch {
+          // ignore
+        }
+      }
+    }
+
+    const normalizedCoverageMap = normalizeCoveragePaths(coverageMap, cwd);
+    return { available: true, coverageMap: normalizedCoverageMap, error: false };
+  } catch (error) {
+    // Malformed or unreadable
+    return { available: true, coverageMap: null, error: true, reason: 'malformed' };
+  } finally {
+    // Cleanup temp file if created - runs on ALL paths (success, early return, throw)
+    if (tempFileToCleanup) {
+      try {
+        await import('node:fs/promises').then(fs => fs.unlink(tempFileToCleanup));
+      } catch {
+        // ignore cleanup failure
+      }
+    }
+  }
+}

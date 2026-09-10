@@ -115,7 +115,7 @@ def main():
             name = node.name if hasattr(node, 'name') else '<lambda>'
             # Get line numbers (1-indexed in AST)
             line_start = node.lineno
-            line_end = node.endlineno if hasattr(node, 'endlineno') else line_start
+            line_end = getattr(node, 'end_lineno', line_start)
             results.append({
                 'file': filename,
                 'method': name,
