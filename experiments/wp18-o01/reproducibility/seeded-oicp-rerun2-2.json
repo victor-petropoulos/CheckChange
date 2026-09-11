@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "0.4",
+  "analysis": {
+    "base": "d906c56fb400cc71f9eaf95179ddbef7a3afcffe",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "available",
+    "coverageArtifact": "available"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/aicp/health.py",
+      "method": "get_health_status",
+      "lineStart": 5,
+      "lineEnd": 12,
+      "cc": 2,
+      "crap": 2,
+      "coverage": 100,
+      "coverageKind": "stmt",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "@barney-media/crap-typescript-core",
+        "version": "0.5.0"
+      },
+      "language": "python"
+    }
+  ],
+  "policy": {
+    "crapThreshold": 30
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/aicp/health.py",
+      "method": "get_health_status",
+      "crap": 2,
+      "threshold": 30,
+      "cc": 2,
+      "coverage": 100
+    }
+  ],
+  "analysisStatus": "SUCCESS",
+  "gate": "PASS",
+  "completeness": "COMPLETE"
+}

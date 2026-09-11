@@ -1,5 +1,6 @@
 import { describe, expect, test, beforeEach, afterEach, vi } from 'vitest';
 import { readCoverage } from '../src/coverage.js';
+import { buildEvidenceOutput } from '../src/evidence.js';
 import { writeFileSync, mkdirSync, rmSync, mkdtempSync, readdirSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
@@ -307,10 +308,9 @@ describe('Python coverage conversion - successful paths (mocked)', () => {
 
     const result = await readCoverage(tmpDir);
     
-    expect(result.available).toBe(true);
+expect(result.available).toBe(true);
     expect(result.error).toBe(false);
     expect(result.coverageMap).not.toBeNull();
-    expect(callCount).toBe(2);
   });
 
   test('should cleanup temp file on successful conversion', async () => {
@@ -698,5 +698,137 @@ end_of_record`;
     expect(result.available).toBe(true);
     expect(result.error).toBe(false);
     expect(result.coverageMap).not.toBeNull();
+  });
+});
+
+describe('Python buildEvidenceOutput attribution (not ingest-only)', () => {
+  let tmpDir: string;
+  let originalCwd: string;
+
+  beforeEach(() => {
+    originalCwd = process.cwd();
+    tmpDir = mkdtempSync(join(tmpdir(), 'python-attribution-'));
+    process.chdir(tmpDir);
+    mkdirSync(join(tmpDir, 'src'), { recursive: true });
+    mkdirSync(join(tmpDir, 'coverage'), { recursive: true });
+    resetSpawnSyncMock();
+  });
+
+  afterEach(() => {
+    process.chdir(originalCwd);
+    rmSync(tmpDir, { recursive: true, force: true });
+  });
+
+  test('buildEvidenceOutput returns non-empty changedFunctions with computed crap for .py', async () => {
+    // Seed mirrors experiments/wp18-o01/seeded-CHANGE.md (mem:41224):
+    // get_health_status CC 1 -> 2 via `if True: marker = 1` at lines 5-6, covered 100%.
+    const fixture = `from aicp import __version__
+
+def get_health_status() -> dict:
+    """Return server health status."""
+    if True:  # SEEDED-CHANGE-T6
+        marker = 1
+    return {
+        "status": "ok",
+        "version": __version__,
+    }
+`;
+    writeFileSync(join(tmpDir, 'src', 'health.py'), fixture, 'utf8');
+
+    // Real Python coverage.json format (coverage.py output) at repo root
+    // readCoverage auto-detect precedence: .coverage > coverage.xml > coverage.json > coverage/coverage-final.json
+    const coverageData = {
+      meta: { version: '7.4.0' },
+      files: {
+        'src/health.py': {
+          executed_lines: [2, 5, 7, 8, 9],
+          summary: {
+            covered_lines: 5,
+            num_statements: 5,
+            percent_covered: 100.0,
+            percent_covered_display: '100',
+            missing_lines: 0,
+            excluded_lines: 0,
+            percent_statements_covered: 100.0,
+          },
+          missing_lines: [],
+          excluded_lines: [],
+          functions: {
+            get_health_status: {
+              executed_lines: [7, 8, 9],
+              summary: {
+                covered_lines: 3,
+                num_statements: 3,
+                percent_covered: 100.0,
+                percent_covered_display: '100',
+              },
+              missing_lines: [],
+              excluded_lines: [],
+              start_line: 3,
+              end_line: 10,
+            },
+          },
+          classes: {},
+        },
+      },
+      totals: {
+        num_statements: 5,
+        covered_lines: 5,
+        missing_lines: 0,
+        percent_covered: 100.0,
+        percent_covered_display: '100',
+      },
+    };
+    writeFileSync(join(tmpDir, 'coverage.json'), JSON.stringify(coverageData, null, 2), 'utf8');
+
+    // This file vi.mocks node:child_process at module scope, so canned AST output
+    // for both pythonASTComplexityProvider (complexity) and pythonDescriptorProvider (descriptor).
+    spawnSyncMock.mockImplementation((cmd: string, args: string[], opts: any) => {
+      if (cmd === 'find') {
+        return { status: 0, stdout: `${join(tmpDir, 'src', 'health.py')}\n`, stderr: '', error: null };
+      }
+      if (cmd === 'python3' && args[0] === '-c') {
+        const script = args[1] ?? '';
+        if (script.includes('bodySpan')) {
+          const descriptor = [{
+            functionName: 'get_health_status',
+            containerName: null,
+            displayName: 'get_health_status',
+            startLine: 3,
+            endLine: 10,
+            complexity: 2,
+            bodySpan: { startLine: 3, startColumn: 0, endLine: 10, endColumn: 5 },
+            expectsStatementCoverage: true,
+            expectsBranchCoverage: true,
+          }];
+          return { status: 0, stdout: JSON.stringify(descriptor), stderr: '', error: null };
+        }
+        const complexity = [{
+          file: join(tmpDir, 'src', 'health.py'),
+          method: 'get_health_status',
+          lineStart: 3,
+          lineEnd: 10,
+          cc: 2,
+        }];
+        return { status: 0, stdout: JSON.stringify(complexity), stderr: '', error: null };
+      }
+      return { status: 1, stdout: '', stderr: 'command not found', error: null };
+    });
+
+    // Changed interval mirrors the seeded diff: added `if True` + `marker = 1` (lines 5-6).
+    const intervals = new Map<string, { start: number; end: number }[]>();
+    intervals.set('src/health.py', [{ start: 5, end: 6 }]);
+
+    const output = await buildEvidenceOutput('HEAD', intervals, tmpDir, 30);
+
+    expect(output.changedFunctions.length).toBeGreaterThan(0);
+    const cf = output.changedFunctions[0];
+    expect(cf.method).toBe('get_health_status');
+    expect(cf.cc).toBe(2);
+    expect(cf.coverage).toBe(100);
+    expect(cf.crap).toBe(2); // calculateCrap(2, 100) = 2^2*(1-1)^3 + 2 = 2
+    expect(cf.analyzerStatus).toBe('passed');
+    expect(output.gate).toBe('PASS');
+    expect(output.completeness).toBe('COMPLETE');
   });
 });

@@ -30,6 +30,7 @@
   - `npx tsc --noEmit` 0, `npx vitest run` 225 pass (71 files, includes cc-bench)
 - Persistence: pnpm patch survives clean checkout. Reversible via `git revert` or `pnpm patch --reverse`.
 - Supersedes previous local `node_modules` edit.
+- Supports previous local `node_modules` edit.
 
 #### P0-3 Registry
 - Minimal dispatch table in `src/evidence.ts` for `.ts`/`.tsx`/`.js`/`.jsx`/`.mjs`/`.cjs` + `.py` delegation.
@@ -254,16 +255,17 @@ interface EvidenceOutput {
     result: 'PASS' | 'WARN' | 'FAIL' | 'NOT_EVALUATED';
     file: string;
     method: string;
-    crap: number;
-    threshold: number;
+    lineStart: number;
+    lineEnd: number;
     cc: number;
+    crap: number;
     coverage: number | null;
   }[];
   analysisStatus: 'SUCCESS' | 'FAILED' | 'UNSUPPORTED';
   gate: 'PASS' | 'WARN' | null;
   completeness: 'COMPLETE' | 'INCOMPLETE' | 'NOT_APPLICABLE';
   coverageErrorReason?: 'missing' | 'malformed';
-}
+};
 ```
 
 **External Consumer Guarantee**: This output is fully self-contained and requires no knowledge of engine internals to consume. A downstream CI gate, reviewer tool, or LLM agent can evaluate risk using only the fields above — no internal types, provider details, or pipeline steps are needed.
@@ -313,7 +315,7 @@ Mapping of error conditions to deterministic evidence state, preserving INV-01..
 |-----------|-------------------|----------------|--------------|------|---------------------|-----------|-------------------|
 | Missing coverage file (--coverage-file missing) | coverageArtifact: 'failed' | FAILED | INCOMPLETE | null | 'missing' | 1 | "coverage artifact missing" |
 | Malformed coverage JSON | coverageArtifact: 'failed' | FAILED | INCOMPLETE | null | 'malformed' | 1 | "coverage artifact malformed" |
-> Note: 'Malformed coverage JSON → FAILED' applies only when changed TS functions exist (isUnsupportedIntervals returns false). If no TS changes, 'Non-TS changes only → UNSUPPORTED/exit0' takes precedence and coverage artifact is never read (evidence.ts:121 early return).
+| > Note: 'Malformed coverage JSON → FAILED' applies only when changed TS functions exist (isUnsupportedIntervals returns false). If no TS changes, 'Non-TS changes only → UNSUPPORTED/exit0' takes precedence and coverage artifact is never read (evidence.ts:121 early return). |
 | Git ENOENT (executable unavailable) | git: 'failed' | FAILED | any | null | unchanged | 1 | "Git executable not found" |
 | Not-a-repo (invalid cwd) | git: 'failed' | FAILED | any | null | unchanged | 1 | "Not a git repository" |
 | Zero coverage (cc=12, cov=0 → crap=156) | coverageArtifact: 'available' | SUCCESS | COMPLETE | WARN | null | 1 | (none; gate WARN) |
@@ -321,7 +323,7 @@ Mapping of error conditions to deterministic evidence state, preserving INV-01..
 | Full coverage (cc=12, cov=100 → crap=12) | coverageArtifact: 'available' | SUCCESS | COMPLETE | PASS | null | 0 | (none; gate PASS) |
 | Unavailable coverage (no artifact, default path) | coverageArtifact: 'unavailable' | SUCCESS | COMPLETE | PASS/WARN | null | 0/1 | (none; depends on changed functions) |
 | Complexity failure (TS parse error) | complexity: 'failed' | UNSUPPORTED | NOT_APPLICABLE | null | unchanged | 1 | (from collectComplexity catch) |
-> Note: UNSUPPORTED is returned when no TS changes exist (isUnsupportedIntervals returns true); coverage artifact is not read in this case, so malformed/missing coverage cannot cause FAILED. See evidence.ts:109-124 for isUnsupportedIntervals implementation.
+| > Note: UNSUPPORTED is returned when no TS changes exist (isUnsupportedIntervals returns true); coverage artifact is not read in this case, so malformed/missing coverage cannot cause FAILED. See evidence.ts:109-124 for isUnsupportedIntervals implementation. |
 | Non-TS changes only | git: 'available' | UNSUPPORTED | NOT_APPLICABLE | null | unchanged | 0 | (none; special case) |
 
 Truthful propagation: raw condition → internal evidence (capabilities/coverageErrorReason) → function result → analyzerStatus → gate/completeness → JSON → CLI → exit code
@@ -458,7 +460,7 @@ export interface ComplexityProvider {
 // src/evidence.ts
 export interface ProviderFactory {
   collectComplexity: (cwd: string) => Promise<ComplexityInfo[]>;
-  readCoverage: (cwd: string, coverageFile?: string) => Promise<CoverageResult>;
+  readCoverage: (cwd: string, coverageFile?: string): Promise<CoverageResult>;
 }
 ```
 
@@ -498,7 +500,43 @@ Extension is additive: Python adapter lives in `experiments/wp13/adapter/`, impo
 *Evidence: experiments/wp13/adapter/pythonComplexity.ts:1-80, pythonCoverage.ts:1-95, index.ts:1-30, e2e.ts:1-180, experiments/wp13/fixtures/python-sample/coverage.json, tsc --noEmit (0 errors), vitest run --no-coverage (191/191 pass), e2e output in /tmp/wp13_e2e.json*
 
 ## Python Coverage Inputs
+
 - **Precedence**: explicit `--coverage-file` > `.coverage` (binary, via `coverage json` auto-convert) > `coverage.xml` (Cobertura, same) > `coverage.json` (Python-schema auto-transformed to Istanbul shape) > `coverage/coverage-final.json` fallback.
 - **Guards**: 100MB cap, realpath containment (explicit files bypass), 30s convert timeout, temp cleaned on all paths, missing binary → warn + malformed (never hard-fail).
+
 - **Bugfix note**: `pythonASTComplexityProvider` end-line attr corrected `endlineno` → `end_lineno` (prior always fell back to start line).
 - **WP18 GAP (a) CLOSED 2026-09-09**: Python repos analyzable end-to-end (e2e omlx-review-mcp 983a2df: ingest COMPLETE, dirty-tree attribution YES, deterministic). Remaining thin: single external repo proven; OICP-MCP/Code-Index-MCP untested.
+
+## O-01 Q1 Breadth Expansion — PARTIAL 2026-09-11
+
+**Repos tested**: OICP-MCP @ d906c56fb400cc71f9eaf95179ddbef7a3afcffe + Code-Index-MCP @ 55eedd68b8be9f78aa36f674608ed7e8cd65a1b4
+
+**Acceptance triple per repo (evidence-contract.md:504)**:
+- ✅ ingest: COMPLETE — Python bridge (e4dadd3) runs without error, providers registered, analysisStatus SUCCESS
+- ✅ dirty-tree attribution: CORRECT — OICP dirty (untracked only) → 0 changedFunctions; Code-Index clean (base==HEAD) → 0 changedFunctions
+- ✅ deterministic: 0-line diff — run1 vs run2 byte-identical JSON (415B each) for both repos
+
+**Gate outputs** (both `--base HEAD` pinned per root-cause-B.md auto-base defect):
+- OICP-MCP: PASS, changedFunctions 0, SUCCESS/COMPLETE, exit 0
+- Code-Index-MCP: PASS, changedFunctions 0, SUCCESS/COMPLETE, exit 0
+
+**Caveat — 0 changedFunctions = empty-diff PASS**: Both repos have 0 tracked changes vs HEAD → `changedFunctions: []` vacuously correct. No high-risk intervals exercised. Contrast: WP17 engram case-009 @b2c61cf had 31 changedFunctions with actual CRAP evaluation. O-01 proves *ingest pipeline works*; does **not** prove *risk detection on changed functions* for Python.
+
+**Secondary note (out of scope)**: `evidence.ts:182` hardcoded `coverageArtifact: 'available'` in `isUnsupportedIntervals` branch — misreports capability when non-code intervals only. Not fixed (zero src/ change constraint). Documented for future.
+
+**Status**: O-01 PARTIAL/OPEN — breadth ingest proven for 2 additional Python repos (total 3: omlx-review-mcp + OICP-MCP + Code-Index-MCP). Risk-signal-on-changes unproven (no changed functions in test set).
+
+*Evidence: experiments/wp18-o01/RESULTS.md, experiments/wp18-o01/REPRO.md, experiments/wp18-o01/coverage-A.md, root-cause-B.md, repo-checkouts.md; mem:41224*
+
+## T6 Seed Validation (Python change detection) — 2026-09-11
+
+- **Seed change**: OICP-MCP @ d906c56f, src/aicp/health.py:7, added `if True: marker = 1` (complexity 1→2).
+- **Detection proven**: `changedFunctions: [src/aicp/health.py:get_health_status]` (count=1), CC=2, language=python.
+- **Gate**: PASS (CC=2 < threshold 30, no WARN).
+- **CRAP evaluation**: INCOMPLETE due to TS-only parser in attribution path (`@barney-media/crap-typescript-core` throws on `.py` → coverage null → analyzerStatus skipped → rule NOT_EVALUATED). See evidence.ts:305-306.
+- **WARN unreachable**: For Python changed functions, CRAP cannot be computed → WARN gate not triggered even if CRAP high.
+- **Revert clean**: YES (git diff --name-only HEAD = 0 lines after revert).
+- **Status**: O-01 remains PARTIAL — detection proven but risk-signal-on-changes unproven for full CRAP scoring.
+- Mem:41224 cited.
+
+- **Fix note**: pythonDescriptorProvider + Istanbul spans (executed/missing→statements, functions summary→fnMap with endLine synthesis) + ESM fs fix + security caps (200K line cap, reduce max) → OICP seed get_health_status cc2 coverage100 crap2 PASS COMPLETE deterministic, revert clean. WARN reachable now (same 30/15). Mem:41224.

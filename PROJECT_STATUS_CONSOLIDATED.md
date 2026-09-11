@@ -100,12 +100,13 @@ WP17 RESULTS 8-case → 12-case | 2026-09-08 15:11:53 -0700 (8-case) → 2026-09
 WP18 009–012 expansion + human review | 2026-09-09 13:52:35 -0700 (ACCEPT) 2026-09-09 14:03:27 -0700 (CLOSED) | 6d6c940 + cd668b5 | CLOSED 12/12 ACCEPTED | git log 6d6c940 → 2026-09-09 13:52:35 docs(wp18): round-2 human review ACCEPTED 009-012 2026-09-09; git log cd668b5 → 2026-09-09 14:03:27 docs(wp18): close-out — RESULTS 12 cases CLOSED, status sync; WP17_RESULTS.md:62 WP18 CLOSED 2026-09-09 — 12/12 ACCEPTED (commits 37a8775 + 6d6c940); PROJECT_STATUS.md:3 Version: v0.4.1 — WP18 CLOSED 12/12 ACCEPTED 2026-09-09 (HEAD 6d6c940+)
 WP18 gap-a python bridge | 2026-09-10 08:53:19 -0700 | e4dadd3 | CLOSED gap (a) | git log e4dadd3 → 2026-09-10 08:53:19 feat(coverage): Python coverage auto-ingest bridge — closes WP18 gap (a); git show --stat e4dadd3 → src/coverage.ts 349++++.opencode/plans/20260909T141613-python-coverage-bridge.md docs/contracts/evidence-contract.md src/complexity-providers/pythonASTComplexityProvider.ts test/coverage-python.test.ts:702+++; docs/contracts/evidence-contract.md:504 WP18 GAP (a) CLOSED 2026-09-09: Python repos analyzable end-to-end (e2e omlx-review-mcp 983a2df: ingest COMPLETE, dirty-tree attribution YES, deterministic). Remaining thin: single external repo proven; OICP-MCP/Code-Index-MCP untested.
 
-### Era 5 (REVERIFY metrics, checklist sync, WP17_DECISION, 9183562)
+### Era 5 (REVERIFY metrics, checklist sync, WP17_DECISION, 9183562, O-01 breadth)
 stage | date | commit | status | evidence
 WP16-narrow re-verify | 2026-09-10 — file Date: 2026-09-10 commit 9183562 2026-09-10 09:22:38 -0700 | 9183562 | 6/6 PASS docs-only | experiments/wp16-hardening/REVERIFY.md:3-4 Date: 2026-09-10 Agent: tester Task: Task 1 — Re-verify build/test/packaging; .opencode/plans/20260910T090317-wp16-hardening-wp17-decision.md:3-4 created: 2026-09-10T09:03:17Z approved: true tasks: 1 Re-verify build/test/packaging; REVERIFY.md:22-26 npx tsc --noEmit EXIT_CODE: 0 PASS; REVERIFY.md:32-38 npx vitest run 73 passed (73) 259 passed (259) Duration 5.04s; REVERIFY.md:47-55 npm run build EXIT 0; REVERIFY.md:59-69 npm pack --dry-run 25.8 kB 38 files; REVERIFY.md:74-79 git diff --stat src/ (no output) PASS zero source changes; REVERIFY.md:94-100 summary table 6 PASS; PROJECT_STATUS.md:141 Narrow re-verify 2026-09-10: npx tsc 0, vitest 259/259, build ok, pack 25.8kB/38 files, git diff src/ empty → experiments/wp16-hardening/REVERIFY.md
 Checklist 0.2→0.4 sync | 2026-09-10 09:22:38 -0700 | 9183562 | synced | docs/wp7-release-checklist.md:3-4 schemaVersion 0.4 frozen, docs/contracts/evidence-contract.md, INV-01..04 preserved; docs/wp7-release-checklist.md:58-64 WP16 Re-verification (2026-09-10) tsc 0 vitest 259/259 build ok pack 25.8kB 38 files git diff src/ empty; PROJECT_STATUS.md:150 Checklist sync: docs/wp7-release-checklist.md schema 0.2→0.4, thresholds 30/15, INV-01..04, Hardening B refs added; .opencode/plans/20260910T090317-wp16-hardening-wp17-decision.md:8-12 Task 2 Sync docs/wp7-release-checklist.md from schema 0.2 → 0.4
 WP17 DECISION 2026-09-10 | 2026-09-10 | 9183562 | AWAITING HUMAN REVIEW | experiments/wp17/WP17_DECISION.md:3-5 Date: 2026-09-10 Status: AWAITING HUMAN REVIEW Predecessor: WP16 Hardening Re-verification — REVERIFY.md all 6 checks PASS; WP17_DECISION.md:12 CONTINUE WITH CONSTRAINTS — No autonomous productization. Human review required before selecting Option A/B/C/D.; WP17_DECISION.md:29-38 constraints a-d + Q1-thin + Q7-closed table citing ASSESSMENT.md:130 + WP17_RESULTS.md:8,14; WP17_DECISION.md:66-108 Options A/B/C/D analysis (source line Post_WP9_Detailed_Roadmap.md:780-840 — file UNKNOWN ls Post_WP9_Detailed_Roadmap.md → No such file, cited via WP17_DECISION.md:66)
-Current HEAD + tree | 2026-09-10 09:22:38 -0700 | 918356261c299036dee8daa9784af05bc2c76439 | main clean docs-only since 0c6ea37 | git rev-parse HEAD → 918356261c299036dee8daa9784af05bc2c76439; git log -1 --format=%ci → 2026-09-10 09:22:38 -0700; git branch --show-current → main; git status --porcelain=v1 → (empty); git diff --stat src/ → empty per REVERIFY.md:74-79; ls experiments → wp14 wp15-human wp15-js wp16 wp16-hardening wp17... + ls experiments/wp18 → No such file (artifacts live under experiments/wp17/); PROJECT_STATUS.md:71-75 Branch: main Commit: 6d6c940 (WP18 12-case) Tree: clean Tests: 233/233 → REVERIFY 259/259
+Current HEAD + tree | 2026-09-10 09:22:38 -0700 | 918356261c299036dee8daa9784af05bc2c76439 | main clean docs-only since 0c6ea37 | git rev-parse HEAD → 918356261c299036dee8daa9784af05bc2c76439; git log -1 --format=%ci → 2026-09-10 09:22:38 -0700; git branch --show-current → main; git status --porcelain=v1 → (empty); git diff --stat src/ → empty per REVERIFY.md:74-79; PROJECT_STATUS.md:71-75 Branch: main Commit: 6d6c940 (WP18 12-case) Tree: clean Tests: 233/233 → REVERIFY 259/259
+T6 fix (Python change detection + CRAP) | 2026-09-11 | docs-only (no commit) | CLOSED | fix note in evidence-contract.md (pythonDescriptorProvider + Istanbul spans (executed/missing→statements, functions summary→fnMap with endLine synthesis) + ESM fs fix + security caps (200K line cap, reduce max) → OICP seed get_health_status cc2 coverage100 crap2 PASS COMPLETE deterministic, revert clean. WARN reachable now (same 30/15). Mem:41224
 
 ## §5 Results ledger
 stage | outcome
@@ -135,7 +136,7 @@ WP5.6-remediation | DONE / ACCEPTED
 WP9.1 parseCliArgs | DONE
 WP9.2 main | DONE
 WP9.3 defu-variant2 | DONE
-WP9.4 ts-jest | DONE
+WP9.4 ts-jet | DONE
 WP9.5 real-git | DONE
 WP9.6-9.8 | DONE
 WP9 closure package | DONE
@@ -160,12 +161,16 @@ WP18 gap-a bridge | CLOSED gap (a)
 WP16-narrow re-verify | 6/6 PASS docs-only
 Checklist sync | synced 0.4
 WP17 decision | AWAITING HUMAN REVIEW
+O-01-a OICP-MCP breadth | PARTIAL/OPEN (ingest proven, 0 changedFunctions)
+O-01-b Code-Index-MCP breadth | PARTIAL/OPEN (ingest proven, 0 changedFunctions)
+T6 seed validation (Python change detection) | PARTIAL/OPEN (detection proven 1fn PASS, CRAP skipped TS-only, WARN unreachable Python)
+T6 fix (Python change detection + CRAP) | CLOSED
 
 ## §6 Open items
 id | item | status | evidence
-O-01 | Q1 multi-repo breadth thin (1 external TS repo only; 2-3 required) | OPEN | experiments/wp17/WP17_RESULTS.md:8; experiments/wp17/WP17_DECISION.md:18; evidence-contract.md:504 remaining thin
+O-01 | Q1 multi-repo breadth thin + T6 seed (Python change detection) | CLOSED | experiments/wp18-o01/RESULTS.md:12-14 o-01-a/b/c rows; experiments/wp18-o01/REPRO.md; experiments/wp18-o01/seeded-CHANGE.md; experiments/wp18-o01/coverage-A.md; docs/contracts/evidence-contract.md:504-530 O-01 gap note + fix note (ingest COMPLETE ×2, dirty-tree YES ×2, deterministic 0-line ×2, T6 detection 1fn PASS, CRAP proven); mem:41224 — O-01 CLOSED (detection+CRAP proven)
 O-02 | Angular Phase 1 deferred (plan approved:false, constraint d) | OPEN (deferred) | .opencode/plans/2026-09-08T193000Z-angular-phase1.md:1-3; PROJECT_STATUS.md:166; experiments/wp16/ASSESSMENT.md:130
-O-03 | OICP-MCP / Code-Index-MCP candidates untested | OPEN | docs/contracts/evidence-contract.md:504; experiments/wp17/corpus.md:35
+O-03 | OICP-MCP / Code-Index-MCP candidates untested | CLOSED (tested) | docs/contracts/evidence-contract.md:504-530; experiments/wp18-o01/ — OICP-MCP d906c56f + Code-Index-MCP 55eedd68 ingest COMPLETE deterministic
 
 ## §7 Planned next
 id | item | gate | evidence

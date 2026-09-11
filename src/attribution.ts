@@ -2,6 +2,7 @@ import { parseFileMethods } from '@barney-media/crap-typescript-core';
 import { coverageForMethods } from '@barney-media/crap-typescript-core';
 import type { MethodDescriptor } from '@barney-media/crap-typescript-core';
 import { resolve, relative } from 'node:path';
+import { parsePythonFileMethods } from './complexity-providers/pythonDescriptorProvider.js';
 
 // We'll define the ComplexityInfo interface here (same as in complexity.ts)
 interface ComplexityInfo {
@@ -84,7 +85,11 @@ export async function attachCoverage(
         methodDescriptors = descriptorCache.get(filePath)!;
       } else {
         try {
-          methodDescriptors = await parseFileMethods(filePath);
+          if (filePath.endsWith('.py')) {
+            methodDescriptors = await parsePythonFileMethods(filePath);
+          } else {
+            methodDescriptors = await parseFileMethods(filePath);
+          }
           descriptorCache.set(filePath, methodDescriptors);
         } catch (error) {
           // If parsing fails, treat as no coverage for this file's methods

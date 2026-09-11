@@ -1,4 +1,5 @@
 import * as path from 'node:path';
+import * as fs from 'node:fs';
 import { access, constants, readFile } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import { parseCoverageReport } from '@barney-media/crap-typescript-core';
@@ -134,23 +135,87 @@ async function convertPythonCoverageToJson(inputPath: string, cwd: string): Prom
 
 /**
  * Transform Python coverage JSON format to Istanbul format expected by parseCoverageReport.
- * Python format: { meta, files: { filepath: {...} }, totals }
- * Istanbul format: { filepath: {...} }
+ * Python format: { meta, files: { filepath: { executed_lines, missing_lines, functions: {...}, summary, ... } }, totals }
+ * Istanbul format: { filepath: { statementMap, s, fnMap, f, branchMap, b } }
  */
 async function transformPythonCoverageToIstanbul(pythonJsonPath: string, cwd: string): Promise<string | null> {
   const outputPath = path.join(cwd, `.checkchange-coverage-temp-istanbul-${process.pid}-${Math.random().toString(36).slice(2)}.json`);
   try {
     const content = await validateAndReadFile(pythonJsonPath, cwd);
-    if (!content) return null;
+    if (!content) {
+      return null;
+    }
     const pythonCoverage = JSON.parse(content);
     const files = pythonCoverage.files;
-    if (!files || typeof files !== 'object') return null;
+    if (!files || typeof files !== 'object') {
+      return null;
+    }
     
     // Convert to Istanbul format
     const istanbulCoverage: Record<string, any> = {};
     for (const [filePath, fileData] of Object.entries(files)) {
       const absPath = path.isAbsolute(filePath) ? filePath : path.resolve(cwd, filePath);
-      istanbulCoverage[absPath] = fileData;
+      const pythonFileData = fileData as any;
+
+      // Build Istanbul statementMap and s from executed_lines + missing_lines
+      const executedLines: number[] = pythonFileData.executed_lines || [];
+      const missingLines: number[] = pythonFileData.missing_lines || [];
+      const excludedLines: number[] = pythonFileData.excluded_lines || [];
+      const combined = [...executedLines, ...missingLines];
+      const MAX_LINES = 200_000;
+      const deduped = combined.length > MAX_LINES ? [...new Set(combined)].slice(0, MAX_LINES) : [...new Set(combined)];
+      const allLines = deduped.sort((a, b) => a - b);
+
+      const statementMap: Record<string, any> = {};
+      const s: Record<string, number> = {};
+      let stmtId = 0;
+      
+      for (const line of allLines) {
+        const key = String(stmtId++);
+        statementMap[key] = {
+          start: { line, column: 0 },
+          end: { line, column: 0 }
+        };
+        s[key] = executedLines.includes(line) ? 1 : 0;
+      }
+      
+      // Build Istanbul fnMap and f from functions summary
+      const fnMap: Record<string, any> = {};
+      const f: Record<string, number> = {};
+      let fnId = 0;
+      
+      const functions = pythonFileData.functions || {};
+      for (const [funcName, funcData] of Object.entries(functions)) {
+        const func = funcData as any;
+        const key = String(fnId++);
+        const startLine = func.start_line || 1;
+        // coverage.py functions carry only start_line (no end_line). Statements
+        // attribute to a method only inside its fn span, so bound the end via
+        // the function's own line coverage; fall back to startLine when empty.
+        // ponytail: no end_line in artifact => synthesize; never guess beyond lines we saw.
+        const funcLines = [...(func.executed_lines || []), ...(func.missing_lines || [])];
+        const endLine = func.end_line ?? (funcLines.length > 0 ? funcLines.reduce((m, v) => v > m ? v : m, funcLines[0]) : startLine);
+        const covered = (func.summary?.percent_covered ?? 0) === 100;
+
+        fnMap[key] = {
+          name: funcName,
+          decl: {
+            start: { line: startLine, column: 0 },
+            end: { line: endLine, column: 0 }
+          },
+          line: startLine
+        };
+        f[key] = covered ? 1 : 0;
+      }
+      
+      istanbulCoverage[absPath] = {
+        statementMap,
+        s,
+        fnMap,
+        f,
+        branchMap: {},
+        b: {}
+      };
     }
     
     await import('node:fs/promises').then(fs => fs.writeFile(outputPath, JSON.stringify(istanbulCoverage)));
@@ -204,6 +269,8 @@ function normalizeCoveragePaths(
     // Find the longest suffix of `key` that, when resolved against `cwd`,
     // points to an existing file. This re-bases cross-environment absolute
     // paths onto the current checkout.
+    // ponytail: resolve against cwd as given (no realpath) so rebased keys
+    // keep the caller's path form (macOS /var vs /private/var).
     const segments = key.split(path.sep);
     let rebased = key;
     for (let i = 1; i < segments.length; i++) {
@@ -212,11 +279,6 @@ function normalizeCoveragePaths(
       const rel = path.relative(cwd, candidate);
       if (rel.startsWith('..') || path.isAbsolute(rel)) continue;
       try {
-        // Use sync exists via a non-throwing try/catch around access.
-        // We deliberately do not use fs.realpathSync here to avoid TOCTOU
-        // and to keep the function zero-dep.
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const fs = require('node:fs') as typeof import('node:fs');
         if (fs.existsSync(candidate)) {
           rebased = candidate;
           break;
@@ -352,7 +414,7 @@ async function readCoverageFile(
       
       // Treat as Istanbul JSON (including converted Python coverage.json)
       coverageMap = await parseCoverageReport(parsePath, cwd);
-      
+
       // Cleanup transform temp file if created
       if (parseTempFile) {
         try {

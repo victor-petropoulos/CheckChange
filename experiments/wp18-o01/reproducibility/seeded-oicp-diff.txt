@@ -1,0 +1,13 @@
+diff --git a/src/aicp/health.py b/src/aicp/health.py
+index 81b7d8e..41ad9fe 100644
+--- a/src/aicp/health.py
++++ b/src/aicp/health.py
+@@ -4,6 +4,8 @@ from aicp import __version__
+ 
+ def get_health_status() -> dict:
+     """Return server health status."""
++    if True:  # SEEDED-CHANGE-T6
++        marker = 1
+     return {
+         "status": "ok",
+         "version": __version__,
