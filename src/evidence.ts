@@ -33,19 +33,96 @@ function sha256Hex(content: string): string {
   return createHash('sha256').update(content).digest('hex');
 }
 
+// ---- Diagnostics quality (Experiment A task 4: optional diagnostics.quality) ----
+export type QualityStage = 'git' | 'complexity' | 'coverage' | 'attribution' | 'rules';
+
+export interface UncoveredFunction {
+  file: string;
+  method: string;
+  lineStart: number;
+  lineEnd: number;
+}
+
+export interface DiagnosticQuality {
+  // Canonical quality vocabulary (ADR-0001 terminology-reconciliation.md):
+  // coverage DIRECT = measured from coverage artifact; UNAVAILABLE otherwise.
+  coverage: 'DIRECT' | 'UNAVAILABLE';
+  // complexity NATIVE = native analyzer; UNAVAILABLE if the provider failed.
+  complexity: 'NATIVE' | 'UNAVAILABLE';
+  /**
+   * Deterministic evidence score 0-100, closed-form arithmetic over evidence
+   * values only (no model judgment). Formula:
+   *   completeness   = Σ weights of completed stages
+   *                    (git 10 | complexity 20 | coverage 40 | attribution 20 | rules 10; total 100)
+   *   coverageRatio  = (# changed functions with coverage > 0) / (# changed functions); 1 when none
+   *   score          = round(0.7 * completeness + 0.3 * 100 * coverageRatio)
+   *   score is null when coverage-backed analysis did not reach rule evaluation
+   *   (no usable coverage evidence AT ALL). INV-01 ZERO≠NULL: a measured 0% is
+   *   a number (lowers score), never null — null only when nothing was measured.
+   */
+  score: number | null;
+  // Per-stage completeness: whether the stage produced usable evidence this run.
+  stageComplete: Record<QualityStage, boolean>;
+  // Changed functions with measured coverage === 0. Present when coverage evidence usable.
+  uncoveredFunctions?: UncoveredFunction[];
+}
+
 /**
- * Attaches optional diagnostics.lineage to the output. When no lineage was
- * collected, returns the output unchanged (byte-identical legacy behavior).
- * Timestamps/durations/PIDs are excluded by construction — lineage carries only
- * deterministic values (per evidence-contract.md:341 determinism guarantee).
+ * Builds diagnostics.quality from the per-run evidence state. Deterministic:
+ * every input is a values of the current run (capabilities, coverage usability,
+ * analyzed functions) — no timing, paths, or model judgment.
  */
-function withLineage<T extends Record<string, unknown>>(
+function buildQuality(params: {
+  complexityCapability: string;
+  coverageUsable: boolean;
+  attributionComplete?: boolean;
+  rulesComplete?: boolean;
+  changedFunctions?: ChangedFunction[];
+}): DiagnosticQuality {
+  const stageComplete: Record<QualityStage, boolean> = {
+    git: true, // base resolved + intervals present; git failure handled upstream in cli.ts
+    complexity: params.complexityCapability !== 'failed',
+    coverage: params.coverageUsable,
+    attribution: params.attributionComplete === true,
+    rules: params.rulesComplete === true,
+  };
+  const weights: Record<QualityStage, number> = { git: 10, complexity: 20, coverage: 40, attribution: 20, rules: 10 };
+  const completeness = (Object.keys(stageComplete) as QualityStage[])
+    .reduce((sum, s) => sum + (stageComplete[s] ? weights[s] : 0), 0);
+  const fns = params.changedFunctions ?? [];
+  const covered = fns.filter((f) => f.coverage !== null && f.coverage > 0).length;
+  const coverageRatio = fns.length === 0 ? 1 : covered / fns.length;
+  const score =
+    stageComplete.coverage && stageComplete.attribution && stageComplete.rules
+      ? Math.round(0.7 * completeness + 0.3 * 100 * coverageRatio)
+      : null;
+  const quality: DiagnosticQuality = {
+    coverage: params.coverageUsable ? 'DIRECT' : 'UNAVAILABLE',
+    complexity: stageComplete.complexity ? 'NATIVE' : 'UNAVAILABLE',
+    score,
+    stageComplete,
+  };
+  if (params.coverageUsable) {
+    quality.uncoveredFunctions = fns
+      .filter((f) => f.coverage === 0)
+      .map((f) => ({ file: f.file, method: f.method, lineStart: f.lineStart, lineEnd: f.lineEnd }));
+  }
+  return quality;
+}
+
+/**
+ * Attaches optional diagnostics.{lineage,quality} to the output. When no
+ * lineage was collected, returns the output unchanged (byte-identical legacy
+ * behavior). All values deterministic per evidence-contract.md:341.
+ */
+function withDiagnostics<T extends Record<string, unknown>>(
   output: T,
-  lineage: DiagnosticLineageEntry[]
-): T & { diagnostics?: { lineage: DiagnosticLineageEntry[] } } {
+  lineage: DiagnosticLineageEntry[],
+  quality: DiagnosticQuality
+): T & { diagnostics?: { lineage: DiagnosticLineageEntry[]; quality: DiagnosticQuality } } {
   return lineage.length === 0
     ? output
-    : { ...output, diagnostics: { lineage } };
+    : { ...output, diagnostics: { lineage, quality } };
 }
 
 export interface ProviderFactory { 
@@ -233,7 +310,7 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
     };
     // If intervals indicate unsupported source (non-code files only), return UNSUPPORTED
     if (isUnsupportedIntervals(intervals)) {
-        return withLineage({
+        return withDiagnostics({
             schemaVersion: '0.4',
             analysis: {
                 base: base,
@@ -252,7 +329,7 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
             analysisStatus: 'UNSUPPORTED',
             gate: null,
             completeness: 'NOT_APPLICABLE'
-        }, lineage);
+        }, lineage, buildQuality({ complexityCapability, coverageUsable: false }));
     }
 // Step 2: Read coverage
     let coverageResult;
@@ -304,7 +381,7 @@ coverageResult = { available: false, coverageMap: null, error: true, reason: 'ma
         gate = null;
         completeness = 'NOT_APPLICABLE';
         // We'll return early with empty changedFunctions.
-        return withLineage({
+        return withDiagnostics({
             schemaVersion: '0.4',
             analysis: {
                 base: base,
@@ -323,14 +400,14 @@ coverageResult = { available: false, coverageMap: null, error: true, reason: 'ma
             analysisStatus: analysisStatus,
             gate: gate,
             completeness: completeness
-        }, lineage);
+        }, lineage, buildQuality({ complexityCapability, coverageUsable: false }));
     }
 // If coverage provider failed (malformed)
      if (coverageCapability === 'failed') {
 analysisStatus = 'FAILED';
           gate = null;
-          completeness = 'INCOMPLETE';
-          return withLineage(buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason), lineage);
+completeness = 'INCOMPLETE';
+           return withDiagnostics(buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason), lineage, buildQuality({ complexityCapability, coverageUsable: false }));
      }
     // Step 3: Attach coverage to complexity info
     let attributedComplexity = [];
@@ -343,7 +420,7 @@ analysisStatus = 'FAILED';
      analysisStatus = 'FAILED';
      gate = null;
 completeness = 'INCOMPLETE';
-      return withLineage(buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason), lineage);
+       return withDiagnostics(buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason), lineage, buildQuality({ complexityCapability, coverageUsable: !coverageResult.error && coverageResult.available === true }));
     }
     lineage.push({
         stage: 'attribution',
@@ -495,7 +572,7 @@ const detectNextFramework = (cwd, filePath) => {
           ruleResults: ruleResults.length
         }
       });
-      return withLineage({
+      return withDiagnostics({
           schemaVersion: '0.4',
          analysis: {
              base: base,
@@ -514,7 +591,13 @@ const detectNextFramework = (cwd, filePath) => {
          analysisStatus: analysisStatus,
          gate: gateValue,
          completeness: completenessValue
-     }, lineage);
+     }, lineage, buildQuality({
+         complexityCapability,
+         coverageUsable: coverageResult.available === true && coverageResult.error === false,
+         attributionComplete: true,
+         rulesComplete: true,
+         changedFunctions: changedFunctionsWithLanguage
+     }));
 }
 // Helper function to build output when there is a provider failure
 function buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason) {
