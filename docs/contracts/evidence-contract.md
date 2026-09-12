@@ -29,7 +29,6 @@
   - `rm -rf node_modules && pnpm install` → grep `ANALYZABLE_EXTENSIONS` shows `.js` etc., utils returns `tsx` for `.jsx`
   - `npx tsc --noEmit` 0, `npx vitest run` 225 pass (71 files, includes cc-bench)
 - Persistence: pnpm patch survives clean checkout. Reversible via `git revert` or `pnpm patch --reverse`.
-- Supersedes previous local `node_modules` edit.
 - Supports previous local `node_modules` edit.
 
 #### P0-3 Registry
@@ -162,6 +161,9 @@ The following invariants are preserved from WP5.6 and must hold in all evidence 
 - **INV-04: ANALYZER TRUTHFUL** — `analyzerStatus` accurately reflects the success/failure/unsupported state of the complexity and coverage analyzers.  
   *Evidence: evidence.ts:216 (analyzerStatus assignment in buildFailedOutput)*
 
+- **INV-05: DIAGNOSTICS TRUTHFUL** — The `diagnostics` object never contradicts evidence values; quality labels align with corresponding capabilities and analysisStatus.
+  *Evidence: prospective — see docs/decisions/diagnostics-schema-design.md; no diagnostics construction in src/ yet (src/evidence.ts is 442 lines).*
+
 ### CLI Contract
 
 The `check` command produces evidence and exits with codes reflecting the deterministic outcome:
@@ -209,6 +211,7 @@ Following semantic versioning given the contract stability, with WP11 additions 
   - Engine signals version via `package.json` version + `evidence-contract.md` header
 - **Current State**: Bumped to 0.3.0 as of 2026-09-01, with language field added to ChangedFunction interface.
   *Evidence: evidence-contract.md:3-5 (frozen status), Post_WP9_Detailed_Roadmap.md:135-160 (WP11 §6)*
+- **Additive Diagnostics**: The optional `diagnostics` object (schema 0.5) is an additive change; consumers ignoring unknown fields remain compatible. Schema version bump from 0.4 to 0.5 is minor when the additive fields stabilize.
 
 ### 11.1 Input Contract
 
