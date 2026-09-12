@@ -145,6 +145,18 @@ interface DiagnosticQuality {
 - The `diagnostics` field is additive and optional; schema version bump from 0.4 → 0.5 is minor (per WP11) when the additive fields stabilize.
 - Required-field changes (e.g., making `zboi` required) would still constitute a major version bump.
 
+## Fingerprint Algorithm (Task 5)
+
+`diagnostics.fingerprints` maps `file:method:lineStart` → SHA-256 hex digest (64 lowercase hex chars).
+
+- **Algorithm**: SHA-256 via `node:crypto` `createHash` (no new dependencies).
+- **Input composition** (normalized function identity, newline-joined):
+  `relativeFilePath \n method \n lineStart \n lineEnd \n cc`
+- **Normalization**: repo-relative path only (no absolute paths); `\` → `/` (forward slashes); CRLF → LF line endings. All inputs are analyzed run values (no timing, no PIDs), so identical runs produce identical hashes per the Determinism Rule above.
+- **Key**: `file:method:lineStart`, where `file` is the repo-relative path (as used by other diagnostics fields).
+- **Scope**: fingerprints cover changed functions only; the field is optional and emitted when changed functions exist.
+- **No caching** in this phase; function-hash caching is deferred (Experiment C, Performance).
+
 ## Rationale
 
 - Supports Experiment A (Trust Layer) by providing lineage for auditability, quality metrics for risk assessment, and fingerprints for change detection.

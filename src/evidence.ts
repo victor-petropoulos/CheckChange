@@ -110,19 +110,53 @@ function buildQuality(params: {
   return quality;
 }
 
+// ---- Diagnostics fingerprints (Experiment A task 5: optional diagnostics.fingerprints{}) ----
+
 /**
- * Attaches optional diagnostics.{lineage,quality} to the output. When no
+ * Deterministic function fingerprint: SHA-256 hex digest (64 lowercase chars)
+ * over the normalized function identity (relative file path + method +
+ * lineStart + lineEnd + cc). Inputs are analyzed run values only — no timing,
+ * no PIDs, no absolute paths — so identical runs produce identical hashes
+ * (evidence-contract.md:341). Normalization: repo-relative path with forward
+ * slashes (`\` → `/`), CRLF → LF line endings. Algorithm documented in
+ * docs/decisions/diagnostics-schema-design.md.
+ */
+function fingerprintFor(f: ChangedFunction): string {
+  const file = f.file.split('\\').join('/');
+  const input = [file, f.method, f.lineStart, f.lineEnd, f.cc].join('\n').replace(/\r\n/g, '\n');
+  return sha256Hex(input);
+}
+
+/**
+ * Builds diagnostics.fingerprints, keyed by `file:method:lineStart` per
+ * diagnostics-schema-design.md. Covers changed functions only.
+ */
+function buildFingerprints(changedFunctions: ChangedFunction[]): Record<string, string> {
+  const fingerprints: Record<string, string> = {};
+  for (const f of changedFunctions) {
+    fingerprints[`${f.file}:${f.method}:${f.lineStart}`] = fingerprintFor(f);
+  }
+  return fingerprints;
+}
+
+/**
+ * Attaches optional diagnostics.{lineage,quality,fingerprints} to the output. When no
  * lineage was collected, returns the output unchanged (byte-identical legacy
- * behavior). All values deterministic per evidence-contract.md:341.
+ * behavior). fingerprints emitted only when non-empty. All values deterministic
+ * per evidence-contract.md:341.
  */
 function withDiagnostics<T extends Record<string, unknown>>(
   output: T,
   lineage: DiagnosticLineageEntry[],
-  quality: DiagnosticQuality
-): T & { diagnostics?: { lineage: DiagnosticLineageEntry[]; quality: DiagnosticQuality } } {
-  return lineage.length === 0
-    ? output
-    : { ...output, diagnostics: { lineage, quality } };
+  quality: DiagnosticQuality,
+  fingerprints?: Record<string, string>
+): T & { diagnostics?: { lineage: DiagnosticLineageEntry[]; quality: DiagnosticQuality; fingerprints?: Record<string, string> } } {
+  const fpEntries = fingerprints ? Object.keys(fingerprints).length : 0;
+  if (lineage.length === 0) return output;
+  return {
+    ...output,
+    diagnostics: { lineage, quality, ...(fpEntries > 0 ? { fingerprints } : {}) },
+  };
 }
 
 export interface ProviderFactory { 
@@ -597,7 +631,7 @@ const detectNextFramework = (cwd, filePath) => {
          attributionComplete: true,
          rulesComplete: true,
          changedFunctions: changedFunctionsWithLanguage
-     }));
+     }), buildFingerprints(changedFunctionsWithLanguage));
 }
 // Helper function to build output when there is a provider failure
 function buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason) {
