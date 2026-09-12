@@ -38,10 +38,10 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 ---
 
 ## Last Session — 2026-09-12
-Research + grill Q1-Q6 accepted Trust-first additive; outputs master plan (docs/Project Master Plans/checkchange-master-plan.md) + phase plan (.opencode/plans/2026-09-12T18-34-32-checkchange-trust-layer.md, approved); DOC-LOCATION decision (all docs in-repo); no source changes; execution NOT started.
+Experiment A executed: tasks 1-11 done with commits 48b8ce9, 0248b31, 18975ce, c78cc50, a318c4c, 5171853, 6ed428a, 10fac9f; baseline tsc 0 / 79 files / 297 tests / pack 40 files / determinism diff-identical; review gates GO (one FIX-LIST cleared on INV-05 false citation); audit reruns after OOM: contract PASS with legacy-0.1 flag REJECTED (src/evidence.ts:250 intentional legacy buildOutput, test/evidence.test.ts:193 asserts it), security PASS; user-agreed next (new session): schema 0.5 bump first, then D3 CI formatters, then B/C/D.
 
 ## Next Session
-Master §Next-Session Resume Checklist is canonical entry; first work = terminology reconciliation doc (phase task 1); no coding before that.
+fresh session starts at schema 0.5 bump, then D3 CI formatters sidecar; entry point master resume checklist.
 
 > Historical (pre-2026-09-12). Current truth = §Last Session above + master plan.
 

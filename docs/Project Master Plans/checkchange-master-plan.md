@@ -178,16 +178,16 @@ Baseline metrics recorded in task notes.
 |------|-------|-----------|----------|------------|
 | 2026-09-12 | Documenter | Research + grill + created trust-layer plan (approved:false) + created this master plan | None | Approve trust-layer plan; begin P0 Terminology reconciliation |
 | 2026-09-12 | Documenter | Master plan moved to `docs/Project Master Plans/`, OPENCODE_START_HERE.md rewired with Living Plans block, DOC-LOCATION-2026-09-12 decision recorded, candidate improvements plan confirmed pre-existing at `docs/Project Master Plans/CheckChange_Candidate_Improvements_Plan.md` | None | Approve trust-layer plan; begin P0 Terminology reconciliation |
+| 2026-09-12 | Documenter | Experiment A executed: tasks 1-11 done with commits 48b8ce9, 0248b31, 18975ce, c78cc50, a318c4c, 5171853, 6ed428a, 10fac9f; baseline tsc 0 / 79 files / 297 tests / pack 40 files / determinism diff-identical; review gates GO (one FIX-LIST cleared on INV-05 false citation); audit reruns after OOM: contract PASS with legacy-0.1 flag REJECTED (src/evidence.ts:250 intentional legacy buildOutput, test/evidence.test.ts:193 asserts it), security PASS; user-agreed next (new session): schema 0.5 bump first, then D3 CI formatters, then B/C/D. | None | Update §Next-Session Resume Checklist to: read bridge + master log, do 0.5 bump, then D3.
 
 ---
 
 ## Next-Session Resume Checklist
 
-- [ ] Read this master plan (`docs/Project Master Plans/checkchange-master-plan.md`)
-- [ ] Read trust-layer plan (`.opencode/plans/2026-09-12T18-34-32-checkchange-trust-layer.md`)
-- [ ] Verify `git status --porcelain` shows only plan files (no src changes)
-- [ ] Run regression baseline: `npx tsc --noEmit && npm test && npm run build && npm pack --dry-run`
-- [ ] Start **P0 Terminology** — create `docs/decisions/terminology-reconciliation.md` with binding table
+- [ ] Read bridge (`OPENCODE_START_HERE.md` §Last/Next Session) + master §Session Log
+- [ ] Verify clean tree at commit 10fac9f (`git status --porcelain` empty, `git log --oneline -1`)
+- [ ] Confirm baseline still green: `npx tsc --noEmit && npm test` (expect 0 / 297)
+- [ ] Start schema 0.5 bump (user-agreed first work), then D3 CI formatters sidecar
 - [ ] Update Session Log with new entry
 
 ---
