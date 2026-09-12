@@ -5,6 +5,9 @@ import { spawnSync } from 'node:child_process';
 import { parseCoverageReport } from '@barney-media/crap-typescript-core';
 import { parseLcovContent } from './coverage-providers/lcovProvider.js';
 
+// Provenance for the coverage lineage stage: artifact parser from the core package.
+export const coverageProvenance = { tool: '@barney-media/crap-typescript-core', version: '0.5.0' } as const;
+
 export interface CoverageResult {
   available: boolean;
   coverageMap: Map<string, any> | null;

@@ -1,5 +1,9 @@
 import { execute } from './execute.js';
 
+// Provenance for the git lineage stage. git runs via node:child_process, so the
+// node version is the driver identifier (per diagnostics-schema-design.md example).
+export const gitProvenance = { tool: 'node:child_process', version: process.version } as const;
+
 export interface GitChangeIntervals {
   intervals: Map<string, Array<{ start: number; end: number }>>;
   rawDiff: string;

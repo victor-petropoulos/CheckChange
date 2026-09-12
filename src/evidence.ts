@@ -5,8 +5,48 @@ import { readCoverage } from './coverage.js';
 import { attachCoverage } from './attribution.js';
 import { calculateCrap } from './crapCalc.js';
 import { pythonASTComplexityProvider } from './complexity-providers/pythonASTComplexityProvider.js';
+import { gitProvenance } from './git.js';
+import { complexityProvenance } from './complexity.js';
+import { coverageProvenance } from './coverage.js';
+import { attributionProvenance } from './attribution.js';
+import { crapCalcProvenance } from './crapCalc.js';
+import { rulesProvenance } from './rules.js';
+import { createHash } from 'node:crypto';
 import * as fs from 'fs';
 import * as path from 'path';
+
+// ---- Diagnostics lineage (Experiment A task 3: optional diagnostics.lineage[]) ----
+export type LineageStage =
+  | 'git' | 'complexity' | 'coverage' | 'attribution' | 'crapCalc' | 'rules' | 'evidence';
+
+export interface DiagnosticLineageEntry {
+  stage: LineageStage;
+  tool: string;
+  version: string;
+  inputs: Record<string, unknown>;
+}
+
+// Self provenance; version mirrors package.json (existing codebase style hard-codes '0.5.0').
+export const evidenceProvenance = { tool: 'checkchange', version: '0.4.0' } as const;
+
+function sha256Hex(content: string): string {
+  return createHash('sha256').update(content).digest('hex');
+}
+
+/**
+ * Attaches optional diagnostics.lineage to the output. When no lineage was
+ * collected, returns the output unchanged (byte-identical legacy behavior).
+ * Timestamps/durations/PIDs are excluded by construction — lineage carries only
+ * deterministic values (per evidence-contract.md:341 determinism guarantee).
+ */
+function withLineage<T extends Record<string, unknown>>(
+  output: T,
+  lineage: DiagnosticLineageEntry[]
+): T & { diagnostics?: { lineage: DiagnosticLineageEntry[] } } {
+  return lineage.length === 0
+    ? output
+    : { ...output, diagnostics: { lineage } };
+}
 
 export interface ProviderFactory { 
    collectComplexity: (cwd:string)=>Promise<any[]>; 
@@ -117,6 +157,19 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
     // We'll assume that the git repo is valid and the base is resolved (done by cli.ts)
     // We'll set the git capability to 'available' (if we got here, git is working)
     const gitCapability = 'available';
+    // Diagnostics lineage collection (deterministic; inputs record identity, never timing)
+    const lineage: DiagnosticLineageEntry[] = [];
+    lineage.push({
+        stage: 'git',
+        ...gitProvenance,
+        inputs: {
+            base,
+            diff: 'git diff --unified=0 <resolvedBase>',
+            fileCount: intervals.size,
+            // Input identity hash over the parsed diff intervals (node:crypto, no new deps)
+            intervalsSha256: sha256Hex(JSON.stringify(Array.from(intervals.entries())))
+        }
+    });
     // Step 1: Collect complexity
     // Extension detection: prioritize .py > .tsx > .ts > .jsx > .js/.mjs/.cjs
     let detectedExtension = '.ts';
@@ -156,6 +209,16 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
         // We'll set complexityInfo to empty and continue.
         complexityInfo = [];
     }
+    lineage.push({
+        stage: 'complexity',
+        ...complexityProvenance,
+        inputs: {
+            extension: detectedExtension,
+            functions: complexityInfo.length,
+            // Canonical vocabulary (ADR-0001): native analyzer present => NATIVE, failed => UNAVAILABLE
+            quality: complexityCapability === 'failed' ? 'UNAVAILABLE' : 'NATIVE'
+        }
+    });
     // Helper to check if intervals contain only non-supported files
     const isUnsupportedIntervals = (intervals) => {
         if (intervals.size === 0) {
@@ -170,7 +233,7 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
     };
     // If intervals indicate unsupported source (non-code files only), return UNSUPPORTED
     if (isUnsupportedIntervals(intervals)) {
-        return {
+        return withLineage({
             schemaVersion: '0.4',
             analysis: {
                 base: base,
@@ -189,7 +252,7 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
             analysisStatus: 'UNSUPPORTED',
             gate: null,
             completeness: 'NOT_APPLICABLE'
-        };
+        }, lineage);
     }
 // Step 2: Read coverage
     let coverageResult;
@@ -214,6 +277,21 @@ coverageCapability = 'failed';
 coverageErrorReason = 'malformed';
 coverageResult = { available: false, coverageMap: null, error: true, reason: 'malformed' };
 }
+    lineage.push({
+        stage: 'coverage',
+        ...coverageProvenance,
+        inputs: {
+            // Input identity: relative coverage path only (security: no absolute paths in diagnostics)
+            ...(coverageFile !== undefined && coverageFile !== '' ? {
+                coverageFile: path.isAbsolute(coverageFile) ? path.relative(cwd, coverageFile) : coverageFile
+            } : {}),
+            available: coverageResult.available,
+            error: coverageResult.error,
+            ...(coverageErrorReason !== undefined ? { reason: coverageErrorReason } : {}),
+            // Canonical vocabulary (ADR-0001): measured from artifact => DIRECT, else UNAVAILABLE
+            quality: coverageResult.error || !coverageResult.available ? 'UNAVAILABLE' : 'DIRECT'
+        }
+    });
     // Determine analysisStatus, gate, and completeness based on provider failures
     let analysisStatus = 'SUCCESS';
     let gate = null;
@@ -226,7 +304,7 @@ coverageResult = { available: false, coverageMap: null, error: true, reason: 'ma
         gate = null;
         completeness = 'NOT_APPLICABLE';
         // We'll return early with empty changedFunctions.
-        return {
+        return withLineage({
             schemaVersion: '0.4',
             analysis: {
                 base: base,
@@ -245,14 +323,14 @@ coverageResult = { available: false, coverageMap: null, error: true, reason: 'ma
             analysisStatus: analysisStatus,
             gate: gate,
             completeness: completeness
-        };
+        }, lineage);
     }
 // If coverage provider failed (malformed)
      if (coverageCapability === 'failed') {
 analysisStatus = 'FAILED';
           gate = null;
           completeness = 'INCOMPLETE';
-          return buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason);
+          return withLineage(buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason), lineage);
      }
     // Step 3: Attach coverage to complexity info
     let attributedComplexity = [];
@@ -265,8 +343,17 @@ analysisStatus = 'FAILED';
      analysisStatus = 'FAILED';
      gate = null;
 completeness = 'INCOMPLETE';
-      return buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason);
+      return withLineage(buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason), lineage);
     }
+    lineage.push({
+        stage: 'attribution',
+        ...attributionProvenance,
+        inputs: {
+            methods: attributedComplexity.length,
+            // Canonical vocabulary (ADR-0001): derived via attribution => ATTRIBUTED, else UNAVAILABLE
+            quality: coverageResult.available && !coverageResult.error ? 'ATTRIBUTED' : 'UNAVAILABLE'
+        }
+    });
     // Step 4: Compute CRAP for each attributed complexity
     const crappedComplexity = attributedComplexity.map(ac => ({
         ...ac.info,
@@ -279,6 +366,7 @@ completeness = 'INCOMPLETE';
             version: '0.5.0'
         }
     }));
+    lineage.push({ stage: 'crapCalc', ...crapCalcProvenance, inputs: { functions: crappedComplexity.length } });
     // Step 5: Build MethodEvidence array for correlation (using the ChangedFunction interface, which is the same as MethodEvidence for the fields we need)
     const methodEvidence = [];
     for (const c of crappedComplexity) {
@@ -299,6 +387,7 @@ completeness = 'INCOMPLETE';
     const changedFunctions = correlate(methodEvidence, intervals);
     // Step 7: Evaluate rule results (using the existing evaluateHighCrap from rules.js)
     const ruleResults = evaluateHighCrap(changedFunctions, threshold);
+    lineage.push({ stage: 'rules', ...rulesProvenance, inputs: { threshold, functions: changedFunctions.length } });
     // Step 8: Compute overall gate and completeness
     // Gate: any WARN -> WARN else PASS
     const gateValue = ruleResults.some((r) => r.result === "WARN") ? "WARN" : "PASS";
@@ -396,7 +485,17 @@ const detectNextFramework = (cwd, filePath) => {
           ...(fw ? { framework: fw } : {})
         };
       });
-      return {
+      lineage.push({
+        stage: 'evidence',
+        ...evidenceProvenance,
+        inputs: {
+          base,
+          threshold,
+          changedFunctions: changedFunctionsWithLanguage.length,
+          ruleResults: ruleResults.length
+        }
+      });
+      return withLineage({
           schemaVersion: '0.4',
          analysis: {
              base: base,
@@ -415,7 +514,7 @@ const detectNextFramework = (cwd, filePath) => {
          analysisStatus: analysisStatus,
          gate: gateValue,
          completeness: completenessValue
-     };
+     }, lineage);
 }
 // Helper function to build output when there is a provider failure
 function buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason) {

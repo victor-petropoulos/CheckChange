@@ -20,6 +20,9 @@ interface CoverageResult {
   error: boolean;
 }
 
+// Provenance for the attribution lineage stage: coverageForMethods/parseFileMethods from the core package.
+export const attributionProvenance = { tool: '@barney-media/crap-typescript-core', version: '0.5.0' } as const;
+
 export interface AttributedComplexity {
   info: ComplexityInfo;
   coveragePercent: number | null;

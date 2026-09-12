@@ -2,6 +2,9 @@ import { findAllTypeScriptFilesUnderSourceRoots, parseFileMethods } from '@barne
 import { relative, resolve } from 'node:path';
 import { execSync } from 'node:child_process';
 
+// Provenance for the complexity lineage stage: native analyzer from the core package.
+export const complexityProvenance = { tool: '@barney-media/crap-typescript-core', version: '0.5.0' } as const;
+
 export interface ComplexityInfo {
   file: string;
   method: string;
