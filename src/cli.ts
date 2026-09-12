@@ -2,7 +2,7 @@
 import { validateGitRepo, resolveBaseRef, getChangedIntervals, detectDefaultBase } from './git.js';
 import { buildEvidenceOutput } from './evidence.js';
 import { readCoverage } from './coverage.js';
-import { execute } from './execute.js';
+import { execute, TraceRun } from './execute.js';
 import * as path from 'node:path';
 
 // Subcommand dispatcher (check|doctor|explain|trace|delta). Legacy check path
@@ -355,25 +355,53 @@ async function runExplain(argv: string[]): Promise<void> {
 }
 
 /**
- * `trace` subcommand: minimal sidecar stub. Pipeline-stage structure only —
- * spans carry null until tracing instrumentation lands (task 7). Never
- * invents timing data.
+ * `trace` subcommand: runs the real pipeline end-to-end under an in-memory
+ * TraceRun and emits a span sidecar (stage/durationMs/status + correlation ID).
+ * Timing lives only here — the deterministic EvidenceOutput
+ * (evidence-contract.md:341) carries no timing, so `check --json` is unchanged.
  */
 async function runTrace(argv: string[]): Promise<void> {
   const json = argv.includes('--json');
-  const status = {
-    command: 'trace',
-    status: 'NOT_IMPLEMENTED',
-    stages: ['git', 'complexity', 'coverage', 'attribution', 'crapCalc', 'rules', 'evidence'].map((stage) => ({
-      stage,
-      span: null, // no timings invented; full spans arrive with task 7
-    })),
-    note: 'Span instrumentation lands in a later task; no durations measured.',
-  };
+  const rawThreshold = flagValue(argv, '--crap-threshold');
+  const threshold = rawThreshold !== undefined ? parseFloat(rawThreshold) : 30;
+  const baseArg = flagValue(argv, '--base');
+  const coverageFile = flagValue(argv, '--coverage-file');
+
+  const base = baseArg ?? (await detectDefaultBase(false));
+  if (base === null) {
+    throw new Error('Cannot auto-detect base branch. Provide --base <ref> explicitly.');
+  }
+
+  const trace = new TraceRun();
+  const { resolvedBase, intervals } = await traceGitStage(base, trace);
+  await buildEvidenceOutput(resolvedBase, intervals, process.cwd(), threshold, coverageFile, trace);
+
+  const status = { command: 'trace', correlationId: trace.correlationId, spans: trace.spans };
   if (json) {
     console.log(JSON.stringify(status, null, 2));
   } else {
-    console.log(`trace: ${status.status} — ${status.note}`);
+    console.log(`trace: ${trace.correlationId} — ${trace.spans.length} span(s)`);
+  }
+}
+
+/**
+ * Times the git pipeline stage (validate → resolve base → changed intervals)
+ * into the trace run. Same call sequence as runCheck: no duplicated logic.
+ */
+async function traceGitStage(
+  base: string,
+  trace: TraceRun
+): Promise<{ resolvedBase: string; intervals: Map<string, Array<{ start: number; end: number }>> }> {
+  const gitStart = Date.now();
+  try {
+    await validateGitRepo();
+    const resolvedBase = await resolveBaseRef(base, undefined, trace);
+    const { intervals } = await getChangedIntervals(resolvedBase, undefined, trace);
+    trace.recordStage('git', Date.now() - gitStart, 'ok');
+    return { resolvedBase, intervals };
+  } catch (error) {
+    trace.recordStage('git', Date.now() - gitStart, 'error');
+    throw error;
   }
 }
 

@@ -1,4 +1,4 @@
-import { execute } from './execute.js';
+import { execute, type TraceRun } from './execute.js';
 
 // Provenance for the git lineage stage. git runs via node:child_process, so the
 // node version is the driver identifier (per diagnostics-schema-design.md example).
@@ -14,8 +14,8 @@ export interface GitChangeIntervals {
  * @param cwd The current working directory (defaults to process.cwd())
  * @throws If not a git repository or if git executable is not found
  */
-export async function validateGitRepo(cwd: string = process.cwd()): Promise<void> {
-  const result = await execute('git', ['rev-parse', '--git-dir'], { cwd });
+export async function validateGitRepo(cwd: string = process.cwd(), trace?: TraceRun): Promise<void> {
+  const result = await execute('git', ['rev-parse', '--git-dir'], { cwd }, trace);
   if (result.errorCode === 'ENOENT') {
     throw new Error('Git executable not found');
   }
@@ -31,8 +31,8 @@ export async function validateGitRepo(cwd: string = process.cwd()): Promise<void
  * @returns The resolved commit hash
  * @throws If the base reference cannot be resolved or if git executable is not found
  */
-export async function resolveBaseRef(base: string, cwd: string = process.cwd()): Promise<string> {
-  const result = await execute('git', ['rev-parse', '--verify', `${base}^{commit}`], { cwd });
+export async function resolveBaseRef(base: string, cwd: string = process.cwd(), trace?: TraceRun): Promise<string> {
+  const result = await execute('git', ['rev-parse', '--verify', `${base}^{commit}`], { cwd }, trace);
   if (result.errorCode === 'ENOENT') {
     throw new Error('Git executable not found');
   }
@@ -139,10 +139,10 @@ export function parseChangedIntervals(diffText: string): Map<string, Array<{ sta
  * @returns An object containing the intervals map and the raw diff output
  * @throws If the git commands fail
  */
-export async function getChangedIntervals(base: string, cwd: string = process.cwd()): Promise<GitChangeIntervals> {
-  await validateGitRepo(cwd);
-  const resolvedBase = await resolveBaseRef(base, cwd);
-  const diffResult = await execute('git', ['diff', '--unified=0', resolvedBase], { cwd });
+export async function getChangedIntervals(base: string, cwd: string = process.cwd(), trace?: TraceRun): Promise<GitChangeIntervals> {
+  await validateGitRepo(cwd, trace);
+  const resolvedBase = await resolveBaseRef(base, cwd, trace);
+  const diffResult = await execute('git', ['diff', '--unified=0', resolvedBase], { cwd }, trace);
   if (diffResult.errorCode === 'ENOENT') {
     throw new Error('Git executable not found');
   }

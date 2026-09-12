@@ -5,7 +5,10 @@ import { main } from '../src/cli.js';
 // unchanged by cli.unit.spec.ts + cli.integration.spec.ts + cli.real-git.spec.ts;
 // here we cover dispatch, doctor/explain/trace/delta sidecars, and the rule that
 // sidecar commands never emit EvidenceOutput-shaped data.
-vi.mock('../src/execute.js', () => ({ execute: vi.fn() }));
+vi.mock('../src/execute.js', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../src/execute.js')>();
+  return { ...actual, execute: vi.fn() }; // real TraceRun; execute stubbed
+});
 vi.mock('../src/git.js', () => ({
   validateGitRepo: vi.fn(),
   resolveBaseRef: vi.fn(),
@@ -151,18 +154,31 @@ describe('subcommand dispatcher (plan task 6)', () => {
     expect(out.ruleResults).toHaveLength(1);
   });
 
-  test('trace --json emits NOT_IMPLEMENTED stage skeleton with null spans only', async () => {
+  test('trace --json runs the real pipeline and emits correlationId + git span (sidecar only)', async () => {
+    mockHealthyEnv();
+    (evidence.buildEvidenceOutput as ReturnType<typeof vi.fn>).mockResolvedValue({
+      analysisStatus: 'SUCCESS', gate: 'PASS', completeness: 'COMPLETE',
+      changedFunctions: [], coverageErrorReason: undefined,
+    });
     setArgv(['trace', '--json']);
     await main();
     expect(errorSpy).not.toHaveBeenCalled();
     const out = JSON.parse((logSpy.mock.calls[0] ?? ['{}'])[0] as string);
     expect(out.command).toBe('trace');
-    expect(out.status).toBe('NOT_IMPLEMENTED');
-    expect(out.stages).toHaveLength(7);
-    for (const s of out.stages) {
-      expect(s.span).toBeNull();
+    expect(out.correlationId).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
+    expect(Array.isArray(out.spans)).toBe(true);
+    const gitSpan = out.spans.find((s: { stage: string }) => s.stage === 'git');
+    expect(gitSpan).toBeDefined();
+    expect(gitSpan.status).toBe('ok');
+    expect(gitSpan.durationMs).toBeGreaterThanOrEqual(0);
+    expect(gitSpan.correlationId).toBe(out.correlationId);
+    // one correlation ID propagated into the engine call (6th arg = TraceRun)
+    const call = (evidence.buildEvidenceOutput as ReturnType<typeof vi.fn>).mock.calls[0] as unknown[];
+    expect((call[5] as { correlationId: string }).correlationId).toBe(out.correlationId);
+    // sidecar only — never EvidenceOutput-shaped data
+    for (const field of EVIDENCE_OUTPUT_FIELDS) {
+      expect(out).not.toHaveProperty(field);
     }
-    expect(out.stages[0].stage).toBe('git');
   });
 
   test('delta --json emits explicit NOT_IMPLEMENTED, never fabricated evidence', async () => {
@@ -213,9 +229,29 @@ describe('subcommand dispatcher (plan task 6)', () => {
     expect(errorSpy).toHaveBeenCalledWith('Error: Cannot auto-detect base branch. Provide --base <ref> explicitly.');
   });
 
-  test('sidecar commands never invoke the evidence engine', async () => {
+  test('trace base detection failure reports error and exits 1', async () => {
     mockHealthyEnv();
-    for (const cmd of ['doctor', 'trace', 'delta']) {
+    (git.detectDefaultBase as ReturnType<typeof vi.fn>).mockResolvedValue(null);
+    setArgv(['trace', '--json']);
+    await main();
+    expect(exitSpy).toHaveBeenCalledWith(1);
+    expect(errorSpy).toHaveBeenCalledWith('Error: Cannot auto-detect base branch. Provide --base <ref> explicitly.');
+  });
+
+  test('trace git failure propagates error and exits 1 (git span recorded, sidecar never emitted)', async () => {
+    mockHealthyEnv();
+    (git.validateGitRepo as ReturnType<typeof vi.fn>).mockRejectedValue(new Error('Not a git repository'));
+    setArgv(['trace', '--json']);
+    await main();
+    expect(exitSpy).toHaveBeenCalledWith(1);
+    expect(errorSpy).toHaveBeenCalledWith('Error: Not a git repository');
+    // pipeline halted before engine; no fabricated stage spans, no partial sidecar
+    expect(evidence.buildEvidenceOutput).not.toHaveBeenCalled();
+  });
+
+  test('doctor and delta sidecars never invoke the evidence engine', async () => {
+    mockHealthyEnv();
+    for (const cmd of ['doctor', 'delta']) {
       setArgv([cmd, '--json']);
       await main();
       expect(evidence.buildEvidenceOutput).not.toHaveBeenCalled();

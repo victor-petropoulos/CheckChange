@@ -11,6 +11,7 @@ import { coverageProvenance } from './coverage.js';
 import { attributionProvenance } from './attribution.js';
 import { crapCalcProvenance } from './crapCalc.js';
 import { rulesProvenance } from './rules.js';
+import { type TraceRun } from './execute.js';
 import { createHash } from 'node:crypto';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -264,7 +265,7 @@ export function buildOutput(base, changed, threshold = 30, capabilities = {}) {
  * @param threshold CRAP threshold for evaluating changed functions
  * @returns Promise<OutputJson>
  */
-export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, coverageFile?: string) {
+export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, coverageFile?: string, trace?: TraceRun) {
     // We'll assume that the git repo is valid and the base is resolved (done by cli.ts)
     // We'll set the git capability to 'available' (if we got here, git is working)
     const gitCapability = 'available';
@@ -304,6 +305,7 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
     else if (hasTsx) detectedExtension = '.tsx';
     else if (hasJsx) detectedExtension = '.jsx';
     else if (hasJs) detectedExtension = '.js';
+    const t0Complexity = Date.now();
     let complexityInfo = [];
     let complexityCapability = 'available';
     try {
@@ -320,6 +322,7 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
         // We'll set complexityInfo to empty and continue.
         complexityInfo = [];
     }
+    if (trace) trace.recordStage('complexity', Date.now() - t0Complexity, complexityCapability === 'failed' ? 'error' : 'ok');
     lineage.push({
         stage: 'complexity',
         ...complexityProvenance,
@@ -366,6 +369,7 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
         }, lineage, buildQuality({ complexityCapability, coverageUsable: false }));
     }
 // Step 2: Read coverage
+    const t0Coverage = Date.now();
     let coverageResult;
     let coverageCapability = 'available';
     let coverageErrorReason;
@@ -388,6 +392,7 @@ coverageCapability = 'failed';
 coverageErrorReason = 'malformed';
 coverageResult = { available: false, coverageMap: null, error: true, reason: 'malformed' };
 }
+    if (trace) trace.recordStage('coverage', Date.now() - t0Coverage, coverageResult.error ? 'error' : coverageResult.available ? 'ok' : 'skipped');
     lineage.push({
         stage: 'coverage',
         ...coverageProvenance,
@@ -444,6 +449,7 @@ completeness = 'INCOMPLETE';
            return withDiagnostics(buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason), lineage, buildQuality({ complexityCapability, coverageUsable: false }));
      }
     // Step 3: Attach coverage to complexity info
+    const t0Attribution = Date.now();
     let attributedComplexity = [];
     try {
         attributedComplexity = await attachCoverage(complexityInfo, coverageResult);
@@ -454,8 +460,10 @@ completeness = 'INCOMPLETE';
      analysisStatus = 'FAILED';
      gate = null;
 completeness = 'INCOMPLETE';
+       if (trace) trace.recordStage('attribution', Date.now() - t0Attribution, 'error');
        return withDiagnostics(buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason), lineage, buildQuality({ complexityCapability, coverageUsable: !coverageResult.error && coverageResult.available === true }));
     }
+    if (trace) trace.recordStage('attribution', Date.now() - t0Attribution, 'ok');
     lineage.push({
         stage: 'attribution',
         ...attributionProvenance,
@@ -466,6 +474,7 @@ completeness = 'INCOMPLETE';
         }
     });
     // Step 4: Compute CRAP for each attributed complexity
+    const t0CrapCalc = Date.now();
     const crappedComplexity = attributedComplexity.map(ac => ({
         ...ac.info,
         crap: calculateCrap(ac.info.cc, ac.coveragePercent),
@@ -478,6 +487,7 @@ completeness = 'INCOMPLETE';
         }
     }));
     lineage.push({ stage: 'crapCalc', ...crapCalcProvenance, inputs: { functions: crappedComplexity.length } });
+    if (trace) trace.recordStage('crapCalc', Date.now() - t0CrapCalc, 'ok');
     // Step 5: Build MethodEvidence array for correlation (using the ChangedFunction interface, which is the same as MethodEvidence for the fields we need)
     const methodEvidence = [];
     for (const c of crappedComplexity) {
@@ -497,8 +507,10 @@ completeness = 'INCOMPLETE';
     // Step 6: Correlate with git intervals
     const changedFunctions = correlate(methodEvidence, intervals);
     // Step 7: Evaluate rule results (using the existing evaluateHighCrap from rules.js)
+    const t0Rules = Date.now();
     const ruleResults = evaluateHighCrap(changedFunctions, threshold);
     lineage.push({ stage: 'rules', ...rulesProvenance, inputs: { threshold, functions: changedFunctions.length } });
+    if (trace) trace.recordStage('rules', Date.now() - t0Rules, 'ok');
     // Step 8: Compute overall gate and completeness
     // Gate: any WARN -> WARN else PASS
     const gateValue = ruleResults.some((r) => r.result === "WARN") ? "WARN" : "PASS";
@@ -587,6 +599,7 @@ const detectNextFramework = (cwd, filePath) => {
          if (filePath.endsWith('.jsx')) return 'react';
          return undefined;
        };
+      const t0Evidence = Date.now();
       const changedFunctionsWithLanguage = changedFunctions.map(fn => {
         const lang = getLanguageForFile(fn.file);
         const fw = detectNextFramework(cwd, fn.file);
@@ -606,6 +619,9 @@ const detectNextFramework = (cwd, filePath) => {
           ruleResults: ruleResults.length
         }
       });
+      // Tracing seam: stage spans recorded only into the in-memory trace run —
+      // never into the deterministic EvidenceOutput returned below.
+      if (trace) trace.recordStage('evidence', Date.now() - t0Evidence, 'ok');
       return withDiagnostics({
           schemaVersion: '0.4',
          analysis: {

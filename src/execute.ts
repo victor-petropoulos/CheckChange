@@ -1,4 +1,45 @@
 import { execFile } from 'node:child_process';
+import { randomUUID } from 'node:crypto';
+
+// ---- Tracing seam (plan task 7) ----
+export interface TraceSpan {
+  stage: string;
+  durationMs: number;
+  status: string;
+  correlationId: string;
+}
+
+export interface TraceExecSpan extends TraceSpan {
+  stage: 'exec';
+  command: string;
+  args: string[];
+  exitCode: number | null;
+}
+
+/**
+ * In-memory trace collector for one pipeline run. Holds the per-run
+ * correlation ID and every span recorded (stage spans from the evidence
+ * pipeline, exec spans from execute()). Never leaves the process — the
+ * deterministic EvidenceOutput (evidence-contract.md:341) carries no timing.
+ */
+export class TraceRun {
+  readonly correlationId: string;
+  readonly spans: Array<TraceSpan | TraceExecSpan> = [];
+
+  constructor(correlationId: string = randomUUID()) {
+    this.correlationId = correlationId;
+  }
+
+  /** Records one pipeline-stage span (git, complexity, ..., evidence). */
+  recordStage(stage: string, durationMs: number, status: string): void {
+    this.spans.push({ stage, durationMs, status, correlationId: this.correlationId });
+  }
+
+  /** Records one child-process span; wired from execute() when given a TraceRun. */
+  recordExec(command: string, args: string[], durationMs: number, exitCode: number | null): void {
+    this.spans.push({ stage: 'exec', command, args, durationMs, exitCode, status: 'ok', correlationId: this.correlationId });
+  }
+}
 
 export interface CommandResult {
   command: string;
@@ -23,7 +64,8 @@ export interface CommandResult {
 export function execute(
   command: string,
   args: string[] = [],
-  options: { cwd?: string; timeout?: number; maxBuffer?: number } = {}
+  options: { cwd?: string; timeout?: number; maxBuffer?: number } = {},
+  trace?: TraceRun
 ): Promise<CommandResult> {
   const { cwd, timeout, maxBuffer } = options;
   const start = Date.now();
@@ -74,6 +116,8 @@ export function execute(
         timedOut,
         errorCode
       });
+      // Tracing seam: record the exec span into the per-run trace (in-memory only).
+      if (trace) trace.recordExec(command, args, durationMs, exitCode);
     });
   });
 }
