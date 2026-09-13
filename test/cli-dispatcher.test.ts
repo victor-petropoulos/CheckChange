@@ -17,13 +17,15 @@ vi.mock('../src/git.js', () => ({
 }));
 vi.mock('../src/evidence.js', () => ({ buildEvidenceOutput: vi.fn() }));
 vi.mock('../src/coverage.js', () => ({ readCoverage: vi.fn() }));
+vi.mock('../src/delta.js', () => ({ compareFromFiles: vi.fn() }));
 
 import * as git from '../src/git.js';
 import * as evidence from '../src/evidence.js';
 import * as coverage from '../src/coverage.js';
 import * as executeModule from '../src/execute.js';
+import * as delta from '../src/delta.js';
 
-const EVIDENCE_OUTPUT_FIELDS = ['schemaVersion', 'analysis', 'analysisStatus', 'gate', 'completeness', 'coverageErrorReason'];
+const EVIDENCE_OUTPUT_FIELDS = ['analysis', 'analysisStatus', 'gate', 'completeness', 'coverageErrorReason'];
 
 describe('subcommand dispatcher (plan task 6)', () => {
   let savedArgv: string[];
@@ -181,13 +183,67 @@ describe('subcommand dispatcher (plan task 6)', () => {
     }
   });
 
-  test('delta --json emits explicit NOT_IMPLEMENTED, never fabricated evidence', async () => {
-    setArgv(['delta', '--json']);
+  test('delta --json emits DeltaOutput shape (not EvidenceOutput)', async () => {
+    const mockDelta = {
+      command: 'delta',
+      schemaVersion: '0.5',
+      inputs: {
+        baseline: { base: 'HEAD~1', analysisStatus: 'complete', gate: 'WARN', changedFunctions: 6 },
+        current: { base: 'HEAD', analysisStatus: 'complete', gate: 'PASS', changedFunctions: 6 },
+        thresholds: { baseline: 30, current: 40, equal: false },
+      },
+      summary: { added: 1, removed: 0, changed: 2, unchanged: 3, gateTransition: 'WARN->PASS', completenessTransition: null },
+      functions: {
+        added: [{ key: 'src/new.ts:webhook:300', current: { file: 'src/new.ts', method: 'webhook', lineStart: 300 } }],
+        removed: [],
+        changed: [{ key: 'src/app.ts:handleRefund:120', baseline: {}, current: {}, fingerprintChanged: true, deltas: { cc: 0, crap: 5, coverage: -0.5 }, ruleTransition: 'WARN->PASS' }],
+        unchanged: ['src/app.ts:handleOrder:85'],
+      },
+    };
+    (delta.compareFromFiles as ReturnType<typeof vi.fn>).mockResolvedValue(mockDelta);
+    setArgv(['delta', '--baseline', 'test/fixtures/delta-baseline-a.json', '--current', 'test/fixtures/delta-current-b.json', '--json']);
     await main();
     expect(errorSpy).not.toHaveBeenCalled();
     const out = JSON.parse((logSpy.mock.calls[0] ?? ['{}'])[0] as string);
     expect(out.command).toBe('delta');
-    expect(out.status).toBe('NOT_IMPLEMENTED');
+    expect(out.schemaVersion).toBe('0.5');
+    expect(out.summary).toEqual({ added: 1, removed: 0, changed: 2, unchanged: 3, gateTransition: 'WARN->PASS', completenessTransition: null });
+    expect(out.functions.added).toHaveLength(1);
+    expect(out.functions.changed).toHaveLength(1);
+    // no EvidenceOutput top-level fields
+    for (const field of EVIDENCE_OUTPUT_FIELDS) {
+      expect(out).not.toHaveProperty(field);
+    }
+    expect(out).not.toHaveProperty('capabilities');
+  });
+
+  test('delta --json contract: no EvidenceOutput fields at top level (inputs.*.gate allowed)', async () => {
+    (delta.compareFromFiles as ReturnType<typeof vi.fn>).mockResolvedValue({
+      command: 'delta',
+      schemaVersion: '0.5',
+      inputs: {
+        baseline: { base: 'a', analysisStatus: 'complete', gate: 'PASS', changedFunctions: 0 },
+        current: { base: 'b', analysisStatus: 'complete', gate: 'WARN', changedFunctions: 0 },
+        thresholds: { baseline: 30, current: 30, equal: true },
+      },
+      summary: { added: 0, removed: 0, changed: 0, unchanged: 0, gateTransition: 'PASS->WARN', completenessTransition: null },
+      functions: { added: [], removed: [], changed: [], unchanged: [] },
+    });
+    setArgv(['delta', '--baseline', 'a.json', '--current', 'b.json', '--json']);
+    await main();
+    const out = JSON.parse((logSpy.mock.calls[0] ?? ['{}'])[0] as string);
+    // allowed top-level keys: command, schemaVersion, inputs, summary, functions, provenance
+    const allowedTop = new Set(['command', 'schemaVersion', 'inputs', 'summary', 'functions', 'provenance']);
+    for (const key of Object.keys(out)) {
+      expect(allowedTop.has(key)).toBe(true);
+    }
+    // forbidden EvidenceOutput fields at top level
+    for (const field of EVIDENCE_OUTPUT_FIELDS) {
+      expect(out).not.toHaveProperty(field);
+    }
+    // nested inputs.*.gate is allowed (per plan:77-78)
+    expect(out.inputs.baseline.gate).toBe('PASS');
+    expect(out.inputs.current.gate).toBe('WARN');
   });
 
   test('unknown first positional is rejected (legacy single-command gate)', async () => {
@@ -249,12 +305,24 @@ describe('subcommand dispatcher (plan task 6)', () => {
     expect(evidence.buildEvidenceOutput).not.toHaveBeenCalled();
   });
 
-  test('doctor and delta sidecars never invoke the evidence engine', async () => {
+  test('doctor sidecar never invokes the evidence engine', async () => {
     mockHealthyEnv();
-    for (const cmd of ['doctor', 'delta']) {
-      setArgv([cmd, '--json']);
-      await main();
-      expect(evidence.buildEvidenceOutput).not.toHaveBeenCalled();
-    }
+    setArgv(['doctor', '--json']);
+    await main();
+    expect(evidence.buildEvidenceOutput).not.toHaveBeenCalled();
+  });
+
+  test('delta sidecar invokes compareFromFiles (not buildEvidenceOutput)', async () => {
+    (delta.compareFromFiles as ReturnType<typeof vi.fn>).mockResolvedValue({
+      command: 'delta',
+      schemaVersion: '0.5',
+      inputs: { baseline: { base: 'a', analysisStatus: 'complete', gate: null, changedFunctions: 0 }, current: { base: 'b', analysisStatus: 'complete', gate: null, changedFunctions: 0 }, thresholds: { baseline: 30, current: 30, equal: true } },
+      summary: { added: 0, removed: 0, changed: 0, unchanged: 0, gateTransition: null, completenessTransition: null },
+      functions: { added: [], removed: [], changed: [], unchanged: [] },
+    });
+    setArgv(['delta', '--baseline', 'a.json', '--current', 'b.json', '--json']);
+    await main();
+    expect(delta.compareFromFiles).toHaveBeenCalled();
+    expect(evidence.buildEvidenceOutput).not.toHaveBeenCalled();
   });
 });

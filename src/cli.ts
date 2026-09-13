@@ -4,6 +4,7 @@ import { buildEvidenceOutput } from './evidence.js';
 import { readCoverage } from './coverage.js';
 import { execute, TraceRun } from './execute.js';
 import { FORMATS, format, type EvidenceOutputShape as FormatterOutputShape, type FormatType } from './formatters/index.js';
+import { compareFromFiles } from './delta.js';
 import * as path from 'node:path';
 
 // Subcommand dispatcher (check|doctor|explain|trace|delta). Legacy check path
@@ -440,20 +441,46 @@ async function traceGitStage(
 }
 
 /**
- * `delta` subcommand: minimal sidecar stub. Delta engine is a later phase;
- * emits an explicit NOT-IMPLEMENTED status and never fabricated evidence.
+ * `delta` subcommand: compares two EvidenceOutput runs (file-pair mode) via
+ * compareFromFiles. Emits the DeltaOutput sidecar only — never
+ * EvidenceOutput-shaped data; gate semantics frozen (Q6, mem:44649).
  */
 async function runDelta(argv: string[]): Promise<void> {
-  const json = argv.includes('--json');
-  const status = {
-    command: 'delta',
-    status: 'NOT_IMPLEMENTED',
-    note: 'Delta engine is a later phase; this stub never emits fabricated evidence.',
-  };
+  let json = false;
+  let baseline: string | undefined;
+  let current: string | undefined;
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i]!;
+    if (arg === '--json') {
+      json = true;
+    }
+    else if (arg === '--baseline' || arg === '--current') {
+      const value = argv[i + 1];
+      if (value === undefined || value.startsWith('-')) {
+        throw new Error(`${arg} requires a value`);
+      }
+      i++;
+      if (arg === '--baseline') baseline = value;
+      else current = value;
+    }
+    else {
+      throw new Error(`Unknown option ${arg}`);
+    }
+  }
+  if (baseline === undefined) {
+    throw new Error('--baseline <path> is required');
+  }
+  if (current === undefined) {
+    throw new Error('--current <path> is required');
+  }
+  const delta = await compareFromFiles(baseline, current);
   if (json) {
-    console.log(JSON.stringify(status, null, 2));
-  } else {
-    console.log(`delta: ${status.status} — ${status.note}`);
+    console.log(JSON.stringify(delta, null, 2));
+  }
+  else {
+    const s = delta.summary;
+    console.log(`delta: added ${s.added}, removed ${s.removed}, changed ${s.changed}, unchanged ${s.unchanged}`);
+    console.log(`gate: ${s.gateTransition ?? 'unchanged'}`);
   }
 }
 

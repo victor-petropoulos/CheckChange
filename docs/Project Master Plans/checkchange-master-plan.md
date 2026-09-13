@@ -164,7 +164,7 @@ Baseline metrics recorded in task notes.
 | **P5: CLI Dispatcher** | Replace hand-rolled parser with subcommand dispatcher (`check|doctor|explain|trace|delta`); remove `@ts-nocheck`; sidecar outputs | P0 | ☐ Pending |
 | **P6: Tracing Seam** | Wrap `execute()` at `src/execute.ts:18`; correlation ID propagation; `diagnostics.trace[]` sidecar | P5 | ☐ Pending |
 | **P7: D1 Doctor/Explain** | `doctor` probes git/python/coverage tools; `explain <ruleId>` prints derivation; both emit diagnostics sidecar | P1, P5 | ☐ Pending |
-| **P8: D2 Baseline/Delta** | `delta` subcommand compares two EvidenceOutput runs; evidence diff (not score); requires lineage | P2, P4 | ☐ Pending |
+| **P8: D2 Baseline/Delta** | `delta` subcommand compares two EvidenceOutput runs; evidence diff (not score); requires lineage | P2, P4 | ☑ Done (2026-09-13, D2 shipped: src/delta.ts + runDelta wiring + 341 tests green, gate tsc/test/build/pack all 0) |
 | **P9: D3 CI/PR Formatters** | `--format github|junit|sarif` sidecar formatters over JSON; GitHub annotations, PR comments | — (anytime) | ☐ Pending |
 | **P10: C Incremental/Caching** | Disk cache keyed by fingerprints; invalidation on cwd/base/threshold/engine commit/coverage mtime | P2, P4, P6 | ☐ Pending |
 
@@ -180,6 +180,7 @@ Baseline metrics recorded in task notes.
 | 2026-09-12 | Documenter | Master plan moved to `docs/Project Master Plans/`, OPENCODE_START_HERE.md rewired with Living Plans block, DOC-LOCATION-2026-09-12 decision recorded, candidate improvements plan confirmed pre-existing at `docs/Project Master Plans/CheckChange_Candidate_Improvements_Plan.md` | None | Approve trust-layer plan; begin P0 Terminology reconciliation |
 | 2026-09-12 | Documenter | Experiment A executed: tasks 1-11 done with commits 48b8ce9, 0248b31, 18975ce, c78cc50, a318c4c, 5171853, 6ed428a, 10fac9f; baseline tsc 0 / 79 files / 297 tests / pack 40 files / determinism diff-identical; review gates GO (one FIX-LIST cleared on INV-05 false citation); audit reruns after OOM: contract PASS with legacy-0.1 flag REJECTED (src/evidence.ts:250 intentional legacy buildOutput, test/evidence.test.ts:193 asserts it), security PASS; user-agreed next (new session): schema 0.5 bump first, then D3 CI formatters, then B/C/D. | None | Update §Next-Session Resume Checklist to: read bridge + master log, do 0.5 bump, then D3.
 | 2026-09-12 | Orchestrator | D3 shipped (c634d57, 83/328 green, Engram rev-1789264830260-3); D2 recon+plan done (5 tasks, approved:false, mem:44649 Q6) — no implementation | None | Approve D2 plan; implement per plan |
+| 2026-09-13 | Orchestrator | D2 shipped (src/delta.ts new, src/cli.ts runDelta, test/delta.spec.ts 13 tests + dispatcher 3 new, 84 files/341 tests green, tsc/build/pack 0, Engram rev-1789271072469-3 PASS non-blocking, security PASS; known non-blocking: ruleKey colon-split src/delta.ts:137 + file:method overload collision :89 — fix before 2nd rule) — no engine/schema/gate changes | None | Commit D2; then C caching |
 
 ---
 
