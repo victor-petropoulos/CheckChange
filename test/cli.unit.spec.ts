@@ -58,6 +58,39 @@ describe('parseCliArgs', () => {
     expect(exitSpy).not.toHaveBeenCalled();
   });
 
+  test('valid --format github flag', () => {
+    setArgv(['--base', 'HEAD', '--format', 'github', 'check']);
+    const result = parseCliArgs();
+    expect(result.format).toBe('github');
+    expect(exitSpy).not.toHaveBeenCalled();
+  });
+
+  test('valid --format junit equals syntax', () => {
+    setArgv(['--base', 'HEAD', '--format=junit', 'check']);
+    const result = parseCliArgs();
+    expect(result.format).toBe('junit');
+    expect(exitSpy).not.toHaveBeenCalled();
+  });
+
+  test('valid --format sarif flag', () => {
+    setArgv(['--base', 'HEAD', '--format', 'sarif', 'check']);
+    const result = parseCliArgs();
+    expect(result.format).toBe('sarif');
+    expect(exitSpy).not.toHaveBeenCalled();
+  });
+
+  test('invalid --format value exits with error', () => {
+    setArgv(['--base', 'HEAD', '--format', 'bogus', 'check']);
+    parseCliArgs();
+    expectExit(1);
+  });
+
+  test('missing value for --format exits with error', () => {
+    setArgv(['--base', 'HEAD', '--format', 'check']);
+    parseCliArgs();
+    expectExit(1);
+  });
+
   test('unknown flag exits with error', () => {
     setArgv(['--unknown', 'check']);
     parseCliArgs();

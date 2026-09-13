@@ -183,6 +183,7 @@ check --base <ref> [--json] [--crap-threshold <T>] [--coverage-file <path>]
 - **Exit 1**: When `analysisStatus` is `FAILED` (provider failure) or `gate` is `WARN` or `FAIL` (based on rule results), or when Git command fails.
 - **JSON Output**: When `--json` flag is present, the full evidence object is output as JSON; otherwise, a human-readable summary is printed.
 - **JSON Truthfulness**: All fields in the JSON output reflect the actual state computed by the evidence engine; no fields are omitted or defaulted when unavailable.
+- **`--format github|junit|sarif`**: Sidecar-only output. Reads the built EvidenceOutput without modifying it — `gate`, `completeness`, and `schemaVersion` are byte-identical between `--json` and `--json --format <name>` runs. Relative paths (e.g. `src/a.ts`) are emitted verbatim, never resolved to absolute. Unknown `--format` value exits 1 with `Error: Unknown --format value: <value>`. Additive; no schema bump.
 
 ### Provenance Pipeline
 

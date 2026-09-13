@@ -3,6 +3,7 @@ import { validateGitRepo, resolveBaseRef, getChangedIntervals, detectDefaultBase
 import { buildEvidenceOutput } from './evidence.js';
 import { readCoverage } from './coverage.js';
 import { execute, TraceRun } from './execute.js';
+import { FORMATS, format, type EvidenceOutputShape as FormatterOutputShape, type FormatType } from './formatters/index.js';
 import * as path from 'node:path';
 
 // Subcommand dispatcher (check|doctor|explain|trace|delta). Legacy check path
@@ -19,6 +20,7 @@ export interface CheckArgs {
   json: boolean;
   crapThreshold: number;
   coverageFile: string | undefined;
+  format?: FormatType;
   verbose: boolean;
 }
 
@@ -33,6 +35,7 @@ export function parseCliArgs(argv: string[] = process.argv.slice(2)): CheckArgs 
   let verbose = false;
   let crapThreshold = 30; // default
   let coverageFile: string | undefined; // optional --coverage-file <path>
+  let format: FormatType | undefined; // optional --format github|junit|sarif
   const positionals: string[] = [];
   let i = 0;
   while (i < argv.length) {
@@ -92,6 +95,29 @@ export function parseCliArgs(argv: string[] = process.argv.slice(2)): CheckArgs 
       }
       coverageFile = value;
     }
+    else if (arg.startsWith('--format')) {
+      let value: string;
+      const parts = arg.split('=');
+      if (parts.length > 1) {
+        value = parts[1]!;
+      }
+      else {
+        if (i + 1 >= argv.length) {
+          console.error('Error: --format requires a value');
+          process.exit(1);
+        }
+        value = argv[++i]!;
+      }
+      if (value === '') {
+        console.error('Error: --format requires a value');
+        process.exit(1);
+      }
+      if (!(FORMATS as readonly string[]).includes(value)) {
+        console.error(`Error: Unknown --format value: ${value}`);
+        process.exit(1);
+      }
+      format = value as FormatType;
+    }
     else if (arg.startsWith('-')) {
       console.error(`Error: Unknown option ${arg}`);
       process.exit(1);
@@ -102,12 +128,13 @@ export function parseCliArgs(argv: string[] = process.argv.slice(2)): CheckArgs 
     i++;
   }
   if (help) {
-    console.log('Usage: checkchange check [--base <ref>] [--json] [--crap-threshold <number>] [--coverage-file <path>] [--verbose]');
+    console.log('Usage: checkchange check [--base <ref>] [--json] [--crap-threshold <number>] [--coverage-file <path>] [--format github|junit|sarif] [--verbose]');
     console.log('Options:');
     console.log('  --base <ref>             Git base reference to compare against (optional, default: auto-detect)');
     console.log('  --json                   Output JSON (default: false)');
     console.log('  --crap-threshold <number> CRAP threshold for WARN (default: 30)');
     console.log('  --coverage-file <path>   Istanbul coverage JSON file path');
+    console.log('  --format <name>          Output format: github, junit, sarif (default: none)');
     console.log('  --verbose                Print diagnostic info to stderr');
     process.exit(0);
   }
@@ -117,7 +144,7 @@ export function parseCliArgs(argv: string[] = process.argv.slice(2)): CheckArgs 
     console.error('Error: Command must be "check"');
     process.exit(1);
   }
-  return { base, json, crapThreshold, coverageFile, verbose };
+  return { base, json, crapThreshold, coverageFile, verbose, ...(format === undefined ? {} : { format }) };
 }
 
 // Shape of buildEvidenceOutput as consumed by the CLI. EvidenceOutput has no
@@ -160,6 +187,13 @@ async function runCheck(args: string[]): Promise<void> {
   const output = (await buildEvidenceOutput(resolvedBase, intervals, process.cwd(), opts.crapThreshold, opts.coverageFile)) as EvidenceOutputShape;
   if (opts.verbose) {
     console.error(`[verbose] analysisStatus=${output.analysisStatus} gate=${output.gate} completeness=${output.completeness} changedFunctions=${output.changedFunctions.length}`);
+  }
+  // Formatter sidecar: emitted as a separate console.log when --format present.
+  // Cast: cli's EvidenceOutputShape (this file), a stable subset, is structurally
+  // assignable to the formatter's clone modulo narrower field types — aliased
+  // above to keep the runtime shape unchanged (no field invented).
+  if (opts.format) {
+    console.log(format(output as unknown as FormatterOutputShape, opts.format, { cwd: process.cwd() }));
   }
   // Output JSON if --json flag is set
   if (opts.json) {
