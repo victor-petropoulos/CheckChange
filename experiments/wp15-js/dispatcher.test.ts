@@ -13,7 +13,7 @@ describe('dispatcher js', () => {
     // at least language field should be javascript if function detected, or empty if not
     if(out.changedFunctions.length>0){
       expect(out.changedFunctions[0].language).toBe('javascript');
-      expect(out.schemaVersion).toBe('0.4');
+      expect(out.schemaVersion).toBe('0.5');
     } else {
       // still verify unsupported not triggered for .js
       expect(out.analysisStatus).not.toBe('UNSUPPORTED');

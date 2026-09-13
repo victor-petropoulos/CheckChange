@@ -15,7 +15,7 @@ describe('Next dispatcher', () => {
     const intervals = new Map([['src/a.ts',[{start:1,end:3}]]]);
     const out = await buildEvidenceOutput('HEAD', intervals, dir, 30);
     expect(['next'].includes(out.changedFunctions[0]?.framework)).toBe(true);
-    expect(out.schemaVersion).toBe('0.4');
+    expect(out.schemaVersion).toBe('0.5');
     fs.rmSync(dir,{recursive:true,force:true});
   });
   test('next.config.js only emits next', async () => {

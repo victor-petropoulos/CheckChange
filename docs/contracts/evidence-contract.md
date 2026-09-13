@@ -1,8 +1,8 @@
 # Evidence Contract
 
-## Version: 0.4.0
-## Date: 2026-09-02
-## Status: FROZEN (WP15 JS+React schema 0.4, additive language javascript + framework react)
+## Version: 0.5.0
+## Date: 2026-09-12
+## Status: FROZEN (WP15 JS+React schema 0.5, additive language javascript + framework react + optional diagnostics)
 
 ### Migration 0.2→0.3
 
@@ -16,6 +16,13 @@
 - Added optional `framework?: string` field (values: `"react" | "next"`).
 - Both additive; consumers ignoring unknown values remain compatible.
 - Schema version bump 0.3→0.4 reflects proven JS gap
+
+### Migration 0.4→0.5
+
+- Added optional top-level `diagnostics` object `{ lineage?, quality?, fingerprints? }` — design in `docs/decisions/diagnostics-schema-design.md`.
+- Additive; consumers ignoring unknown fields remain compatible (forward compatibility).
+- `schemaVersion` emitters (`buildEvidenceOutput`, `buildFailedOutput`) now emit `'0.5'`; legacy `buildOutput` retains `'0.1'`.
+- Determinism guarantee (INV-01) unchanged: timing-dependent fields excluded from main output (sidecar outputs only).
 
 ### Hardening B Addendum (2026-09-02)
 

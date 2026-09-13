@@ -348,7 +348,7 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
     // If intervals indicate unsupported source (non-code files only), return UNSUPPORTED
     if (isUnsupportedIntervals(intervals)) {
         return withDiagnostics({
-            schemaVersion: '0.4',
+            schemaVersion: '0.5',
             analysis: {
                 base: base,
                 target: 'current'
@@ -421,7 +421,7 @@ coverageResult = { available: false, coverageMap: null, error: true, reason: 'ma
         completeness = 'NOT_APPLICABLE';
         // We'll return early with empty changedFunctions.
         return withDiagnostics({
-            schemaVersion: '0.4',
+            schemaVersion: '0.5',
             analysis: {
                 base: base,
                 target: 'current'
@@ -623,7 +623,7 @@ const detectNextFramework = (cwd, filePath) => {
       // never into the deterministic EvidenceOutput returned below.
       if (trace) trace.recordStage('evidence', Date.now() - t0Evidence, 'ok');
       return withDiagnostics({
-          schemaVersion: '0.4',
+          schemaVersion: '0.5',
          analysis: {
              base: base,
              target: 'current'
@@ -652,7 +652,7 @@ const detectNextFramework = (cwd, filePath) => {
 // Helper function to build output when there is a provider failure
 function buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason) {
      return {
-         schemaVersion: '0.4',
+         schemaVersion: '0.5',
          analysis: {
              base: base,
              target: 'current'
