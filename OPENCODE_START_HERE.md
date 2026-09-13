@@ -53,9 +53,11 @@ Hardening B plans .opencode/plans/2026-09-02T182626Z-hardening-b-python-js-next.
 WP14 APPROVED 2026-09-08 CONTINUE. WP15 solo packet ACCEPTED 2026-09-08 CONTINUE. WP16 assessment CONTINUE WITH CONSTRAINTS 2026-09-08.
 
 Current work 2026-09-12: schema 0.5 bump planned (.opencode/plans/2026-09-12T23-12-40Z-schema-05-bump.md, approved:true), Experiment A tasks 1-11 CLOSED at 8185c30, baseline tsc 0 / 79 files / 297 tests verified this session.
+
+D2 prepared 2026-09-12: commits 082ed63 (schema 0.5) + c634d57 (D3 formatters) landed; D2 baseline/delta plan ready at .opencode/plans/20260913T031207-d2-baseline-delta.md (approved:false, 5 tasks); baseline tsc 0 / 83 files / 328 tests; tree clean at c634d57 except untracked D2 plan.
 ## Next Step
 **NEXT: WP16 hardening under constraints (perf/security/packaging) OR WP17 product decision prep — no new language without gating criteria met.**
-Immediate next: user approval of 0.5 bump plan → implement bump → D3 CI formatters sidecar → B/C/D
+Immediate next (new session): user approval of D2 plan → implement src/delta.ts → wire runDelta → tests → regression; then C caching
 
 ```
 CONTINUE — WP14 approved, WP15 accepted 2026-09-08; Angular deferred

@@ -179,15 +179,16 @@ Baseline metrics recorded in task notes.
 | 2026-09-12 | Documenter | Research + grill + created trust-layer plan (approved:false) + created this master plan | None | Approve trust-layer plan; begin P0 Terminology reconciliation |
 | 2026-09-12 | Documenter | Master plan moved to `docs/Project Master Plans/`, OPENCODE_START_HERE.md rewired with Living Plans block, DOC-LOCATION-2026-09-12 decision recorded, candidate improvements plan confirmed pre-existing at `docs/Project Master Plans/CheckChange_Candidate_Improvements_Plan.md` | None | Approve trust-layer plan; begin P0 Terminology reconciliation |
 | 2026-09-12 | Documenter | Experiment A executed: tasks 1-11 done with commits 48b8ce9, 0248b31, 18975ce, c78cc50, a318c4c, 5171853, 6ed428a, 10fac9f; baseline tsc 0 / 79 files / 297 tests / pack 40 files / determinism diff-identical; review gates GO (one FIX-LIST cleared on INV-05 false citation); audit reruns after OOM: contract PASS with legacy-0.1 flag REJECTED (src/evidence.ts:250 intentional legacy buildOutput, test/evidence.test.ts:193 asserts it), security PASS; user-agreed next (new session): schema 0.5 bump first, then D3 CI formatters, then B/C/D. | None | Update §Next-Session Resume Checklist to: read bridge + master log, do 0.5 bump, then D3.
+| 2026-09-12 | Orchestrator | D3 shipped (c634d57, 83/328 green, Engram rev-1789264830260-3); D2 recon+plan done (5 tasks, approved:false, mem:44649 Q6) — no implementation | None | Approve D2 plan; implement per plan |
 
 ---
 
 ## Next-Session Resume Checklist
 
 - [ ] Read bridge (`OPENCODE_START_HERE.md` §Last/Next Session) + master §Session Log
-- [ ] Verify clean tree at commit 10fac9f (`git status --porcelain` empty, `git log --oneline -1`)
-- [ ] Confirm baseline still green: `npx tsc --noEmit && npm test` (expect 0 / 297)
-- [ ] Start schema 0.5 bump (user-agreed first work), then D3 CI formatters sidecar
+- [ ] Verify clean tree at commit c634d57 (`git status --porcelain` empty, `git log --oneline -1`)
+- [ ] Confirm baseline still green: `npx tsc --noEmit && npm test` (expect 0 / 328)
+- [ ] D2 plan at `.opencode/plans/20260913T031207-d2-baseline-delta.md` (approved:false) — implement src/delta.ts → wire runDelta → tests → regression gate
 - [ ] Update Session Log with new entry
 
 ---
