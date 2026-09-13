@@ -19,7 +19,7 @@ export interface CoverageResult {
 }
 
 const MAX_COVERAGE_SIZE = 100 * 1024 * 1024; // 100MB
-const PYTHON_COVERAGE_FILES = ['.coverage', 'coverage.xml', 'coverage.json', 'coverage/coverage-final.json'] as const;
+export const PYTHON_COVERAGE_FILES = ['.coverage', 'coverage.xml', 'coverage.json', 'coverage/coverage-final.json'] as const;
 
 /**
  * Check if a file path is within the given cwd (prevents path traversal).

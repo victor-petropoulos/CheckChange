@@ -13,7 +13,7 @@ export interface ComplexityInfo {
   cc: number;
 }
 
-function getGitTrackedCodeFiles(cwd: string): string[] {
+export function getGitTrackedCodeFiles(cwd: string): string[] {
   try {
     // Get list of tracked files, one per line
     const output = execSync('git ls-files --cached --others --exclude-standard', { cwd, encoding: 'utf8' });
