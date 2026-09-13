@@ -13,6 +13,8 @@ import { crapCalcProvenance } from './crapCalc.js';
 import { rulesProvenance } from './rules.js';
 import { type TraceRun } from './execute.js';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -32,6 +34,38 @@ export const evidenceProvenance = { tool: 'checkchange', version: '0.4.0' } as c
 
 function sha256Hex(content: string): string {
   return createHash('sha256').update(content).digest('hex');
+}
+
+// Engine identity for the evidence lineage stage: HEAD commit of the repo this
+// code runs FROM (walk up from this module to its own .git — NOT cwd, which is
+// the analyzed target repo). Deterministic; never throws.
+function engineIdentity(): string {
+  const fallback = (): string => {
+    try {
+      // moduleDir is src/ or dist/; own package.json sits one level up
+      const moduleDir = path.dirname(fileURLToPath(import.meta.url));
+      const pkg = JSON.parse(fs.readFileSync(path.join(moduleDir, '..', 'package.json'), 'utf8'));
+      return `${pkg.version}/${process.version}`;
+    } catch {
+      return `${evidenceProvenance.version}/${process.version}`;
+    }
+  };
+  try {
+    let dir = path.dirname(fileURLToPath(import.meta.url));
+    for (;;) {
+      if (fs.existsSync(path.join(dir, '.git'))) {
+        const sha = execFileSync('git', ['rev-parse', 'HEAD'], {
+          cwd: dir, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore']
+        }).trim();
+        return sha || fallback();
+      }
+      const parent = path.dirname(dir);
+      if (parent === dir) return fallback();
+      dir = parent;
+    }
+  } catch {
+    return fallback();
+  }
 }
 
 // ---- Diagnostics quality (Experiment A task 4: optional diagnostics.quality) ----
@@ -404,6 +438,9 @@ coverageResult = { available: false, coverageMap: null, error: true, reason: 'ma
             available: coverageResult.available,
             error: coverageResult.error,
             ...(coverageErrorReason !== undefined ? { reason: coverageErrorReason } : {}),
+            // Input identity: sha256 of artifact bytes when read succeeded; sentinel otherwise
+            coverageHash: coverageResult.contentSha256
+                ?? (coverageResult.error ? `malformed:${coverageErrorReason ?? 'malformed'}` : 'absent'),
             // Canonical vocabulary (ADR-0001): measured from artifact => DIRECT, else UNAVAILABLE
             quality: coverageResult.error || !coverageResult.available ? 'UNAVAILABLE' : 'DIRECT'
         }
@@ -616,7 +653,9 @@ const detectNextFramework = (cwd, filePath) => {
           base,
           threshold,
           changedFunctions: changedFunctionsWithLanguage.length,
-          ruleResults: ruleResults.length
+          ruleResults: ruleResults.length,
+          // Engine identity: HEAD commit of the repo running the analysis (cache key input)
+          engine: engineIdentity()
         }
       });
       // Tracing seam: stage spans recorded only into the in-memory trace run —

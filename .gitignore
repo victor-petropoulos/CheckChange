@@ -26,6 +26,7 @@ npm-debug.log*
 
 .engram/
 .worktrees/
+.checkchange/
 **/__pycache__/
 experiments/wp13/fixtures/**/coverage.json
 computeCC.cjs

@@ -1,10 +1,18 @@
 #!/usr/bin/env node
 import { validateGitRepo, resolveBaseRef, getChangedIntervals, detectDefaultBase } from './git.js';
-import { buildEvidenceOutput } from './evidence.js';
-import { readCoverage } from './coverage.js';
+import { buildEvidenceOutput, registerProvider } from './evidence.js';
+import { readCoverage, coverageProvenance, type CoverageResult } from './coverage.js';
+import { complexityProvenance } from './complexity.js';
+import { getOrCompute, type CacheKeyInput } from './cache.js';
 import { execute, TraceRun } from './execute.js';
 import { FORMATS, format, type EvidenceOutputShape as FormatterOutputShape, type FormatType } from './formatters/index.js';
 import { compareFromFiles } from './delta.js';
+import { findAllTypeScriptFilesUnderSourceRoots, parseFileMethods } from '@barney-media/crap-typescript-core';
+import { pythonASTComplexityProvider } from './complexity-providers/pythonASTComplexityProvider.js';
+import { createHash } from 'node:crypto';
+import { access, constants as fsConstants, readFile as fsReadFile } from 'node:fs/promises';
+import { execSync } from 'node:child_process';
+import { relative } from 'node:path';
 import * as path from 'node:path';
 
 // Subcommand dispatcher (check|doctor|explain|trace|delta). Legacy check path
@@ -19,6 +27,7 @@ const SUPPORTED_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cj
 export interface CheckArgs {
   base: string | null;
   json: boolean;
+  cache?: boolean;
   crapThreshold: number;
   coverageFile: string | undefined;
   format?: FormatType;
@@ -32,6 +41,7 @@ export interface CheckArgs {
 export function parseCliArgs(argv: string[] = process.argv.slice(2)): CheckArgs {
   let base: string | null = null;
   let json = false;
+  let cache = false;
   let help = false;
   let verbose = false;
   let crapThreshold = 30; // default
@@ -41,7 +51,10 @@ export function parseCliArgs(argv: string[] = process.argv.slice(2)): CheckArgs 
   let i = 0;
   while (i < argv.length) {
     const arg = argv[i]!;
-    if (arg === '--base') {
+    if (arg === '--cache') {
+      cache = true;
+    }
+    else if (arg === '--base') {
       if (i + 1 >= argv.length) {
         console.error('Error: --base requires a value');
         process.exit(1);
@@ -129,10 +142,11 @@ export function parseCliArgs(argv: string[] = process.argv.slice(2)): CheckArgs 
     i++;
   }
   if (help) {
-    console.log('Usage: checkchange check [--base <ref>] [--json] [--crap-threshold <number>] [--coverage-file <path>] [--format github|junit|sarif] [--verbose]');
+    console.log('Usage: checkchange check [--base <ref>] [--json] [--cache] [--crap-threshold <number>] [--coverage-file <path>] [--format github|junit|sarif] [--verbose]');
     console.log('Options:');
     console.log('  --base <ref>             Git base reference to compare against (optional, default: auto-detect)');
     console.log('  --json                   Output JSON (default: false)');
+    console.log('  --cache                  Enable incremental caching (default: off; also CHECKCHANGE_CACHE=1 env)');
     console.log('  --crap-threshold <number> CRAP threshold for WARN (default: 30)');
     console.log('  --coverage-file <path>   Istanbul coverage JSON file path');
     console.log('  --format <name>          Output format: github, junit, sarif (default: none)');
@@ -145,7 +159,7 @@ export function parseCliArgs(argv: string[] = process.argv.slice(2)): CheckArgs 
     console.error('Error: Command must be "check"');
     process.exit(1);
   }
-  return { base, json, crapThreshold, coverageFile, verbose, ...(format === undefined ? {} : { format }) };
+  return { base, json, crapThreshold, coverageFile, verbose, ...(cache ? { cache: true } : {}), ...(format === undefined ? {} : { format }) };
 }
 
 // Shape of buildEvidenceOutput as consumed by the CLI. EvidenceOutput has no
@@ -184,6 +198,11 @@ async function runCheck(args: string[]): Promise<void> {
   const resolvedBase = await resolveBaseRef(base);
   // Get changed intervals
   const { intervals } = await getChangedIntervals(resolvedBase);
+  // Incremental caching opt-in (Experiment C, task C-4): --cache flag or
+  // CHECKCHANGE_CACHE=1. Default OFF => evidence.ts provider defaults untouched.
+  if (opts.cache === true || process.env.CHECKCHANGE_CACHE === '1') {
+    enableCacheProviders();
+  }
   // Build evidence output using composed providers
   const output = (await buildEvidenceOutput(resolvedBase, intervals, process.cwd(), opts.crapThreshold, opts.coverageFile)) as EvidenceOutputShape;
   if (opts.verbose) {
@@ -225,6 +244,142 @@ async function runCheck(args: string[]): Promise<void> {
     }
   }
   process.exit(exitCode);
+}
+
+// ---- incremental caching (Experiment C, task C-4) ----
+// Per-file complexity + per-artifact coverage wrapper registration.
+// Re-registers providers for JS/TS extensions (per-file cached via parseFileMethods)
+// and .py (coverage only — Python complexity provider has no per-file parser exposed).
+// Caching enabled via --cache or CHECKCHANGE_CACHE=1; default OFF leaves the
+// evidence.ts provider defaults untouched (zero new files written at rest).
+
+/** Pony-tail replica of complexity.ts:16-34 — git-tracked code files enumeration. */
+function getGitTrackedCodeFiles(cwd: string): string[] {
+  try {
+    const output = execSync('git ls-files --cached --others --exclude-standard', { cwd, encoding: 'utf8' });
+    const lines = output.trim().split('\n');
+    const codeFiles: string[] = [];
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (/\.(ts|tsx|js|jsx|mjs|cjs)$/.test(trimmed)) {
+        codeFiles.push(path.resolve(cwd, trimmed));
+      }
+    }
+    return codeFiles;
+  } catch {
+    return [];
+  }
+}
+
+interface CachedCoverageValue {
+  available: boolean;
+  coverageEntries: [string, any][] | null;
+  error: boolean;
+  reason?: string;
+  contentSha256?: string;
+}
+
+const COVERAGE_CANDIDATES = ['.coverage', 'coverage.xml', 'coverage.json', 'coverage/coverage-final.json'];
+
+async function cachedTsCollectComplexity(cwd: string): Promise<any[]> {
+  const sourceRoots = await findAllTypeScriptFilesUnderSourceRoots(cwd);
+  const gitTracked = getGitTrackedCodeFiles(cwd);
+  const fileSet = new Set([...sourceRoots, ...gitTracked]);
+  const results: any[] = [];
+  for (const filePath of fileSet) {
+    try {
+      const content = await fsReadFile(filePath, 'utf8');
+      const key: CacheKeyInput = { kind: 'file', fileContent: content, providerVersion: complexityProvenance.version };
+      const lookup = await getOrCompute(cwd, key, async () => {
+        const methods = await parseFileMethods(filePath);
+        return methods.map((d: any) => ({
+          file: relative(cwd, filePath).replace(/\\/g, '/'),
+          method: d.containerName ? `${d.containerName}.${d.functionName}` : d.functionName,
+          lineStart: d.startLine,
+          lineEnd: d.endLine,
+          cc: d.complexity,
+        }));
+      });
+      results.push(...lookup.value);
+    } catch (err) {
+      console.error(`Warning: failed to parse ${filePath}, skipping: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  }
+  return results;
+}
+
+async function cachedReadCoverage(cwd: string, coverageFile?: string): Promise<CoverageResult> {
+  // Explicit file path
+  if (coverageFile !== undefined && coverageFile !== null && coverageFile !== '') {
+    const coveragePath = path.isAbsolute(coverageFile) ? coverageFile : path.resolve(cwd, coverageFile);
+    // ponytail: mirror coverage.ts readCoverageFile explicit-missing shape — access pre-check
+    // before read so an absent explicit file degrades gracefully instead of throwing.
+    try {
+      await access(coveragePath, fsConstants.R_OK);
+    } catch {
+      return { available: true, coverageMap: null, error: true, reason: 'missing' };
+    }
+    return cachedReadCoveragePath(coveragePath, cwd);
+  }
+  // Auto-detect same precedence as coverage.ts readCoverage
+  for (const candidate of COVERAGE_CANDIDATES) {
+    const filePath = path.join(cwd, candidate);
+    try {
+      await access(filePath, fsConstants.R_OK);
+      const result = await cachedReadCoveragePath(filePath, cwd);
+      if (!result.error) return result;
+      console.warn(`Coverage conversion failed for ${filePath}: ${result.reason}`);
+    } catch {
+      // file not accessible, continue
+    }
+  }
+  return { available: false, coverageMap: null, error: false };
+}
+
+async function cachedReadCoveragePath(coveragePath: string, cwd: string): Promise<CoverageResult> {
+  try {
+    const content = await fsReadFile(coveragePath);
+    const coverageHash = createHash('sha256').update(content).digest('hex');
+    const key: CacheKeyInput = { kind: 'coverage', coverageHash, providerVersion: coverageProvenance.version };
+    const lookup = await getOrCompute<CachedCoverageValue>(cwd, key, async () => {
+      const result = await readCoverage(cwd, coveragePath);
+      const value: CachedCoverageValue = {
+        available: result.available,
+        coverageEntries: result.coverageMap ? [...result.coverageMap.entries()] : null,
+        error: result.error,
+      };
+      if (result.reason !== undefined) value.reason = result.reason;
+      if (result.contentSha256 !== undefined) value.contentSha256 = result.contentSha256;
+      return value;
+    });
+    const out: CoverageResult = {
+      available: lookup.value.available,
+      coverageMap: lookup.value.coverageEntries ? new Map(lookup.value.coverageEntries) : null,
+      error: lookup.value.error,
+    };
+    if (lookup.value.reason !== undefined) out.reason = lookup.value.reason;
+    if (lookup.value.contentSha256 !== undefined) out.contentSha256 = lookup.value.contentSha256;
+    return out;
+  } catch (err) {
+    // ponytail: never throw out of the cached path — unexpected read/cache errors
+    // degrade to the same error shape readCoverageFile uses, cache simply misses.
+    return { available: false, coverageMap: null, error: true, reason: err instanceof Error ? err.message : String(err) };
+  }
+}
+
+function enableCacheProviders() {
+  const cachedTsProvider = {
+    collectComplexity: cachedTsCollectComplexity,
+    readCoverage: cachedReadCoverage,
+  };
+  for (const ext of ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'] as const) {
+    registerProvider(ext, cachedTsProvider);
+  }
+  // Python: cache coverage only; complexity provider passes through unchanged
+  registerProvider('.py', {
+    collectComplexity: pythonASTComplexityProvider.collectComplexity,
+    readCoverage: cachedReadCoverage,
+  });
 }
 
 interface DoctorProbe {

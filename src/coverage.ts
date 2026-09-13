@@ -2,6 +2,7 @@ import * as path from 'node:path';
 import * as fs from 'node:fs';
 import { access, constants, readFile } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { parseCoverageReport } from '@barney-media/crap-typescript-core';
 import { parseLcovContent } from './coverage-providers/lcovProvider.js';
 
@@ -13,6 +14,8 @@ export interface CoverageResult {
   coverageMap: Map<string, any> | null;
   error: boolean;
   reason?: string;
+  /** SHA-256 hex of the coverage artifact bytes as read (present only on a successful read). */
+  contentSha256?: string;
 }
 
 const MAX_COVERAGE_SIZE = 100 * 1024 * 1024; // 100MB
@@ -429,7 +432,8 @@ async function readCoverageFile(
     }
 
     const normalizedCoverageMap = normalizeCoveragePaths(coverageMap, cwd);
-    return { available: true, coverageMap: normalizedCoverageMap, error: false };
+    // Lineage input identity: hash of the artifact bytes actually read (in hand, no new reads)
+    return { available: true, coverageMap: normalizedCoverageMap, error: false, contentSha256: createHash('sha256').update(content).digest('hex') };
   } catch (error) {
     // Malformed or unreadable
     return { available: true, coverageMap: null, error: true, reason: 'malformed' };
