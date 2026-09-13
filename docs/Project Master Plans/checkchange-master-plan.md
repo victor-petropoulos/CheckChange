@@ -165,8 +165,8 @@ Baseline metrics recorded in task notes.
 | **P6: Tracing Seam** | Wrap `execute()` at `src/execute.ts:18`; correlation ID propagation; `diagnostics.trace[]` sidecar | P5 | ☐ Pending |
 | **P7: D1 Doctor/Explain** | `doctor` probes git/python/coverage tools; `explain <ruleId>` prints derivation; both emit diagnostics sidecar | P1, P5 | ☐ Pending |
 | **P8: D2 Baseline/Delta** | `delta` subcommand compares two EvidenceOutput runs; evidence diff (not score); requires lineage | P2, P4 | ☑ Done (2026-09-13, D2 shipped: src/delta.ts + runDelta wiring + 341 tests green, gate tsc/test/build/pack all 0) |
-| **P9: D3 CI/PR Formatters** | `--format github|junit|sarif` sidecar formatters over JSON; GitHub annotations, PR comments | — (anytime) | ☐ Pending |
-| **P10: C Incremental/Caching** | Disk cache keyed by fingerprints; invalidation on cwd/base/threshold/engine commit/coverage mtime | P2, P4, P6 | ☐ Pending |
+| **P9: D3 CI/PR Formatters** | `--format github|junit|sarif` sidecar formatters over JSON; GitHub annotations, PR comments | — (anytime) | ☑ Done (2026-09-12, c634d57, 83/328 green) |
+| **P10: C Incremental/Caching** | Disk cache keyed by fingerprints; invalidation on cwd/base/threshold/engine commit/coverage mtime | P2, P4, P6 | ☑ Done (2026-09-13, C shipped: src/cache.ts + --cache opt-in + 33 tests, 377 green; refactor aa70f24 moved composition cli.ts→cache.ts) |
 
 **Gate:** Each phase requires regression baseline (tsc/test/build/pack) + contract audit + security audit before next phase.
 
@@ -180,16 +180,16 @@ Baseline metrics recorded in task notes.
 | 2026-09-12 | Documenter | Master plan moved to `docs/Project Master Plans/`, OPENCODE_START_HERE.md rewired with Living Plans block, DOC-LOCATION-2026-09-12 decision recorded, candidate improvements plan confirmed pre-existing at `docs/Project Master Plans/CheckChange_Candidate_Improvements_Plan.md` | None | Approve trust-layer plan; begin P0 Terminology reconciliation |
 | 2026-09-12 | Documenter | Experiment A executed: tasks 1-11 done with commits 48b8ce9, 0248b31, 18975ce, c78cc50, a318c4c, 5171853, 6ed428a, 10fac9f; baseline tsc 0 / 79 files / 297 tests / pack 40 files / determinism diff-identical; review gates GO (one FIX-LIST cleared on INV-05 false citation); audit reruns after OOM: contract PASS with legacy-0.1 flag REJECTED (src/evidence.ts:250 intentional legacy buildOutput, test/evidence.test.ts:193 asserts it), security PASS; user-agreed next (new session): schema 0.5 bump first, then D3 CI formatters, then B/C/D. | None | Update §Next-Session Resume Checklist to: read bridge + master log, do 0.5 bump, then D3.
 | 2026-09-12 | Orchestrator | D3 shipped (c634d57, 83/328 green, Engram rev-1789264830260-3); D2 recon+plan done (5 tasks, approved:false, mem:44649 Q6) — no implementation | None | Approve D2 plan; implement per plan |
-| 2026-09-13 | Orchestrator | D2 shipped (src/delta.ts new, src/cli.ts runDelta, test/delta.spec.ts 13 tests + dispatcher 3 new, 84 files/341 tests green, tsc/build/pack 0, Engram rev-1789271072469-3 PASS non-blocking, security PASS; known non-blocking: ruleKey colon-split src/delta.ts:137 + file:method overload collision :89 — fix before 2nd rule) — no engine/schema/gate changes | None | Commit D2; then C caching |
+| 2026-09-13 | Orchestrator | C shipped (18d4ba3: perf baseline doc, lineage plumbing, src/cache.ts 2-tier keys + TTL/eviction/guards, --cache wiring default-off, 33 tests, 377 green, cold-vs-cached identical, ~20% warm saving, audit High+Mediums fixed, Engram rev-1789326912647-11 approved); refactor (aa70f24: composition cli.ts→cache.ts, 669→535 lines, all 5 arch findings resolved, Engram rev-1789333673935-15 approved); agent constitutions baked (planner seam-explicit + D1–D16 + E1–E5 + repo-conventions, implementer H1–H8; backups kept; live post-restart) | None (open: verbose-drain test follow-up per aa70f24 trailer; default-on cache flip needs field data; gpg signing unavailable → commits unsigned) | Commit constitution package; next session per roadmap (WP16/WP17) or first live test of new planner constitution |
 
 ---
 
 ## Next-Session Resume Checklist
 
 - [ ] Read bridge (`OPENCODE_START_HERE.md` §Last/Next Session) + master §Session Log
-- [ ] Verify clean tree at commit c634d57 (`git status --porcelain` empty, `git log --oneline -1`)
-- [ ] Confirm baseline still green: `npx tsc --noEmit && npm test` (expect 0 / 328)
-- [ ] D2 plan at `.opencode/plans/20260913T031207-d2-baseline-delta.md` (approved:false) — implement src/delta.ts → wire runDelta → tests → regression gate
+- [ ] Verify clean tree at commit aa70f24 (`git status --porcelain` empty, `git log --oneline -1`)
+- [ ] Confirm baseline still green: `npx tsc --noEmit && npm test` (expect 0 / 377)
+- [ ] Constitution package at `.opencode/plans/20260913T213000-agent-constitution-package.md` — baked live; first live test on next real planning task
 - [ ] Update Session Log with new entry
 
 ---

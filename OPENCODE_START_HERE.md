@@ -37,11 +37,11 @@ AWAITING HUMAN REVIEW
 After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `STOP`.
 ---
 
-## Last Session — 2026-09-12
-Experiment A executed: tasks 1-11 done with commits 48b8ce9, 0248b31, 18975ce, c78cc50, a318c4c, 5171853, 6ed428a, 10fac9f; baseline tsc 0 / 79 files / 297 tests / pack 40 files / determinism diff-identical; review gates GO (one FIX-LIST cleared on INV-05 false citation); audit reruns after OOM: contract PASS with legacy-0.1 flag REJECTED (src/evidence.ts:250 intentional legacy buildOutput, test/evidence.test.ts:193 asserts it), security PASS; user-agreed next (new session): schema 0.5 bump first, then D3 CI formatters, then B/C/D.
+## Last Session — 2026-09-13
+D2 shipped (be5e725, 84/341 green) + reviewer lows fixed; C shipped (18d4ba3: perf baseline, lineage plumbing, src/cache.ts, --cache opt-in, 33 tests, 377 green, Engram approved); refactor (aa70f24: composition cli.ts→cache.ts, 669→535, all 5 arch findings resolved); agent constitutions baked live (planner D1–D16/E1–E5/repo-conventions, implementer H1–H8). Baseline tsc 0 / 85 files / 377 tests. Open: verbose-drain test follow-up, default-on flip needs field data.
 
 ## Next Session
-fresh session starts at schema 0.5 bump, then D3 CI formatters sidecar; entry point master resume checklist.
+Fresh session starts at master §Next-Session Resume Checklist (HEAD aa70f24, expect 0/377). Constitution package at `.opencode/plans/20260913T213000-agent-constitution-package.md` — baked live; first live test on next real planning task.
 
 > Historical (pre-2026-09-12). Current truth = §Last Session above + master plan.
 
@@ -54,10 +54,10 @@ WP14 APPROVED 2026-09-08 CONTINUE. WP15 solo packet ACCEPTED 2026-09-08 CONTINUE
 
 Current work 2026-09-12: schema 0.5 bump planned (.opencode/plans/2026-09-12T23-12-40Z-schema-05-bump.md, approved:true), Experiment A tasks 1-11 CLOSED at 8185c30, baseline tsc 0 / 79 files / 297 tests verified this session.
 
-D2 prepared 2026-09-12: commits 082ed63 (schema 0.5) + c634d57 (D3 formatters) landed; D2 baseline/delta plan ready at .opencode/plans/20260913T031207-d2-baseline-delta.md (approved:false, 5 tasks); baseline tsc 0 / 83 files / 328 tests; tree clean at c634d57 except untracked D2 plan.
+D2 shipped + C shipped + refactor landed (aa70f24); constitutions baked. See §Last Session above + master plan.
 ## Next Step
 **NEXT: WP16 hardening under constraints (perf/security/packaging) OR WP17 product decision prep — no new language without gating criteria met.**
-Immediate next (new session): user approval of D2 plan → implement src/delta.ts → wire runDelta → tests → regression; then C caching
+Immediate next (new session): resume checklist → roadmap work or first live test of new planner constitution.
 
 ```
 CONTINUE — WP14 approved, WP15 accepted 2026-09-08; Angular deferred
