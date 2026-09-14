@@ -156,17 +156,19 @@ Baseline metrics recorded in task notes.
 
 | Phase | Tasks | Depends On | Status |
 |-------|-------|------------|--------|
-| **P0: Terminology** | Create `docs/decisions/terminology-reconciliation.md` with binding table mapping every code term → canonical term | — | ☐ Pending |
-| **P1: Diagnostics Schema** | Design `diagnostics{lineage[], quality{}, fingerprints{}}` in `docs/decisions/diagnostics-schema-design.md`; amend `evidence-contract.md` with `INV-05` | P0 | ☐ Pending |
-| **P2: Lineage** | Implement per-stage provenance in 7 pipeline stages; emit `diagnostics.lineage[]` | P1 | ☐ Pending |
-| **P3: Completeness/Quality** | Numeric quality score 0-100; per-stage completeness; `uncoveredFunctions[]` | P2 | ☐ Pending |
-| **P4: Fingerprints** | SHA-256 of normalized signature+body AST; stable cross-platform; `diagnostics.fingerprints{}` | P3 | ☐ Pending |
-| **P5: CLI Dispatcher** | Replace hand-rolled parser with subcommand dispatcher (`check|doctor|explain|trace|delta`); remove `@ts-nocheck`; sidecar outputs | P0 | ☐ Pending |
-| **P6: Tracing Seam** | Wrap `execute()` at `src/execute.ts:18`; correlation ID propagation; `diagnostics.trace[]` sidecar | P5 | ☐ Pending |
-| **P7: D1 Doctor/Explain** | `doctor` probes git/python/coverage tools; `explain <ruleId>` prints derivation; both emit diagnostics sidecar | P1, P5 | ☐ Pending |
+| **P0: Terminology** | Create `docs/decisions/terminology-reconciliation.md` with binding table mapping every code term → canonical term | — | ✅ Done (2026-09-12, file exists @ docs/decisions/terminology-reconciliation.md:10713 bytes) |
+| **P1: Diagnostics Schema** | Design `diagnostics{lineage[], quality{}, fingerprints{}}` in `docs/decisions/diagnostics-schema-design.md`; amend `evidence-contract.md` with `INV-05` | P0 | ✅ Done (2026-09-12, file exists @ docs/decisions/diagnostics-schema-design.md:7406 bytes) |
+| **P2: Lineage** | Implement per-stage provenance in 7 pipeline stages; emit `diagnostics.lineage[]` | P1 | ☑ Done (2026-09-13, src/evidence.ts:21,25,185,306 diagnostics.lineage[] 7 stages, commit 18975ce) |
+| **P3: Completeness/Quality** | Numeric quality score 0-100; per-stage completeness; `uncoveredFunctions[]` | P2 | ☑ Done (2026-09-13, src/evidence.ts:71,81,102,110,134 diagnostics.quality{score,stageComplete,uncoveredFunctions}, commit c78cc50) |
+| **P4: Fingerprints** | SHA-256 of normalized signature+body AST; stable cross-platform; `diagnostics.fingerprints{}` | P3 | ☑ Done (2026-09-13, src/evidence.ts:35,148,159,169 sha256Hex diagnostics.fingerprints{}, commit a318c4c) |
+| **P5: CLI Dispatcher** | Replace hand-rolled parser with subcommand dispatcher (`check|doctor|explain|trace|delta`); remove `@ts-nocheck`; sidecar outputs | P0 | ✅ Done (2026-09-13, src/cli.ts:11-14 SUBCOMMANDS, no @ts-nocheck, doctor/explain/trace/delta implemented) |
+| **P6: Tracing Seam** | Wrap `execute()` at `src/execute.ts:18`; correlation ID propagation; `diagnostics.trace[]` sidecar | P5 | ☑ Done (2026-09-13, src/execute.ts:18 seam + TraceRun{correlationId,spans} + src/cli.ts:414 trace sidecar (not diagnostics.trace by design for determinism), commit 6ed428a) |
+| **P7: D1 Doctor/Explain** | `doctor` probes git/python/coverage tools; `explain <ruleId>` prints derivation; both emit diagnostics sidecar | P1, P5 | ☑ Done (2026-09-13, src/cli.ts:270 runDoctor + 350 runExplain, commit 5171853) |
 | **P8: D2 Baseline/Delta** | `delta` subcommand compares two EvidenceOutput runs; evidence diff (not score); requires lineage | P2, P4 | ☑ Done (2026-09-13, D2 shipped: src/delta.ts + runDelta wiring + 341 tests green, gate tsc/test/build/pack all 0) |
 | **P9: D3 CI/PR Formatters** | `--format github|junit|sarif` sidecar formatters over JSON; GitHub annotations, PR comments | — (anytime) | ☑ Done (2026-09-12, c634d57, 83/328 green) |
 | **P10: C Incremental/Caching** | Disk cache keyed by fingerprints; invalidation on cwd/base/threshold/engine commit/coverage mtime | P2, P4, P6 | ☑ Done (2026-09-13, C shipped: src/cache.ts + --cache opt-in + 33 tests, 377 green; refactor aa70f24 moved composition cli.ts→cache.ts) |
+
+**Drift note — RESOLVED (2026-09-13):** Audit session ses_f629c3ec2ffePZPV0FEBRsFTQB (researcher, high confidence, all file:line verified) confirms P0–P10 all DONE. P2 (commit 18975ce), P3 (c78cc50), P4 (a318c4c), P6 (6ed428a), P7 (5171853) implemented; roadmap was stale. P6 naming caveat: sidecar `TraceRun{correlationId,spans}` emitted via `trace` subcommand, not `diagnostics.trace` — by design to preserve EvidenceOutput determinism (evidence-contract.md:341). No genuinely-pending phases remain.
 
 **Gate:** Each phase requires regression baseline (tsc/test/build/pack) + contract audit + security audit before next phase.
 
@@ -178,19 +180,22 @@ Baseline metrics recorded in task notes.
 |------|-------|-----------|----------|------------|
 | 2026-09-12 | Documenter | Research + grill + created trust-layer plan (approved:false) + created this master plan | None | Approve trust-layer plan; begin P0 Terminology reconciliation |
 | 2026-09-12 | Documenter | Master plan moved to `docs/Project Master Plans/`, OPENCODE_START_HERE.md rewired with Living Plans block, DOC-LOCATION-2026-09-12 decision recorded, candidate improvements plan confirmed pre-existing at `docs/Project Master Plans/CheckChange_Candidate_Improvements_Plan.md` | None | Approve trust-layer plan; begin P0 Terminology reconciliation |
-| 2026-09-12 | Documenter | Experiment A executed: tasks 1-11 done with commits 48b8ce9, 0248b31, 18975ce, c78cc50, a318c4c, 5171853, 6ed428a, 10fac9f; baseline tsc 0 / 79 files / 297 tests / pack 40 files / determinism diff-identical; review gates GO (one FIX-LIST cleared on INV-05 false citation); audit reruns after OOM: contract PASS with legacy-0.1 flag REJECTED (src/evidence.ts:250 intentional legacy buildOutput, test/evidence.test.ts:193 asserts it), security PASS; user-agreed next (new session): schema 0.5 bump first, then D3 CI formatters, then B/C/D. | None | Update §Next-Session Resume Checklist to: read bridge + master log, do 0.5 bump, then D3.
+| 2026-09-12 | Documenter | Experiment A executed: tasks 1-11 done with commits 48b8ce9, 0248b31, 18975ce, c78cc50, a318c4c, 5171853, 6ed428a, 10fac9f; baseline tsc 0 / 79 files / 297 tests / pack 40 files / determinism diff-identical; review gates GO (one FIX-LIST cleared on INV-05 false citation); audit reruns after OOM: contract PASS with legacy-0.1 flag REJECTED (src/evidence.ts:250 intentional legacy buildOutput, test/evidence.test.ts:193 asserts it), security PASS; user-agreed next (new session): schema 0.5 bump first, then D3 CI formatters, then B/C/D. | None | Update §Next-Session Resume Checklist to: read bridge + master log, do 0.5 bump, then D3. |
 | 2026-09-12 | Orchestrator | D3 shipped (c634d57, 83/328 green, Engram rev-1789264830260-3); D2 recon+plan done (5 tasks, approved:false, mem:44649 Q6) — no implementation | None | Approve D2 plan; implement per plan |
 | 2026-09-13 | Orchestrator | C shipped (18d4ba3: perf baseline doc, lineage plumbing, src/cache.ts 2-tier keys + TTL/eviction/guards, --cache wiring default-off, 33 tests, 377 green, cold-vs-cached identical, ~20% warm saving, audit High+Mediums fixed, Engram rev-1789326912647-11 approved); refactor (aa70f24: composition cli.ts→cache.ts, 669→535 lines, all 5 arch findings resolved, Engram rev-1789333673935-15 approved); agent constitutions baked (planner seam-explicit + D1–D16 + E1–E5 + repo-conventions, implementer H1–H8; backups kept; live post-restart) | None (open: verbose-drain test follow-up per aa70f24 trailer; default-on cache flip needs field data; gpg signing unavailable → commits unsigned) | Commit constitution package; next session per roadmap (WP16/WP17) or first live test of new planner constitution |
+| 2026-09-13 | Orchestrator | Gate-null investigate (researcher ses_f63242747ffeVwNMygmB2SfZq6) → hermetic plan .opencode/plans/2026-09-13T22:26:48Z-index-test-hermetic.md (approved:true) → implementer (src/index.test.ts 49+/15-, tmpDir T1 PASS + T2 malformed-null) → reviewer rev-1789339382356-4 approved 0 findings + pre-commit rev-1789346300781-5 COMMIT-GO → tester PASS (checkchange PASS 63 fns) → committed f6aa8f0, merged-result 85/379 green tsc 0 | None (open: verbose-drain follow-up, cache default-on flip needs field data) | WP16/WP17 scoping |
+| 2026-09-13 | Documenter | Audit ses_f629c3ec2ffePZPV0FEBRsFTQB (researcher) verified P2–P4/P6–P7 implementation complete; updated roadmap P2/P3/P4/P6/P7 ☐→☑ with commit+file:line evidence; replaced stale drift note with resolved note citing audit session; all P0–P10 now DONE per evidence | None | Commit roadmap updates |
 
 ---
 
 ## Next-Session Resume Checklist
 
 - [ ] Read bridge (`OPENCODE_START_HERE.md` §Last/Next Session) + master §Session Log
-- [ ] Verify clean tree at commit aa70f24 (`git status --porcelain` empty, `git log --oneline -1`)
-- [ ] Confirm baseline still green: `npx tsc --noEmit && npm test` (expect 0 / 377)
+- [ ] Verify clean tree at commit f6aa8f0 (`git status --porcelain` empty, `git log --oneline -1`)
+- [ ] Confirm baseline still green: `npx tsc --noEmit && npm test` (expect 0 / 379)
 - [ ] Constitution package at `.opencode/plans/20260913T213000-agent-constitution-package.md` — baked live; first live test on next real planning task
 - [ ] Update Session Log with new entry
+- [ ] Prior checklist stale (was aa70f24 / 377 tests) — updated to HEAD f6aa8f0 / 379 tests / tsc 0
 
 ---
 
