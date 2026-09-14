@@ -216,21 +216,21 @@ function withDiagnostics<T extends Record<string, unknown>>(
   };
 }
 
-export interface ProviderFactory { 
-   collectComplexity: (cwd:string, trace?:any)=>Promise<any[]>; 
-   readCoverage: (cwd:string, file?:string, trace?:any)=>Promise<any> 
-  }
- const providers = new Map<string, ProviderFactory>()
- export function registerProvider(ext:string, factory:ProviderFactory){providers.set(ext,factory)}
+export interface ProviderFactory {
+  collectComplexity: (cwd:string, trace?:any)=>Promise<any[]>;
+  readCoverage: (cwd:string, file?:string, trace?:any)=>Promise<any>
+}
+const providers = new Map<string, ProviderFactory>()
+export function registerProvider(ext:string, factory:ProviderFactory){providers.set(ext,factory)}
 
 // Register TypeScript provider for JS/TS extensions (delegation preserves vi.spyOn mocks)
- const typescriptProvider: ProviderFactory = {
-   collectComplexity: (...args: Parameters<typeof collectComplexity>) => collectComplexity(...args),
-   readCoverage: (...args: Parameters<typeof readCoverage>) => readCoverage(...args),
- };
- for (const ext of ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'] as const) {
-   registerProvider(ext, typescriptProvider);
- }
+const typescriptProvider: ProviderFactory = {
+  collectComplexity: (...args: Parameters<typeof collectComplexity>) => collectComplexity(...args),
+  readCoverage: (...args: Parameters<typeof readCoverage>) => readCoverage(...args),
+};
+for (const ext of ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'] as const) {
+  registerProvider(ext, typescriptProvider);
+}
 
 // Register Python provider for .py extension
  registerProvider('.py', pythonASTComplexityProvider);
@@ -289,7 +289,7 @@ export function correlate(methodEvidence: MethodEvidenceWithSource[], intervals:
 /**
  * Legacy buildOutput for WP3 tests (schema 0.1, sync). Kept for backward compatibility.
  */
-export function buildOutput(base: string, changed: ChangedFunction[], threshold: number = 30, capabilities: Capabilities = {} as Capabilities) {
+export function buildOutput(base: string, changed: ChangedFunction[], threshold: number = 30, capabilities: Capabilities = { git: 'available' } satisfies Capabilities) {
     const ruleResults = evaluateHighCrap(changed, threshold);
     const gate = ruleResults.some((r: RuleResult) => r.result === 'WARN') ? 'WARN' : 'PASS';
     const completeness = ruleResults.some((r: RuleResult) => r.result === 'NOT_EVALUATED') ? 'INCOMPLETE' : 'COMPLETE';
@@ -501,12 +501,12 @@ coverageResult = { available: false, coverageMap: null, error: true, reason: 'ma
         }, lineage, buildQuality({ complexityCapability, coverageUsable: false }));
     }
 // If coverage provider failed (malformed)
-     if (coverageCapability === 'failed') {
-analysisStatus = 'FAILED';
-          gate = null;
-completeness = 'INCOMPLETE';
-           return withDiagnostics(buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason), lineage, buildQuality({ complexityCapability, coverageUsable: false }));
-     }
+    if (coverageCapability === 'failed') {
+        analysisStatus = 'FAILED';
+        gate = null;
+        completeness = 'INCOMPLETE';
+        return withDiagnostics(buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason), lineage, buildQuality({ complexityCapability, coverageUsable: false }));
+    }
     // Step 3: Attach coverage to complexity info
     const t0Attribution = Date.now();
     let attributedComplexity = [];
@@ -539,7 +539,7 @@ completeness = 'INCOMPLETE';
         crap: calculateCrap(ac.info.cc, ac.coveragePercent),
         coverage: ac.coveragePercent,
         coverageKind: ac.coverageKind ?? 'N/A',
-            analyzerStatus: (ac.coveragePercent !== null && ac.coveragePercent !== undefined ? 'passed' : 'skipped') as 'passed' | 'failed' | 'skipped',
+        analyzerStatus: (ac.coveragePercent !== null && ac.coveragePercent !== undefined ? 'passed' : 'skipped') as 'passed' | 'failed' | 'skipped',
         source: {
             tool: '@barney-media/crap-typescript-core',
             version: '0.5.0'
@@ -659,15 +659,15 @@ const detectNextFramework = (cwd: string, filePath: string) => {
          return undefined;
        };
       const t0Evidence = Date.now();
-       const changedFunctionsWithLanguage = changedFunctions.map(fn => {
-         const lang = getLanguageForFile(fn.file);
-         const fw = detectNextFramework(cwd, fn.file);
-         return {
-           ...fn,
-           ...(lang !== undefined ? { language: lang } : {}),
-           ...(fw ? { framework: fw } : {})
-         };
-       });
+      const changedFunctionsWithLanguage = changedFunctions.map(fn => {
+        const lang = getLanguageForFile(fn.file);
+        const fw = detectNextFramework(cwd, fn.file);
+        return {
+          ...fn,
+          ...(lang !== undefined ? { language: lang } : {}),
+          ...(fw ? { framework: fw } : {})
+        };
+      });
       lineage.push({
         stage: 'evidence',
         ...evidenceProvenance,
