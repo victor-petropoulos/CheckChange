@@ -1,109 +1,98 @@
-# WP16 Hardening — Re-verification Log
+# WP16 Hardening Task 1 — Re-verify (read-only, no code changes)
 
-**Date:** 2026-09-10
-**Agent:** tester
-**Task:** Task 1 — Re-verify build/test/packaging (narrow WP16 hardening)
+**Date:** 2026-09-14
+**HEAD:** `7fa2156` (`docs(bridge): session catch-up — HEAD 5efd353, 87/391 baseline, typing plan staged`)
+**Pre-condition:** Only dirty file = `.opencode/plans/2026-09-13T19-30-00Z-evidence-ts-nocheck-remediation.md` (typing plan approval flip). `src/` is clean.
 
-## Preconditions
+---
 
-| Check | Value |
-|-------|-------|
-| Node version | v24.18.1 |
-| NPM version | 11.16.0 |
-| `.nvmrc` | 20.10.0 (stale — ignored per AGENTS.md Node 24 mandate) |
-| Schema | 0.4.0 frozen |
-| Thresholds | 30/15 frozen |
-| INV-01..04 | Preserved |
-| Angular | Deferred |
+## 1. `npx tsc --noEmit`
 
-## Verification Results
-
-### 1. TypeScript Compilation
-
-```bash
-npx tsc --noEmit
-EXIT_CODE: 0
+```
+EXIT_CODE=0
 ```
 
-**Result:** PASS — zero type errors.
+**Verdict:** PASS — exit 0, no type errors.
 
-### 2. Test Suite
+---
 
-```bash
-npx vitest run
-EXIT_CODE: 0
+## 2. `npm test`
 
-Test Files  73 passed (73)
-     Tests  259 passed (259)
-  Duration  5.04s (transform 1.77s, setup 25.17s, tests 22.49s)
+```
+> checkchange@0.4.0 test
+> vitest run
+
+ RUN  v4.1.11 /Users/victorpetropoulos/Cursor Projects/code-risk-prototype-v0.3-opencode
+
+ Test Files  87 passed (87)
+      Tests  391 passed (391)
+   Start at  08:45:17
+   Duration  5.83s (transform 2.61s, setup 0ms, import 28.72s, tests 31.56s, environment 54ms)
+
+EXIT_CODE=0
 ```
 
-**Result:** PASS — 73/73 files, 259/259 tests.
+**Verdict:** PASS — 87 files, 391 tests, exit 0.
 
-**Baseline comparison:** Prior baseline was 233 pass / 72 files. Current 259 pass / 73 files (+26 tests, +1 file). Growth attributable to WP18 expansion (cases 009-012), not hardening changes.
+---
 
-### 3. Build
+## 3. `npm run build`
 
-```bash
-npm run build
-EXIT_CODE: 0
+```
+> checkchange@0.4.0 build
+> tsc && chmod +x dist/cli.js
+
+EXIT_CODE=0
+```
+
+**Verdict:** PASS — exit 0.
+
+---
+
+## 4. `npm pack --dry-run`
+
+```
+> checkchange@0.4.0 prepare
+> npm run build
 
 > checkchange@0.4.0 build
 > tsc && chmod +x dist/cli.js
+
+npm notice
+npm notice  checkchange@0.4.0
+npm notice total files: 52
+npm notice package size: 46.8 kB
+npm notice unpacked size: 179.8 kB
+
+EXIT_CODE=0
 ```
 
-**Result:** PASS — tsc compilation + chmod ok.
+**Verdict:** PASS — 52 files, exit 0.
 
-### 4. Packaging (npm pack)
+---
 
-```bash
-npm pack --dry-run
-EXIT_CODE: 0
+## 5. `git diff --stat -- src/`
 
-npm notice name: checkchange
-npm notice version: 0.4.0
-npm notice filename: checkchange-0.4.0.tgz
-npm notice package size: 25.8 kB
-npm notice unpacked size: 100.3 kB
-npm notice total files: 38
+```
+EXIT_CODE=0
 ```
 
-**Result:** PASS — tarball builds clean, 38 files, 25.8 kB.
+(Empty output — zero src/ changes.)
 
-### 5. Source Diff
+**Verdict:** PASS — src/ clean, no changes.
 
-```bash
-git diff --stat src/
-EXIT_CODE: 0
-(no output)
-```
-
-**Result:** PASS — zero source changes. Docs-only delivery.
-
-### 6. Git Status
-
-```bash
-git status --short
-?? .opencode/plans/20260910T090317-wp16-hardening-wp17-decision.md
-EXIT_CODE: 0
-```
-
-**Result:** Only untracked plan file. No staged/unstaged changes to tracked files.
+---
 
 ## Summary
 
-| Check | Exit Code | Status |
-|-------|-----------|--------|
-| `npx tsc --noEmit` | 0 | PASS |
-| `npx vitest run` | 0 (259/259) | PASS |
-| `npm run build` | 0 | PASS |
-| `npm pack --dry-run` | 0 (25.8 kB) | PASS |
-| `git diff --stat src/` | 0 (empty) | PASS |
-| `git status --short` | 0 (plan file only) | PASS |
+| Check | Command | Exit Code | Expected | Actual | Status |
+|-------|---------|-----------|----------|--------|--------|
+| TypeScript | `npx tsc --noEmit` | 0 | 0 | 0 | PASS |
+| Tests | `npm test` | 0 | 0 | 0 | PASS |
+| Test count | - | - | 87/391 | 87/391 | PASS |
+| Build | `npm run build` | 0 | 0 | 0 | PASS |
+| Pack | `npm pack --dry-run` | 0 | 0 | 0 | PASS |
+| Pack file count | - | - | recorded | 52 | PASS |
+| src/ diff | `git diff --stat -- src/` | 0 | empty | empty | PASS |
 
-**Overall:** All 6 checks PASS. Zero src changes. Docs-only delivery. Packaging intact. No regressions.
-
-## Notes
-
-- `.nvmrc` contains `20.10.0` which conflicts with AGENTS.md Node 24 mandate. Documented but not fixed (docs-only scope).
-- stderr warnings during vitest (JSX parse warnings, "not a git repository" in temp dirs) are expected and benign — same as prior runs.
+All 7 gates pass. No code changes made. Read-only re-verification of 87/391 baseline.

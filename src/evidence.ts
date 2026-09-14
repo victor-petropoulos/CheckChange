@@ -1,18 +1,7 @@
-// @ts-nocheck
-// ADR: keep @ts-nocheck on src/evidence.ts (2026-09-13, T4 spike)
-//   - 34 pre-existing type errors when removed (implicit-any params, missing index signature
-//     on extension-map literal, diagnostics.fingerprints optional-vs-required mismatch in generic
-//     intersection, provenance-object property narrowing gaps).
-//   - EvidenceOutput shape contract FROZEN at 0.5.0 (docs/contracts/evidence-contract.md:5) —
-//     typing the internals requires reshaping builder logic + generic bounds; out of scope for a
-//     spike and risks behavior change.
-//   - File is 713 lines of builder/provenance wiring; type-level refactor is a separate T-task.
-//   - Purely type-level; no runtime behavior change from removing @ts-nocheck.
-//   - Decision: KEEP until a dedicated typing task lands (see plan T4 appendix).
-import { evaluateHighCrap } from './rules.js';
+import { evaluateHighCrap, type RuleResult } from './rules.js';
 import { collectComplexity } from './complexity.js';
 import { readCoverage } from './coverage.js';
-import { attachCoverage } from './attribution.js';
+import { attachCoverage, type AttributedComplexity } from './attribution.js';
 import { calculateCrap } from './crapCalc.js';
 import { pythonASTComplexityProvider } from './complexity-providers/pythonASTComplexityProvider.js';
 import { gitProvenance } from './git.js';
@@ -22,11 +11,34 @@ import { attributionProvenance } from './attribution.js';
 import { crapCalcProvenance } from './crapCalc.js';
 import { rulesProvenance } from './rules.js';
 import { type TraceRun } from './execute.js';
+import { type MethodEvidence } from './crap.js';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import * as fs from 'fs';
 import * as path from 'path';
+
+// ---- Local type definitions (kept in evidence.ts to avoid cross-file type coupling) ----
+
+/** Capabilities passed to buildOutput / buildEvidenceOutput. */
+export interface Capabilities {
+  git: string;
+  crapTypescript?: string;
+  complexity?: string;
+  coverageArtifact?: string;
+  [key: string]: string | undefined;
+}
+
+/** Source provenance for a method evidence entry. */
+export interface Source {
+  tool: string;
+  version: string;
+}
+
+/** MethodEvidence extended with source (source is untyped in crap.ts). */
+export interface MethodEvidenceWithSource extends MethodEvidence {
+  source?: Source;
+}
 
 // ---- Diagnostics lineage (Experiment A task 3: optional diagnostics.lineage[]) ----
 export type LineageStage =
@@ -195,7 +207,7 @@ function withDiagnostics<T extends Record<string, unknown>>(
   lineage: DiagnosticLineageEntry[],
   quality: DiagnosticQuality,
   fingerprints?: Record<string, string>
-): T & { diagnostics?: { lineage: DiagnosticLineageEntry[]; quality: DiagnosticQuality; fingerprints?: Record<string, string> } } {
+): T & { diagnostics?: { lineage: DiagnosticLineageEntry[]; quality: DiagnosticQuality; fingerprints?: Record<string, string> | undefined } } {
   const fpEntries = fingerprints ? Object.keys(fingerprints).length : 0;
   if (lineage.length === 0) return output;
   return {
@@ -233,12 +245,12 @@ export interface ChangedFunction {
   coverage: number | null;
   coverageKind: string;
   analyzerStatus: 'passed' | 'failed' | 'skipped';
-  source: { tool: string; version: string; };
+  source: Source;
   language?: string;
   framework?: string;
 }
 
-export function correlate(methodEvidence, intervals) {
+export function correlate(methodEvidence: MethodEvidenceWithSource[], intervals: Map<string, {start: number; end: number}[]>) {
     const changedFunctions = [];
     for (const evidence of methodEvidence) {
         const fileIntervals = intervals.get(evidence.file);
@@ -277,11 +289,11 @@ export function correlate(methodEvidence, intervals) {
 /**
  * Legacy buildOutput for WP3 tests (schema 0.1, sync). Kept for backward compatibility.
  */
-export function buildOutput(base, changed, threshold = 30, capabilities = {}) {
+export function buildOutput(base: string, changed: ChangedFunction[], threshold: number = 30, capabilities: Capabilities = {} as Capabilities) {
     const ruleResults = evaluateHighCrap(changed, threshold);
-    const gate = ruleResults.some((r) => r.result === 'WARN') ? 'WARN' : 'PASS';
-    const completeness = ruleResults.some((r) => r.result === 'NOT_EVALUATED') ? 'INCOMPLETE' : 'COMPLETE';
-    const caps = {
+    const gate = ruleResults.some((r: RuleResult) => r.result === 'WARN') ? 'WARN' : 'PASS';
+    const completeness = ruleResults.some((r: RuleResult) => r.result === 'NOT_EVALUATED') ? 'INCOMPLETE' : 'COMPLETE';
+    const caps: Record<string, string> = {
         git: capabilities.git ?? 'available',
         crapTypescript: capabilities.crapTypescript ?? 'available',
     };
@@ -309,7 +321,7 @@ export function buildOutput(base, changed, threshold = 30, capabilities = {}) {
  * @param threshold CRAP threshold for evaluating changed functions
  * @returns Promise<OutputJson>
  */
-export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, coverageFile?: string, trace?: TraceRun) {
+export async function buildEvidenceOutput(base: string, intervals: Map<string, {start: number; end: number}[]>, cwd: string, threshold = 30, coverageFile?: string, trace?: TraceRun) {
     // We'll assume that the git repo is valid and the base is resolved (done by cli.ts)
     // We'll set the git capability to 'available' (if we got here, git is working)
     const gitCapability = 'available';
@@ -378,7 +390,7 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
         }
     });
     // Helper to check if intervals contain only non-supported files
-    const isUnsupportedIntervals = (intervals) => {
+    const isUnsupportedIntervals = (intervals: Map<string, {start: number; end: number}[]>) => {
         if (intervals.size === 0) {
             return false; // empty intervals -> not unsupported (could be no changes)
         }
@@ -522,12 +534,12 @@ completeness = 'INCOMPLETE';
     });
     // Step 4: Compute CRAP for each attributed complexity
     const t0CrapCalc = Date.now();
-    const crappedComplexity = attributedComplexity.map(ac => ({
+    const crappedComplexity = attributedComplexity.map((ac: AttributedComplexity) => ({
         ...ac.info,
         crap: calculateCrap(ac.info.cc, ac.coveragePercent),
         coverage: ac.coveragePercent,
         coverageKind: ac.coverageKind ?? 'N/A',
-        analyzerStatus: ac.coveragePercent !== null && ac.coveragePercent !== undefined ? 'passed' : 'skipped',
+            analyzerStatus: (ac.coveragePercent !== null && ac.coveragePercent !== undefined ? 'passed' : 'skipped') as 'passed' | 'failed' | 'skipped',
         source: {
             tool: '@barney-media/crap-typescript-core',
             version: '0.5.0'
@@ -560,9 +572,9 @@ completeness = 'INCOMPLETE';
     if (trace) trace.recordStage('rules', Date.now() - t0Rules, 'ok');
     // Step 8: Compute overall gate and completeness
     // Gate: any WARN -> WARN else PASS
-    const gateValue = ruleResults.some((r) => r.result === "WARN") ? "WARN" : "PASS";
+    const gateValue = ruleResults.some((r: RuleResult) => r.result === "WARN") ? "WARN" : "PASS";
     // Completeness: any NOT_EVALUATED -> INCOMPLETE else COMPLETE
-    const completenessValue = ruleResults.some((r) => r.result === "NOT_EVALUATED") ? "INCOMPLETE" : "COMPLETE";
+    const completenessValue = ruleResults.some((r: RuleResult) => r.result === "NOT_EVALUATED") ? "INCOMPLETE" : "COMPLETE";
     // Step 9: Determine analysisStatus
     // If we have no relevant TS functions after successful analysis -> SUCCESS
     // We'll check if we have any complexityInfo (from the provider) and if we have any changedFunctions?
@@ -578,7 +590,7 @@ completeness = 'INCOMPLETE';
     }
 // Step 10: Build and return the OutputJson
       // Map language to changedFunctions based on file extension
-      const languageMap = {
+      const languageMap: Record<string, string> = {
         '.py': 'python',
         '.ts': 'typescript',
         '.tsx': 'typescript',
@@ -587,11 +599,11 @@ completeness = 'INCOMPLETE';
         '.mjs': 'javascript',
         '.cjs': 'javascript'
       };
-      const getLanguageForFile = (filePath) => {
+      const getLanguageForFile = (filePath: string) => {
         const ext = Object.keys(languageMap).find(key => filePath.endsWith(key));
         return ext ? languageMap[ext] : undefined;
       };
-const detectNextFramework = (cwd, filePath) => {
+const detectNextFramework = (cwd: string, filePath: string) => {
          // 1. package.json next dep
          try {
            const pkg = JSON.parse(fs.readFileSync(path.resolve(cwd, 'package.json'), 'utf8'));
@@ -609,10 +621,10 @@ const detectNextFramework = (cwd, filePath) => {
            if (fs.existsSync(path.resolve(cwd, marker))) return 'next';
          }
          // Helper for depth-limited directory walk (max depth 3)
-         const walkDir = (dir, depth) => {
+         const walkDir = (dir: string, depth: number): string[] => {
            if (depth > 3) return [];
            const entries = fs.readdirSync(dir, { withFileTypes: true });
-           let files = [];
+           let files: string[] = [];
            for (const entry of entries) {
              const fullPath = path.join(dir, entry.name);
              if (entry.isDirectory()) {
@@ -627,14 +639,14 @@ const detectNextFramework = (cwd, filePath) => {
          const appDir = path.resolve(cwd, 'app');
          if (fs.existsSync(appDir)) {
            const routeFiles = walkDir(appDir, 0)
-             .filter(f => f.endsWith('route.ts') || f.endsWith('route.tsx'));
+             .filter((f: string) => f.endsWith('route.ts') || f.endsWith('route.tsx'));
            if (routeFiles.length > 0) return 'next';
          }
          // 4. Pages Router markers
          const pagesDir = path.resolve(cwd, 'pages');
          if (fs.existsSync(pagesDir)) {
            const pageFiles = walkDir(pagesDir, 0)
-             .filter(f => f.endsWith('.tsx') || f.endsWith('.ts'));
+             .filter((f: string) => f.endsWith('.tsx') || f.endsWith('.ts'));
            if (pageFiles.length > 0) return 'next';
          }
          // 5. React fallback
@@ -647,15 +659,15 @@ const detectNextFramework = (cwd, filePath) => {
          return undefined;
        };
       const t0Evidence = Date.now();
-      const changedFunctionsWithLanguage = changedFunctions.map(fn => {
-        const lang = getLanguageForFile(fn.file);
-        const fw = detectNextFramework(cwd, fn.file);
-        return {
-          ...fn,
-          language: lang,
-          ...(fw ? { framework: fw } : {})
-        };
-      });
+       const changedFunctionsWithLanguage = changedFunctions.map(fn => {
+         const lang = getLanguageForFile(fn.file);
+         const fw = detectNextFramework(cwd, fn.file);
+         return {
+           ...fn,
+           ...(lang !== undefined ? { language: lang } : {}),
+           ...(fw ? { framework: fw } : {})
+         };
+       });
       lineage.push({
         stage: 'evidence',
         ...evidenceProvenance,
@@ -699,7 +711,7 @@ const detectNextFramework = (cwd, filePath) => {
      }), buildFingerprints(changedFunctionsWithLanguage));
 }
 // Helper function to build output when there is a provider failure
-function buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason) {
+function buildFailedOutput(base: string, gitCapability: string, complexityCapability: string, coverageCapability: string, threshold: number, coverageErrorReason: string | undefined) {
      return {
          schemaVersion: '0.5',
          analysis: {

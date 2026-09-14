@@ -1,7 +1,7 @@
 ---
 task: "Remove @ts-nocheck from src/evidence.ts and fix all type errors"
 created: "2026-09-13T19:30:00Z"
-approved: false
+approved: true
 repo_conventions:
   gate: "npx tsc --noEmit && npm test"
   entry_points: ["src/cli.ts"]

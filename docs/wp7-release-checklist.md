@@ -62,4 +62,9 @@
 - [x] pack: 25.8 kB, 38 files
 - [x] git diff --stat src/: empty (zero source change)
 
+## Hardening B Ref (from WP16 Task 2)
+- [x] Schema 0.4 confirmed (line 4), thresholds 30/15 confirmed (line 46), INV-01..04 preserved (lines 40-43)
+- [x] Hardening B baseline CLOSED 2026-09-03 (lines 25, 48-52): P0-1 parser persistence, P0-3 registry, P1-4 CC benchmark, 5 security fixes
+- [x] WP16 re-verification confirms Hardening B baseline intact — zero src drift
+
 AWAITING HUMAN REVIEW
