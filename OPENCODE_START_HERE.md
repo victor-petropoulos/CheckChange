@@ -40,14 +40,15 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 ## Last Session — 2026-09-14
 HEAD 45b3edc nits T2/T3 landed (satisfies caps default + indent cleanup), T1 kept (`| undefined` required), Engram rev-1789409197427-4 GO, 87/391, gate PASS/5, pushed
 HEAD 5a718ce, typing T1-T8 landed (@ts-nocheck removed, tsc 0, 87/391, T7 byte-identical, Engram rev-1789403842876-2 GO); WP16 T1/T2 + WP17_DECISION shipped (docs GO rev-1789402250035-1)
+HEAD 37fe4b2 leftovers (:236 col0, :655-660) rev-1789410633025-1 GO; 8b588ff tail (:654-660) rev-1789426704783-1 approved empty, pushed
 
 ## Next Session
-Fresh session starts at master §Next-Session Resume Checklist (HEAD 45b3edc, expect 0/87/391). Constitution package at `.opencode/plans/20260913T213000-agent-constitution-package.md` — baked live; first live test on next real planning task.
+Fresh session starts at master §Next-Session Resume Checklist (HEAD 8b588ff, expect 0/87/391). Constitution package at `.opencode/plans/20260913T213000-agent-constitution-package.md` — baked live; first live test on next real planning task.
 
 > Historical (pre-2026-09-12). Current truth = §Last Session above + master plan.
 
 ## Current Step
-**Nits COMPLETE** — T2 (`satisfies` caps default) + T3 (indent cleanup 4 regions) landed, T1 reverted (`| undefined` required for strict assignability). tsc 0, 87/391 tests, checkchange gate PASS/5, Engram rev-1789409197427-4 GO. WP16 T1/T2 + WP17_DECISION docs shipped prior. WP17 A/B/C/D pending human review.
+**Tail COMPLETE at 8b588ff** — 37fe4b2 leftovers (:236 col0, :655-660) rev-1789410633025-1 GO; 8b588ff tail (:654-660) rev-1789426704783-1 approved empty, pushed. tsc 0, 87/391, gate PASS/2, Engram GOs, clean tree.
 
 ## Next Step
 **NEXT: WP17 decision human review (A/B/C/D pending).** No new language without gating criteria met.

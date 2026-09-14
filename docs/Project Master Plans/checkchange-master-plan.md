@@ -186,18 +186,18 @@ Baseline metrics recorded in task notes.
 | 2026-09-13 | Orchestrator | Gate-null investigate (researcher ses_f63242747ffeVwNMygmB2SfZq6) → hermetic plan .opencode/plans/2026-09-13T22:26:48Z-index-test-hermetic.md (approved:true) → implementer (src/index.test.ts 49+/15-, tmpDir T1 PASS + T2 malformed-null) → reviewer rev-1789339382356-4 approved 0 findings + pre-commit rev-1789346300781-5 COMMIT-GO → tester PASS (checkchange PASS 63 fns) → committed f6aa8f0, merged-result 85/379 green tsc 0 | None (open: verbose-drain follow-up, cache default-on flip needs field data) | WP16/WP17 scoping |
 | 2026-09-13 | Documenter | Audit ses_f629c3ec2ffePZPV0FEBRsFTQB (researcher) verified P2–P4/P6–P7 implementation complete; updated roadmap P2/P3/P4/P6/P7 ☐→☑ with commit+file:line evidence; replaced stale drift note with resolved note citing audit session; all P0–P10 now DONE per evidence | gpg signing unavailable → commits unsigned | Commit roadmap updates |
 | 2026-09-13 | Orchestrator | remediation b6a1691 — T1 backup del, T2 verbose 4/4, T3 warnings buffer + reviewer GO rev-1789350155002-8, T4 KEEP nocheck 34 errs, T5 criteria doc, T6 gpg note, T7 skill 116-line sync; Engram routing verified :8001; gates tsc 0 86/383 | None | trace-warning tests + typing scope + WP16/WP17 |
-| 2026-09-14 | Orchestrator | 45b3edc: nits T2/T3 landed (satisfies caps default + indent cleanup 4 regions), T1 reverted (`| undefined` required for strict assignability of optional-param spread), tsc 0, 87/391 green, checkchange gate PASS/5, Engram rev-1789409197427-4 GO, pushed | None | WP17 human decision A/B/C/D |
+| 2026-09-14 | Orchestrator | 37fe4b2 leftovers + 8b588ff tail (brace-match :660→:606, tsc 0, 87/391, PASS/2, Engram GOs, pushed) | None | WP17 human decision A/B/C/D |
 
 ---
 
 ## Next-Session Resume Checklist
 
 - [ ] Read bridge (`OPENCODE_START_HERE.md` §Last/Next Session) + master §Session Log
-- [ ] Verify clean tree at commit 45b3edc (`git status --porcelain` empty, `git log --oneline -1`)
+- [ ] Verify clean tree at commit 8b588ff (`git status --porcelain` empty, `git log --oneline -1`)
 - [ ] Confirm baseline still green: `npx tsc --noEmit && npm test` (expect 0 / 87 files / 391 tests)
 - [ ] Constitution package at `.opencode/plans/20260913T213000-agent-constitution-package.md` — baked live; first live test on next real planning task
 - [ ] Update Session Log with new entry
-- [ ] Prior checklist stale (was 5a718ce / 391 tests) — updated to HEAD 45b3edc / 87 files / 391 tests / tsc 0
+- [ ] Prior checklist stale (was 45b3edc / 87 files / 391 tests / tsc 0) — updated to HEAD 8b588ff / 87 files / 391 tests / tsc 0
 
 ---
 
