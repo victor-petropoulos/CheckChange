@@ -233,7 +233,7 @@ for (const ext of ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'] as const) {
 }
 
 // Register Python provider for .py extension
- registerProvider('.py', pythonASTComplexityProvider);
+registerProvider('.py', pythonASTComplexityProvider);
 
 export interface ChangedFunction {
   file: string;
@@ -652,12 +652,12 @@ const detectNextFramework = (cwd: string, filePath: string) => {
          // 5. React fallback
          try {
            const pkg = JSON.parse(fs.readFileSync(path.resolve(cwd, 'package.json'), 'utf8'));
-           const deps = { ...pkg.dependencies, ...pkg.devDependencies, ...pkg.peerDependencies };
-           if (deps.react) return 'react';
-         } catch {}
-         if (filePath.endsWith('.jsx')) return 'react';
-         return undefined;
-       };
+          const deps = { ...pkg.dependencies, ...pkg.devDependencies, ...pkg.peerDependencies };
+          if (deps.react) return 'react';
+        } catch {}
+        if (filePath.endsWith('.jsx')) return 'react';
+        return undefined;
+      };
       const t0Evidence = Date.now();
       const changedFunctionsWithLanguage = changedFunctions.map(fn => {
         const lang = getLanguageForFile(fn.file);

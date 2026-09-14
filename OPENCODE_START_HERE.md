@@ -38,20 +38,19 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 ---
 
 ## Last Session — 2026-09-14
+HEAD 45b3edc nits T2/T3 landed (satisfies caps default + indent cleanup), T1 kept (`| undefined` required), Engram rev-1789409197427-4 GO, 87/391, gate PASS/5, pushed
 HEAD 5a718ce, typing T1-T8 landed (@ts-nocheck removed, tsc 0, 87/391, T7 byte-identical, Engram rev-1789403842876-2 GO); WP16 T1/T2 + WP17_DECISION shipped (docs GO rev-1789402250035-1)
-HEAD 5efd353, 87/391 green, trace-warning 8/8 + typing plan staged approved:false (gpg skipped)
 
 ## Next Session
-Fresh session starts at master §Next-Session Resume Checklist (HEAD 5a718ce, expect 0/87/391). Constitution package at `.opencode/plans/20260913T213000-agent-constitution-package.md` — baked live; first live test on next real planning task.
+Fresh session starts at master §Next-Session Resume Checklist (HEAD 45b3edc, expect 0/87/391). Constitution package at `.opencode/plans/20260913T213000-agent-constitution-package.md` — baked live; first live test on next real planning task.
 
 > Historical (pre-2026-09-12). Current truth = §Last Session above + master plan.
 
 ## Current Step
-**Typing COMPLETE** — T1-T8 explicit types landed, @ts-nocheck removed, tsc 0, 87/391 tests, T7 byte-identical determinism verified, Engram rev-1789403842876-2 GO. WP16 T1 re-verify + T2 checklist done. WP17_DECISION docs shipped (Engram rev-1789402250035-1 approved 0 findings). Implementer agent returned empty twice → cavecrew-builder fallback succeeded 4/4.
+**Nits COMPLETE** — T2 (`satisfies` caps default) + T3 (indent cleanup 4 regions) landed, T1 reverted (`| undefined` required for strict assignability). tsc 0, 87/391 tests, checkchange gate PASS/5, Engram rev-1789409197427-4 GO. WP16 T1/T2 + WP17_DECISION docs shipped prior. WP17 A/B/C/D pending human review.
 
 ## Next Step
-**NEXT: WP17 decision human review (A/B/C/D pending) + reviewer nits (caps cast, indent, redundant `| undefined`) as optional follow-up.**
-No new language without gating criteria met.
+**NEXT: WP17 decision human review (A/B/C/D pending).** No new language without gating criteria met.
 
 ```
 CONTINUE — WP14 approved, WP15 accepted 2026-09-08; Angular deferred
