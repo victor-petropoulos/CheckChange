@@ -40,9 +40,10 @@ After human review it may end with `CONTINUE`, `CONTINUE WITH CONSTRAINTS`, or `
 ## Last Session — 2026-09-13
 D2 shipped (be5e725, 84/341 green) + reviewer lows fixed; C shipped (18d4ba3: perf baseline, lineage plumbing, src/cache.ts, --cache opt-in, 33 tests, 377 green, Engram approved); refactor (aa70f24: composition cli.ts→cache.ts, 669→535, all 5 arch findings resolved); agent constitutions baked live (planner D1–D16/E1–E5/repo-conventions, implementer H1–H8). Baseline tsc 0 / 85 files / 377 tests. Open: verbose-drain test follow-up, default-on flip needs field data.
 HEAD b6a1691, 86/383 green, remediation T1-T7 landed, skill synced (116 lines)
+HEAD 5efd353, 87/391 green, trace-warning 8/8 + typing plan staged approved:false (gpg skipped)
 
 ## Next Session
-Fresh session starts at master §Next-Session Resume Checklist (HEAD b6a1691, expect 0/86/383). Constitution package at `.opencode/plans/20260913T213000-agent-constitution-package.md` — baked live; first live test on next real planning task.
+Fresh session starts at master §Next-Session Resume Checklist (HEAD 5efd353, expect 0/87/391). Constitution package at `.opencode/plans/20260913T213000-agent-constitution-package.md` — baked live; first live test on next real planning task.
 
 > Historical (pre-2026-09-12). Current truth = §Last Session above + master plan.
 
