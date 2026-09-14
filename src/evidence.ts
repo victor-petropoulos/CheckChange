@@ -1,4 +1,14 @@
 // @ts-nocheck
+// ADR: keep @ts-nocheck on src/evidence.ts (2026-09-13, T4 spike)
+//   - 34 pre-existing type errors when removed (implicit-any params, missing index signature
+//     on extension-map literal, diagnostics.fingerprints optional-vs-required mismatch in generic
+//     intersection, provenance-object property narrowing gaps).
+//   - EvidenceOutput shape contract FROZEN at 0.5.0 (docs/contracts/evidence-contract.md:5) —
+//     typing the internals requires reshaping builder logic + generic bounds; out of scope for a
+//     spike and risks behavior change.
+//   - File is 713 lines of builder/provenance wiring; type-level refactor is a separate T-task.
+//   - Purely type-level; no runtime behavior change from removing @ts-nocheck.
+//   - Decision: KEEP until a dedicated typing task lands (see plan T4 appendix).
 import { evaluateHighCrap } from './rules.js';
 import { collectComplexity } from './complexity.js';
 import { readCoverage } from './coverage.js';
@@ -195,9 +205,9 @@ function withDiagnostics<T extends Record<string, unknown>>(
 }
 
 export interface ProviderFactory { 
-   collectComplexity: (cwd:string)=>Promise<any[]>; 
-   readCoverage: (cwd:string, file?:string)=>Promise<any> 
- }
+   collectComplexity: (cwd:string, trace?:any)=>Promise<any[]>; 
+   readCoverage: (cwd:string, file?:string, trace?:any)=>Promise<any> 
+  }
  const providers = new Map<string, ProviderFactory>()
  export function registerProvider(ext:string, factory:ProviderFactory){providers.set(ext,factory)}
 
@@ -345,9 +355,9 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
     try {
         const provider = providers.get(detectedExtension);
         if (provider) {
-            complexityInfo = await provider.collectComplexity(cwd);
+            complexityInfo = await provider.collectComplexity(cwd, trace);
         } else {
-            complexityInfo = await collectComplexity(cwd);
+            complexityInfo = await collectComplexity(cwd, trace);
         }
     }
     catch (error) {
@@ -410,9 +420,9 @@ export async function buildEvidenceOutput(base, intervals, cwd, threshold = 30, 
     try {
         const provider = providers.get(detectedExtension);
         if (provider) {
-            coverageResult = await provider.readCoverage(cwd, coverageFile);
+            coverageResult = await provider.readCoverage(cwd, coverageFile, trace);
         } else {
-        coverageResult = await readCoverage(cwd, coverageFile);
+        coverageResult = await readCoverage(cwd, coverageFile, trace);
         }
         if (coverageResult.error) {
         coverageCapability = 'failed';

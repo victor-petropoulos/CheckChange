@@ -5,6 +5,7 @@ import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { parseCoverageReport } from '@barney-media/crap-typescript-core';
 import { parseLcovContent } from './coverage-providers/lcovProvider.js';
+import type { TraceRun } from './execute.js';
 
 // Provenance for the coverage lineage stage: artifact parser from the core package.
 export const coverageProvenance = { tool: '@barney-media/crap-typescript-core', version: '0.5.0' } as const;
@@ -298,7 +299,7 @@ function normalizeCoveragePaths(
   return normalized;
 }
 
-export async function readCoverage(cwd: string, coverageFile?: string): Promise<CoverageResult> {
+export async function readCoverage(cwd: string, coverageFile?: string, trace?: TraceRun): Promise<CoverageResult> {
   // 1. Explicit coverageFile provided - use it directly (existing behavior)
   if (coverageFile !== undefined && coverageFile !== null && coverageFile !== '') {
     const coveragePath = path.isAbsolute(coverageFile) ? coverageFile : path.resolve(cwd, coverageFile);
@@ -319,7 +320,12 @@ export async function readCoverage(cwd: string, coverageFile?: string): Promise<
         return result;
       }
       // Conversion/read failed - warn and continue to next candidate
-      console.warn(`Coverage conversion failed for ${filePath}: ${result.reason}`);
+      const message = `Coverage conversion failed for ${filePath}: ${result.reason}`;
+      if (trace) {
+        trace.recordWarning('coverage', message);
+      } else {
+        console.warn(message);
+      }
       // Continue to next file in precedence
     } catch {
       // File doesn't exist or not readable, continue to next

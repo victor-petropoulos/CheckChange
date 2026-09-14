@@ -432,11 +432,14 @@ async function runTrace(argv: string[]): Promise<void> {
   const { resolvedBase, intervals } = await traceGitStage(base, trace);
   await buildEvidenceOutput(resolvedBase, intervals, process.cwd(), threshold, coverageFile, trace);
 
-  const status = { command: 'trace', correlationId: trace.correlationId, spans: trace.spans };
+  const status = { command: 'trace', correlationId: trace.correlationId, spans: trace.spans, warnings: trace.warnings };
   if (json) {
     console.log(JSON.stringify(status, null, 2));
   } else {
     console.log(`trace: ${trace.correlationId} — ${trace.spans.length} span(s)`);
+    for (const warning of trace.warnings) {
+      console.log(`warning: [${warning.source}] ${warning.message}`);
+    }
   }
 }
 

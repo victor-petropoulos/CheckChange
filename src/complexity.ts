@@ -1,6 +1,7 @@
 import { findAllTypeScriptFilesUnderSourceRoots, parseFileMethods } from '@barney-media/crap-typescript-core';
 import { relative, resolve } from 'node:path';
 import { execSync } from 'node:child_process';
+import type { TraceRun } from './execute.js';
 
 // Provenance for the complexity lineage stage: native analyzer from the core package.
 export const complexityProvenance = { tool: '@barney-media/crap-typescript-core', version: '0.5.0' } as const;
@@ -33,7 +34,7 @@ export function getGitTrackedCodeFiles(cwd: string): string[] {
   }
 }
 
-export async function collectComplexity(cwd: string): Promise<ComplexityInfo[]> {
+export async function collectComplexity(cwd: string, trace?: TraceRun): Promise<ComplexityInfo[]> {
   // Find all TypeScript files under the source roots
   const sourceRootFiles = await findAllTypeScriptFilesUnderSourceRoots(cwd);
   // Get all tracked code files in the repo (respects .gitignore)
@@ -70,7 +71,13 @@ export async function collectComplexity(cwd: string): Promise<ComplexityInfo[]> 
       }
     } catch (error) {
       // If parsing fails for a single file (e.g., stray temp malformed JS), skip file rather than failing entire collection.
-      console.error(`Warning: failed to parse ${filePath}, skipping: ${error instanceof Error ? error.message : String(error)}`);
+      // With a TraceRun the warning buffers there; without one the CLI console behavior is preserved.
+      const message = `Warning: failed to parse ${filePath}, skipping: ${error instanceof Error ? error.message : String(error)}`;
+      if (trace) {
+        trace.recordWarning('complexity', message);
+      } else {
+        console.error(message);
+      }
       continue;
     }
   }

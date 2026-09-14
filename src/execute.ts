@@ -16,6 +16,12 @@ export interface TraceExecSpan extends TraceSpan {
   exitCode: number | null;
 }
 
+export interface TraceWarning {
+  source: string;
+  message: string;
+  correlationId: string;
+}
+
 /**
  * In-memory trace collector for one pipeline run. Holds the per-run
  * correlation ID and every span recorded (stage spans from the evidence
@@ -25,6 +31,7 @@ export interface TraceExecSpan extends TraceSpan {
 export class TraceRun {
   readonly correlationId: string;
   readonly spans: Array<TraceSpan | TraceExecSpan> = [];
+  readonly warnings: TraceWarning[] = [];
 
   constructor(correlationId: string = randomUUID()) {
     this.correlationId = correlationId;
@@ -38,6 +45,11 @@ export class TraceRun {
   /** Records one child-process span; wired from execute() when given a TraceRun. */
   recordExec(command: string, args: string[], durationMs: number, exitCode: number | null): void {
     this.spans.push({ stage: 'exec', command, args, durationMs, exitCode, status: 'ok', correlationId: this.correlationId });
+  }
+
+  /** Records one non-fatal warning (parse/conversion skip) into the trace buffer. */
+  recordWarning(source: string, message: string): void {
+    this.warnings.push({ source, message, correlationId: this.correlationId });
   }
 }
 
