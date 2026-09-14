@@ -16,7 +16,7 @@ This is the **single source of truth** for CheckChange evolution across sessions
 | **Update Session Log** | End of each session — append row with date, agent, work done, blockers, next steps |
 | **Append decisions** | When new Q&A resolves ambiguity — add to Decisions table with rationale |
 | **Mark phase complete** | When acceptance criteria met — tick phase in Roadmap, note evidence |
-| **Never rename/move** | This file stays at `docs/Project Master Plans/checkchange-master-plan.md`; reference plans stay timestamped |
+| **Never rename/move** | This file stays at `docs/Project Master Plans/checkchange-master-plan.md`; reference plans stay timestamped
 
 ---
 
@@ -88,10 +88,10 @@ This is the **single source of truth** for CheckChange evolution across sessions
 ### Dependency Chain (must-separate vs can-bundle)
 ```
 A (Trust: lineage + completeness) 
-  → B (Tracing sidecar) 
-    → fingerprints (needs A+B) 
-      → C (Incremental — needs fingerprints)
-        → D2 (Baseline/delta — needs A)
+   → B (Tracing sidecar) 
+     → fingerprints (needs A+B) 
+       → C (Incremental — needs fingerprints)
+         → D2 (Baseline/delta — needs A)
 D1 (doctor/explain) bundles with A (same diagnostics plumbing)
 D3 (CI/PR formatters) — standalone sidecar, ship anytime
 ```
@@ -185,18 +185,19 @@ Baseline metrics recorded in task notes.
 | 2026-09-13 | Orchestrator | C shipped (18d4ba3: perf baseline doc, lineage plumbing, src/cache.ts 2-tier keys + TTL/eviction/guards, --cache wiring default-off, 33 tests, 377 green, cold-vs-cached identical, ~20% warm saving, audit High+Mediums fixed, Engram rev-1789326912647-11 approved); refactor (aa70f24: composition cli.ts→cache.ts, 669→535 lines, all 5 arch findings resolved, Engram rev-1789333673935-15 approved); agent constitutions baked (planner seam-explicit + D1–D16 + E1–E5 + repo-conventions, implementer H1–H8; backups kept; live post-restart) | None (open: verbose-drain test follow-up per aa70f24 trailer; default-on cache flip needs field data; gpg signing unavailable → commits unsigned) | Commit constitution package; next session per roadmap (WP16/WP17) or first live test of new planner constitution |
 | 2026-09-13 | Orchestrator | Gate-null investigate (researcher ses_f63242747ffeVwNMygmB2SfZq6) → hermetic plan .opencode/plans/2026-09-13T22:26:48Z-index-test-hermetic.md (approved:true) → implementer (src/index.test.ts 49+/15-, tmpDir T1 PASS + T2 malformed-null) → reviewer rev-1789339382356-4 approved 0 findings + pre-commit rev-1789346300781-5 COMMIT-GO → tester PASS (checkchange PASS 63 fns) → committed f6aa8f0, merged-result 85/379 green tsc 0 | None (open: verbose-drain follow-up, cache default-on flip needs field data) | WP16/WP17 scoping |
 | 2026-09-13 | Documenter | Audit ses_f629c3ec2ffePZPV0FEBRsFTQB (researcher) verified P2–P4/P6–P7 implementation complete; updated roadmap P2/P3/P4/P6/P7 ☐→☑ with commit+file:line evidence; replaced stale drift note with resolved note citing audit session; all P0–P10 now DONE per evidence | gpg signing unavailable → commits unsigned | Commit roadmap updates |
+| 2026-09-13 | Orchestrator | remediation b6a1691 — T1 backup del, T2 verbose 4/4, T3 warnings buffer + reviewer GO rev-1789350155002-8, T4 KEEP nocheck 34 errs, T5 criteria doc, T6 gpg note, T7 skill 116-line sync; Engram routing verified :8001; gates tsc 0 86/383 | None | trace-warning tests + typing scope + WP16/WP17 |
 
 ---
 
 ## Next-Session Resume Checklist
 
 - [ ] Read bridge (`OPENCODE_START_HERE.md` §Last/Next Session) + master §Session Log
-- [ ] Verify clean tree at commit f6aa8f0 (`git status --porcelain` empty, `git log --oneline -1`)
-- [ ] Confirm baseline still green: `npx tsc --noEmit && npm test` (expect 0 / 379)
+- [ ] Verify clean tree at commit b6a1691 (`git status --porcelain` empty, `git log --oneline -1`)
+- [ ] Confirm baseline still green: `npx tsc --noEmit && npm test` (expect 0 / 86 files / 383 tests)
 - [ ] Constitution package at `.opencode/plans/20260913T213000-agent-constitution-package.md` — baked live; first live test on next real planning task
 - [ ] Update Session Log with new entry
-- [ ] Prior checklist stale (was aa70f24 / 377 tests) — updated to HEAD f6aa8f0 / 379 tests / tsc 0
+- [ ] Prior checklist stale (was aa70f24 / 377 tests) — updated to HEAD b6a1691 / 86 files / 383 tests / tsc 0
 
 ---
 
-*End of Master Plan*
+## End of Master Plan

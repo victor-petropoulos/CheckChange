@@ -1,6 +1,6 @@
 // Tests for cache verbose-drain: warnings buffer, --verbose drain, reset per registration.
 // Verifies src/cache.ts:309-314 buffer, :337 push, :390 drain, :399 reset
-// and src/cli.ts:204-206 drain under --verbose. (plan task T2)
+// and src/cli.ts:202-211 drain under --verbose. (plan task T2)
 
 import { describe, test, expect, vi, afterEach, beforeEach } from 'vitest';
 import * as path from 'node:path';
