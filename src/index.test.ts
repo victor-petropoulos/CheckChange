@@ -1,26 +1,60 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, beforeEach, afterEach } from 'vitest';
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { buildEvidenceOutput } from './index.js';
 
 describe('buildEvidenceOutput (barrel)', () => {
   test('is a function', () => {
     expect(typeof buildEvidenceOutput).toBe('function');
   });
+});
 
-test('returns schemaVersion 0.5 with gate PASS for no changes', async () => {
-     const base = 'HEAD'; // we can use HEAD as base, but note: we are in a git repo? We are in the project repo.
-     // However, we want to test with no changes. We can use an empty intervals map.
-     const intervals = new Map(); // empty intervals
-     const cwd = process.cwd();
-     const threshold = 30;
+describe('buildEvidenceOutput (hermetic)', () => {
+  let tmpDir: string;
+  let originalCwd: string;
 
-     const result = await buildEvidenceOutput(base, intervals, cwd, threshold);
+  beforeEach(() => {
+    originalCwd = process.cwd();
+    tmpDir = mkdtempSync(join(tmpdir(), 'index-test-hermetic-'));
+    process.chdir(tmpDir);
+    mkdirSync(join(tmpDir, 'src'), { recursive: true });
+    writeFileSync(
+      join(tmpDir, 'tsconfig.json'),
+      JSON.stringify({
+        compilerOptions: { target: 'ES2022', module: 'NodeNext', moduleResolution: 'NodeNext' },
+        include: ['src'],
+      }),
+      'utf8',
+    );
+  });
 
-     expect(result.schemaVersion).toBe('0.5');
-    // With no changes and assuming we have coverage and complexity available, we expect gate to be PASS.
-    // However, note: if there are no changed functions, the gate should be PASS (if no WARN).
-    // We'll check that the gate is either PASS or WARN? But with no changed functions, ruleResults will be empty, so no WARN -> PASS.
+  afterEach(() => {
+    process.chdir(originalCwd);
+    rmSync(tmpDir, { recursive: true, force: true });
+  });
+
+  test('positive: empty src, no coverage, empty intervals -> 0.5/PASS/SUCCESS', async () => {
+    const intervals = new Map();
+    const threshold = 30;
+    const result = await buildEvidenceOutput('HEAD', intervals, tmpDir, threshold);
+
+    expect(result.schemaVersion).toBe('0.5');
     expect(result.gate).toBe('PASS');
-    // Also, we expect analysisStatus to be SUCCESS (if complexity and coverage are available) or at least not FAILED.
-    // We'll just check the gate and schemaVersion as per the acceptance criteria.
+    expect(result.analysisStatus).toBe('SUCCESS');
+  });
+
+  test('negative: malformed .coverage -> FAILED/null/INCOMPLETE/coverageErrorReason malformed', async () => {
+    writeFileSync(join(tmpDir, '.coverage'), 'mock-binary-content', 'utf8');
+    const intervals = new Map();
+    const threshold = 30;
+    const result = await buildEvidenceOutput('HEAD', intervals, tmpDir, threshold);
+
+    expect(result.schemaVersion).toBe('0.5');
+    expect(result.gate).toBeNull();
+    expect(result.analysisStatus).toBe('FAILED');
+    expect(result.completeness).toBe('INCOMPLETE');
+    // coverageErrorReason is a conditional-spread field on an untyped output object
+    expect(result).toHaveProperty('coverageErrorReason', 'malformed');
   });
 });
