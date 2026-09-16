@@ -60,14 +60,10 @@ describe('cli-empty-evidence (hermetic, in-process)', () => {
 
     const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
     const logSpy = vi.spyOn(console, 'log');
-    // argv below (directed form) has no `check` positional, so parseCliArgs
-    // logs 'Error: Command must be "check"' + exit(1) (mocked), then runCheck
-    // proceeds — same flow as cli.real-git.spec.ts precedent. Error silenced.
-    vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const originalArgv = process.argv;
     try {
-      process.argv = ['node', 'cli.js', '--base', 'HEAD', '--json'];
+      process.argv = ['node', 'cli.js', '--base', 'HEAD', '--json', 'check'];
       await main();
     } finally {
       process.argv = originalArgv;

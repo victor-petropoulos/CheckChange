@@ -66,14 +66,10 @@ describe('cli-malformed-coverage (hermetic, in-process)', () => {
 
     const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
     const logSpy = vi.spyOn(console, 'log');
-    // parseCliArgs fires console.error('Error: Command must be "check"') + exit(1)
-    // on missing positional (cli.ts:152-153); silenced — same flow as
-    // test/negatives/cli-empty-evidence.spec.ts + test/cli.real-git.spec.ts.
-    vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const originalArgv = process.argv;
     try {
-      process.argv = ['node', 'cli.js', '--base', 'HEAD', '--json'];
+      process.argv = ['node', 'cli.js', '--base', 'HEAD', '--json', 'check'];
       await main();
     } finally {
       process.argv = originalArgv;
