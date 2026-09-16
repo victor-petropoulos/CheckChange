@@ -17,8 +17,8 @@ Correct use of `checkchange check`: prevents hallucination, enforces WARN blocks
 - Comparing evidence runs with `delta`.
 
 # What It Entails
-1. `pnpm vitest run --coverage` → `coverage/coverage-final.json` (or jest coverage) — required before check
-2. `checkchange check [--base <ref>] [--json] [--cache] [--crap-threshold <n>] [--coverage-file <path>] [--format github|junit|sarif] [--verbose]` — auto-detects base if omitted (origin/HEAD → origin/master/main → master/main)
+1. `pnpm vitest run --coverage` → `coverage/coverage-final.json` (or jest coverage) — required before check (or use `--auto-coverage`)
+2. `checkchange check [--base <ref>] [--json] [--cache] [--auto-coverage] [--crap-threshold <n>] [--coverage-file <path>] [--format github|junit|sarif] [--verbose]` — auto-detects base if omitted (origin/HEAD → origin/master/main → master/main)
 3. Read gate + changedFunctions
 
 # Requires

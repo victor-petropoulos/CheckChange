@@ -2,6 +2,7 @@
 import { validateGitRepo, resolveBaseRef, getChangedIntervals, detectDefaultBase } from './git.js';
 import { buildEvidenceOutput } from './evidence.js';
 import { readCoverage } from './coverage.js';
+import { autoCoverage } from './auto-coverage.js';
 import { registerCachedProviders, getCacheWarnings, clearCacheWarnings } from './cache.js';
 import { execute, TraceRun } from './execute.js';
 import { FORMATS, format, type EvidenceOutputShape as FormatterOutputShape, type FormatType } from './formatters/index.js';
@@ -21,6 +22,7 @@ export interface CheckArgs {
   base: string | null;
   json: boolean;
   cache?: boolean;
+  autoCoverage?: boolean;
   crapThreshold: number;
   coverageFile: string | undefined;
   format?: FormatType;
@@ -31,10 +33,56 @@ export interface CheckArgs {
  * Parses command line arguments for the `check` subcommand.
  * Returns parsed args or prints error and exits.
  */
+/** Require value from next argv slot (space form only). Exits on missing. */
+function nextValue(argv: string[], i: number, name: string): [string, number] {
+  if (i + 1 >= argv.length) {
+    console.error(`Error: ${name} requires a value`);
+    process.exit(1);
+  }
+  return [argv[i + 1]!, i + 1];
+}
+
+/** Require value from `--flag=value` or next argv slot. Exits on missing/empty-ish. */
+function splitValue(argv: string[], i: number, name: string): [string, number] {
+  const parts = argv[i]!.split('=');
+  if (parts.length > 1) return [parts[1]!, i];
+  return nextValue(argv, i, name);
+}
+
+function parseCrapThreshold(value: string): number {
+  const parsed = parseFloat(value);
+  if (!isFinite(parsed) || parsed < 0) {
+    console.error('Error: --crap-threshold must be a finite non-negative number');
+    process.exit(1);
+  }
+  return parsed;
+}
+
+function parseCoverageFile(value: string): string {
+  if (value === '') {
+    console.error('Error: --coverage-file requires a value');
+    process.exit(1);
+  }
+  return value;
+}
+
+function parseFormat(value: string): FormatType {
+  if (value === '') {
+    console.error('Error: --format requires a value');
+    process.exit(1);
+  }
+  if (!(FORMATS as readonly string[]).includes(value)) {
+    console.error(`Error: Unknown --format value: ${value}`);
+    process.exit(1);
+  }
+  return value as FormatType;
+}
+
 export function parseCliArgs(argv: string[] = process.argv.slice(2)): CheckArgs {
   let base: string | null = null;
   let json = false;
   let cache = false;
+  let autoCoverage = false;
   let help = false;
   let verbose = false;
   let crapThreshold = 30; // default
@@ -47,12 +95,11 @@ export function parseCliArgs(argv: string[] = process.argv.slice(2)): CheckArgs 
     if (arg === '--cache') {
       cache = true;
     }
+    else if (arg === '--auto-coverage') {
+      autoCoverage = true;
+    }
     else if (arg === '--base') {
-      if (i + 1 >= argv.length) {
-        console.error('Error: --base requires a value');
-        process.exit(1);
-      }
-      base = argv[++i]!;
+      [base, i] = nextValue(argv, i, '--base');
     }
     else if (arg === '--json') {
       json = true;
@@ -64,66 +111,19 @@ export function parseCliArgs(argv: string[] = process.argv.slice(2)): CheckArgs 
       verbose = true;
     }
     else if (arg.startsWith('--crap-threshold')) {
-      let value: string;
-      const parts = arg.split('=');
-      if (parts.length > 1) {
-        value = parts[1]!;
-      }
-      else {
-        if (i + 1 >= argv.length) {
-          console.error('Error: --crap-threshold requires a value');
-          process.exit(1);
-        }
-        value = argv[++i]!;
-      }
-      const parsed = parseFloat(value);
-      if (!isFinite(parsed) || parsed < 0) {
-        console.error('Error: --crap-threshold must be a finite non-negative number');
-        process.exit(1);
-      }
-      crapThreshold = parsed;
+      const [v, next] = splitValue(argv, i, '--crap-threshold');
+      crapThreshold = parseCrapThreshold(v);
+      i = next;
     }
     else if (arg.startsWith('--coverage-file')) {
-      let value: string;
-      const parts = arg.split('=');
-      if (parts.length > 1) {
-        value = parts[1]!;
-      }
-      else {
-        if (i + 1 >= argv.length) {
-          console.error('Error: --coverage-file requires a value');
-          process.exit(1);
-        }
-        value = argv[++i]!;
-      }
-      if (value === '') {
-        console.error('Error: --coverage-file requires a value');
-        process.exit(1);
-      }
-      coverageFile = value;
+      const [v, next] = splitValue(argv, i, '--coverage-file');
+      coverageFile = parseCoverageFile(v);
+      i = next;
     }
     else if (arg.startsWith('--format')) {
-      let value: string;
-      const parts = arg.split('=');
-      if (parts.length > 1) {
-        value = parts[1]!;
-      }
-      else {
-        if (i + 1 >= argv.length) {
-          console.error('Error: --format requires a value');
-          process.exit(1);
-        }
-        value = argv[++i]!;
-      }
-      if (value === '') {
-        console.error('Error: --format requires a value');
-        process.exit(1);
-      }
-      if (!(FORMATS as readonly string[]).includes(value)) {
-        console.error(`Error: Unknown --format value: ${value}`);
-        process.exit(1);
-      }
-      format = value as FormatType;
+      const [v, next] = splitValue(argv, i, '--format');
+      format = parseFormat(v);
+      i = next;
     }
     else if (arg.startsWith('-')) {
       console.error(`Error: Unknown option ${arg}`);
@@ -135,13 +135,14 @@ export function parseCliArgs(argv: string[] = process.argv.slice(2)): CheckArgs 
     i++;
   }
   if (help) {
-    console.log('Usage: checkchange check [--base <ref>] [--json] [--cache] [--crap-threshold <number>] [--coverage-file <path>] [--format github|junit|sarif] [--verbose]');
+    console.log('Usage: checkchange check [--base <ref>] [--json] [--cache] [--auto-coverage] [--crap-threshold <number>] [--coverage-file <path>] [--format github|junit|sarif] [--verbose]');
     console.log('Options:');
     console.log('  --base <ref>             Git base reference to compare against (optional, default: auto-detect)');
     console.log('  --json                   Output JSON (default: false)');
     console.log('  --cache                  Enable incremental caching (default: off; also CHECKCHANGE_CACHE=1 env)');
     console.log('  --crap-threshold <number> CRAP threshold for WARN (default: 30)');
     console.log('  --coverage-file <path>   Istanbul coverage JSON file path');
+    console.log('  --auto-coverage          Detect test runner, generate coverage artifact, retry [experimental]');
     console.log('  --format <name>          Output format: github, junit, sarif (default: none)');
     console.log('  --verbose                Print diagnostic info to stderr');
     process.exit(0);
@@ -152,7 +153,7 @@ export function parseCliArgs(argv: string[] = process.argv.slice(2)): CheckArgs 
     console.error('Error: Command must be "check"');
     process.exit(1);
   }
-  return { base, json, crapThreshold, coverageFile, verbose, ...(cache ? { cache: true } : {}), ...(format === undefined ? {} : { format }) };
+  return { base, json, crapThreshold, coverageFile, verbose, ...(cache ? { cache: true } : {}), ...(autoCoverage ? { autoCoverage: true } : {}), ...(format === undefined ? {} : { format }) };
 }
 
 // Shape of buildEvidenceOutput as consumed by the CLI. EvidenceOutput has no
@@ -170,35 +171,32 @@ interface EvidenceOutputShape {
 }
 
 /**
- * The `check` subcommand. Body (messages, exit codes, output) preserved
- * byte-identical from the pre-dispatcher CLI.
+ * Auto-detect base reference. If base is non-null returns it directly,
+ * otherwise tries detectDefaultBase. Exits on failure.
  */
-async function runCheck(args: string[]): Promise<void> {
-  const opts = parseCliArgs(args);
-  // Auto-detect base if not provided
-  let base = opts.base;
+export async function detectBase(base: string | null, verbose: boolean): Promise<string> {
   if (base === null) {
-    const detectedBase = await detectDefaultBase(opts.verbose);
+    const detectedBase = await detectDefaultBase(verbose);
     if (detectedBase === null) {
       console.error('Error: Cannot auto-detect base branch (tried origin/master, origin/main, master, main). Provide --base <ref> explicitly.');
       process.exit(1);
     }
     base = detectedBase;
   }
-  // Validate git repo
-  await validateGitRepo();
-  // Resolve base ref
-  const resolvedBase = await resolveBaseRef(base);
-  // Get changed intervals
-  const { intervals } = await getChangedIntervals(resolvedBase);
-  // Incremental caching opt-in (Experiment C, task C-4): --cache flag or
-  // CHECKCHANGE_CACHE=1. Default OFF => evidence.ts provider defaults untouched.
-  const cacheEnabled = opts.cache === true || process.env.CHECKCHANGE_CACHE === '1';
-  if (cacheEnabled) {
-    registerCachedProviders();
-  }
-  // Build evidence output using composed providers
-  const output = (await buildEvidenceOutput(resolvedBase, intervals, process.cwd(), opts.crapThreshold, opts.coverageFile)) as EvidenceOutputShape;
+  return base;
+}
+
+/**
+ * Emit check output: verbose diagnostics, formatter, JSON/summary, and
+ * FAILED status handling + exit code. Preserves byte-identical output
+ * from pre-dispatcher CLI.
+ */
+export function formatOutput(
+  output: EvidenceOutputShape,
+  opts: CheckArgs,
+  resolvedBase: string,
+  cacheEnabled: boolean
+): void {
   if (opts.verbose) {
     console.error(`[verbose] analysisStatus=${output.analysisStatus} gate=${output.gate} completeness=${output.completeness} changedFunctions=${output.changedFunctions.length}`);
     // Cache-provider warnings (parse/conversion skips) buffer in cache.ts; the
@@ -246,6 +244,46 @@ async function runCheck(args: string[]): Promise<void> {
     }
   }
   process.exit(exitCode);
+}
+
+/**
+ * The `check` subcommand. Body (messages, exit codes, output) preserved
+ * byte-identical from the pre-dispatcher CLI.
+ */
+async function runCheck(args: string[]): Promise<void> {
+  const opts = parseCliArgs(args);
+  // Auto-detect base if not provided
+  const base = await detectBase(opts.base, opts.verbose);
+  // Validate git repo
+  await validateGitRepo();
+  // Resolve base ref
+  const resolvedBase = await resolveBaseRef(base);
+  // Get changed intervals
+  const { intervals } = await getChangedIntervals(resolvedBase);
+  // Incremental caching opt-in (Experiment C, task C-4): --cache flag or
+  // CHECKCHANGE_CACHE=1. Default OFF => evidence.ts provider defaults untouched.
+  const cacheEnabled = opts.cache === true || process.env.CHECKCHANGE_CACHE === '1';
+  if (cacheEnabled) {
+    registerCachedProviders();
+  }
+  // Auto-coverage: detect runner, spawn coverage generation, use artifact path.
+  // Explicit --coverage-file wins (skip auto). On fail: fall back to absent path (never forced FAILED).
+  let coverageFile = opts.coverageFile;
+  let autoGenerated = false; // ponytail: generation-truth, not flag-truth (fixes C1 regression)
+  if (opts.autoCoverage === true && !coverageFile) {
+    const cwd = process.cwd();
+    const { generatedPath, hint } = autoCoverage(cwd);
+    if (generatedPath) {
+      coverageFile = generatedPath;
+      autoGenerated = true;
+    }
+    if (hint) {
+      console.error(`[auto-coverage] ${hint}`);
+    }
+  }
+  // Build evidence output using composed providers
+  const output = (await buildEvidenceOutput(resolvedBase, intervals, process.cwd(), opts.crapThreshold, coverageFile, undefined, autoGenerated)) as EvidenceOutputShape;
+  formatOutput(output, opts, resolvedBase, cacheEnabled);
 }
 
 interface DoctorProbe {

@@ -176,4 +176,41 @@ test('missing --base returns null base and does not exit', () => {
     });
     expect(exitSpy).not.toHaveBeenCalled();
   });
+
+  // Combo tests (Task 3)
+  test('C1: --auto-coverage + --coverage-file', () => {
+    setArgv(['--base', 'main', '--auto-coverage', '--coverage-file', 'cov.json', 'check']);
+    const result = parseCliArgs();
+    expect(result.autoCoverage).toBe(true);
+    expect(result.coverageFile).toBe('cov.json');
+    expect(exitSpy).not.toHaveBeenCalled();
+  });
+
+  test('C2: --auto-coverage + --json + --verbose', () => {
+    setArgv(['--base', 'main', '--auto-coverage', '--json', '--verbose', 'check']);
+    const result = parseCliArgs();
+    expect(result.autoCoverage).toBe(true);
+    expect(result.json).toBe(true);
+    expect(result.verbose).toBe(true);
+    expect(exitSpy).not.toHaveBeenCalled();
+  });
+
+  test('C3: --auto-coverage + --crap-threshold + --format', () => {
+    setArgv(['--auto-coverage', '--crap-threshold=40', '--format', 'sarif', '--verbose', 'check']);
+    const result = parseCliArgs();
+    expect(result.autoCoverage).toBe(true);
+    expect(result.crapThreshold).toBe(40);
+    expect(result.format).toBe('sarif');
+    expect(result.verbose).toBe(true);
+    expect(exitSpy).not.toHaveBeenCalled();
+  });
+
+  test('C4: --auto-coverage + --coverage-file=inline + --json', () => {
+    setArgv(['--auto-coverage', '--coverage-file=inline.json', '--json', 'check']);
+    const result = parseCliArgs();
+    expect(result.autoCoverage).toBe(true);
+    expect(result.coverageFile).toBe('inline.json');
+    expect(result.json).toBe(true);
+    expect(exitSpy).not.toHaveBeenCalled();
+  });
 });

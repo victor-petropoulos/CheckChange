@@ -91,9 +91,10 @@ Examples:
 checkchange check --verbose
 checkchange check --base main --json | jq
 pnpm vitest run --coverage && checkchange check --json
+checkchange check --auto-coverage --json
 ```
 
-**Coverage artifact required** for CRAP score calculation. Without coverage, gate returns `INCOMPLETE`.
+**Coverage artifact required** for CRAP score calculation. Without coverage, gate returns `INCOMPLETE`. Use `--auto-coverage` to auto-detect runner and generate the artifact.
 
 ## Skill for AI Agents
 
