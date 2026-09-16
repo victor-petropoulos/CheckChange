@@ -82,10 +82,6 @@ describe('cli-tool-absent (hermetic, in-process)', () => {
 
     const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
     const logSpy = vi.spyOn(console, 'log');
-    // parseCliArgs fires console.error('Error: Command must be "check"') + exit(1)
-    // when the "check" positional is missing (cli.ts:152-153); silenced — same
-    // pattern as test/negatives/cli-empty-evidence.spec.ts + test/cli.real-git.spec.ts.
-    vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const originalArgv = process.argv;
     try {

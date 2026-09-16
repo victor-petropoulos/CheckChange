@@ -1,9 +1,9 @@
 /// <reference types="vitest" />
 import { describe, test, expect, vi, afterEach } from 'vitest'
 import { buildEvidenceOutput } from '../../src/evidence.js'
-import * as complexity from '../../src/complexity.ts'
-import * as coverage from '../../src/coverage.ts'
-import * as attribution from '../../src/attribution.ts'
+import * as complexity from '../../src/complexity.js'
+import * as coverage from '../../src/coverage.js'
+import * as attribution from '../../src/attribution.js'
 
 // ponytail: mock pattern mirrors coverage-errors.test.ts
 function createInterval(start: number, end: number) {
@@ -15,9 +15,10 @@ function createComplexityInfo(file: string, method: string, lineStart: number, l
 }
 
 /**
- * 2 taxonomy: test tool errors through buildEvidenceOutput pipeline.
- *   TEST_COMMAND_FAILED → test runner non-zero exit
- *   EXTERNAL_TOOL_UNEXPECTED → tool returns unrecognized output format
+ * Reason pass-through contract: verifies buildEvidenceOutput (evidence.ts:441)
+ * propagates arbitrary reason strings from readCoverage to output unchanged.
+ * TEST_COMMAND_FAILED / EXTERNAL_TOOL_UNEXPECTED are example strings — not
+ * emitted by src/coverage.ts (which only emits 'missing'/'malformed').
  */
 describe('test-tool-errors (mocked unit)', () => {
   afterEach(() => vi.restoreAllMocks())
