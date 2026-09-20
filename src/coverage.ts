@@ -5,6 +5,7 @@ import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { parseCoverageReport } from '@barney-media/crap-typescript-core';
 import { parseLcovContent } from './coverage-providers/lcovProvider.js';
+import { providerRegistry } from './evidence.js';
 import type { TraceRun } from './execute.js';
 
 // Provenance for the coverage lineage stage: artifact parser from the core package.
@@ -20,7 +21,7 @@ export interface CoverageResult {
 }
 
 const MAX_COVERAGE_SIZE = 100 * 1024 * 1024; // 100MB
-export const PYTHON_COVERAGE_FILES = ['.coverage', 'coverage.xml', 'coverage.json', 'coverage/coverage-final.json'] as const;
+export const PYTHON_COVERAGE_FILES: readonly string[] = ['.coverage', 'coverage.xml', 'coverage.json', 'coverage/coverage-final.json']; // kept for backward compat; prefer config-driven coverageFiles
 
 /**
  * Check if a file path is within the given cwd (prevents path traversal).
@@ -307,13 +308,17 @@ export async function readCoverage(cwd: string, coverageFile?: string, trace?: T
   }
 
   // 2. Auto-detect coverage files in precedence order with fallthrough on conversion failure
-  // Precedence: .coverage > coverage.xml > coverage.json > coverage/coverage-final.json
-  let pythonArtifactFound = false;
-  for (const file of PYTHON_COVERAGE_FILES) {
+  // Precedence: config-driven — all providers' coverageFiles deduped in builtin order
+  let artifactFound = false;
+  const registry = providerRegistry();
+  const coverageCandidates = registry
+    ? [...new Set([...registry.values()].flatMap((r) => r.coverageFiles))]
+    : [...PYTHON_COVERAGE_FILES];
+  for (const file of coverageCandidates) {
     const filePath = path.join(cwd, file);
     try {
       await access(filePath, constants.R_OK);
-      pythonArtifactFound = true;
+      artifactFound = true;
       const result = await readCoverageFile(filePath, cwd, false);
       // If conversion/read succeeded (error: false), return it
       if (!result.error) {
@@ -333,8 +338,8 @@ export async function readCoverage(cwd: string, coverageFile?: string, trace?: T
   }
 
   // 3. All candidates exhausted
-  if (pythonArtifactFound) {
-    // At least one Python artifact existed but all failed conversion
+  if (artifactFound) {
+    // At least one artifact existed but all failed conversion
     return { available: true, coverageMap: null, error: true, reason: 'malformed' };
   } else {
     // No coverage files found at all

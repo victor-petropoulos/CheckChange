@@ -362,8 +362,8 @@ describe('Defect reproduction evidence', () => {
       expect(func.coverage).toBeNull();
     }
     
-    // And the gate should be PASS (as per the rule for default missing coverage)
-    expect(output.gate).toBe('PASS');
+    // Coverage absent → vacuous-PASS ban: gate is NOT_EVALUATED
+    expect(output.gate).toBe('NOT_EVALUATED');
   });
 
   test('FM-D10/FM-G06: CLI message inaccuracies -> invoke buildEvidenceOutput with missing explicit coverage file, assert analysisStatus is FAILED', async () => {

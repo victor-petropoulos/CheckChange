@@ -81,6 +81,8 @@ describe('jsFault invariants', () => {
         const langs = out.changedFunctions.map(c=>c.language).sort();
         expect(langs).toContain('typescript');
         expect(langs).toContain('javascript');
+        expect(langs.filter((l): l is string => l === 'typescript').length).toBe(1);
+        expect(langs.filter((l): l is string => l === 'javascript').length).toBe(1);
       }
     } finally {repo.cleanup();}
   });

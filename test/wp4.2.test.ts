@@ -248,7 +248,7 @@ describe('WP4.2 Composed Evidence Implementation', () => {
       30
     );
     expect(output.analysisStatus).toBe('SUCCESS');
-    expect(output.gate).toBe('PASS'); // Because no WARN (only NOT_EVALUATED)
+    expect(output.gate).toBe('NOT_EVALUATED'); // Coverage absent → vacuous-PASS ban
     expect(output.completeness).toBe('INCOMPLETE');
   });
 
@@ -302,8 +302,8 @@ describe('WP4.2 Composed Evidence Implementation', () => {
      expect(output.completeness).toBe('COMPLETE');
    });
 
-// Case 13: UNSUPPORTED/null/NOT_APPLICABLE (non-TS file)
-    test('UNSUPPORTED/null/NOT_APPLICABLE', async () => {
+// Case 13: UNSUPPORTED/null/INCOMPLETE (non-TS file)
+    test('UNSUPPORTED/null/INCOMPLETE', async () => {
       // Create a non-TS file (e.g., README.md) with some content (but no TS functions)
       writeFileSync(join('src', 'README.md'), '# Unsupported\nThis is a markdown file.', 'utf8');
       const complexity = await collectComplexity('.');
@@ -322,7 +322,7 @@ describe('WP4.2 Composed Evidence Implementation', () => {
       );
       expect(output.analysisStatus).toBe('UNSUPPORTED');
       expect(output.gate).toBeNull();
-      expect(output.completeness).toBe('NOT_APPLICABLE');
+      expect(output.completeness).toBe('INCOMPLETE');
     });
 
 // Case 14: FAILED/null/INCOMPLETE (malformed coverage)

@@ -15,8 +15,16 @@ const registeredProviders = new Map<string, any>();
 // Mock evidence.ts: intercept registerProvider to capture cached provider factories
 vi.mock('../src/evidence.js', async (importOriginal) => {
   const orig = (await importOriginal()) as Record<string, unknown>;
+  const fakeRegistry = new Map<string, any>([
+    ['.ts', { language: 'typescript', extensions: ['.ts'], complexityCmd: null, coverageFiles: ['coverage.json'], coverageCmd: null, source: 'builtin' }],
+  ]);
   return {
     ...orig,
+    initProviderConfig: vi.fn(() => ({
+      config: {},
+      registry: fakeRegistry,
+    })),
+    providerRegistry: vi.fn(() => fakeRegistry),
     registerProvider: vi.fn((ext: string, factory: any) => {
       registeredProviders.set(ext, factory);
     }),

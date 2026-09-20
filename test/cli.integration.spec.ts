@@ -8,7 +8,8 @@ vi.mock('../src/git.js', () => ({
 }));
 
 vi.mock('../src/evidence.js', () => ({
-  buildEvidenceOutput: vi.fn()
+  buildEvidenceOutput: vi.fn(),
+  initProviderConfig: vi.fn().mockReturnValue({ config: {}, registry: new Map() })
 }));
 
 import * as git from '../src/git.js';
@@ -226,7 +227,7 @@ describe('main() integration tests', () => {
     expect(buildEvidenceOutputMock).not.toHaveBeenCalled();
   });
 
-  test('UNSUPPORTED branch if feasible (gate null completeness NOT_APPLICABLE → exit 0)', async () => {
+  test('UNSUPPORTED branch if feasible (gate null completeness INCOMPLETE → exit 0)', async () => {
     // Arrange
     setArgv(['--base', 'main', 'check']);
     mockCwd('/fake/cwd');
@@ -241,7 +242,7 @@ describe('main() integration tests', () => {
     const mockOutput = {
       analysisStatus: 'UNSUPPORTED',
       gate: null,
-      completeness: 'NOT_APPLICABLE',
+      completeness: 'INCOMPLETE',
       changedFunctions: [],
       coverageErrorReason: undefined
     };

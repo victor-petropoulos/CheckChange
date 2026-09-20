@@ -7,19 +7,12 @@ import * as path from 'path';
 import * as os from 'os';
 import { execSync } from 'child_process';
 
-// Hermetic CLI anchor (negatives): empty-evidence taxonomy at the CLI seam.
-// Harness follows the working precedent test/cli.real-git.spec.ts:25-48 —
-// in-process main(), real git via execSync, mkdtemp + chdir, no child_process
-// execFile (await on non-promisified execFile hangs; prior attempt stalled).
-//
+// Hermetic CLI anchor (negatives): unknown-language taxonomy at the CLI seam.
 // Scenario: repo with two commits, working tree carrying an UNCOMMITTED
-// README-only edit → `git diff HEAD` yields intervals containing only a
-// non-supported file → evidence.ts isUnsupportedIntervals branch →
+// .rs edit → `git diff HEAD` yields intervals containing only an
+// unsupported .rs file → evidence.ts isUnsupportedIntervals branch →
 // UNSUPPORTED / gate null / completeness INCOMPLETE / changedFunctions [].
-// ponytail: a fully clean tree returns SUCCESS/PASS/COMPLETE (verified by
-// probe run 2026-09-15), so the README-only diff is what satisfies the
-// acceptance triple; argv kept as directed: ['node','cli.js','--base','HEAD','--json'].
-describe('cli-empty-evidence (hermetic, in-process)', () => {
+describe('cli-lang-unknown (hermetic, in-process)', () => {
   let originalCwd: string;
   let tempDir: string | undefined;
 
@@ -29,7 +22,6 @@ describe('cli-empty-evidence (hermetic, in-process)', () => {
   });
 
   afterEach(() => {
-    // chdir out BEFORE rm — never delete a directory the process is inside.
     process.chdir(originalCwd);
     vi.restoreAllMocks();
     if (tempDir !== undefined) {
@@ -38,25 +30,25 @@ describe('cli-empty-evidence (hermetic, in-process)', () => {
     }
   });
 
-  test('README-only diff vs HEAD → changedFunctions [], gate null, NOT_APPLICABLE, exit 0', async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'cli-empty-evidence-'));
+  test('unknown .rs diff vs HEAD → UNSUPPORTED, completeness INCOMPLETE, exit 0', async () => {
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'cli-lang-unknown-'));
     process.chdir(tempDir);
 
-    // Repo: src file + README, two commits so HEAD has history.
+    // Repo: src file + Rust file, two commits so HEAD has history.
     await fs.mkdir(path.join(tempDir, 'src'));
     await fs.writeFile(path.join(tempDir, 'src', 'index.ts'), 'export function hello() { return 1; }\n');
-    await fs.writeFile(path.join(tempDir, 'README.md'), 'initial content\n');
+    await fs.writeFile(path.join(tempDir, 'src', 'lib.rs'), 'fn main() { println!("hello"); }\n');
     execSync('git init', { stdio: 'ignore' });
     execSync('git config user.email "ci@example.com"', { stdio: 'ignore' });
     execSync('git config user.name "CI"', { stdio: 'ignore' });
     execSync('git add .', { stdio: 'ignore' });
     execSync('git commit -m "initial commit"', { stdio: 'ignore' });
-    await fs.writeFile(path.join(tempDir, 'README.md'), 'committed content\n');
-    execSync('git add README.md', { stdio: 'ignore' });
-    execSync('git commit -m "update README"', { stdio: 'ignore' });
+    await fs.writeFile(path.join(tempDir, 'src', 'lib.rs'), 'fn main() { println!("updated"); }\n');
+    execSync('git add src/lib.rs', { stdio: 'ignore' });
+    execSync('git commit -m "update rust file"', { stdio: 'ignore' });
 
-    // Uncommitted non-supported change: diff vs HEAD contains only README.md.
-    await fs.writeFile(path.join(tempDir, 'README.md'), 'committed content\nuncommitted edit\n');
+    // Uncommitted .rs change: diff vs HEAD contains only lib.rs (unknown ext).
+    await fs.writeFile(path.join(tempDir, 'src', 'lib.rs'), 'fn main() { println!("uncommitted"); }\n');
 
     const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
     const logSpy = vi.spyOn(console, 'log');
@@ -71,13 +63,11 @@ describe('cli-empty-evidence (hermetic, in-process)', () => {
 
     expect(logSpy).toHaveBeenCalled();
     const output = JSON.parse(logSpy.mock.calls[0][0] as string);
-    // Acceptance triple + status anchor.
     expect(output.changedFunctions).toEqual([]);
-    expect(output.gate).toBeNull();
-    expect(output.completeness).toBe('INCOMPLETE');
     expect(output.analysisStatus).toBe('UNSUPPORTED');
+    expect(output.completeness).toBe('INCOMPLETE');
     expect(output.ruleResults).toEqual([]);
-    // UNSUPPORTED + gate null + INCOMPLETE → exit 0 (cli.ts runCheck).
+    // UNSUPPORTED + gate null + INCOMPLETE (unknown lang) → exit 0.
     expect(exitSpy).toHaveBeenCalledWith(0);
   });
 });

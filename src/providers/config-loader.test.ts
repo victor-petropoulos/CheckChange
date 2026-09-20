@@ -10,14 +10,21 @@ function tmpDir(): string {
 }
 
 describe('builtinConfig', () => {
-  it('returns version 1 with typescript and python providers', () => {
+  it('returns version 1 with typescript, javascript, and python providers', () => {
     const cfg = builtinConfig();
     expect(cfg.version).toBe(1);
-    expect(cfg.providers).toHaveLength(2);
+    expect(cfg.providers).toHaveLength(3);
     const ts = cfg.providers.find((p) => p.language === 'typescript');
+    const js = cfg.providers.find((p) => p.language === 'javascript');
     const py = cfg.providers.find((p) => p.language === 'python');
     expect(ts).toBeDefined();
     expect(ts!.extensions).toContain('.ts');
+    expect(ts!.extensions).toContain('.tsx');
+    expect(js).toBeDefined();
+    expect(js!.extensions).toContain('.js');
+    expect(js!.extensions).toContain('.jsx');
+    expect(js!.extensions).toContain('.mjs');
+    expect(js!.extensions).toContain('.cjs');
     expect(py).toBeDefined();
     expect(py!.extensions).toContain('.py');
     expect(py!.coverageFiles).toContain('.coverage');
@@ -39,7 +46,8 @@ describe('loadProviderConfig', () => {
     fs.writeFileSync(path.join(sub, 'cfg.json'), JSON.stringify(explicit));
 
     // Pass relative path from dir's perspective
-    const cfg = loadProviderConfig(dir, 'sub/cfg.json');
+    const { config: cfg, source } = loadProviderConfig(dir, 'sub/cfg.json');
+    expect(source).toBe('explicit');
     expect(cfg.providers[0]!.language).toBe('go');
   });
 
@@ -57,7 +65,8 @@ describe('loadProviderConfig', () => {
       providers: [{ language: 'go', extensions: ['.go'] }],
     }));
 
-    const cfg = loadProviderConfig(dir, explicitPath);
+    const { config: cfg, source } = loadProviderConfig(dir, explicitPath);
+    expect(source).toBe('explicit');
     expect(cfg.providers[0]!.language).toBe('rust');
   });
 
@@ -68,12 +77,14 @@ describe('loadProviderConfig', () => {
     };
     fs.writeFileSync(path.join(dir, 'checkchange.providers.json'), JSON.stringify(repo));
 
-    const cfg = loadProviderConfig(dir);
+    const { config: cfg, source } = loadProviderConfig(dir);
+    expect(source).toBe('repo-root');
     expect(cfg.providers[0]!.language).toBe('go');
   });
 
   it('falls back to builtin when no config file exists', () => {
-    const cfg = loadProviderConfig(dir);
+    const { config: cfg, source } = loadProviderConfig(dir);
+    expect(source).toBe('builtin');
     expect(cfg.version).toBe(1);
     expect(cfg.providers.some((p) => p.language === 'typescript')).toBe(true);
   });

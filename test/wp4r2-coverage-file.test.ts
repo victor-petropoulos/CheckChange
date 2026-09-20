@@ -169,9 +169,9 @@ const coverageData = {
     const output = await callBuildEvidence('.', undefined);
     
     expect(output.analysisStatus).toBe('SUCCESS');
-    expect(output.gate).toBe('PASS');
+    expect(output.gate).toBe('NOT_EVALUATED');
     expect(output.completeness).toBe('INCOMPLETE');
-    expect(output.capabilities.coverageArtifact).toBe('absent'); // FM-V01 fix: default missing -> coverageArtifact absent, gate PASS, SUCCESS
+    expect(output.capabilities.coverageArtifact).toBe('absent'); // FM-V01 fix: default missing -> coverageArtifact absent, gate NOT_EVALUATED, SUCCESS
     
     // Actually, looking at evidence.ts, when coverageFile is omitted and default is missing:
     // readCoverage returns { available: false, coverageMap: null, error: false }

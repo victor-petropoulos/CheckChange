@@ -213,7 +213,7 @@ it('condition 2: valid coverage WARN', async () => {
         undefined
       );
       expect(output.analysisStatus).toBe('SUCCESS');
-      expect(output.gate).toBe('PASS');
+      expect(output.gate).toBe('NOT_EVALUATED'); // Coverage absent → vacuous-PASS ban
       expect(output.capabilities.coverageArtifact).toBe('absent');
     });
 
@@ -266,7 +266,7 @@ it('condition 2: valid coverage WARN', async () => {
       );
       expect(output.analysisStatus).toBe('UNSUPPORTED');
       expect(output.gate).toBeNull();
-      expect(output.completeness).toBe('NOT_APPLICABLE');
+      expect(output.completeness).toBe('INCOMPLETE');
       expect(output.changedFunctions).toHaveLength(0);
     });
   });

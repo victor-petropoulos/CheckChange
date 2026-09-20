@@ -82,7 +82,7 @@ it('CLI exits with 1 and stderr \"Not a git repository\" when run in non-git dir
 
   // Scenario C: unsupported (non-TS changes only)
   describe('unsupported (non-TS changes only)', () => {
-    it('buildEvidenceOutput returns UNSUPPORTED analysisStatus, gate null, completeness NOT_APPLICABLE, empty changedFunctions for non-TS intervals', async () => {
+    it('buildEvidenceOutput returns UNSUPPORTED analysisStatus, gate null, completeness INCOMPLETE, empty changedFunctions for non-TS intervals', async () => {
       const { createTempRepo, writeSourceFile } = await import('../wp5.2/fixtures/helpers.ts');
       const repo = createTempRepo();
       try {
@@ -95,7 +95,7 @@ it('CLI exits with 1 and stderr \"Not a git repository\" when run in non-git dir
         const output = await buildEvidenceOutput('HEAD', intervals, repo.tempDir, 30);
         expect(output.analysisStatus).toBe('UNSUPPORTED');
         expect(output.gate).toBeNull();
-        expect(output.completeness).toBe('NOT_APPLICABLE');
+        expect(output.completeness).toBe('INCOMPLETE');
         expect(output.changedFunctions).toHaveLength(0);
       } finally {
         repo.cleanup();

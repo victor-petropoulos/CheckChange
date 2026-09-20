@@ -31,7 +31,6 @@ export interface ResolvedProvider {
 
 // ---- Builtin defaults (current hardcoded values as config) ----
 
-const TS_EXTENSIONS = ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'];
 const PY_EXTENSIONS = ['.py'];
 
 export function builtinConfig(): ProviderConfig {
@@ -39,8 +38,13 @@ export function builtinConfig(): ProviderConfig {
     version: 1,
     providers: [
       {
+        language: 'javascript',
+        extensions: ['.js', '.jsx', '.mjs', '.cjs'],
+        coverageFiles: ['coverage/coverage-final.json', 'coverage/lcov.info'],
+      },
+      {
         language: 'typescript',
-        extensions: TS_EXTENSIONS,
+        extensions: ['.ts', '.tsx'],
         coverageFiles: ['coverage/coverage-final.json', 'coverage/lcov.info'],
       },
       {
@@ -77,12 +81,12 @@ const REPO_ROOT_NAMES = [
   path.join('.checkchange', 'providers.json'),
 ];
 
-export function loadProviderConfig(cwd: string, explicitPath?: string): ProviderConfig {
+export function loadProviderConfig(cwd: string, explicitPath?: string): { config: ProviderConfig; source: 'explicit' | 'repo-root' | 'builtin' } {
   if (explicitPath !== undefined) {
     const resolved = path.isAbsolute(explicitPath)
       ? explicitPath
       : path.resolve(cwd, explicitPath);
-    return validateConfig(JSON.parse(fs.readFileSync(resolved, 'utf8')));
+    return { config: validateConfig(JSON.parse(fs.readFileSync(resolved, 'utf8'))), source: 'explicit' };
   }
   for (const name of REPO_ROOT_NAMES) {
     const candidate = path.resolve(cwd, name);
@@ -93,9 +97,9 @@ export function loadProviderConfig(cwd: string, explicitPath?: string): Provider
       if (err?.code === 'ENOENT') continue; // file missing — try next
       throw err; // EACCES, EISDIR, etc. — propagate, don't silently skip
     }
-    return validateConfig(JSON.parse(raw)); // throws on bad JSON or bad schema
+    return { config: validateConfig(JSON.parse(raw)), source: 'repo-root' }; // throws on bad JSON or bad schema
   }
-  return builtinConfig();
+  return { config: builtinConfig(), source: 'builtin' };
 }
 
 // ---- Registry derivation ----

@@ -13,7 +13,7 @@ vi.mock('../../src/git.js', () => ({
   getChangedIntervals: vi.fn(),
   detectDefaultBase: vi.fn(),
 }))
-vi.mock('../../src/evidence.js', () => ({ buildEvidenceOutput: vi.fn() }))
+vi.mock('../../src/evidence.js', () => ({ buildEvidenceOutput: vi.fn(), initProviderConfig: vi.fn(() => ({ config: {}, registry: new Map() })) }))
 vi.mock('../../src/coverage.js', () => ({ readCoverage: vi.fn() }))
 
 import * as git from '../../src/git.js'

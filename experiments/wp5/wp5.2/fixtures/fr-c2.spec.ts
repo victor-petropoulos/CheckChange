@@ -37,10 +37,10 @@ describe('FR-C2: P2 - Zero functions / missing src root graceful empty SUCCESS',
       expect(output.changedFunctions).toBeDefined();
       expect(Array.isArray(output.changedFunctions)).toBe(true);
       
-      // Observed behavior for zero TS files
-      expect(output.analysisStatus).toBe('SUCCESS');
-      expect(output.gate).toBe('PASS');
-      expect(output.completeness).toBe('COMPLETE');
+      // vacuous-PASS ban: zero TS files → UNSUPPORTED/NOT_EVALUATED/INCOMPLETE
+      expect(output.analysisStatus).toBe('UNSUPPORTED');
+      expect(output.gate).toBe('NOT_EVALUATED');
+      expect(output.completeness).toBe('INCOMPLETE');
       expect(output.changedFunctions.length).toBe(0);
       
     } finally {

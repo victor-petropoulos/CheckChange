@@ -157,7 +157,7 @@ describe('Regression anchors for WP5.2', () => {
     expect(output).toBeDefined();
     expect(output.analysisStatus).toBe('UNSUPPORTED');
     expect(output.gate).toBeNull();
-    expect(output.completeness).toBe('NOT_APPLICABLE');
+    expect(output.completeness).toBe('INCOMPLETE');
     expect(output.changedFunctions).toHaveLength(0);
   });
 

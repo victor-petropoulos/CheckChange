@@ -112,7 +112,7 @@ describe('coverage-errors (mocked unit)', () => {
 
       const out = await buildEvidenceOutput(base, intervals, cwd, 30)
 
-      expect(out.gate).toBe('PASS')
+      expect(out.gate).toBe('NOT_EVALUATED') // Coverage absent → vacuous-PASS ban
       expect(out.completeness).toBe('INCOMPLETE')
       expect(out.ruleResults).toHaveLength(1)
       expect(out.ruleResults[0].result).toBe('NOT_EVALUATED')

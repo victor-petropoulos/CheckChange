@@ -16,20 +16,20 @@ describe('detectExtension', () => {
     expect(detectExtension(intervals)).toBe('.py');
   });
 
-  test('returns .tsx over .ts when both present', () => {
+  test('returns .ts over .tsx when both present (config order)', () => {
     const intervals = new Map([
       ['src/app.ts', [{ start: 1, end: 5 }]],
       ['src/page.tsx', [{ start: 1, end: 5 }]],
     ]);
-    expect(detectExtension(intervals)).toBe('.tsx');
+    expect(detectExtension(intervals)).toBe('.ts');
   });
 
-  test('returns .jsx over .js when both present', () => {
+  test('returns .js over .jsx when both present (config order)', () => {
     const intervals = new Map([
       ['src/util.js', [{ start: 1, end: 5 }]],
       ['src/component.jsx', [{ start: 1, end: 5 }]],
     ]);
-    expect(detectExtension(intervals)).toBe('.jsx');
+    expect(detectExtension(intervals)).toBe('.js');
   });
 
   test('returns .js for plain JS files (.js/.mjs/.cjs)', () => {

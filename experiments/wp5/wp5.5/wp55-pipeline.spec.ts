@@ -153,7 +153,7 @@ describe('WP5.5 T2: End-to-end composed pipeline tests (using buildEvidenceOutpu
 
     // Assertions for scenario B
     expect(normalized.analysisStatus).toBe('SUCCESS');
-    expect(normalized.gate).toBe('PASS'); // As deduced
+    expect(normalized.gate).toBe('NOT_EVALUATED'); // Coverage absent → vacuous-PASS ban
     expect(normalized.completeness).toBe('INCOMPLETE');
     expect(normalized.capabilities.coverageArtifact).toBe('absent');
     // We expect at least one changed function
@@ -196,7 +196,7 @@ describe('WP5.5 T2: End-to-end composed pipeline tests (using buildEvidenceOutpu
     // Assertions for scenario C
     expect(normalized.analysisStatus).toBe('UNSUPPORTED');
     expect(normalized.gate).toBeNull();
-    expect(normalized.completeness).toBe('NOT_APPLICABLE');
+    expect(normalized.completeness).toBe('INCOMPLETE');
     expect(normalized.capabilities.coverageArtifact).toBe('available'); // Note: in the unsupported branch, coverageArtifact is set to 'available' (line 131)
     // We expect no changed functions because the complexity provider returns empty for non-TS
     expect(normalized.changedFunctions).toEqual([]); // or at least not contain any TS functions

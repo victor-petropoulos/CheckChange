@@ -46,7 +46,7 @@ describe('FR-G3: P0 - CLI invocation with non-TS changes exits 0 with analysisSt
       expect(output).toBeDefined();
       expect(output.analysisStatus).toBe('UNSUPPORTED');
       expect(output.gate).toBeNull();
-      expect(output.completeness).toBe('NOT_APPLICABLE');
+      expect(output.completeness).toBe('INCOMPLETE');
       expect(output.changedFunctions).toBeDefined();
       expect(output.changedFunctions.length).toBe(0);
       // Capabilities: git available, complexity available (since we have a TS file), coverageArtifact available (we provided empty)

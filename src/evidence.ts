@@ -5,7 +5,7 @@ import { attachCoverage, type AttributedComplexity } from './attribution.js';
 import { calculateCrap } from './crapCalc.js';
 import { pythonASTComplexityProvider } from './complexity-providers/pythonASTComplexityProvider.js';
 import { gitProvenance } from './git.js';
-import { complexityProvenance } from './complexity.js';
+import { complexityProvenance, type ComplexityInfo } from './complexity.js';
 import { coverageProvenance } from './coverage.js';
 import { attributionProvenance } from './attribution.js';
 import { crapCalcProvenance } from './crapCalc.js';
@@ -17,6 +17,7 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import * as fs from 'fs';
 import * as path from 'path';
+import { loadProviderConfig, deriveRegistry, builtinConfig, type ResolvedProvider, type ProviderConfig, createGenericCommandProvider } from './providers/index.js';
 
 // ---- Local type definitions (kept in evidence.ts to avoid cross-file type coupling) ----
 
@@ -88,6 +89,28 @@ function engineIdentity(): string {
   } catch {
     return fallback();
   }
+}
+
+// ---- EvidenceOutput: explicit return type for buildEvidenceOutput ----
+// ponytail: concrete interface prevents TS from widening the inferred return
+// union when early-return helpers use Record<string, unknown>.
+
+export interface EvidenceOutput {
+  schemaVersion: string;
+  analysis: { base: string; target: string };
+  capabilities: { git: string; complexity: string; coverageArtifact: string };
+  changedFunctions: ChangedFunction[];
+  policy: { crapThreshold: number };
+  ruleResults: RuleResult[];
+  analysisStatus: string;
+  gate: string | null;
+  completeness: string;
+  coverageErrorReason?: string;
+  diagnostics?: {
+    lineage: DiagnosticLineageEntry[];
+    quality: DiagnosticQuality;
+    fingerprints?: Record<string, string> | undefined;
+  };
 }
 
 // ---- Diagnostics quality (Experiment A task 4: optional diagnostics.quality) ----
@@ -222,18 +245,124 @@ export interface ProviderFactory {
 }
 const providers = new Map<string, ProviderFactory>()
 export function registerProvider(ext:string, factory:ProviderFactory){providers.set(ext,factory)}
+export function getProvider(ext: string): ProviderFactory | undefined { return providers.get(ext); }
 
-// Register TypeScript provider for JS/TS extensions (delegation preserves vi.spyOn mocks)
-const typescriptProvider: ProviderFactory = {
-  collectComplexity: (...args: Parameters<typeof collectComplexity>) => collectComplexity(...args),
-  readCoverage: (...args: Parameters<typeof readCoverage>) => readCoverage(...args),
-};
-for (const ext of ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'] as const) {
-  registerProvider(ext, typescriptProvider);
+// ---- Config-driven provider registry ----
+let _providerConfig: ProviderConfig | null = null;
+let _providerRegistry: Map<string, ResolvedProvider> | null = null;
+let _extensionPriority: string[] = [];
+let _supportedExtensions: Set<string> | null = null;
+
+  // ponytail: derived from builtinConfig() so defaults stay in sync with config
+  const _builtinDefaults = builtinConfig();
+  const DEFAULT_EXTENSION_PRIORITY: string[] = (() => {
+    const seen = new Set<string>();
+    const out: string[] = [];
+    for (const entry of [..._builtinDefaults.providers].reverse()) {
+      for (const ext of entry.extensions) {
+        if (!seen.has(ext)) { seen.add(ext); out.push(ext); }
+      }
+    }
+    return out;
+  })();
+  const DEFAULT_SUPPORTED_EXTENSIONS = new Set(_builtinDefaults.providers.flatMap((p) => p.extensions));
+  const DEFAULT_LANGUAGE_MAP: Record<string, string> = (() => {
+    const map: Record<string, string> = {};
+    for (const entry of _builtinDefaults.providers) {
+      for (const ext of entry.extensions) {
+        if (!map[ext]) map[ext] = entry.language;
+      }
+    }
+    return map;
+  })();
+
+/** Load provider config and populate providers Map. Call once at startup. */
+export function initProviderConfig(explicitPath?: string): { config: ProviderConfig; registry: Map<string, ResolvedProvider>; source: 'explicit' | 'repo-root' | 'builtin' } {
+  const cwd = process.cwd();
+  const { config, source } = loadProviderConfig(cwd, explicitPath);
+  const registry = deriveRegistry(config, source);
+  _providerConfig = config;
+  _providerRegistry = registry;
+  // Derive extension priority from registry: reverse provider order so later providers
+  // (e.g. python) get higher priority than earlier ones (e.g. javascript).
+  // DEFAULT_EXTENSION_PRIORITY: .py > .ts > .tsx > .js > .jsx > .mjs > .cjs > .ts
+  const seen = new Set<string>();
+  _extensionPriority = [];
+  for (const entry of [...config.providers].reverse()) {
+    for (const ext of entry.extensions) {
+      if (!seen.has(ext)) {
+        seen.add(ext);
+        _extensionPriority.push(ext);
+      }
+    }
+  }
+  // Populate providers Map from registry
+  providers.clear();
+  for (const [ext, resolved] of registry) {
+    const generic = createGenericCommandProvider(resolved, cwd);
+    if (generic) {
+      registerProvider(ext, {
+        collectComplexity: (cwd: string) => generic.collectComplexity(cwd),
+        readCoverage: (...args: Parameters<typeof readCoverage>) => readCoverage(...args),
+      });
+    } else if (resolved.language === 'typescript') {
+      // Builtin TS provider: delegation preserves vi.spyOn mocks
+      registerProvider(ext, {
+        collectComplexity: (...args: Parameters<typeof collectComplexity>) => collectComplexity(...args),
+        readCoverage: (...args: Parameters<typeof readCoverage>) => readCoverage(...args),
+      });
+    } else if (resolved.language === 'python') {
+      registerProvider(ext, {
+        collectComplexity: (...args: Parameters<typeof pythonASTComplexityProvider.collectComplexity>) =>
+          pythonASTComplexityProvider.collectComplexity(...args),
+        readCoverage: (...args: Parameters<typeof readCoverage>) => readCoverage(...args),
+      });
+    }
+  }
+  _supportedExtensions = new Set(registry.keys());
+  rebuildLanguageMap();
+  return { config, registry, source };
 }
 
-// Register Python provider for .py extension
-registerProvider('.py', pythonASTComplexityProvider);
+/** Extension priority list (derived from config). Lazily falls back to hardcoded defaults. */
+export function extensionPriority(): readonly string[] {
+  if (_extensionPriority.length > 0) return _extensionPriority;
+  // ponytail: lazy init with hardcoded priority when initProviderConfig() not called
+  _extensionPriority = [...DEFAULT_EXTENSION_PRIORITY];
+  return _extensionPriority;
+}
+
+/** Supported extensions set (derived from config). Lazily falls back to hardcoded defaults. */
+export function supportedExtensions(): Set<string> {
+  if (_supportedExtensions) return _supportedExtensions;
+  // ponytail: lazy init with hardcoded set when initProviderConfig() not called
+  _supportedExtensions = new Set(DEFAULT_SUPPORTED_EXTENSIONS);
+  return _supportedExtensions;
+}
+
+/** Loaded provider config (or null if not initialized). */
+export function providerConfig(): ProviderConfig | null { return _providerConfig; }
+
+/** Loaded provider registry (or null if not initialized). */
+export function providerRegistry(): Map<string, ResolvedProvider> | null { return _providerRegistry; }
+
+/** Get the language for a file from the loaded registry. Falls back to hardcoded defaults. */
+export function getLanguageForFile(filePath: string): string | undefined {
+  const map = Object.keys(LANGUAGE_MAP).length > 0 ? LANGUAGE_MAP : DEFAULT_LANGUAGE_MAP;
+  const ext = Object.keys(map).find((key) => filePath.endsWith(key));
+  return ext ? map[ext] : undefined;
+}
+
+// Derive LANGUAGE_MAP from loaded config (or fallback to builtin defaults)
+let LANGUAGE_MAP: Record<string, string> = {};
+function rebuildLanguageMap(): void {
+  LANGUAGE_MAP = {};
+  const registry = _providerRegistry;
+  if (!registry) return;
+  for (const [ext, resolved] of registry) {
+    if (!LANGUAGE_MAP[ext]) LANGUAGE_MAP[ext] = resolved.language;
+  }
+}
 
 /**
  * Checks whether intervals contain only non-supported file types.
@@ -244,10 +373,10 @@ export function isUnsupportedIntervals(intervals: Map<string, {start: number; en
     if (intervals.size === 0) {
         return false; // empty intervals -> not unsupported (could be no changes)
     }
+    const supported = supportedExtensions();
     for (const [filePath] of intervals) {
-        if (filePath.endsWith('.ts') || filePath.endsWith('.tsx') || filePath.endsWith('.js') || filePath.endsWith('.jsx') || filePath.endsWith('.mjs') || filePath.endsWith('.cjs') || filePath.endsWith('.py')) {
-            return false; // at least one supported file -> supported
-        }
+        const ext = filePath.slice(filePath.lastIndexOf('.'));
+        if (supported.has(ext)) return false;
     }
     return true; // all files are non-supported and intervals non-empty
 }
@@ -296,22 +425,23 @@ export interface ChangedFunction {
 
 // ---- Extracted helper: extension detection ----
 // ponytail: extracted from buildEvidenceOutput to reduce cyclomatic complexity;
-// priority order .py > .tsx > .jsx > .js mirrors original inline logic.
-const EXTENSION_PRIORITY: [string, ...string[]] = ['.py', '.tsx', '.jsx', '.js'];
-const JS_EXTENSIONS = new Set(['.js', '.mjs', '.cjs']);
-
+// priority order derived from config (default: .py > .tsx > .jsx > .js).
 export function detectExtension(intervals: Map<string, { start: number; end: number }[]>): string {
-  let hasPy = false, hasTsx = false, hasJsx = false, hasJs = false;
+  const priority = extensionPriority();
+  const supported = supportedExtensions();
+  // Collect which extensions are present
+  const present = new Set<string>();
   for (const [filePath] of intervals) {
-    if (filePath.endsWith('.py')) hasPy = true;
-    else if (filePath.endsWith('.tsx')) hasTsx = true;
-    else if (filePath.endsWith('.jsx')) hasJsx = true;
-    else if (JS_EXTENSIONS.has(filePath.slice(filePath.lastIndexOf('.')))) hasJs = true;
+    let ext = filePath.slice(filePath.lastIndexOf('.'));
+    // ponytail: normalize .mjs/.cjs → .js for detection
+    if (ext === '.mjs' || ext === '.cjs') ext = '.js';
+    if (supported.has(ext)) present.add(ext);
   }
-  if (hasPy) return '.py';
-  if (hasTsx) return '.tsx';
-  if (hasJsx) return '.jsx';
-  if (hasJs) return '.js';
+  // Return first extension in priority order that's present
+  for (const ext of priority) {
+    if (present.has(ext)) return ext;
+  }
+  // Fallback: default to '.ts' when no supported extension found
   return '.ts';
 }
 
@@ -326,20 +456,7 @@ export function computeGateAndCompleteness(ruleResults: RuleResult[]): { gate: s
 }
 
 // ---- Extracted helper: language + framework enrichment ----
-const LANGUAGE_MAP: Record<string, string> = {
-  '.py': 'python',
-  '.ts': 'typescript',
-  '.tsx': 'typescript',
-  '.js': 'javascript',
-  '.jsx': 'javascript',
-  '.mjs': 'javascript',
-  '.cjs': 'javascript',
-};
-
-function getLanguageForFile(filePath: string): string | undefined {
-  const ext = Object.keys(LANGUAGE_MAP).find((key) => filePath.endsWith(key));
-  return ext ? LANGUAGE_MAP[ext] : undefined;
-}
+// LANGUAGE_MAP and getLanguageForFile are config-driven (see initProviderConfig above)
 
 function detectNextFramework(cwd: string, filePath: string): string | undefined {
   // 1. package.json next dep
@@ -446,6 +563,52 @@ export async function readCoverageWithProvider(
   return { result, capability, errorReason, elapsed: Date.now() - t0 };
 }
 
+// ponytail: extracted from buildEvidenceOutput to reduce cyclomatic complexity.
+// Handles the empty-intervals early return (vacuous-PASS ban §5).
+// Reads coverage so coverageErrorReason survives — INV-02/INV-03 MISSING≠MALFORMED.
+async function emptyIntervalsReturn(
+  base: string, threshold: number, detectedExtension: string, cwd: string,
+  coverageFile: string | undefined, trace: TraceRun | undefined, autoGenerated: boolean | undefined,
+  gitCapability: string, lineage: DiagnosticLineageEntry[],
+): Promise<EvidenceOutput> {
+    const t0CovEarly = Date.now();
+    const covEarly = await readCoverageWithProvider(detectedExtension, cwd, coverageFile, trace, autoGenerated);
+    if (trace) trace.recordStage('coverage', Date.now() - t0CovEarly, covEarly.result.error ? 'error' : covEarly.result.available ? 'ok' : 'skipped');
+    lineage.push({
+        stage: 'coverage',
+        ...coverageProvenance,
+        inputs: buildCoverageLineageInputs(coverageFile, cwd, covEarly.result, covEarly.errorReason),
+    });
+    // Empty intervals → UNSUPPORTED always. coverageErrorReason recorded
+    // for diagnostics but does NOT change analysisStatus (vacuous-PASS ban).
+    return withDiagnostics({
+        schemaVersion: '0.5',
+        analysis: { base, target: 'current' },
+        capabilities: {
+            git: gitCapability,
+            complexity: 'unavailable',
+            coverageArtifact: covEarly.capability === 'failed' ? 'failed' : 'unavailable'
+        },
+        changedFunctions: [],
+        ruleResults: [],
+        policy: { crapThreshold: threshold },
+        analysisStatus: 'UNSUPPORTED',
+        gate: 'NOT_EVALUATED',
+        completeness: 'INCOMPLETE',
+        ...(covEarly.errorReason !== undefined ? { coverageErrorReason: covEarly.errorReason } : {})
+    }, lineage, buildQuality({ complexityCapability: 'unavailable', coverageUsable: false }));
+}
+
+// ponytail: extracted from buildEvidenceOutput to reduce cyclomatic complexity.
+// §5 vacuous-PASS ban: coverage absent + needs coverage → NOT_EVALUATED gate.
+// preserve ZERO!=NULL MISSING!=MALFORMED: absent ≠ failed, not conflated.
+function applyAbsentCoverageGate(currentGate: string, coverageCapability: string, changedFunctionsCount: number): string {
+    if (coverageCapability === 'absent' && changedFunctionsCount > 0) {
+        return 'NOT_EVALUATED';
+    }
+    return currentGate;
+}
+
 // ---- Extracted helper: map attributed complexity → MethodEvidence array ----
 // ponytail: extracted from buildEvidenceOutput; pure transformation, no side effects.
 export function mapToMethodEvidence(attributedComplexity: AttributedComplexity[]): MethodEvidenceWithSource[] {
@@ -526,6 +689,75 @@ export function buildOutput(base: string, changed: ChangedFunction[], threshold:
         completeness,
     };
 }
+
+/**
+ * Handles coverage-failure resolution. Mutates state in place; returns early-return
+ * output when analysis should stop, or null to continue.
+ * ponytail: extracted from buildEvidenceOutput to reduce cyclomatic complexity.
+ */
+function resolveCoverageFailure(
+  coverageCapability: string,
+  coverageErrorReason: string | undefined,
+  autoGenerated: boolean | undefined,
+  base: string, gitCapability: string, complexityCapability: string, threshold: number,
+  lineage: DiagnosticLineageEntry[], complexityCapabilityForQuality: string,
+): { earlyReturn: EvidenceOutput | null; coverageCapability: string; coverageErrorReason: string | undefined; analysisStatus: string; gate: null; completeness: string } {
+  let analysisStatus = 'SUCCESS';
+  let gate = null;
+  let completeness = 'COMPLETE';
+  if (coverageCapability === 'failed') {
+    if (autoGenerated) {
+      return { earlyReturn: null, coverageCapability: 'absent', coverageErrorReason: undefined, analysisStatus, gate, completeness };
+    } else {
+      analysisStatus = 'FAILED';
+      completeness = 'INCOMPLETE';
+      return {
+        earlyReturn: withDiagnostics(buildFailedOutput(base, gitCapability, complexityCapability, 'failed', threshold, coverageErrorReason), lineage, buildQuality({ complexityCapability: complexityCapabilityForQuality, coverageUsable: false })),
+        coverageCapability: 'failed', coverageErrorReason, analysisStatus, gate, completeness
+      };
+    }
+  }
+  return { earlyReturn: null, coverageCapability, coverageErrorReason, analysisStatus, gate, completeness };
+}
+
+/**
+ * Wraps attribution attachment with timing and error handling.
+ * Returns either the attributed complexity or an early-return output on failure.
+ * ponytail: extracted from buildEvidenceOutput to reduce cyclomatic complexity.
+ */
+async function attachCoverageWithTracking(
+  complexityInfo: ComplexityInfo[],
+  coverageResult: CoverageResult,
+  trace: TraceRun | undefined,
+  lineage: DiagnosticLineageEntry[],
+  base: string, gitCapability: string, complexityCapability: string, coverageCapability: string, threshold: number, coverageErrorReason: string | undefined,
+): Promise<{ attributedComplexity: AttributedComplexity[]; earlyReturn?: EvidenceOutput }> {
+  const t0 = Date.now();
+  try {
+    const attributedComplexity = await attachCoverage(complexityInfo, coverageResult);
+    if (trace) trace.recordStage('attribution', Date.now() - t0, 'ok');
+    lineage.push({
+      stage: 'attribution',
+      ...attributionProvenance,
+      inputs: {
+        methods: attributedComplexity.length,
+        quality: coverageResult.available && !coverageResult.error ? 'ATTRIBUTED' : 'UNAVAILABLE'
+      }
+    });
+    return { attributedComplexity };
+  } catch {
+    if (trace) trace.recordStage('attribution', Date.now() - t0, 'error');
+    return {
+      attributedComplexity: [],
+      earlyReturn: withDiagnostics(
+        buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason),
+        lineage,
+        buildQuality({ complexityCapability, coverageUsable: !coverageResult.error && coverageResult.available === true })
+      )
+    };
+  }
+}
+
 /**
  * Builds the final JSON output using composed evidence.
  * @param base The base reference used for comparison
@@ -534,7 +766,7 @@ export function buildOutput(base: string, changed: ChangedFunction[], threshold:
  * @param threshold CRAP threshold for evaluating changed functions
  * @returns Promise<OutputJson>
  */
-export async function buildEvidenceOutput(base: string, intervals: Map<string, {start: number; end: number}[]>, cwd: string, threshold = 30, coverageFile?: string, trace?: TraceRun, autoGenerated?: boolean) {
+export async function buildEvidenceOutput(base: string, intervals: Map<string, {start: number; end: number}[]>, cwd: string, threshold = 30, coverageFile?: string, trace?: TraceRun, autoGenerated?: boolean): Promise<EvidenceOutput> {
     // We'll assume that the git repo is valid and the base is resolved (done by cli.ts)
     // We'll set the git capability to 'available' (if we got here, git is working)
     const gitCapability = 'available';
@@ -557,7 +789,8 @@ export async function buildEvidenceOutput(base: string, intervals: Map<string, {
     let complexityInfo = [];
     let complexityCapability = 'available';
     try {
-        const provider = providers.get(detectedExtension);
+        if (_providerRegistry === null) { initProviderConfig(); }
+        const provider = getProvider(detectedExtension);
         if (provider) {
             complexityInfo = await provider.collectComplexity(cwd, trace);
         } else {
@@ -581,6 +814,14 @@ export async function buildEvidenceOutput(base: string, intervals: Map<string, {
             quality: complexityCapability === 'failed' ? 'UNAVAILABLE' : 'NATIVE'
         }
     });
+    // Vacuous-PASS ban (§5): no files in diff + no supported extensions →
+    // INCOMPLETE/NOT_EVALUATED, never PASS. ponytail: intervals.size===0 is
+    // the degenerate case where isUnsupportedIntervals returns false (by
+    // design), but the output must still be NOT_EVALUATED because there is
+    // nothing to analyze.
+    if (intervals.size === 0) {
+        return emptyIntervalsReturn(base, threshold, detectedExtension, cwd, coverageFile, trace, autoGenerated, gitCapability, lineage);
+    }
     // Helper to check if intervals contain only non-supported files
     // If intervals indicate unsupported source (non-code files only), return UNSUPPORTED
     if (isUnsupportedIntervals(intervals)) {
@@ -602,7 +843,7 @@ export async function buildEvidenceOutput(base: string, intervals: Map<string, {
             },
             analysisStatus: 'UNSUPPORTED',
             gate: null,
-            completeness: 'NOT_APPLICABLE'
+            completeness: 'INCOMPLETE'
         }, lineage, buildQuality({ complexityCapability, coverageUsable: false }));
     }
 // Step 2: Read coverage
@@ -617,18 +858,9 @@ export async function buildEvidenceOutput(base: string, intervals: Map<string, {
         inputs: buildCoverageLineageInputs(coverageFile, cwd, coverageResult, coverageErrorReason),
     });
     // Determine analysisStatus, gate, and completeness based on provider failures
-    let analysisStatus = 'SUCCESS';
-    let gate = null;
-    let completeness = 'COMPLETE';
-    // If git failed (should have been caught by cli.ts, but we check)
-    // We don't have git status here, so we assume it's available.
     // If complexity provider failed -> unsupported source
     if (complexityCapability === 'failed') {
-        analysisStatus = 'UNSUPPORTED';
-        gate = null;
-        completeness = 'NOT_APPLICABLE';
-        // We'll return early with empty changedFunctions.
-        return withDiagnostics({
+        const earlyReturn = withDiagnostics({
             schemaVersion: '0.5',
             analysis: {
                 base: base,
@@ -644,50 +876,24 @@ export async function buildEvidenceOutput(base: string, intervals: Map<string, {
                 crapThreshold: threshold
             },
             ruleResults: [],
-            analysisStatus: analysisStatus,
-            gate: gate,
-            completeness: completeness
+            analysisStatus: 'UNSUPPORTED',
+            gate: null,
+            completeness: 'NOT_APPLICABLE'
         }, lineage, buildQuality({ complexityCapability, coverageUsable: false }));
+        return earlyReturn;
     }
 // If coverage provider failed (malformed)
-    if (coverageCapability === 'failed') {
-        if (autoGenerated) {
-            // Auto-generated artifact malformed — downgrade to absent (never forced FAILED for auto)
-            analysisStatus = 'SUCCESS';
-            coverageCapability = 'absent';
-            coverageErrorReason = undefined;
-        } else {
-            analysisStatus = 'FAILED';
-            gate = null;
-            completeness = 'INCOMPLETE';
-            return withDiagnostics(buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason), lineage, buildQuality({ complexityCapability, coverageUsable: false }));
-        }
-    }
+    const covRes = resolveCoverageFailure(coverageCapability, coverageErrorReason, autoGenerated, base, gitCapability, complexityCapability, threshold, lineage, complexityCapability);
+    if (covRes.earlyReturn) return covRes.earlyReturn;
+    coverageCapability = covRes.coverageCapability;
+    coverageErrorReason = covRes.coverageErrorReason;
+    const analysisStatus = covRes.analysisStatus;
+    const gate = covRes.gate;
+    const completeness = covRes.completeness;
     // Step 3: Attach coverage to complexity info
-    const t0Attribution = Date.now();
-    let attributedComplexity = [];
-    try {
-        attributedComplexity = await attachCoverage(complexityInfo, coverageResult);
-    }
-    catch (error) {
-// If attachment fails, treat as coverage failure? But we already checked coverageResult.
-// We'll set analysisStatus to FAILED.
-     analysisStatus = 'FAILED';
-     gate = null;
-completeness = 'INCOMPLETE';
-       if (trace) trace.recordStage('attribution', Date.now() - t0Attribution, 'error');
-       return withDiagnostics(buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason), lineage, buildQuality({ complexityCapability, coverageUsable: !coverageResult.error && coverageResult.available === true }));
-    }
-    if (trace) trace.recordStage('attribution', Date.now() - t0Attribution, 'ok');
-    lineage.push({
-        stage: 'attribution',
-        ...attributionProvenance,
-        inputs: {
-            methods: attributedComplexity.length,
-            // Canonical vocabulary (ADR-0001): derived via attribution => ATTRIBUTED, else UNAVAILABLE
-            quality: coverageResult.available && !coverageResult.error ? 'ATTRIBUTED' : 'UNAVAILABLE'
-        }
-    });
+    const attrResult = await attachCoverageWithTracking(complexityInfo, coverageResult, trace, lineage, base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason);
+    if (attrResult.earlyReturn) return attrResult.earlyReturn;
+    const attributedComplexity = attrResult.attributedComplexity;
     // Step 4+5: Map attributed complexity → MethodEvidence (merged Steps 4+5 via mapToMethodEvidence)
     const t0CrapCalc = Date.now();
     const methodEvidence = mapToMethodEvidence(attributedComplexity);
@@ -701,7 +907,9 @@ completeness = 'INCOMPLETE';
     lineage.push({ stage: 'rules', ...rulesProvenance, inputs: { threshold, functions: changedFunctions.length } });
     if (trace) trace.recordStage('rules', Date.now() - t0Rules, 'ok');
     // Step 8: Compute overall gate and completeness
-    const { gate: gateValue, completeness: completenessValue } = computeGateAndCompleteness(ruleResults);
+    let { gate: gateValue, completeness: completenessValue } = computeGateAndCompleteness(ruleResults);
+    // §5 vacuous-PASS ban: coverage absent + needs coverage → NOT_EVALUATED gate.
+    gateValue = applyAbsentCoverageGate(gateValue, coverageCapability, changedFunctions.length);
     // Step 9: Determine analysisStatus
     // If we have no relevant TS functions after successful analysis -> SUCCESS
     // We'll check if we have any complexityInfo (from the provider) and if we have any changedFunctions?

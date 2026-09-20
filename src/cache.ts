@@ -12,9 +12,8 @@ import { access, constants, mkdir, readFile, readdir, rename, rm, stat, unlink, 
 import { findAllTypeScriptFilesUnderSourceRoots, parseFileMethods } from '@barney-media/crap-typescript-core';
 import { getGitTrackedCodeFiles, complexityProvenance } from './complexity.js';
 import type { ComplexityInfo } from './complexity.js';
-import { readCoverage, coverageProvenance, PYTHON_COVERAGE_FILES, type CoverageResult } from './coverage.js';
-import { registerProvider } from './evidence.js';
-import { pythonASTComplexityProvider } from './complexity-providers/pythonASTComplexityProvider.js';
+import { readCoverage, coverageProvenance, type CoverageResult } from './coverage.js';
+import { registerProvider, providerRegistry, getProvider } from './evidence.js';
 
 export const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days, mtime-based (no clock in key)
 export const MAX_CACHE_TOTAL_BYTES = 500 * 1024 * 1024; // 500MB total, LRU-pruned on write-through
@@ -371,17 +370,10 @@ async function cachedReadCoveragePath(coveragePath: string, cwd: string): Promis
   }
 }
 
-async function cachedReadCoverage(cwd: string, coverageFile?: string): Promise<CoverageResult> {
-  if (coverageFile !== undefined && coverageFile !== null && coverageFile !== '') {
-    const coveragePath = path.isAbsolute(coverageFile) ? coverageFile : path.resolve(cwd, coverageFile);
-    try {
-      await access(coveragePath, constants.R_OK);
-    } catch {
-      return { available: true, coverageMap: null, error: true, reason: 'missing' };
-    }
-    return cachedReadCoveragePath(coveragePath, cwd);
-  }
-  for (const candidate of PYTHON_COVERAGE_FILES) {
+// ponytail: extracted candidate-search loop from cachedReadCoverage to reduce CRAP.
+// Iterates coverageCandidates; returns first accessible, non-error result.
+async function findCoverageCandidate(candidates: string[], cwd: string): Promise<CoverageResult | null> {
+  for (const candidate of candidates) {
     const filePath = path.join(cwd, candidate);
     try {
       await access(filePath, constants.R_OK);
@@ -392,21 +384,66 @@ async function cachedReadCoverage(cwd: string, coverageFile?: string): Promise<C
       // not accessible, continue
     }
   }
-  return { available: false, coverageMap: null, error: false };
+  return null;
+}
+
+async function cachedReadCoverage(cwd: string, coverageFile?: string): Promise<CoverageResult> {
+  if (coverageFile !== undefined && coverageFile !== null && coverageFile !== '') {
+    const coveragePath = path.isAbsolute(coverageFile) ? coverageFile : path.resolve(cwd, coverageFile);
+    try {
+      await access(coveragePath, constants.R_OK);
+    } catch {
+      return { available: true, coverageMap: null, error: true, reason: 'missing' };
+    }
+    return cachedReadCoveragePath(coveragePath, cwd);
+  }
+  // Config-driven: collect coverageFiles from all providers in registry
+  const registry = providerRegistry();
+  const coverageCandidates = registry
+    ? [...new Set([...registry.values()].flatMap((r) => r.coverageFiles))]
+    : ['.coverage', 'coverage.xml', 'coverage.json', 'coverage/coverage-final.json']; // builtin defaults
+  const found = await findCoverageCandidate(coverageCandidates, cwd);
+  return found ?? { available: false, coverageMap: null, error: false };
 }
 
 export function registerCachedProviders(): void {
   cacheWarnings.length = 0; // reset per registration — in-process re-invocations must not accumulate stale warnings
-  const cachedTsProvider = {
-    collectComplexity: cachedTsCollectComplexity,
-    readCoverage: cachedReadCoverage,
-  };
-  for (const ext of ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'] as const) {
-    registerProvider(ext, cachedTsProvider);
+  const registry = providerRegistry();
+  if (!registry) return; // no config loaded yet
+  // Collect unique providers to avoid double-registration
+  const seen = new Set<string>();
+  for (const [ext, resolved] of registry) {
+    const key = resolved.language;
+    // ponytail: snapshot original BEFORE registerProvider overwrites same ext
+    const orig = getProvider(ext);
+    if (seen.has(key)) {
+      // Same language, different ext — register same cached factory
+      registerProvider(ext, seen.has(`cached:${key}`) ? {
+        collectComplexity: cachedTsCollectComplexity,
+        readCoverage: cachedReadCoverage,
+      } : {
+        // Use snapshot: resolved is ResolvedProvider (no collectComplexity method)
+        collectComplexity: (cwd: string, trace?: any) => orig ? orig.collectComplexity(cwd, trace) : Promise.resolve([]),
+        readCoverage: cachedReadCoverage,
+      });
+      continue;
+    }
+    seen.add(key);
+    if (resolved.language === 'typescript') {
+      registerProvider(ext, {
+        collectComplexity: cachedTsCollectComplexity,
+        readCoverage: cachedReadCoverage,
+      });
+      seen.add(`cached:${key}`);
+    } else {
+      // Non-TS: cache coverage only; complexity passes through unchanged
+      registerProvider(ext, {
+        // Lazy-load original provider's collectComplexity to avoid circular deps
+        collectComplexity: async (cwd: string, trace?: unknown) => {
+          return orig ? orig.collectComplexity(cwd, trace) : [];
+        },
+        readCoverage: cachedReadCoverage,
+      });
+    }
   }
-  // Python: cache coverage only; complexity provider passes through unchanged
-  registerProvider('.py', {
-    collectComplexity: pythonASTComplexityProvider.collectComplexity,
-    readCoverage: cachedReadCoverage,
-  });
 }

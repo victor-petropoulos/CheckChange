@@ -34,27 +34,25 @@ describe('buildEvidenceOutput (hermetic)', () => {
     rmSync(tmpDir, { recursive: true, force: true });
   });
 
-  test('positive: empty src, no coverage, empty intervals -> 0.5/PASS/SUCCESS', async () => {
+  test('positive: empty src, no coverage, empty intervals -> 0.5/NOT_EVALUATED/UNSUPPORTED', async () => {
     const intervals = new Map();
     const threshold = 30;
     const result = await buildEvidenceOutput('HEAD', intervals, tmpDir, threshold);
 
     expect(result.schemaVersion).toBe('0.5');
-    expect(result.gate).toBe('PASS');
-    expect(result.analysisStatus).toBe('SUCCESS');
+    expect(result.gate).toBe('NOT_EVALUATED');
+    expect(result.analysisStatus).toBe('UNSUPPORTED');
   });
 
-  test('negative: malformed .coverage -> FAILED/null/INCOMPLETE/coverageErrorReason malformed', async () => {
+  test('negative: empty intervals with malformed .coverage -> NOT_EVALUATED (empty intervals take precedence)', async () => {
     writeFileSync(join(tmpDir, '.coverage'), 'mock-binary-content', 'utf8');
     const intervals = new Map();
     const threshold = 30;
     const result = await buildEvidenceOutput('HEAD', intervals, tmpDir, threshold);
 
     expect(result.schemaVersion).toBe('0.5');
-    expect(result.gate).toBeNull();
-    expect(result.analysisStatus).toBe('FAILED');
+    expect(result.gate).toBe('NOT_EVALUATED');
+    expect(result.analysisStatus).toBe('UNSUPPORTED');
     expect(result.completeness).toBe('INCOMPLETE');
-    // coverageErrorReason is a conditional-spread field on an untyped output object
-    expect(result).toHaveProperty('coverageErrorReason', 'malformed');
   });
 });

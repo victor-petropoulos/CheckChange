@@ -123,18 +123,18 @@ describe('Schema & threshold', () => {
       vi.spyOn(complexity, 'collectComplexity').mockResolvedValue([])
       vi.spyOn(attribution, 'attachCoverage').mockResolvedValue([])
 
-      // Test missing coverage file
+      // Test missing coverage file — empty intervals → UNSUPPORTED (vacuous-PASS ban)
       vi.spyOn(coverage, 'readCoverage').mockResolvedValue({ available: false, coverageMap: null, error: true, reason: 'missing' })
       const outputMissing = await buildEvidenceOutput(base, intervals, cwd, 30, '/missing/file.json')
       expect(outputMissing.coverageErrorReason).toBe('missing')
-      expect(outputMissing.analysisStatus).toBe('FAILED')
+      expect(outputMissing.analysisStatus).toBe('UNSUPPORTED')
 
-      // Test malformed coverage JSON
+      // Test malformed coverage JSON — empty intervals → UNSUPPORTED
       vi.spyOn(complexity, 'collectComplexity').mockResolvedValue([])
       vi.spyOn(coverage, 'readCoverage').mockRejectedValue(new Error('Unexpected token'))
       const outputMalformed = await buildEvidenceOutput(base, intervals, cwd, 30, '/malformed/file.json')
       expect(outputMalformed.coverageErrorReason).toBe('malformed')
-      expect(outputMalformed.analysisStatus).toBe('FAILED')
+      expect(outputMalformed.analysisStatus).toBe('UNSUPPORTED')
     })
 
     test('INV-03: GIT ENOENT vs not-a-repo — coverageErrorReason and git capability distinct states', async () => {
