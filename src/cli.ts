@@ -7,13 +7,13 @@ import { registerCachedProviders, getCacheWarnings, clearCacheWarnings } from '.
 import { execute, TraceRun } from './execute.js';
 import { FORMATS, format, type EvidenceOutputShape as FormatterOutputShape, type FormatType } from './formatters/index.js';
 import { compareFromFiles } from './delta.js';
-import { resolveRunner } from './providers/index.js';
+import { resolveRunner, detectStack, createInstallPlan, promptApproval, executeInstallPlan, flushConfigUpdates, verifyInstall, type PrepareOptions, type DetectedStack, type InstallPlan, type PromptApprovalResult, type ExecuteResult, type InstallActionResult, type VerifyReport, type VerifyAnalyzer } from './providers/index.js';
 import * as path from 'node:path';
 
 // Subcommand dispatcher (check|doctor|explain|trace|delta). Legacy check path
 // output is byte-identical to the pre-dispatcher CLI; doctor/explain/trace/delta
 // emit sidecar diagnostics only — never EvidenceOutput-shaped data.
-const SUBCOMMANDS = ['check', 'doctor', 'explain', 'trace', 'delta'] as const;
+const SUBCOMMANDS = ['check', 'doctor', 'explain', 'trace', 'delta', 'prepare-repo'] as const;
 type Subcommand = (typeof SUBCOMMANDS)[number];
 
 // File extensions that map to a registered provider (evidence.ts registerProvider).
@@ -596,6 +596,153 @@ async function runDelta(argv: string[]): Promise<void> {
 }
 
 /**
+ * `prepare-repo` subcommand (Task 8): detect → plan → approve → install → verify.
+ * CLI wiring only — all phases reuse prepare.ts exports (no analysis logic here).
+ *
+ * Split into parse → phases → report so each function stays under the CRAP
+ * threshold (cc ≤ 5, coverage-independent). Dispatch + exit codes are identical
+ * to the pre-split implementation.
+ *
+ * Exit codes: 0 = dry-run plan printed or full success; 1 = partial/unfixable
+ * install or verify, approval denied, or no-TTY refusal.
+ */
+
+/** Result handed from `runPreparePhases` to `printPrepareReport`/exit wiring. */
+interface PrepareResult {
+  phase: 'plan' | 'refused' | 'declined' | 'done';
+  stack: DetectedStack;
+  plan: InstallPlan[];
+  approval: PromptApprovalResult;
+  install?: ExecuteResult;
+  verify?: VerifyReport;
+  ok?: boolean;
+  configWritten?: string[];
+}
+
+// ponytail: const tag/status maps replace per-branch ternaries so reporting
+// functions stay cc ≤ 5 without coverage. Exhaustive over the union statuses.
+const INSTALL_TAG: Record<InstallActionResult['status'], string> = {
+  installed: '✓',
+  skipped: '⊘',
+  failed: '✗',
+};
+const ANALYZE_TAG: Record<VerifyAnalyzer['status'], string> = {
+  ok: '✓',
+  unfixable: '✗',
+};
+const DONE_STATUS: Record<string, string> = { true: 'success', false: 'failure' };
+const DONE_EXIT: Record<string, number> = { true: 0, false: 1 };
+
+// ponytail: extracted from runPrepareRepo to reduce cyclomatic complexity; pure parse.
+function parsePrepareFlags(argv: string[]): PrepareOptions {
+  let dryRun = false;
+  let json = false;
+  let yes = false;
+  for (const arg of argv) {
+    if (arg === '--dry-run') dryRun = true;
+    else if (arg === '--json') json = true;
+    else if (arg === '--yes') yes = true;
+    else throw new Error(`Unknown option ${arg}`);
+  }
+  return { cwd: process.cwd(), dryRun, json, yes };
+}
+
+// ponytail: extracted from runPrepareRepo to reduce cyclomatic complexity; returns
+// a phase result instead of calling process.exit so reporting/exit stay separate.
+async function runPreparePhases(opts: PrepareOptions): Promise<PrepareResult> {
+  const { config, registry } = initProviderConfig();
+  const stack = detectStack(opts.cwd, registry);
+  const plan = createInstallPlan(stack, registry, config);
+  const approval = await promptApproval(plan, opts);
+  if (opts.dryRun) return { phase: 'plan', stack, plan, approval };
+  if (approval.refused) return { phase: 'refused', stack, plan, approval };
+  if (!approval.approved) return { phase: 'declined', stack, plan, approval };
+  const install = await executeInstallPlan(plan, opts);
+  // Config flush only on full install success (spec:3 / design gate #2).
+  const configWritten = install.ok ? flushConfigUpdates(plan, opts.cwd) : [];
+  const verify = await verifyInstall(stack, opts);
+  return { phase: 'done', stack, plan, approval, install, verify, ok: install.ok && verify.ok, configWritten };
+}
+
+// ponytail: extracted from runPrepareRepo to reduce cyclomatic complexity; prints
+// the phase result only (no exit). Tag lookups use const maps (no per-call branches).
+function printPrepareReport(result: PrepareResult, json: boolean): void {
+  if (result.phase === 'plan') { printPlanReport(result, json); return; }
+  if (result.phase === 'refused') { printRefusedReport(result, json); return; }
+  if (result.phase === 'declined') { printDeclinedReport(result, json); return; }
+  printDoneReport(result, json);
+}
+
+function printPlanReport(result: PrepareResult, json: boolean): void {
+  if (json) {
+    console.log(JSON.stringify({
+      status: 'plan',
+      languages: result.stack.languages,
+      plan: result.plan.map((p) => ({
+        language: p.language,
+        actions: p.actions.map((a) => ({ kind: a.kind, description: a.description, command: a.command, packages: a.packages })),
+        configUpdates: p.configUpdates,
+      })),
+    }, null, 2));
+    return;
+  }
+  console.log(result.approval.preamble);
+}
+
+function printRefusedReport(result: PrepareResult, json: boolean): void {
+  if (json) {
+    console.log(JSON.stringify({
+      status: 'refused',
+      reason: 'no TTY without --dry-run/--yes; re-run `checkchange prepare-repo --dry-run --json` to preview, or `--yes` to execute',
+    }, null, 2));
+    return;
+  }
+  console.log(result.approval.preamble);
+  console.error('Refused: re-run `checkchange prepare-repo --dry-run --json` to preview, or `checkchange prepare-repo --yes` to execute.');
+}
+
+function printDeclinedReport(result: PrepareResult, json: boolean): void {
+  if (json) {
+    console.log(JSON.stringify({ status: 'declined' }, null, 2));
+    return;
+  }
+  console.error('Declined — no changes made.');
+}
+
+function printDoneReport(result: PrepareResult, json: boolean): void {
+  const { install, verify } = result;
+  if (json) {
+    console.log(JSON.stringify({
+      status: DONE_STATUS[String(result.ok!)],
+      languages: result.stack.languages,
+      install: { ok: install!.ok, actions: install!.actions },
+      verify: { ok: verify!.ok, languages: verify!.reDetected.languages, analyzers: verify!.analyzers },
+      configWritten: result.configWritten ?? [],
+      exitHint: 'checkchange doctor',
+      resumeHint: 'checkchange prepare-repo (idempotent)',
+    }, null, 2));
+    return;
+  }
+  for (const r of install!.actions) {
+    console.log(`${INSTALL_TAG[r.status]} ${r.kind}: ${r.detail}`);
+  }
+  for (const a of verify!.analyzers) {
+    console.log(`${ANALYZE_TAG[a.status]} ${a.name}: ${a.detail}`);
+  }
+  console.log('→ Run `checkchange doctor` to verify');
+  console.log('→ Re-run `checkchange prepare-repo` anytime (idempotent)');
+}
+
+async function runPrepareRepo(argv: string[]): Promise<void> {
+  const opts = parsePrepareFlags(argv);
+  const result = await runPreparePhases(opts);
+  printPrepareReport(result, opts.json);
+  if (result.phase === 'plan') { process.exit(0); return; }
+  if (result.phase === 'refused' || result.phase === 'declined') { process.exit(1); return; }
+  process.exit(DONE_EXIT[String(result.ok!)]);
+}
+
+/**
  * Main CLI function: subcommand dispatcher. First argument selects the
  * subcommand; a non-subcommand first argument (e.g. legacy `--base HEAD check`)
  * defaults to `check`, preserving pre-dispatcher behavior.
@@ -614,6 +761,7 @@ export async function main(): Promise<void> {
       case 'explain': await runExplain(args.slice(1)); break;
       case 'trace': await runTrace(args.slice(1)); break;
       case 'delta': await runDelta(args.slice(1)); break;
+      case 'prepare-repo': await runPrepareRepo(args.slice(1)); break;
     }
   } catch (error) {
     // Handle command errors (invalid base, not a repo, etc.)

@@ -172,6 +172,66 @@ describe('loadProviderConfig', () => {
     expect(source).toBe('repo-root');
     expect(cfg.providers[0]!.testRunners).toEqual(explicit.providers[0]!.testRunners);
   });
+
+  it('accepts config with testRunner install block', () => {
+    const explicit: ProviderConfig = {
+      version: 1,
+      providers: [{
+        language: 'python',
+        extensions: ['.py'],
+        testRunners: [{
+          name: 'pytest',
+          configFiles: ['pytest.ini'],
+          binaryProbes: ['.venv/bin/pytest'],
+          command: ['python3', '-m', 'pytest'],
+          artifact: 'coverage.xml',
+          install: { packages: ['pytest', 'coverage'] },
+        }],
+      }],
+    };
+    fs.writeFileSync(path.join(dir, 'checkchange.providers.json'), JSON.stringify(explicit));
+    const { config: cfg } = loadProviderConfig(dir);
+    expect(cfg.providers[0]!.testRunners![0]!.install).toEqual({ packages: ['pytest', 'coverage'] });
+  });
+
+  it('rejects testRunner install with non-array packages', () => {
+    fs.writeFileSync(path.join(dir, 'checkchange.providers.json'), JSON.stringify({
+      version: 1,
+      providers: [{
+        language: 'python',
+        extensions: ['.py'],
+        testRunners: [{
+          name: 'pytest',
+          configFiles: ['pytest.ini'],
+          binaryProbes: [],
+          command: ['pytest'],
+          artifact: 'coverage.xml',
+          install: { packages: 'not-an-array' },
+        }],
+      }],
+    }));
+    expect(() => loadProviderConfig(dir)).toThrow('install.packages must be an array');
+  });
+
+  it('accepts testRunner without install field', () => {
+    const explicit: ProviderConfig = {
+      version: 1,
+      providers: [{
+        language: 'go',
+        extensions: ['.go'],
+        testRunners: [{
+          name: 'gotest',
+          configFiles: ['go.mod'],
+          binaryProbes: ['go'],
+          command: ['go', 'test', '-coverprofile', 'coverage.out'],
+          artifact: 'coverage.out',
+        }],
+      }],
+    };
+    fs.writeFileSync(path.join(dir, 'checkchange.providers.json'), JSON.stringify(explicit));
+    const { config: cfg } = loadProviderConfig(dir);
+    expect(cfg.providers[0]!.testRunners![0]!.install).toBeUndefined();
+  });
 });
 
 describe('deriveRegistry', () => {
@@ -248,5 +308,26 @@ describe('deriveRegistry', () => {
     const reg = deriveRegistry(cfg);
     const x = reg.get('.x')!;
     expect(x.testRunners).toBeNull();
+  });
+
+  it('passes install block through to resolved provider testRunner', () => {
+    const cfg: ProviderConfig = {
+      version: 1,
+      providers: [{
+        language: 'python',
+        extensions: ['.py'],
+        testRunners: [{
+          name: 'pytest',
+          configFiles: ['pytest.ini'],
+          binaryProbes: ['.venv/bin/pytest'],
+          command: ['python3', '-m', 'pytest'],
+          artifact: 'coverage.xml',
+          install: { packages: ['pytest', 'coverage'] },
+        }],
+      }],
+    };
+    const reg = deriveRegistry(cfg);
+    const py = reg.get('.py')!;
+    expect(py.testRunners![0]!.install).toEqual({ packages: ['pytest', 'coverage'] });
   });
 });

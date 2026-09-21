@@ -9,6 +9,7 @@ import { join } from 'path';
 const spawnSyncMock = vi.hoisted(() => vi.fn());
 vi.mock('node:child_process', () => ({
   spawnSync: spawnSyncMock,
+  execFile: vi.fn(), // ponytail: bare mock satisfies module-graph import from prepare.ts
 }));
 
 function checkTempFilesCleaned(dir: string): boolean {

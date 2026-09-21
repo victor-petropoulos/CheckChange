@@ -96,6 +96,26 @@ checkchange check --auto-coverage --json
 
 **Coverage artifact required** for CRAP score calculation. Without coverage, gate returns `INCOMPLETE`. Use `--auto-coverage` to auto-detect runner and generate the artifact.
 
+## `prepare-repo` — Bootstrap Test Runners
+
+```bash
+checkchange prepare-repo [--dry-run] [--json] [--yes]
+```
+
+Phases: **detect** → **plan** → **approve** → **install** → **verify**
+
+- `--dry-run` — print plan (human or `--json`), exit 0. Safe in non-TTY.
+- `--json` — machine-readable output for CI/agents.
+- `--yes` — skip interactive approval, execute plan. Combined with `--dry-run`, `--dry-run` wins.
+- Agent protocol: **always run `--dry-run --json` first**, inspect plan, then `--yes` to execute.
+
+Example:
+```bash
+checkchange prepare-repo --dry-run --json
+checkchange prepare-repo --yes
+checkchange doctor  # verify
+```
+
 ## Skill for AI Agents
 
 `.agents/skills/using-checkchange/SKILL.md` (422 words) — wired to `reviewer`, `tester`, `orchestrator` agents. Any IDE/LLM with opencode can invoke `checkchange check` deterministically.

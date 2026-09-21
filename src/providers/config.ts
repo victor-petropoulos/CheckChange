@@ -12,6 +12,10 @@ export interface TestRunner {
   binaryProbes: string[];
   command: string[];
   artifact: string;
+  /** Optional install spec consulted by prepare-repo (Task 1). */
+  install?: {
+    packages: string[];
+  };
 }
 
 export interface ProviderEntry {
@@ -102,6 +106,23 @@ function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
 }
 
+// ponytail: extracted from validateConfig to reduce cyclomatic complexity / CRAP.
+function validateTestRunner(runner: unknown, i: number, j: number): void {
+  if (!isRecord(runner)) throw new Error(`config: providers[${i}].testRunners[${j}] not an object`);
+  if (typeof runner.name !== 'string') throw new Error(`config: providers[${i}].testRunners[${j}].name missing`);
+  if (!Array.isArray(runner.configFiles)) throw new Error(`config: providers[${i}].testRunners[${j}].configFiles missing`);
+  if (!Array.isArray(runner.binaryProbes)) throw new Error(`config: providers[${i}].testRunners[${j}].binaryProbes missing`);
+  if (!Array.isArray(runner.command)) throw new Error(`config: providers[${i}].testRunners[${j}].command missing`);
+  if (typeof runner.artifact !== 'string') throw new Error(`config: providers[${i}].testRunners[${j}].artifact missing`);
+  if (runner.install !== undefined) validateInstallField(runner.install, i, j);
+}
+
+// ponytail: extracted install-field check from validateTestRunner (trivially separable).
+function validateInstallField(install: unknown, i: number, j: number): void {
+  if (!isRecord(install)) throw new Error(`config: providers[${i}].testRunners[${j}].install not an object`);
+  if (!Array.isArray(install.packages)) throw new Error(`config: providers[${i}].testRunners[${j}].install.packages must be an array`);
+}
+
 function validateConfig(raw: unknown): ProviderConfig {
   if (!isRecord(raw)) throw new Error('config: not an object');
   if (raw.version !== 1) throw new Error(`config: unsupported version ${String(raw.version)}`);
@@ -113,12 +134,7 @@ function validateConfig(raw: unknown): ProviderConfig {
     if (entry.testRunners !== undefined) {
       if (!Array.isArray(entry.testRunners)) throw new Error(`config: providers[${i}].testRunners not an array`);
       for (const [j, runner] of entry.testRunners.entries()) {
-        if (!isRecord(runner)) throw new Error(`config: providers[${i}].testRunners[${j}] not an object`);
-        if (typeof runner.name !== 'string') throw new Error(`config: providers[${i}].testRunners[${j}].name missing`);
-        if (!Array.isArray(runner.configFiles)) throw new Error(`config: providers[${i}].testRunners[${j}].configFiles missing`);
-        if (!Array.isArray(runner.binaryProbes)) throw new Error(`config: providers[${i}].testRunners[${j}].binaryProbes missing`);
-        if (!Array.isArray(runner.command)) throw new Error(`config: providers[${i}].testRunners[${j}].command missing`);
-        if (typeof runner.artifact !== 'string') throw new Error(`config: providers[${i}].testRunners[${j}].artifact missing`);
+        validateTestRunner(runner, i, j);
       }
     }
   }
