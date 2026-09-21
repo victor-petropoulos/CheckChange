@@ -7,6 +7,7 @@ import { registerCachedProviders, getCacheWarnings, clearCacheWarnings } from '.
 import { execute, TraceRun } from './execute.js';
 import { FORMATS, format, type EvidenceOutputShape as FormatterOutputShape, type FormatType } from './formatters/index.js';
 import { compareFromFiles } from './delta.js';
+import { resolveRunner } from './providers/index.js';
 import * as path from 'node:path';
 
 // Subcommand dispatcher (check|doctor|explain|trace|delta). Legacy check path
@@ -304,10 +305,16 @@ interface DoctorProbe {
   name: string;
   status: string;
   detail?: string;
+  remediation?: string;
 }
 
-function probe(name: string, status: string, detail?: string): DoctorProbe {
-  return { name, status, ...(detail === undefined ? {} : { detail }) };
+function probe(name: string, status: string, detail?: string, remediation?: string): DoctorProbe {
+  return {
+    name,
+    status,
+    ...(detail === undefined ? {} : { detail }),
+    ...(remediation === undefined ? {} : { remediation }),
+  };
 }
 
 function errorMessage(error: unknown): string {
@@ -331,21 +338,26 @@ async function runDoctor(argv: string[]): Promise<void> {
 
   // 1. git executable availability
   const gitVersion = await execute('git', ['--version'], { cwd });
-  probes.push(probe('gitExecutable', gitVersion.exitCode === 0 ? 'ok' : 'missing'));
+  const gitAvailable = gitVersion.exitCode === 0;
+  probes.push(
+    gitAvailable
+      ? probe('gitExecutable', 'ok')
+      : probe('gitExecutable', 'missing', undefined, 'git executable not found — install git and ensure it is on your PATH.'),
+  );
 
   // 2. repository detection (reuse validateGitRepo)
   try {
     await validateGitRepo(cwd);
     probes.push(probe('gitRepo', 'ok'));
   } catch (error) {
-    probes.push(probe('gitRepo', 'error', errorMessage(error)));
+    probes.push(probe('gitRepo', 'error', errorMessage(error), 'not a git repository (or git unavailable) — run from a repo root, or initialize one with `git init`.'));
   }
 
   // 3. default base detection (reuse detectDefaultBase)
   const base = await detectDefaultBase(false, cwd);
   probes.push(
     base === null
-      ? probe('defaultBase', 'missing')
+      ? probe('defaultBase', 'missing', undefined, 'no base ref could be auto-detected — pass `--base <ref>` (e.g. `--base main`).')
       : probe('defaultBase', 'ok', base)
   );
 
@@ -356,7 +368,7 @@ async function runDoctor(argv: string[]): Promise<void> {
       const exts = [...intervals.keys()].map((f) => path.extname(f));
       const unsupported = exts.filter((e) => !SUPPORTED_EXTENSIONS.has(e));
         if (exts.length === 0) {
-          probes.push(probe('providerAvailability', 'no-changed-files'));
+          probes.push(probe('providerAvailability', 'no-changed-files', undefined, 'no changed files detected against the base — stage a change and re-run (`git status` / `git diff --stat`). An empty diff is a valid stop: there is nothing to assess.'));
         } else if (unsupported.length === 0) {
           // Show per-language source attribution
           const extSet = [...new Set(exts)];
@@ -366,23 +378,32 @@ async function runDoctor(argv: string[]): Promise<void> {
           });
           probes.push(probe('providerAvailability', 'ok', langAttributions.join(', ')));
         } else {
-          probes.push(probe('providerAvailability', 'partial', `unsupported: ${[...new Set(unsupported)].join(',')}, source: ${providerSource}`));
+          probes.push(probe('providerAvailability', 'partial', `unsupported: ${[...new Set(unsupported)].join(',')}, source: ${providerSource ?? 'unknown'}`, 'some changed extensions have no registered provider — add a provider config (`--provider-config`) or restrict changes to supported file types.'));
         }
     } catch (error) {
-      probes.push(probe('providerAvailability', 'error', errorMessage(error)));
+      probes.push(probe('providerAvailability', 'error', errorMessage(error), 'failed to compute changed files — verify the base ref and that your git state is healthy.'));
     }
   } else {
-    probes.push(probe('providerAvailability', 'skipped', 'no base resolved'));
+    probes.push(probe('providerAvailability', 'skipped', 'no base resolved', 'no base ref was resolved — pass `--base <ref>` so changed files can be detected.'));
   }
 
   // 5. coverage artifact presence (reuse readCoverage — LCOV guards inside)
   const coverage = await readCoverage(cwd);
+  let note = '';
+  try {
+    const rr = resolveRunner(cwd, registry);
+    note = rr.size > 0
+      ? ' Detected runners: ' + [...rr.entries()].map(([l, r]) => l + '->' + r.command.join(' ')).join('; ')
+      : ' No test runner detected for this repo layout.';
+  } catch (error) {
+    note = ' Runner detection failed (' + errorMessage(error) + ').';
+  }
   probes.push(
     coverage.error
-      ? probe('coverageArtifact', 'malformed', coverage.reason ?? '')
+      ? probe('coverageArtifact', 'malformed', coverage.reason ?? '', 'coverage artifact present but could not be parsed — inspect it and regenerate a valid coverage JSON (e.g. `npx vitest run --coverage`).')
       : coverage.available
         ? probe('coverageArtifact', 'present')
-        : probe('coverageArtifact', 'missing')
+        : probe('coverageArtifact', 'missing', undefined, 'coverage artifact not found — generate one: `npx vitest run --coverage` (JS/TS) or `coverage run -m pytest && coverage json` (Python), then pass `--coverage-file <path>.`' + note),
   );
 
   if (json) {
@@ -390,6 +411,9 @@ async function runDoctor(argv: string[]): Promise<void> {
   } else {
     for (const p of probes) {
       console.log(`${p.name}: ${p.status}${p.detail !== undefined ? ` (${p.detail})` : ''}`);
+      if (p.remediation !== undefined) {
+        console.log(`  ↳ ${p.remediation}`);
+      }
     }
   }
 }

@@ -64,3 +64,4 @@ Apply the following to every finding before taking any action.
 3. **Assess confidence + severity** — Confidence ≥ 0.9: investigate seriously. 0.7–0.89: likely correct, verify before acting. 0.5–0.69: speculative, strongly consider rejecting unless independently verified. < 0.5: suggestion, not an action item. **Severity measures impact if correct, not confidence it is correct.**
 4. **Decide action** — `accept` (apply fix), `modify` (real problem, different fix), or `reject` (false positive). Report via `report_review_action`.
 5. **When uncertain, call `explain_finding(findingId)`** — ID is `sessionId:index`, sessionId from the review call. Returns the finding's structured fields for focused evaluation.
+doctor --json includes remediation field per probe; text output prints hint after each probe line

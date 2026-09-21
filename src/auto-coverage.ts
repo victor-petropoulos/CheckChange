@@ -1,6 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { loadProviderConfig, deriveRegistry, resolveRunner } from './providers/index.js';
 
 const COV_TIMEOUT = 120_000;
 
@@ -55,7 +56,15 @@ function hasPytest(cwd: string): boolean {
  * On timeout/failure: returns null (caller falls back to absent path — never forced FAILED).
  */
 export function autoCoverage(cwd: string): { generatedPath: string | null; hint: string | null } {
-  const runner = detectRunner(cwd);
+  let runner = detectRunner(cwd);
+  const cfg = loadProviderConfig(cwd, undefined);
+  const registry = deriveRegistry(cfg.config, cfg.source);
+  const resolved = resolveRunner(cwd, registry);
+  if (resolved.size > 0) {
+    const first = resolved.values().next().value!;
+    const [cmd, ...args] = first.command;
+    runner = { command: cmd!, args, artifact: path.join(cwd, first.artifact) };
+  }
   if (!runner) {
     return { generatedPath: null, hint: 'No test runner detected. Install vitest, jest, or pytest to use --auto-coverage.' };
   }

@@ -19,6 +19,7 @@ function fakeResolved(overrides?: Partial<ResolvedProvider>): ResolvedProvider {
     complexityCmd: 'mytool {cwd} {out} {ext}',
     coverageFiles: [],
     coverageCmd: null,
+    testRunners: null,
     source: 'test',
     ...overrides,
   };

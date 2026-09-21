@@ -18,8 +18,21 @@ vi.mock('../src/git.js', () => ({
   detectDefaultBase: vi.fn(),
 }));
 
+// Mock providers so fs mocks don't reach real loadProviderConfig/deriveRegistry/resolveRunner.
+// builtinConfig and createGenericCommandProvider pass through (needed by evidence.ts/cli.ts).
+vi.mock('../src/providers/index.js', async () => {
+  const actual = await vi.importActual<typeof import('../src/providers/index.js')>('../src/providers/index.js');
+  return {
+    ...actual,
+    loadProviderConfig: vi.fn(),
+    deriveRegistry: vi.fn(),
+    resolveRunner: vi.fn(),
+  };
+});
+
 import { autoCoverage } from '../src/auto-coverage.js';
 import { detectDefaultBase } from '../src/git.js';
+import { loadProviderConfig, deriveRegistry, resolveRunner } from '../src/providers/index.js';
 
 // Access mocks via the mocked modules (imported after vi.mock)
 const mockReaddirSync = fs.readdirSync as ReturnType<typeof vi.fn>;
@@ -27,12 +40,22 @@ const mockReadFileSync = fs.readFileSync as ReturnType<typeof vi.fn>;
 const mockExistsSync = fs.existsSync as ReturnType<typeof vi.fn>;
 const mockSpawnSync = child_process.spawnSync as ReturnType<typeof vi.fn>;
 
+// Resolved-runner fixtures (ResolvedRunner shape: command, artifact, provenance)
+const VITEST_RUNNER = { command: ['npx', 'vitest', 'run', '--coverage'], artifact: 'coverage/coverage-final.json', provenance: 'vitest.config.ts' };
+const JEST_RUNNER = { command: ['npx', 'jest', '--coverage'], artifact: 'coverage/coverage-final.json', provenance: 'jest.config.js' };
+const PYTEST_RUNNER = { command: ['python3', '-m', 'pytest', '--cov', '--cov-report=xml'], artifact: 'coverage.xml', provenance: 'pyproject.toml' };
+
 describe('autoCoverage() — detection precedence', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(loadProviderConfig).mockReturnValue({ config: { version: 1, providers: [] }, source: 'builtin' });
+    vi.mocked(deriveRegistry).mockReturnValue(new Map());
+    vi.mocked(resolveRunner).mockReturnValue(new Map());
   });
 
   test('vitest detected first (over jest)', () => {
+    vi.mocked(resolveRunner).mockReturnValue(new Map([['typescript', VITEST_RUNNER]]));
+
     mockReaddirSync.mockImplementation((dir: string) => {
       if (dir === '/proj') return ['vitest.config.ts', 'jest.config.js'];
       return [];
@@ -50,6 +73,8 @@ describe('autoCoverage() — detection precedence', () => {
   });
 
   test('jest detected when no vitest', () => {
+    vi.mocked(resolveRunner).mockReturnValue(new Map([['typescript', JEST_RUNNER]]));
+
     mockReaddirSync.mockImplementation((dir: string) => {
       if (dir === '/proj') return ['jest.config.js'];
       return [];
@@ -67,6 +92,8 @@ describe('autoCoverage() — detection precedence', () => {
   });
 
   test('pytest detected when no vitest/jest', () => {
+    vi.mocked(resolveRunner).mockReturnValue(new Map([['python', PYTEST_RUNNER]]));
+
     mockReaddirSync.mockImplementation((dir: string, opts?: { recursive?: boolean }) => {
       if (dir === '/proj' && !opts?.recursive) return ['pyproject.toml'];
       if (dir === '/proj' && opts?.recursive) return ['main.py'];
@@ -83,7 +110,9 @@ describe('autoCoverage() — detection precedence', () => {
 
   test('no runner detected returns null + hint', () => {
     mockReaddirSync.mockReturnValue([]);
-    mockReadFileSync.mockImplementation(() => { throw new Error('ENOENT'); });
+    mockReadFileSync.mockImplementation(() => {
+      throw Object.assign(new Error('ENOENT'), { code: 'ENOENT' });
+    });
     mockExistsSync.mockReturnValue(false);
 
     const result = autoCoverage('/proj');
@@ -95,6 +124,9 @@ describe('autoCoverage() — detection precedence', () => {
 describe('autoCoverage() — timeout and failure', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(loadProviderConfig).mockReturnValue({ config: { version: 1, providers: [] }, source: 'builtin' });
+    vi.mocked(deriveRegistry).mockReturnValue(new Map());
+    vi.mocked(resolveRunner).mockReturnValue(new Map([['typescript', VITEST_RUNNER]]));
   });
 
   test('timeout returns ETIMEDOUT hint', () => {

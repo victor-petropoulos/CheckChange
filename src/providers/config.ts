@@ -5,12 +5,22 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
+/** Test runner definition for a provider language. */
+export interface TestRunner {
+  name: string;
+  configFiles: string[];
+  binaryProbes: string[];
+  command: string[];
+  artifact: string;
+}
+
 export interface ProviderEntry {
   language: string;
   extensions: string[];
   complexityCmd?: string;
   coverageFiles?: string[];
   coverageCmd?: string;
+  testRunners?: TestRunner[];
 }
 
 export interface ProviderConfig {
@@ -25,6 +35,7 @@ export interface ResolvedProvider {
   complexityCmd: string | null;
   coverageFiles: string[];
   coverageCmd: string | null;
+  testRunners: TestRunner[] | null;
   /** Whether this provider came from the builtin defaults or a loaded config file. */
   source: 'builtin' | string;
 }
@@ -32,6 +43,30 @@ export interface ResolvedProvider {
 // ---- Builtin defaults (current hardcoded values as config) ----
 
 const PY_EXTENSIONS = ['.py'];
+
+const VITEST_RUNNER: TestRunner = {
+  name: 'vitest',
+  configFiles: ['vitest.config.*'],
+  binaryProbes: [],
+  command: ['npx', 'vitest', 'run', '--coverage'],
+  artifact: 'coverage/coverage-final.json',
+};
+
+const JEST_RUNNER: TestRunner = {
+  name: 'jest',
+  configFiles: ['jest.config.*'],
+  binaryProbes: [],
+  command: ['npx', 'jest', '--coverage'],
+  artifact: 'coverage/coverage-final.json',
+};
+
+const PYTEST_RUNNER: TestRunner = {
+  name: 'pytest',
+  configFiles: ['pyproject.toml', 'pytest.ini', 'setup.cfg', 'requirements.txt'],
+  binaryProbes: ['.venv/bin/pytest', 'VIRTUAL_ENV', 'python3 -m pytest'],
+  command: ['python3', '-m', 'pytest', '--cov', '--cov-report=xml'],
+  artifact: 'coverage.xml',
+};
 
 export function builtinConfig(): ProviderConfig {
   return {
@@ -41,17 +76,20 @@ export function builtinConfig(): ProviderConfig {
         language: 'javascript',
         extensions: ['.js', '.jsx', '.mjs', '.cjs'],
         coverageFiles: ['coverage/coverage-final.json', 'coverage/lcov.info'],
+        testRunners: [VITEST_RUNNER, JEST_RUNNER],
       },
       {
         language: 'typescript',
         extensions: ['.ts', '.tsx'],
         coverageFiles: ['coverage/coverage-final.json', 'coverage/lcov.info'],
+        testRunners: [VITEST_RUNNER, JEST_RUNNER],
       },
       {
         language: 'python',
         extensions: PY_EXTENSIONS,
         coverageFiles: ['.coverage', 'coverage.xml', 'coverage.json', 'coverage/coverage-final.json'],
         coverageCmd: 'coverage json -o {out}',
+        testRunners: [PYTEST_RUNNER],
       },
     ],
     allowlist: ['./checkchange.providers.json', './.checkchange/providers.json'],
@@ -72,6 +110,17 @@ function validateConfig(raw: unknown): ProviderConfig {
     if (!isRecord(entry)) throw new Error(`config: providers[${i}] not an object`);
     if (typeof entry.language !== 'string') throw new Error(`config: providers[${i}].language missing`);
     if (!Array.isArray(entry.extensions)) throw new Error(`config: providers[${i}].extensions missing`);
+    if (entry.testRunners !== undefined) {
+      if (!Array.isArray(entry.testRunners)) throw new Error(`config: providers[${i}].testRunners not an array`);
+      for (const [j, runner] of entry.testRunners.entries()) {
+        if (!isRecord(runner)) throw new Error(`config: providers[${i}].testRunners[${j}] not an object`);
+        if (typeof runner.name !== 'string') throw new Error(`config: providers[${i}].testRunners[${j}].name missing`);
+        if (!Array.isArray(runner.configFiles)) throw new Error(`config: providers[${i}].testRunners[${j}].configFiles missing`);
+        if (!Array.isArray(runner.binaryProbes)) throw new Error(`config: providers[${i}].testRunners[${j}].binaryProbes missing`);
+        if (!Array.isArray(runner.command)) throw new Error(`config: providers[${i}].testRunners[${j}].command missing`);
+        if (typeof runner.artifact !== 'string') throw new Error(`config: providers[${i}].testRunners[${j}].artifact missing`);
+      }
+    }
   }
   return raw as unknown as ProviderConfig;
 }
@@ -113,6 +162,7 @@ export function deriveRegistry(config: ProviderConfig, source: 'builtin' | strin
       complexityCmd: entry.complexityCmd ?? null,
       coverageFiles: entry.coverageFiles ?? [],
       coverageCmd: entry.coverageCmd ?? null,
+      testRunners: entry.testRunners ?? null,
       source,
     };
     for (const ext of entry.extensions) {

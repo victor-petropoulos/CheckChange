@@ -29,6 +29,33 @@ describe('builtinConfig', () => {
     expect(py!.extensions).toContain('.py');
     expect(py!.coverageFiles).toContain('.coverage');
   });
+
+  it('builtin testRunners preserve current vitest/jest/pytest behavior', () => {
+    const cfg = builtinConfig();
+    // TypeScript + JavaScript
+    const ts = cfg.providers.find((p) => p.language === 'typescript')!;
+    const js = cfg.providers.find((p) => p.language === 'javascript')!;
+    for (const entry of [ts, js]) {
+      const runners = entry.testRunners!;
+      expect(runners).toHaveLength(2);
+      const vitest = runners.find((r) => r.name === 'vitest');
+      expect(vitest).toBeDefined();
+      expect(vitest!.command).toEqual(['npx', 'vitest', 'run', '--coverage']);
+      expect(vitest!.artifact).toBe('coverage/coverage-final.json');
+      const jest = runners.find((r) => r.name === 'jest');
+      expect(jest).toBeDefined();
+      expect(jest!.command).toEqual(['npx', 'jest', '--coverage']);
+      expect(jest!.artifact).toBe('coverage/coverage-final.json');
+    }
+    // Python — preserve exact current behavior
+    const py = cfg.providers.find((p) => p.language === 'python')!;
+    const pytest = py.testRunners![0]!;
+    expect(pytest.name).toBe('pytest');
+    expect(pytest.configFiles).toEqual(['pyproject.toml', 'pytest.ini', 'setup.cfg', 'requirements.txt']);
+    expect(pytest.binaryProbes).toEqual(['.venv/bin/pytest', 'VIRTUAL_ENV', 'python3 -m pytest']);
+    expect(pytest.command).toEqual(['python3', '-m', 'pytest', '--cov', '--cov-report=xml']);
+    expect(pytest.artifact).toBe('coverage.xml');
+  });
 });
 
 describe('loadProviderConfig', () => {
@@ -108,6 +135,43 @@ describe('loadProviderConfig', () => {
     }));
     expect(() => loadProviderConfig(dir)).toThrow('missing providers');
   });
+
+  it('rejects testRunners that is not an array', () => {
+    fs.writeFileSync(path.join(dir, 'checkchange.providers.json'), JSON.stringify({
+      version: 1,
+      providers: [{ language: 'go', extensions: ['.go'], testRunners: 'notarray' }],
+    }));
+    expect(() => loadProviderConfig(dir)).toThrow('testRunners not an array');
+  });
+
+  it('rejects testRunner missing required fields', () => {
+    fs.writeFileSync(path.join(dir, 'checkchange.providers.json'), JSON.stringify({
+      version: 1,
+      providers: [{ language: 'go', extensions: ['.go'], testRunners: [{ name: 'go-test' }] }],
+    }));
+    expect(() => loadProviderConfig(dir)).toThrow('configFiles missing');
+  });
+
+  it('accepts config with testRunners', () => {
+    const explicit: ProviderConfig = {
+      version: 1,
+      providers: [{
+        language: 'go',
+        extensions: ['.go'],
+        testRunners: [{
+          name: 'gotest',
+          configFiles: ['go.mod'],
+          binaryProbes: ['go'],
+          command: ['go', 'test', '-coverprofile', 'coverage.out'],
+          artifact: 'coverage.out',
+        }],
+      }],
+    };
+    fs.writeFileSync(path.join(dir, 'checkchange.providers.json'), JSON.stringify(explicit));
+    const { config: cfg, source } = loadProviderConfig(dir);
+    expect(source).toBe('repo-root');
+    expect(cfg.providers[0]!.testRunners).toEqual(explicit.providers[0]!.testRunners);
+  });
 });
 
 describe('deriveRegistry', () => {
@@ -154,5 +218,35 @@ describe('deriveRegistry', () => {
     expect(x.complexityCmd).toBeNull();
     expect(x.coverageCmd).toBeNull();
     expect(x.coverageFiles).toEqual([]);
+  });
+
+  it('passes testRunners through to resolved provider', () => {
+    const cfg: ProviderConfig = {
+      version: 1,
+      providers: [{
+        language: 'python',
+        extensions: ['.py'],
+        testRunners: [{
+          name: 'pytest',
+          configFiles: ['pytest.ini'],
+          binaryProbes: ['.venv/bin/Pytest'],
+          command: ['python3', '-m', 'pytest'],
+          artifact: 'coverage.xml',
+        }],
+      }],
+    };
+    const reg = deriveRegistry(cfg);
+    const py = reg.get('.py')!;
+    expect(py.testRunners).toEqual(cfg.providers[0]!.testRunners);
+  });
+
+  it('nulls testRunners when not provided', () => {
+    const cfg: ProviderConfig = {
+      version: 1,
+      providers: [{ language: 'x', extensions: ['.x'] }],
+    };
+    const reg = deriveRegistry(cfg);
+    const x = reg.get('.x')!;
+    expect(x.testRunners).toBeNull();
   });
 });
