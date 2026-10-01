@@ -1,0 +1,91 @@
+import { findAllTypeScriptFilesUnderSourceRoots, parseFileMethods } from '@barney-media/crap-typescript-core';
+import { relative, resolve } from 'node:path';
+import { execSync } from 'node:child_process';
+import type { TraceRun } from './execute.js';
+
+// Provenance for the complexity lineage stage: native analyzer from the core package.
+export const complexityProvenance = { tool: '@barney-media/crap-typescript-core', version: '0.5.0' } as const;
+
+export interface ComplexityInfo {
+  file: string;
+  method: string;
+  lineStart: number;
+  lineEnd: number;
+  cc: number;
+}
+
+export function getGitTrackedCodeFiles(cwd: string): string[] {
+  try {
+    // Get list of tracked files, one per line
+    const output = execSync('git ls-files --cached --others --exclude-standard', { cwd, encoding: 'utf8' });
+    const lines = output.trim().split('\n');
+    const codeFiles: string[] = [];
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (/\.(ts|tsx|js|jsx|mjs|cjs)$/.test(trimmed)) {
+        // Convert to absolute path
+        codeFiles.push(resolve(cwd, trimmed));
+      }
+    }
+    return codeFiles;
+  } catch {
+    // If git fails (not a repo, or any error), return empty array
+    return [];
+  }
+}
+
+export async function collectComplexity(
+  cwd: string,
+  trace?: TraceRun,
+  changedFiles?: ReadonlySet<string>,
+): Promise<ComplexityInfo[]> {
+  // Find all TypeScript files under the source roots
+  const sourceRootFiles = await findAllTypeScriptFilesUnderSourceRoots(cwd);
+  // Get all tracked code files in the repo (respects .gitignore)
+  const gitTrackedCode = getGitTrackedCodeFiles(cwd);
+   
+  // Union of both lists, deduplicated
+  const fileSet = new Set<string>();
+  for (const f of sourceRootFiles) {
+    fileSet.add(f);
+  }
+  for (const f of gitTrackedCode) {
+    fileSet.add(f);
+  }
+  const filePaths = Array.from(fileSet);
+   
+  const complexityInfo: ComplexityInfo[] = [];
+ 
+  for (const filePath of filePaths) {
+    const rel = relative(cwd, filePath).replace(/\\/g, '/');
+    if (changedFiles && !changedFiles.has(rel)) continue;
+    try {
+      const methodDescriptors = await parseFileMethods(filePath);
+      for (const descriptor of methodDescriptors) {
+        // Build method name: if containerName exists, use "containerName.functionName", else just functionName
+        const methodName = descriptor.containerName
+          ? `${descriptor.containerName}.${descriptor.functionName}`
+          : descriptor.functionName;
+        complexityInfo.push({
+          file: rel,
+          method: methodName,
+          lineStart: descriptor.startLine,
+          lineEnd: descriptor.endLine,
+          cc: descriptor.complexity,
+        });
+      }
+    } catch (error) {
+      // If parsing fails for a single file (e.g., stray temp malformed JS), skip file rather than failing entire collection.
+      // With a TraceRun the warning buffers there; without one the CLI console behavior is preserved.
+      const message = `Warning: failed to parse ${filePath}, skipping: ${error instanceof Error ? error.message : String(error)}`;
+      if (trace) {
+        trace.recordWarning('complexity', message);
+      } else {
+        console.error(message);
+      }
+      continue;
+    }
+  }
+ 
+  return complexityInfo;
+}

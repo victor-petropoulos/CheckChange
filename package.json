@@ -1,0 +1,52 @@
+{
+  "name": "checkchange",
+  "version": "0.4.0",
+  "license": "MIT",
+  "packageManager": "pnpm@11.17.0",
+  "type": "module",
+  "bin": {
+    "checkchange": "./dist/cli.js",
+    "code-risk": "./dist/cli.js"
+  },
+  "files": [
+    "dist/",
+    "!dist/**/*.test.*"
+  ],
+  "scripts": {
+    "build": "tsc && chmod +x dist/cli.js",
+    "test": "vitest run",
+    "typecheck:test": "tsc -p tsconfig.test.json --noEmit",
+    "typecheck:test:baseline": "tsc -p tsconfig.test.json --noEmit 2>&1 | grep '^test/' | LC_ALL=C sort | diff tsconfig.test.baseline.txt -",
+    "typecheck:test:baseline:update": "tsc -p tsconfig.test.json --noEmit 2>&1 | grep '^test/' | LC_ALL=C sort > tsconfig.test.baseline.txt",
+    "check": "node dist/cli.js check",
+    "prepare": "pnpm run build"
+  },
+  "dependencies": {
+    "@barney-media/crap-typescript": "0.5.0",
+    "@barney-media/crap-typescript-core": "0.5.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "latest",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "latest",
+    "@vitest/coverage-v8": "^4.1.11",
+    "eslint": "latest",
+    "tsx": "^4.23.12",
+    "typescript": "6.0.3",
+    "vitest": "4.1.11"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "fsevents@2.3.3": true
+  },
+  "description": "Independent, deterministic evidence and verification layer for AI-assisted software development.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/victor-petropoulos/CheckChange.git"
+  },
+  "homepage": "https://github.com/victor-petropoulos/CheckChange",
+  "bugs": {
+    "url": "https://github.com/victor-petropoulos/CheckChange/issues"
+  }
+}

@@ -1,0 +1,1069 @@
+import { describe, expect, test, beforeEach, afterEach, vi } from 'vitest';
+import { readCoverage } from '../src/coverage.js';
+import { buildEvidenceOutput } from '../src/evidence.js';
+import { writeFileSync, mkdirSync, rmSync, mkdtempSync, readdirSync, readFileSync } from 'fs';
+import { tmpdir } from 'os';
+import { join } from 'path';
+
+// Hoisted mock for spawnSync
+const spawnSyncMock = vi.hoisted(() => vi.fn());
+vi.mock('node:child_process', () => ({
+  spawnSync: spawnSyncMock,
+  execFile: vi.fn(), // ponytail: bare mock satisfies module-graph import from prepare.ts
+}));
+
+const openWithinRootMock = vi.hoisted(() => vi.fn());
+vi.mock('../src/fs-safety.js', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../src/fs-safety.js')>();
+  openWithinRootMock.mockImplementation(actual.openWithinRoot);
+  return { ...actual, openWithinRoot: openWithinRootMock };
+});
+
+function checkTempFilesCleaned(dir: string): boolean {
+  const files = readdirSync(dir);
+  return !files.some((f: string) => f.startsWith('.checkchange-coverage-temp'));
+}
+
+function resetSpawnSyncMock() {
+  spawnSyncMock.mockReset();
+  spawnSyncMock.mockImplementation(() => {
+    return { status: 1, stdout: '', stderr: 'command not found', error: null };
+  });
+}
+
+describe('Python coverage format detection', () => {
+  let tmpDir: string;
+  let originalCwd: string;
+
+  beforeEach(() => {
+    originalCwd = process.cwd();
+    tmpDir = mkdtempSync(join(tmpdir(), 'python-coverage-test-'));
+    process.chdir(tmpDir);
+    mkdirSync(join(tmpDir, 'src'), { recursive: true });
+    resetSpawnSyncMock();
+  });
+
+  afterEach(() => {
+    process.chdir(originalCwd);
+    rmSync(tmpDir, { recursive: true, force: true });
+  });
+
+  test('should detect .coverage binary and attempt to convert via coverage json', async () => {
+    writeFileSync(join(tmpDir, '.coverage'), 'mock-binary-content', 'utf8');
+    
+    const result = await readCoverage(tmpDir);
+    expect(result).toHaveProperty('available');
+    expect(result).toHaveProperty('coverageMap');
+    expect(result).toHaveProperty('error');
+    expect(checkTempFilesCleaned(tmpDir)).toBe(true);
+  });
+
+  test('should parse coverage.xml (Cobertura format) and convert via coverage json', async () => {
+    const coberturaXml = `<?xml version="1.0" ?>
+<coverage line-rate="0.8" branch-rate="0.5" version="5.5" timestamp="1234567890">
+  <sources>
+    <source>/project</source>
+  </sources>
+  <packages>
+    <package name="src">
+      <classes>
+        <class name="example.py" filename="src/example.py">
+          <methods/>
+          <lines>
+            <line number="1" hits="10"/>
+            <line number="2" hits="5"/>
+            <line number="3" hits="0"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>`;
+    
+    writeFileSync(join(tmpDir, 'coverage.xml'), coberturaXml, 'utf8');
+    
+    const result = await readCoverage(tmpDir);
+    expect(result).toHaveProperty('available');
+    expect(result).toHaveProperty('coverageMap');
+    expect(result).toHaveProperty('error');
+  });
+
+  test('should parse coverage.json (Istanbul-like format) directly', async () => {
+    const coverageJson = {
+      "src/example.py": {
+        "statementMap": {
+          "0": { "start": { "line": 1, "column": 0 }, "end": { "line": 1, "column": 20 } },
+          "1": { "start": { "line": 2, "column": 0 }, "end": { "line": 2, "column": 15 } }
+        },
+        "s": { "0": 1, "1": 1 },
+        "branchMap": {},
+        "b": {},
+        "fnMap": {},
+        "f": {}
+      }
+    };
+    
+    writeFileSync(join(tmpDir, 'coverage.json'), JSON.stringify(coverageJson, null, 2), 'utf8');
+    
+    const result = await readCoverage(tmpDir);
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+    expect(result.coverageMap).not.toBeNull();
+    if (result.coverageMap) {
+      expect(result.coverageMap.size).toBeGreaterThan(0);
+    }
+  });
+
+  test('should handle missing coverage files gracefully', async () => {
+    const result = await readCoverage(tmpDir);
+    expect(result.available).toBe(false);
+    expect(result.error).toBe(false);
+    expect(result.coverageMap).toBeNull();
+  });
+
+  test('should enforce 100MB size limit on coverage.json', async () => {
+    const { open } = await import('fs/promises');
+    const coveragePath = join(tmpDir, 'coverage.json');
+    const fh = await open(coveragePath, 'w');
+    await fh.truncate(100 * 1024 * 1024 + 1);
+    await fh.close();
+    
+    const result = await readCoverage(tmpDir);
+    expect(result.error).toBe(true);
+    expect(result.reason).toBe('malformed');
+  });
+
+  test('auto-detected traversal symlink is rejected', async () => {
+    const { symlink } = await import('fs/promises');
+    const outsideDir = mkdtempSync(join(tmpdir(), 'outside-'));
+    const outsideFile = join(outsideDir, 'coverage.json');
+    writeFileSync(outsideFile, JSON.stringify({
+      'src/example.py': { statementMap: {}, s: {}, branchMap: {}, b: {}, fnMap: {}, f: {} }
+    }), 'utf8');
+
+    try {
+      // Auto-detected candidate: symlink inside tmpDir escapes to an outside file
+      await symlink(outsideFile, join(tmpDir, 'coverage.json'));
+      openWithinRootMock.mockClear();
+
+      const result = await readCoverage(tmpDir);
+      expect(result.available).toBe(true);
+      expect(result.error).toBe(true);
+      expect(result.reason).toBe('malformed');
+      expect(openWithinRootMock).toHaveBeenCalledWith(tmpDir, join(tmpDir, 'coverage.json'));
+    } finally {
+      rmSync(outsideDir, { recursive: true, force: true });
+    }
+  });
+
+  test('should prioritize explicit --coverage-file over auto-detection', async () => {
+    writeFileSync(join(tmpDir, '.coverage'), 'mock-binary', 'utf8');
+    
+    const explicitCoverage = {
+      "src/explicit.py": {
+        "statementMap": { "0": { "start": { "line": 1, "column": 0 }, "end": { "line": 1, "column": 10 } } },
+        "s": { "0": 1 },
+        "branchMap": {}, "b": {}, "fnMap": {}, "f": {}
+      }
+    };
+    writeFileSync(join(tmpDir, 'coverage.json'), JSON.stringify(explicitCoverage), 'utf8');
+    
+    const result = await readCoverage(tmpDir, 'coverage.json');
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+  });
+
+  test('should handle symlink validation on coverage files', async () => {
+    const coverageJson = {
+      "src/example.py": {
+        "statementMap": { "0": { "start": { "line": 1, "column": 0 }, "end": { "line": 1, "column": 10 } } },
+        "s": { "0": 1 },
+        "branchMap": {}, "b": {}, "fnMap": {}, "f": {}
+      }
+    };
+    writeFileSync(join(tmpDir, 'coverage.json'), JSON.stringify(coverageJson), 'utf8');
+    
+    const result = await readCoverage(tmpDir, 'coverage.json');
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+  });
+
+  test('should not leave temp file behind when .coverage conversion fails (no coverage binary)', async () => {
+    writeFileSync(join(tmpDir, '.coverage'), 'mock-binary-content', 'utf8');
+    
+    const tempFiles = readdirSync(tmpDir).filter((f: string) => f.startsWith('.checkchange-coverage-temp'));
+    tempFiles.forEach(f => rmSync(join(tmpDir, f), { force: true }));
+    
+    const result = await readCoverage(tmpDir);
+    
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(true);
+    expect(result.reason).toBe('malformed');
+    expect(checkTempFilesCleaned(tmpDir)).toBe(true);
+  });
+
+  test('fallthrough: broken .coverage + valid coverage.json → uses json, error:false', async () => {
+    writeFileSync(join(tmpDir, '.coverage'), 'mock-binary-content', 'utf8');
+    
+    const validCoverageJson = {
+      "src/valid.py": {
+        "statementMap": { "0": { "start": { "line": 1, "column": 0 }, "end": { "line": 1, "column": 10 } } },
+        "s": { "0": 1 },
+        "branchMap": {}, "b": {}, "fnMap": {}, "f": {}
+      }
+    };
+    writeFileSync(join(tmpDir, 'coverage.json'), JSON.stringify(validCoverageJson), 'utf8');
+    
+    const result = await readCoverage(tmpDir);
+    
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+    expect(result.coverageMap).not.toBeNull();
+    if (result.coverageMap) {
+      expect(result.coverageMap.size).toBeGreaterThan(0);
+    }
+  });
+
+  test('tool-absent: .coverage present but coverage binary missing → malformed (reason covers tool-absent)', async () => {
+    writeFileSync(join(tmpDir, '.coverage'), 'mock-binary-content', 'utf8');
+    
+    const result = await readCoverage(tmpDir);
+    
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(true);
+    expect(result.reason).toBe('malformed');
+  });
+
+  test('auto-detect routes reads through fail-closed seam while explicit files bypass it', async () => {
+    const coverageJson = {
+      'src/example.py': {
+        statementMap: {}, s: {}, branchMap: {}, b: {}, fnMap: {}, f: {}
+      }
+    };
+    writeFileSync(join(tmpDir, 'coverage.json'), JSON.stringify(coverageJson), 'utf8');
+
+    openWithinRootMock.mockClear();
+    openWithinRootMock.mockRejectedValueOnce(new Error('openWithinRoot: candidate escapes root'));
+    const autoResult = await readCoverage(tmpDir);
+
+    expect(autoResult.available).toBe(true);
+    expect(autoResult.error).toBe(true);
+    expect(autoResult.reason).toBe('malformed');
+    expect(openWithinRootMock).toHaveBeenCalledWith(tmpDir, join(tmpDir, 'coverage.json'));
+
+    openWithinRootMock.mockClear();
+    const explicitResult = await readCoverage(tmpDir, 'coverage.json');
+
+    expect(explicitResult.available).toBe(true);
+    expect(explicitResult.error).toBe(false);
+    expect(openWithinRootMock).not.toHaveBeenCalled();
+  });
+});
+
+describe('Python coverage conversion - successful paths (mocked)', () => {
+  let tmpDir: string;
+  let originalCwd: string;
+
+  beforeEach(() => {
+    originalCwd = process.cwd();
+    tmpDir = mkdtempSync(join(tmpdir(), 'python-coverage-success-'));
+    process.chdir(tmpDir);
+    mkdirSync(join(tmpDir, 'src'), { recursive: true });
+    resetSpawnSyncMock();
+  });
+
+  afterEach(() => {
+    process.chdir(originalCwd);
+    rmSync(tmpDir, { recursive: true, force: true });
+  });
+
+  function mockSuccessfulCoverageJson(pythonCoverageJson: unknown) {
+    spawnSyncMock.mockImplementation((cmd: string, args: string[]) => {
+      if (cmd === 'coverage' && args[0] === 'json') {
+        const outputPath = args[args.indexOf('-o') + 1];
+        writeFileSync(outputPath, JSON.stringify(pythonCoverageJson), 'utf8');
+        return { status: 0, stdout: '', stderr: '', error: null };
+      }
+      if (cmd === 'python3' && args[0] === '-m' && args[1] === 'coverage') {
+        const outputPath = args[args.indexOf('-o') + 1];
+        writeFileSync(outputPath, JSON.stringify(pythonCoverageJson), 'utf8');
+        return { status: 0, stdout: '', stderr: '', error: null };
+      }
+      return { status: 1, stdout: '', stderr: 'command not found', error: null };
+    });
+  }
+
+  test('should successfully convert .coverage via coverage json (first command succeeds)', async () => {
+    writeFileSync(join(tmpDir, '.coverage'), 'mock-binary-content', 'utf8');
+    
+    const pythonCoverageJson = {
+      meta: { version: '7.0' },
+      files: {
+        'src/example.py': {
+          executed_lines: [1, 2, 3],
+          missing_lines: [4],
+          excluded_lines: [],
+          num_statements: 4,
+          num_excluded: 0,
+          num_missing: 1,
+          num_branches: 0,
+          num_partial_branches: 0,
+          covered_lines: 3,
+        },
+      },
+      totals: { covered_lines: 3, num_statements: 4, percent_covered: 75.0 },
+    };
+    
+    mockSuccessfulCoverageJson(pythonCoverageJson);
+
+    const result = await readCoverage(tmpDir);
+    
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+    expect(result.coverageMap).not.toBeNull();
+    if (result.coverageMap) {
+      expect(result.coverageMap.size).toBeGreaterThan(0);
+    }
+    expect(spawnSyncMock).toHaveBeenCalled();
+  });
+
+  test('should fallback to python3 -m coverage when coverage command not found', async () => {
+    writeFileSync(join(tmpDir, '.coverage'), 'mock-binary-content', 'utf8');
+    
+    const pythonCoverageJson = {
+      meta: { version: '7.0' },
+      files: {
+        'src/example.py': {
+          executed_lines: [1, 2],
+          missing_lines: [],
+          excluded_lines: [],
+          num_statements: 2,
+          num_excluded: 0,
+          num_missing: 0,
+          num_branches: 0,
+          num_partial_branches: 0,
+          covered_lines: 2,
+        },
+      },
+      totals: { covered_lines: 2, num_statements: 2, percent_covered: 100.0 },
+    };
+    
+    spawnSyncMock.mockImplementation((cmd: string, args: string[]) => {
+      if (cmd === 'coverage') {
+        return { status: 127, stdout: '', stderr: 'command not found', error: new Error('ENOENT') };
+      }
+      if (cmd === 'python3' && args[0] === '-m' && args[1] === 'coverage') {
+        const outputPath = args[args.indexOf('-o') + 1];
+        writeFileSync(outputPath, JSON.stringify(pythonCoverageJson), 'utf8');
+        return { status: 0, stdout: '', stderr: '', error: null };
+      }
+      return { status: 1, stdout: '', stderr: '', error: null };
+    });
+
+    const result = await readCoverage(tmpDir);
+    
+expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+    expect(result.coverageMap).not.toBeNull();
+  });
+
+  // Task 5 — the three buildStatementMap fixture bodies, in ONE place so the
+  // :173/:174/:176 tests below and the committed golden can never drift apart.
+  // keys are the Python coverage `files` keys; the tests convert them to
+  // Istanbul via the readCoverage path.
+  const statementMapFixtures: Record<string, Record<string, unknown>> = {
+    'src/exec_omitted.py': {
+      // executed_lines intentionally absent — triggers :173 fallback to []
+      missing_lines: [2, 3],
+      excluded_lines: [],
+      num_statements: 2,
+      num_excluded: 0,
+      num_missing: 2,
+      num_branches: 0,
+      num_partial_branches: 0,
+      covered_lines: 0,
+    },
+    'src/miss_omitted.py': {
+      executed_lines: [1, 2, 3],
+      // missing_lines intentionally absent — triggers :174 fallback to []
+      excluded_lines: [],
+      num_statements: 3,
+      num_excluded: 0,
+      num_missing: 0,
+      num_branches: 0,
+      num_partial_branches: 0,
+      covered_lines: 3,
+    },
+    'src/dedupe_test.py': {
+      executed_lines: [1, 2, 5],
+      missing_lines: [3, 4, 2],  // line 2 duplicated — Set collapses 6→5
+      excluded_lines: [],
+      num_statements: 5,
+      num_excluded: 0,
+      num_missing: 3,
+      num_branches: 0,
+      num_partial_branches: 0,
+      covered_lines: 3,
+    },
+  };
+
+  // Task 5 — committed byte-identity golden (Approach A guardrail for Approach B).
+  // Replaces the phantom golden-fixture.json of OF-1, which never existed.
+  const statementMapGoldenPath = join(import.meta.dirname, 'fixtures', 'coverage-statement-map.golden.json');
+
+  test('should handle omitted executed_lines via || [] fallback (:173)', async () => {
+    // Task 2 — exercises the :173 `pythonFileData.executed_lines || []` fallback.
+    // executed_lines key is absent from the Python coverage JSON for this file.
+    writeFileSync(join(tmpDir, '.coverage'), 'mock-binary-content', 'utf8');
+
+    const pythonCoverageJson = {
+      meta: { version: '7.0' },
+      files: { 'src/exec_omitted.py': statementMapFixtures['src/exec_omitted.py'] },
+      totals: { covered_lines: 0, num_statements: 2, percent_covered: 0 },
+    };
+
+    mockSuccessfulCoverageJson(pythonCoverageJson);
+
+    const result = await readCoverage(tmpDir);
+
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+    expect(result.coverageMap).not.toBeNull();
+    if (result.coverageMap) {
+      // Lines from missing_lines [2,3]; executed_lines absent → all hits 0
+      const fileKey = [...result.coverageMap.keys()].find((k) => k.includes('exec_omitted.py'));
+      expect(fileKey).toBeDefined();
+      const fc = result.coverageMap.get(fileKey!)!;
+      expect(fc.statements.length).toBe(2);
+      expect(fc.statements.every((st) => st.hits === 0)).toBe(true);
+    }
+  });
+
+  test('should handle omitted missing_lines via || [] fallback (:174)', async () => {
+    // Task 2 — exercises the :174 `pythonFileData.missing_lines || []` fallback.
+    // missing_lines key is absent from the Python coverage JSON for this file.
+    writeFileSync(join(tmpDir, '.coverage'), 'mock-binary-content', 'utf8');
+
+    const pythonCoverageJson = {
+      meta: { version: '7.0' },
+      files: { 'src/miss_omitted.py': statementMapFixtures['src/miss_omitted.py'] },
+      totals: { covered_lines: 3, num_statements: 3, percent_covered: 100.0 },
+    };
+
+    mockSuccessfulCoverageJson(pythonCoverageJson);
+
+    const result = await readCoverage(tmpDir);
+
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+    expect(result.coverageMap).not.toBeNull();
+    if (result.coverageMap) {
+      // All 3 lines appear from executed_lines; missing_lines absent → all hits 1
+      const fileKey = [...result.coverageMap.keys()].find((k) => k.includes('miss_omitted.py'));
+      expect(fileKey).toBeDefined();
+      const fc = result.coverageMap.get(fileKey!)!;
+      expect(fc.statements.length).toBe(3);
+      expect(fc.statements.every((st) => st.hits === 1)).toBe(true);
+    }
+  });
+
+  test('should dedupe overlapping executed_lines and missing_lines via Set (:176)', async () => {
+    // Task 3 — characterization of the dedupe arm at :176 `new Set(combined)`.
+    // Line 2 appears in BOTH executed_lines and missing_lines.
+    // With Set dedupe, combined collapses to 5 unique lines → 5 statements.
+    // Owner decision A: no RED proof claimed. fc.statements is deduplicated
+    // downstream (istanbul deduplicateStatements), so removing the :176 Set
+    // yields the same observable shape — this fixture documents the shape only.
+    writeFileSync(join(tmpDir, '.coverage'), 'mock-binary-content', 'utf8');
+
+    const pythonCoverageJson = {
+      meta: { version: '7.0' },
+      files: { 'src/dedupe_test.py': statementMapFixtures['src/dedupe_test.py'] },
+      totals: { covered_lines: 3, num_statements: 5, percent_covered: 60.0 },
+    };
+
+    mockSuccessfulCoverageJson(pythonCoverageJson);
+
+    const result = await readCoverage(tmpDir);
+
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+    expect(result.coverageMap).not.toBeNull();
+    if (result.coverageMap) {
+      const fileKey = [...result.coverageMap.keys()].find((k) => k.includes('dedupe_test.py'));
+      expect(fileKey).toBeDefined();
+      const fc = result.coverageMap.get(fileKey!)!;
+      // 5 unique lines [1,2,3,4,5] → 5 statements (not 6 from un-deduped [1,2,5,3,4,2])
+      expect(fc.statements.length).toBe(5);
+      // Sorted deduped order: [1,2,3,4,5]
+      // Lines 1,2,5 in executedLines → hits 1; lines 3,4 only in missingLines → hits 0
+      // Line 2 appears in BOTH lists but deduped to one entry with hits 1 (executed priority)
+      expect(fc.statements.filter((st) => st.hits === 1).length).toBe(3); // lines 1,2,5
+      expect(fc.statements.filter((st) => st.hits === 0).length).toBe(2);  // lines 3,4
+    }
+  });
+
+  test('should match the committed buildStatementMap golden (Task 5)', async () => {
+    // Task 5 — the committed byte-identity artifact. All THREE fixture cases
+    // (2 from task 2 -> :173/:174, 1 from task 3 -> :176) go through ONE
+    // readCoverage call so a single golden file covers every arm.
+    //
+    // Keys are keyed back to the fixture keys on purpose: the transform's map
+    // keys are absolute mkdtemp paths — non-deterministic across runs, the same
+    // hazard that disqualified contentSha256 as a test signal.
+    writeFileSync(join(tmpDir, '.coverage'), 'mock-binary-content', 'utf8');
+
+    mockSuccessfulCoverageJson({
+      meta: { version: '7.0' },
+      files: statementMapFixtures,
+      totals: { covered_lines: 3, num_statements: 10, percent_covered: 30 },
+    });
+
+    const result = await readCoverage(tmpDir);
+
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+    expect(result.coverageMap).not.toBeNull();
+
+    const golden: Record<string, unknown> = {};
+    for (const [key, fc] of result.coverageMap!) {
+      // Key the golden by the fixture's OWN coverage key, not by a path
+      // transform: the produced key is absolute and its tmp root differs from
+      // `tmpDir` in case/realpath (macOS /var/T vs /var/t), so `path.relative`
+      // returns garbage. The key always ends with the fixture key, and asserting
+      // that correspondence keeps a changed key form from writing a wrong golden.
+      const fixtureKey = Object.keys(statementMapFixtures).find((fk) => key.endsWith(fk));
+      expect(fixtureKey).toBeDefined();
+      golden[fixtureKey!] = fc;
+    }
+    // every fixture case reached the transform, under its own key
+    expect(Object.keys(golden).sort()).toEqual(Object.keys(statementMapFixtures).sort());
+
+    const serialized = JSON.stringify(golden, null, 2);
+    // On first run `-u` creates the golden; on every later run this compares.
+    // Vitest forces updateSnapshot='none' under CI, so a DELETED golden fails
+    // there instead of silently regenerating.
+    await expect(serialized).toMatchFileSnapshot(statementMapGoldenPath);
+    // read back from disk — proves the comparison was against committed content
+    expect(readFileSync(statementMapGoldenPath, 'utf8').trimEnd()).toBe(serialized);
+  });
+
+  test('should cleanup temp file on successful conversion', async () => {
+    writeFileSync(join(tmpDir, '.coverage'), 'mock-binary-content', 'utf8');
+    
+    const pythonCoverageJson = {
+      meta: { version: '7.0' },
+      files: {
+        'src/example.py': {
+          executed_lines: [1],
+          missing_lines: [],
+          excluded_lines: [],
+          num_statements: 1,
+          num_excluded: 0,
+          num_missing: 0,
+          num_branches: 0,
+          num_partial_branches: 0,
+          covered_lines: 1,
+        },
+      },
+      totals: { covered_lines: 1, num_statements: 1, percent_covered: 100.0 },
+    };
+    
+    mockSuccessfulCoverageJson(pythonCoverageJson);
+
+    await readCoverage(tmpDir);
+    
+    expect(checkTempFilesCleaned(tmpDir)).toBe(true);
+  });
+});
+
+describe('Python coverage JSON format detection and transformation', () => {
+  let tmpDir: string;
+  let originalCwd: string;
+
+  beforeEach(() => {
+    originalCwd = process.cwd();
+    tmpDir = mkdtempSync(join(tmpdir(), 'python-json-transform-'));
+    process.chdir(tmpDir);
+    mkdirSync(join(tmpDir, 'src'), { recursive: true });
+    resetSpawnSyncMock();
+  });
+
+  afterEach(() => {
+    process.chdir(originalCwd);
+    rmSync(tmpDir, { recursive: true, force: true });
+  });
+
+test('should detect Python coverage.json format and transform to Istanbul (covers transformPythonCoverageToIstanbul)', async () => {
+    const pythonCoverageJson = {
+      meta: { version: '7.0' },
+      files: {
+        'src/transform_test.py': {
+          executed_lines: [1, 2, 3],
+          missing_lines: [4],
+          excluded_lines: [],
+          num_statements: 4,
+          num_excluded: 0,
+          num_missing: 1,
+          num_branches: 2,
+          num_partial_branches: 0,
+          covered_lines: 3,
+          branches: { '1': [2, 1] },
+        },
+      },
+      totals: { covered_lines: 3, num_statements: 4, percent_covered: 75.0 },
+    };
+    
+    writeFileSync(join(tmpDir, 'coverage.json'), JSON.stringify(pythonCoverageJson, null, 2), 'utf8');
+    
+    const result = await readCoverage(tmpDir);
+    
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+    expect(result.coverageMap).not.toBeNull();
+    if (result.coverageMap) {
+      expect(result.coverageMap.size).toBeGreaterThan(0);
+      // transformPythonCoverageToIstanbul rekeys paths but preserves Python format data
+      // parseCoverageReport may produce limited results from Python-format data
+      for (const [key] of result.coverageMap.entries()) {
+        expect(key).toContain('transform_test.py');
+      }
+    }
+  });
+
+  test('should handle Python coverage.json with summary instead of meta', async () => {
+    const pythonCoverageJson = {
+      summary: { covered_lines: 5, num_statements: 10 },
+      files: {
+        'src/summary_test.py': {
+          executed_lines: [1, 2, 3, 4, 5],
+          missing_lines: [6, 7, 8, 9, 10],
+          excluded_lines: [],
+          num_statements: 10,
+          num_excluded: 0,
+          num_missing: 5,
+          num_branches: 0,
+          num_partial_branches: 0,
+          covered_lines: 5,
+        },
+      },
+    };
+    
+    writeFileSync(join(tmpDir, 'coverage.json'), JSON.stringify(pythonCoverageJson), 'utf8');
+    
+    const result = await readCoverage(tmpDir);
+    
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+    expect(result.coverageMap).not.toBeNull();
+  });
+
+  test('should handle Python coverage.json with totals only', async () => {
+    const pythonCoverageJson = {
+      totals: { covered_lines: 1, num_statements: 1 },
+      files: {
+        'src/totals_test.py': {
+          executed_lines: [1],
+          missing_lines: [],
+          excluded_lines: [],
+          num_statements: 1,
+          num_excluded: 0,
+          num_missing: 0,
+          num_branches: 0,
+          num_partial_branches: 0,
+          covered_lines: 1,
+        },
+      },
+    };
+    
+    writeFileSync(join(tmpDir, 'coverage.json'), JSON.stringify(pythonCoverageJson), 'utf8');
+    
+    const result = await readCoverage(tmpDir);
+    
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+    expect(result.coverageMap).not.toBeNull();
+  });
+
+  test('should not double-transform when already converted via convertPythonCoverageToJson', async () => {
+    const istanbulCoverage = {
+      'src/normal.py': {
+        statementMap: { '0': { start: { line: 1, column: 0 }, end: { line: 1, column: 10 } } },
+        s: { '0': 1 },
+        branchMap: {}, b: {}, fnMap: {}, f: {},
+      },
+    };
+    
+    writeFileSync(join(tmpDir, 'coverage.json'), JSON.stringify(istanbulCoverage), 'utf8');
+    
+    const result = await readCoverage(tmpDir);
+    
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+    expect(result.coverageMap).not.toBeNull();
+  });
+});
+
+describe('readCoverageFile - uncovered branches', () => {
+  let tmpDir: string;
+  let originalCwd: string;
+
+  beforeEach(() => {
+    originalCwd = process.cwd();
+    tmpDir = mkdtempSync(join(tmpdir(), 'readcoverage-branches-'));
+    process.chdir(tmpDir);
+    mkdirSync(join(tmpDir, 'src'), { recursive: true });
+    resetSpawnSyncMock();
+  });
+
+  afterEach(() => {
+    process.chdir(originalCwd);
+    rmSync(tmpDir, { recursive: true, force: true });
+  });
+
+  function mockCoverageXmlConversion() {
+    spawnSyncMock.mockImplementation((cmd: string, args: string[]) => {
+      if (cmd === 'coverage' && args[0] === 'json') {
+        const outputPath = args[args.indexOf('-o') + 1];
+        const pythonJson = {
+          meta: { version: '7.0' },
+          files: {
+            'src/example.py': {
+              executed_lines: [1, 2],
+              missing_lines: [3],
+              excluded_lines: [],
+              num_statements: 3,
+              num_excluded: 0,
+              num_missing: 1,
+              num_branches: 0,
+              num_partial_branches: 0,
+              covered_lines: 2,
+            },
+          },
+          totals: { covered_lines: 2, num_statements: 3, percent_covered: 66.67 },
+        };
+        writeFileSync(outputPath, JSON.stringify(pythonJson), 'utf8');
+        return { status: 0, stdout: '', stderr: '', error: null };
+      }
+      if (cmd === 'python3' && args[0] === '-m' && args[1] === 'coverage') {
+        const outputPath = args[args.indexOf('-o') + 1];
+        const pythonJson = {
+          meta: { version: '7.0' },
+          files: {
+            'src/example.py': {
+              executed_lines: [1, 2],
+              missing_lines: [3],
+              excluded_lines: [],
+              num_statements: 3,
+              num_excluded: 0,
+              num_missing: 1,
+              num_branches: 0,
+              num_partial_branches: 0,
+              covered_lines: 2,
+            },
+          },
+          totals: { covered_lines: 2, num_statements: 3, percent_covered: 66.67 },
+        };
+        writeFileSync(outputPath, JSON.stringify(pythonJson), 'utf8');
+        return { status: 0, stdout: '', stderr: '', error: null };
+      }
+      return { status: 1, stdout: '', stderr: '', error: null };
+    });
+  }
+
+  test('should handle coverage.xml (Cobertura) conversion path', async () => {
+    const coberturaXml = `<?xml version="1.0" ?>
+<coverage line-rate="0.8" branch-rate="0.5" version="5.5" timestamp="1234567890">
+  <sources>
+    <source>/project</source>
+  </sources>
+  <packages>
+    <package name="src">
+      <classes>
+        <class name="example.py" filename="src/example.py">
+          <methods/>
+          <lines>
+            <line number="1" hits="10"/>
+            <line number="2" hits="5"/>
+            <line number="3" hits="0"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>`;
+    
+    writeFileSync(join(tmpDir, 'coverage.xml'), coberturaXml, 'utf8');
+    mockCoverageXmlConversion();
+    
+    const result = await readCoverage(tmpDir);
+    
+    expect(result.available).toBe(true);
+    expect(result).toHaveProperty('error');
+  });
+
+  test('should handle explicit coverage file with missing file error', async () => {
+    const result = await readCoverage(tmpDir, 'nonexistent.json');
+    
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(true);
+    expect(result.reason).toBe('missing');
+  });
+
+  test('should handle explicit coverage file with oversized file', async () => {
+    const { open } = await import('fs/promises');
+    const coveragePath = join(tmpDir, 'oversized.json');
+    const fh = await open(coveragePath, 'w');
+    await fh.truncate(100 * 1024 * 1024 + 1);
+    await fh.close();
+    
+    const result = await readCoverage(tmpDir, 'oversized.json');
+    
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(true);
+    expect(result.reason).toBe('malformed');
+  });
+
+  test('should handle LCOV content detection by content (not just extension)', async () => {
+    const lcovContent = `TN:Test
+SF:src/test.ts
+DA:1,10
+DA:2,5
+DA:3,0
+end_of_record`;
+    
+    writeFileSync(join(tmpDir, 'coverage.txt'), lcovContent, 'utf8');
+    
+    const result = await readCoverage(tmpDir, 'coverage.txt');
+    
+    expect(result.available).toBe(true);
+    expect(result).toHaveProperty('error');
+  });
+
+  test('should handle malformed JSON gracefully', async () => {
+    writeFileSync(join(tmpDir, 'coverage.json'), '{ invalid json', 'utf8');
+    
+    const result = await readCoverage(tmpDir, 'coverage.json');
+    
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(true);
+    expect(result.reason).toBe('malformed');
+  });
+
+  test('should handle JSON without files key (not Python format)', async () => {
+    const notPythonFormat = {
+      someOtherKey: 'value',
+      data: [1, 2, 3],
+    };
+    
+    writeFileSync(join(tmpDir, 'coverage.json'), JSON.stringify(notPythonFormat), 'utf8');
+    
+    const result = await readCoverage(tmpDir, 'coverage.json');
+    
+    // Should try to parse as Istanbul - may succeed with empty map or fail
+    expect(result.available).toBe(true);
+    expect(result).toHaveProperty('error');
+    if (result.error) {
+      expect(result).toHaveProperty('reason');
+    }
+  });
+
+  test('should handle path traversal attempt in explicit file', async () => {
+    const outsideDir = mkdtempSync(join(tmpdir(), 'outside-'));
+    const outsideFile = join(outsideDir, 'coverage.json');
+    writeFileSync(outsideFile, JSON.stringify({
+      'test.py': { statementMap: {}, s: {}, branchMap: {}, b: {}, fnMap: {}, f: {} }
+    }), 'utf8');
+    
+    try {
+      const result = await readCoverage(tmpDir, outsideFile);
+      expect(result).toHaveProperty('available');
+    } finally {
+      rmSync(outsideDir, { recursive: true, force: true });
+    }
+  });
+
+  test('should handle symlink validation in validateAndReadFile', async () => {
+    const { symlink } = await import('fs/promises');
+    const realFile = join(tmpDir, 'real_coverage.json');
+    const linkFile = join(tmpDir, 'link_coverage.json');
+    
+    writeFileSync(realFile, JSON.stringify({
+      'src/test.py': { 
+        statementMap: { '0': { start: { line: 1, column: 0 }, end: { line: 1, column: 10 } } }, 
+        s: { '0': 1 }, 
+        branchMap: {}, b: {}, fnMap: {}, f: {} 
+      }
+    }), 'utf8');
+    
+    await symlink(realFile, linkFile);
+    
+    const result = await readCoverage(tmpDir, 'link_coverage.json');
+    
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+  });
+
+  test('should handle coverage.json with branch coverage data', async () => {
+    const coverageWithBranches = {
+      'src/branch_test.py': {
+        statementMap: {
+          '0': { start: { line: 1, column: 0 }, end: { line: 1, column: 20 } },
+          '1': { start: { line: 2, column: 0 }, end: { line: 2, column: 15 } },
+        },
+        s: { '0': 1, '1': 1 },
+        branchMap: {
+          '0': { 
+            loc: { start: { line: 1, column: 5 }, end: { line: 1, column: 15 } }, 
+            type: 'if', 
+            locations: [{ start: { line: 1, column: 5 }, end: { line: 1, column: 15 } }, { start: { line: 1, column: 5 }, end: { line: 1, column: 15 } }], 
+            line: 1 
+          },
+        },
+        b: { '0': [1, 0] },
+        fnMap: {},
+        f: {},
+      },
+    };
+    
+    writeFileSync(join(tmpDir, 'coverage.json'), JSON.stringify(coverageWithBranches), 'utf8');
+    
+    const result = await readCoverage(tmpDir, 'coverage.json');
+    
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+    expect(result.coverageMap).not.toBeNull();
+  });
+});
+
+describe('Python buildEvidenceOutput attribution (not ingest-only)', () => {
+  let tmpDir: string;
+  let originalCwd: string;
+
+  beforeEach(() => {
+    originalCwd = process.cwd();
+    tmpDir = mkdtempSync(join(tmpdir(), 'python-attribution-'));
+    process.chdir(tmpDir);
+    mkdirSync(join(tmpDir, 'src'), { recursive: true });
+    mkdirSync(join(tmpDir, 'coverage'), { recursive: true });
+    resetSpawnSyncMock();
+  });
+
+  afterEach(() => {
+    process.chdir(originalCwd);
+    rmSync(tmpDir, { recursive: true, force: true });
+  });
+
+  test('buildEvidenceOutput returns non-empty changedFunctions with computed crap for .py', async () => {
+    // Seed mirrors experiments/wp18-o01/seeded-CHANGE.md (mem:41224):
+    // get_health_status CC 1 -> 2 via `if True: marker = 1` at lines 5-6, covered 100%.
+    const fixture = `from aicp import __version__
+
+def get_health_status() -> dict:
+    """Return server health status."""
+    if True:  # SEEDED-CHANGE-T6
+        marker = 1
+    return {
+        "status": "ok",
+        "version": __version__,
+    }
+`;
+    writeFileSync(join(tmpDir, 'src', 'health.py'), fixture, 'utf8');
+
+    // Real Python coverage.json format (coverage.py output) at repo root
+    // readCoverage auto-detect precedence: .coverage > coverage.xml > coverage.json > coverage/coverage-final.json
+    const coverageData = {
+      meta: { version: '7.4.0' },
+      files: {
+        'src/health.py': {
+          executed_lines: [2, 5, 7, 8, 9],
+          summary: {
+            covered_lines: 5,
+            num_statements: 5,
+            percent_covered: 100.0,
+            percent_covered_display: '100',
+            missing_lines: 0,
+            excluded_lines: 0,
+            percent_statements_covered: 100.0,
+          },
+          missing_lines: [],
+          excluded_lines: [],
+          functions: {
+            get_health_status: {
+              executed_lines: [7, 8, 9],
+              summary: {
+                covered_lines: 3,
+                num_statements: 3,
+                percent_covered: 100.0,
+                percent_covered_display: '100',
+              },
+              missing_lines: [],
+              excluded_lines: [],
+              start_line: 3,
+              end_line: 10,
+            },
+          },
+          classes: {},
+        },
+      },
+      totals: {
+        num_statements: 5,
+        covered_lines: 5,
+        missing_lines: 0,
+        percent_covered: 100.0,
+        percent_covered_display: '100',
+      },
+    };
+    writeFileSync(join(tmpDir, 'coverage.json'), JSON.stringify(coverageData, null, 2), 'utf8');
+
+    // This file vi.mocks node:child_process at module scope, so canned AST output
+    // for both pythonASTComplexityProvider (complexity) and pythonDescriptorProvider (descriptor).
+    spawnSyncMock.mockImplementation((cmd: string, args: string[]) => {
+      if (cmd === 'find') {
+        return { status: 0, stdout: `${join(tmpDir, 'src', 'health.py')}\n`, stderr: '', error: null };
+      }
+      if (cmd === 'python3' && args[0] === '-c') {
+        const script = args[1] ?? '';
+        if (script.includes('bodySpan')) {
+          const descriptor = [{
+            functionName: 'get_health_status',
+            containerName: null,
+            displayName: 'get_health_status',
+            startLine: 3,
+            endLine: 10,
+            complexity: 2,
+            bodySpan: { startLine: 3, startColumn: 0, endLine: 10, endColumn: 5 },
+            expectsStatementCoverage: true,
+            expectsBranchCoverage: true,
+          }];
+          return { status: 0, stdout: JSON.stringify(descriptor), stderr: '', error: null };
+        }
+        const complexity = [{
+          file: join(tmpDir, 'src', 'health.py'),
+          method: 'get_health_status',
+          lineStart: 3,
+          lineEnd: 10,
+          cc: 2,
+        }];
+        return { status: 0, stdout: JSON.stringify(complexity), stderr: '', error: null };
+      }
+      return { status: 1, stdout: '', stderr: 'command not found', error: null };
+    });
+
+    // Changed interval mirrors the seeded diff: added `if True` + `marker = 1` (lines 5-6).
+    const intervals = new Map<string, { start: number; end: number }[]>();
+    intervals.set('src/health.py', [{ start: 5, end: 6 }]);
+
+    const output = await buildEvidenceOutput('HEAD', intervals, tmpDir, 30);
+
+    expect(output.changedFunctions.length).toBeGreaterThan(0);
+    const cf = output.changedFunctions[0];
+    expect(cf.method).toBe('get_health_status');
+    expect(cf.cc).toBe(2);
+    expect(cf.coverage).toBe(100);
+    expect(cf.crap).toBe(2); // calculateCrap(2, 100) = 2^2*(1-1)^3 + 2 = 2
+    expect(cf.analyzerStatus).toBe('passed');
+    expect(output.gate).toBe('PASS');
+    expect(output.completeness).toBe('COMPLETE');
+  });
+});

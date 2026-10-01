@@ -1,0 +1,72 @@
+import { ChangedFunction } from './evidence.js';
+
+// Provenance for the rules lineage stage. Self tool version tracks package.json.
+export const rulesProvenance = { tool: 'checkchange', version: '0.4.0' } as const;
+
+export interface RuleResult {
+  ruleId: string;
+  result: "PASS" | "WARN" | "NOT_EVALUATED";
+  file: string;
+  method: string;
+  crap: number | null;
+  threshold: number;
+  cc: number;
+  coverage: number | null;
+}
+
+export interface Rule {
+  ruleId: string;
+  evaluate(changed: ChangedFunction[], threshold: number): RuleResult[];
+}
+
+/**
+ * Evaluate changed functions against the high-CRAP rule.
+ * @param changed Array of changed functions
+ * @param threshold CRAP threshold (default 30)
+ * @returns Array of rule results
+ */
+export function evaluateHighCrap(changed: ChangedFunction[], threshold: number): RuleResult[] {
+  return changed.map((cf) => {
+    if (cf.crap === null) {
+      return {
+        ruleId: "changed-function-high-crap",
+        result: "NOT_EVALUATED",
+        file: cf.file,
+        method: cf.method,
+        crap: cf.crap,
+        threshold,
+        cc: cf.cc,
+        coverage: cf.coverage,
+      };
+    } else if (cf.crap <= threshold) {
+      return {
+        ruleId: "changed-function-high-crap",
+        result: "PASS",
+        file: cf.file,
+        method: cf.method,
+        crap: cf.crap,
+        threshold,
+        cc: cf.cc,
+        coverage: cf.coverage,
+      };
+    } else {
+      return {
+        ruleId: "changed-function-high-crap",
+        result: "WARN",
+        file: cf.file,
+        method: cf.method,
+        crap: cf.crap,
+        threshold,
+        cc: cf.cc,
+        coverage: cf.coverage,
+      };
+    }
+  });
+}
+
+export function loadRuleRegistry(externalRules: Rule[] = []): Rule[] {
+  return [
+    { ruleId: "changed-function-high-crap", evaluate: evaluateHighCrap },
+    ...externalRules,
+  ];
+}

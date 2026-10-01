@@ -1,0 +1,44 @@
+diff --git a/dist/fileSelection.js b/dist/fileSelection.js
+index 194eaa7110302bd81b3b2edc0143c909afbfbfb7..dfebdc071100ed661f28e0377b586e0b3b6083c8 100644
+--- a/dist/fileSelection.js
++++ b/dist/fileSelection.js	
+@@ -2,7 +2,7 @@ import { readdir, stat } from "node:fs/promises";
+ import path from "node:path";
+ import { IGNORED_DIRECTORIES, IGNORED_SOURCE_ROOT_DISCOVERY_DIRECTORIES } from "./constants.js";
+ import { normalizeSlashes, runCommand, toRelativePath } from "./utils.js";
+-const ANALYZABLE_EXTENSIONS = [".ts", ".tsx"];
++const ANALYZABLE_EXTENSIONS = [".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs"];
+ const TEST_FILE_MARKERS = [".test.", ".spec."];
+ const BUILD_OUTPUT_SOURCE_ROOT_SEGMENTS = new Set(["build", "out", "target"]);
+ const EXCLUDED_PATH_SEGMENTS = [
+diff --git a/dist/parser.js b/dist/parser.js
+index bc6eab90e94684c18922b01b9b5d76984bf11769..325725b573b688714b3dee92714831390a1e3649 100644
+--- a/dist/parser.js
++++ b/dist/parser.js	
+@@ -44,7 +44,8 @@ const NESTED_BOUNDARY_KINDS = new Set([
+ ]);
+ export async function parseFileMethods(filePath) {
+     const sourceText = await readFile(filePath, "utf8");
+-    const scriptKind = resolveScriptKind(filePath) === "tsx" ? ts.ScriptKind.TSX : ts.ScriptKind.TS;
++    const scriptKindMap = { "ts": ts.ScriptKind.TS, "tsx": ts.ScriptKind.TSX, "js": ts.ScriptKind.JS, "jsx": ts.ScriptKind.TSX };
++    const scriptKind = scriptKindMap[resolveScriptKind(filePath)] ?? ts.ScriptKind.TS;
+     const sourceFile = ts.createSourceFile(filePath, sourceText, ts.ScriptTarget.Latest, true, scriptKind);
+     throwIfParseDiagnostics(sourceFile);
+     const methods = [];
+diff --git a/dist/utils.js b/dist/utils.js
+index 57afa95eba027b6682b13ae6cff8b2be2d4667d4..8743c53ab537f7105317498e05e065ba3faf5e6c 100644
+--- a/dist/utils.js
++++ b/dist/utils.js	
+@@ -136,7 +136,11 @@ export function formatNumber(value) {
+     return value.toFixed(1);
+ }
+ export function resolveScriptKind(filePath) {
+-    return filePath.toLowerCase().endsWith(".tsx") ? "tsx" : "ts";
++  const lower = filePath.toLowerCase();
++  if (lower.endsWith(".tsx")) return "tsx";
++  if (lower.endsWith(".ts")) return "ts";
++  if (lower.endsWith(".jsx")) return "tsx";
++  return "js"; // for .js, .mjs, .cjs
+ }
+ export class DefaultCommandExecutor {
+     async execute(command) {

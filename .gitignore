@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+.pnp.*
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# Test / coverage
+coverage/
+lib-cov/
+.nyc_output/
+*.lcov
+.cache/
+.turbo/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+*.pid
+*.seed
+
+# Env
+.env
+.env.*
+
+# OS
+.DS_Store
+
+# Editor
+.idea/
+
+# Runtime artifacts
+.checkchange/
+**/__pycache__/
+**/.coverage
+# ...but this one is a tracked test FIXTURE, not a runtime artifact:
+# test/negatives/cli-tool-absent.spec.ts:73-74 copyFileSync's it into a temp dir.
+# Without this the public squash-init's `git add` drops it and CI goes red.
+!test/negatives/fixtures/.coverage
+
+# Local databases
+*.sqlite*

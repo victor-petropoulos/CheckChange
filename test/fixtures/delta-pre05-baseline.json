@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "0.5",
+  "analysis": {
+    "base": "HEAD",
+    "target": "HEAD~1"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/p.ts",
+      "method": "a",
+      "lineStart": 1,
+      "lineEnd": 10,
+      "cc": 2,
+      "crap": 20,
+      "coverage": null,
+      "coverageKind": "none",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "checkchange",
+        "version": "0.4.0"
+      }
+    },
+    {
+      "file": "src/p.ts",
+      "method": "b",
+      "lineStart": 10,
+      "lineEnd": 20,
+      "cc": 5,
+      "crap": 30,
+      "coverage": 0.5,
+      "coverageKind": "lcov",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "checkchange",
+        "version": "0.4.0"
+      }
+    },
+    {
+      "file": "src/p.ts",
+      "method": "c",
+      "lineStart": 50,
+      "lineEnd": 60,
+      "cc": 8,
+      "crap": 50,
+      "coverage": null,
+      "coverageKind": "none",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "checkchange",
+        "version": "0.4.0"
+      }
+    },
+    {
+      "file": "src/p.ts",
+      "method": "d",
+      "lineStart": 100,
+      "lineEnd": 110,
+      "cc": 1,
+      "crap": 9,
+      "coverage": 1,
+      "coverageKind": "lcov",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "checkchange",
+        "version": "0.4.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 30
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/p.ts",
+      "method": "a",
+      "crap": 20,
+      "threshold": 30,
+      "cc": 2,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "WARN",
+      "file": "src/p.ts",
+      "method": "b",
+      "crap": 30,
+      "threshold": 30,
+      "cc": 5,
+      "coverage": 0.5
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/p.ts",
+      "method": "c",
+      "crap": 50,
+      "threshold": 30,
+      "cc": 8,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/p.ts",
+      "method": "d",
+      "crap": 9,
+      "threshold": 30,
+      "cc": 1,
+      "coverage": 1
+    }
+  ],
+  "analysisStatus": "complete",
+  "gate": "WARN",
+  "completeness": "git+complexity"
+}
