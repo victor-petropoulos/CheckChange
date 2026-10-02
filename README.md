@@ -1,135 +1,150 @@
-# CheckChange
-Independent, deterministic evidence for AI-assisted software development.
-AI writes. We check the change.
+# checkchange
+Independent, deterministic evidence and verification layer for AI-assisted software development.
 
-CheckChange provides deterministic evidence around code changes: it analyzes changed functions, their complexity, test coverage, deterministic CRAP scores, evidence completeness and status, and provenance of the evidence.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Node: 24](https://img.shields.io/badge/Node-24-green.svg)](.nvmrc)
 
-## Direction
+## Install
 
-> **This project consumes analysis. It does not perform analysis.**
-
-This is a completely separate project from Engram. Established tools already know how to measure tests, coverage, complexity, CRAP, lint, type errors, security findings, duplication, and similar signals. This project should not recreate them.
-
-Its deliberately small job is to discover or invoke a few supported existing tools, consume their deterministic outputs, correlate facts about the current code change, apply a few deterministic rules, and report PASS / WARN / FAIL.
-
-## Prototype hypothesis
-
-Can a small, free, local-first glue layer over existing developer tools produce a more useful deterministic assessment of a code change than any one tool provides by itself?
-
-If not, stop.
-
-## v0 scope
-
-TypeScript/JavaScript only.
-
-Initial sources:
-- Git
-- `crap-typescript`
-- existing project test/coverage tooling
-- `tsc` when configured
-- ESLint when configured
-
-Initial rules:
-1. Tests fail.
-2. A changed function has high CRAP.
-3. A changed high-risk function has inadequate coverage.
-
-## Non-goals
-
-No custom analysis engine, AST quality analysis, coverage instrumentation, security scanner, plugin framework, multi-language framework, dashboard, SaaS, LLM, MCP, IDE extension, or Engram integration.
-
-The project is primarily a research and learning project. It only needs to be useful, understandable, free to run, and clean enough that another developer could use it if desired.
-
-Additionally, CheckChange does NOT claim to prove correctness, predict defects, replace human review, or certify production readiness. CRAP is one signal, not the entire product.
-
-Because "trust me, I tested it" isn't evidence.
-
-## Status
-
-**Current state (2026-10-01):** repository version 0.4.0 — evidence schema 0.4, CRAP thresholds frozen, LCOV + Python complexity support.
-
-- Test files: 63 spec files (8 under `src/`, 55 under `test/`)
-- Typecheck: `npx tsc --noEmit` → 0 errors
-- Build: `npm run build` → ok (runs `tsc && chmod +x dist/cli.js`), bin entries: `checkchange` + `code-risk`
-- Evidence contract: schema 0.4, thresholds 30/15 frozen, INV-01..04 preserved, explicit `language` and `framework` fields (`src/evidence.ts:433`)
-- Pluggable complexity providers behind the `ComplexityProvider` interface (`src/complexity-providers.ts:3`); Python complexity provider registered (`src/evidence.ts:325`)
-- LCOV coverage provider (`src/coverage-providers/lcovProvider.ts`)
-- Attribution: case-insensitive suffix match for provider-lowercased paths (`src/attribution.ts:91`), anchored by `test/attribution.case.spec.ts`
-- Performance: LCOV synthetic E2E 0.78s/255 MB, Istanbul synthetic 0.81s/260 MB
-- Schema 0.4 is current; schema 0.3 consumers should stay on v0.3.x
-
-## Installation
-
-Requires Node 24 (`.nvmrc`).
+Verified from-source (registry install available **after npm publish** — gated on `npm view checkchange version` returning 2xx):
 
 ```bash
+corepack enable
+pnpm install --frozen-lockfile
+pnpm run build
+```
+
+```bash
+# after npm publish only:
 npm install -g checkchange
 ```
 
-Or run it without installing:
+> **Warning:** Git URL install is not supported. `prepare` runs `pnpm run build` (needs pnpm + TypeScript toolchain). The npm registry tarball ships prebuilt `dist/cli.js`; from-source always builds.
+
+## Quickstart (<30s)
 
 ```bash
-npx checkchange --help
+pnpm exec vitest run --coverage
 ```
 
-Verify:
+```text
+ Test Files  122 passed (122)
+      Tests  872 passed (872)
+
+ % Coverage report from v8
+All files          |   86.47 |    78.74 |   90.16 |   88.42 |
+```
 
 ```bash
-checkchange --help
+node dist/cli.js check --base main --json
 ```
 
-**Installing from a git URL is not supported.** The package builds itself on
-install — `prepare` runs `pnpm run build`, which needs pnpm plus a full
-TypeScript toolchain. Installing from the npm registry ships the prebuilt
-tarball instead, so no build step runs on your machine.
+```json
+{
+  "schemaVersion": "0.5",
+  "analysis": {
+    "base": "2ca94cddb9c2f91a1a56cd6e065d34f4ca1c8de0",
+    "target": "current"
+  },
+  "capabilities": {
+    "git": "available",
+    "complexity": "unavailable",
+    "coverageArtifact": "unavailable"
+  },
+  "changedFunctions": [],
+  "ruleResults": [],
+  "policy": {
+    "crapThreshold": 30
+  },
+  "analysisStatus": "UNSUPPORTED",
+  "gate": "NOT_EVALUATED",
+  "completeness": "INCOMPLETE"
+}
+```
+
+`diagnostics.lineage` and `diagnostics.quality` follow; omitted above for brevity. A clean
+checkout has no changed functions, so `changedFunctions` is empty and the gate is not evaluated.
+
+```bash
+node dist/cli.js doctor
+```
+
+```text
+gitExecutable: ok
+gitRepo: ok
+defaultBase: ok (origin/main)
+providerAvailability: no-changed-files
+  ↳ no changed files detected against the base — stage a change and re-run (`git status` / `git diff --stat`). An empty diff is a valid stop: there is nothing to assess.
+coverageArtifact: present
+```
 
 ## Usage
 
-```bash
-checkchange check [--base <ref>] [--json] [--verbose]
-```
-
-- `--base` optional — auto-detects: `origin/HEAD` → `origin/master`/`main` → `master`/`main` (Engram uses `master`, most others `main`)
-- `--json` — machine-readable output for CI/programmatic use
-- `--verbose` — detailed evidence breakdown
-
-Examples:
+Three canonical examples (verbatim from `src/help.ts:75-77`):
 
 ```bash
-checkchange check --verbose
-checkchange check --base main --json | jq
-pnpm vitest run --coverage && checkchange check --json
-checkchange check --auto-coverage --json
+checkchange check --base main --json
 ```
-
-**Coverage artifact required** for CRAP score calculation. Without coverage, gate returns `INCOMPLETE`. Use `--auto-coverage` to auto-detect runner and generate the artifact.
-
-## `prepare-repo` — Bootstrap Test Runners
 
 ```bash
-checkchange prepare-repo [--dry-run] [--json] [--yes]
+checkchange check --crap-threshold 25 --format github
 ```
 
-Phases: **detect** → **plan** → **approve** → **install** → **verify**
-
-- `--dry-run` — print plan (human or `--json`), exit 0. Safe in non-TTY.
-- `--json` — machine-readable output for CI/agents.
-- `--yes` — skip interactive approval, execute plan. Combined with `--dry-run`, `--dry-run` wins.
-- Agent protocol: **always run `--dry-run --json` first**, inspect plan, then `--yes` to execute.
-
-Example:
 ```bash
-checkchange prepare-repo --dry-run --json
-checkchange prepare-repo --yes
-checkchange doctor  # verify
+checkchange check --auto-coverage --verbose
 ```
 
-## Use from AI Agents
+Primary subcommands (`src/cli.ts:17`):
 
-`checkchange check --json` is the stable machine-readable entry point. Run it
-first, read the PASS / WARN / FAIL verdict and the per-rule evidence, and treat
-it as one deterministic signal among many — it does not replace human review.
+| Command | Purpose |
+|---------|---------|
+| `check` | Analyze changed functions, emit PASS/WARN/FAIL with evidence |
+| `doctor` | Verify runtime prerequisites (Node, pnpm, coverage, git) |
+| `prepare-repo` | Bootstrap test runners & coverage tooling (detect → plan → approve → install → verify) |
+| `explain` | Show rule rationale for a given verdict |
+| `trace` | Print evidence trace for a specific function |
+| `delta` | Compare evidence between two refs |
 
-## Next
+Supported languages: TypeScript, JavaScript, Python (`src/cli.ts:22`).
 
-Angular integration awaiting spec (Hardening B human review 2026-09-02 authorized fork).
+## How it works
+
+Eight-stage pipeline (git → complexity → coverage → attribution → crapCalc → rules → evidence):
+
+1. **Git diff** — enumerate changed functions since `--base` (default: `origin/HEAD` → `main`/`master`)
+2. **Complexity** — per-function CRAP via `crap-typescript` (TS/JS) or `radon` (Python)
+3. **Coverage** — map LCOV/istanbul lines to changed functions (`src/coverage-providers/lcovProvider.ts`)
+4. **Attribution** — case-insensitive suffix match to provider-lowercased paths (`src/attribution.ts:91`)
+5. **crapCalc** — combine complexity + coverage → CRAP score (`src/crapCalc.ts:5`)
+6. **Rules** — INV-01..04 evaluated against thresholds (`src/evidence.ts:828`)
+7. **Evidence** — schema 0.5 (`src/evidence.ts:644`, `src/delta.ts:35`)
+8. **Output** — human-readable summary by default; JSON via `--json`, or `--format github|junit|sarif` for CI annotations
+
+Default CRAP threshold: **30** (`src/help.ts:49`, `src/help.ts:66`).
+
+Test suite: **122 test files**, 872 tests (`pnpm exec vitest run --coverage` in a clean clone). Hand-written specs live in `src/` (8) and `test/` (55); the run also picks up compiled `dist/` specs and spike suites.
+
+## Configuration
+
+Key options (`src/help.ts` for full list):
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `--base <ref>` | Git base ref for diff | auto-detect |
+| `--crap-threshold <n>` | CRAP WARN threshold | 30 |
+| `--coverage-file <path>` | Explicit LCOV/istanbul path | auto-detect |
+| `--format <github\|junit\|sarif>` | Output format; JSON is the `--json` flag | none |
+
+Provider config precedence: explicit `--provider-config <path>` > repo-root `./checkchange.providers.json` > builtin providers.
+
+## Contributing
+
+Contributions via GitHub issues and pull requests.
+
+## License
+
+MIT — see [LICENSE](LICENSE:1-3).
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
