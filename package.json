@@ -5,8 +5,8 @@
   "packageManager": "pnpm@11.17.0",
   "type": "module",
   "bin": {
-    "checkchange": "./dist/cli.js",
-    "code-risk": "./dist/cli.js"
+    "checkchange": "dist/cli.js",
+    "code-risk": "dist/cli.js"
   },
   "files": [
     "dist/",
