@@ -167,7 +167,7 @@ describe('diagnostics lineage (task 3)', () => {
     const intervals = new Map<string, Array<{ start: number; end: number }>>();
     intervals.set('src/pass.ts', [{ start: 1, end: 10 }]);
 
-    const engine = '0.4.0/' + process.version;
+    const engine = '0.4.1/' + process.version;
     const execFileSync = vi.fn((command: string, args: readonly string[]) => {
       throw new Error(`${command} ${args.join(' ')} unavailable`);
     });

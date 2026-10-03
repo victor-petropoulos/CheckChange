@@ -7,7 +7,7 @@ Independent, deterministic evidence and verification layer for AI-assisted softw
 
 ## Install
 
-Registry is live at `0.4.0` (`npm view checkchange version` → `0.4.0`).
+Registry is live at `0.4.1` (`npm view checkchange version` → `0.4.1`).
 
 ### npm / pnpm (recommended)
 
@@ -39,7 +39,7 @@ node dist/cli.js check --base main --json
 
 > **Warning:** Git URL install (`npm install git+https://…`) is not supported. `prepare` runs `pnpm run build` (needs pnpm + TypeScript toolchain). The npm registry tarball ships prebuilt `dist/cli.js`; from-source always builds.
 
-The lean repo is public, 125 files, 2 commits.
+The lean repo is public (125 files in the current snapshot).
 
 ### Requirements
 

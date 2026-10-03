@@ -1,7 +1,7 @@
 import { ChangedFunction } from './evidence.js';
 
 // Provenance for the rules lineage stage. Self tool version tracks package.json.
-export const rulesProvenance = { tool: 'checkchange', version: '0.4.0' } as const;
+export const rulesProvenance = { tool: 'checkchange', version: '0.4.1' } as const;
 
 export interface RuleResult {
   ruleId: string;

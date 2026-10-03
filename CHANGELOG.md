@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - README: added `prepare-repo` usage section
 
+## [0.4.1] - 2026-10-03
+
+### Fixed
+- Corrected README install directions for the live npm registry
+- Removed stale test-count claims from README
+- Clarified gate vocabulary (`PASS` / `WARN` / `NOT_EVALUATED`)
+
 ## [0.3.0] - 2026-09-03
 
 ### Added
