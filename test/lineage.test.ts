@@ -3,7 +3,7 @@ import { mkdtempSync, writeFileSync, readFileSync, rmSync, mkdirSync } from 'fs'
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { execSync } from 'child_process';
-import { buildEvidenceOutput, buildOutput, type EvidenceOutput } from '../src/evidence.js';
+import { buildEvidenceOutput, buildOutput, type EvidenceOutput, evidenceProvenance } from '../src/evidence.js';
 import { gitProvenance } from '../src/git.js';
 import { complexityProvenance } from '../src/complexity.js';
 import { coverageProvenance } from '../src/coverage.js';
@@ -40,13 +40,21 @@ describe('diagnostics lineage (task 3)', () => {
   };
 
   test('every stage module exposes provenance (tool + version)', () => {
-    const all = [gitProvenance, complexityProvenance, coverageProvenance, attributionProvenance, crapCalcProvenance, rulesProvenance];
+    const all = [gitProvenance, complexityProvenance, coverageProvenance, attributionProvenance, crapCalcProvenance, rulesProvenance, evidenceProvenance];
+    // Read from package.json (same idiom as engine lineage test) so version bumps need no test edit.
+    const { version: pkgVersion } = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as { version: string };
     for (const p of all) {
       expect(typeof p.tool).toBe('string');
       expect(p.tool.length).toBeGreaterThan(0);
       expect(typeof p.version).toBe('string');
       expect(p.version.length).toBeGreaterThan(0);
+      // Self-tool stages (checkchange) must track package.json; external tools keep own version.
+      if (p.tool === 'checkchange') {
+        expect(p.version).toBe(pkgVersion);
+      }
     }
+    const checkchangeCount = all.filter((p) => p.tool === 'checkchange').length;
+    expect(checkchangeCount).toBeGreaterThanOrEqual(3);
     expect(crapCalcProvenance.tool).toBe('checkchange');
   });
 
