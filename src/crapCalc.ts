@@ -1,6 +1,6 @@
 // Provenance for the crapCalc lineage stage. Self tool version tracks package.json
 // (matches existing hard-coded '0.5.0' style for the core package).
-export const crapCalcProvenance = { tool: 'checkchange', version: '0.4.1' } as const;
+export const crapCalcProvenance = { tool: 'checkchange', version: '0.4.2' } as const;
 
 export function calculateCrap(cc: number, coveragePercent: number | null): number | null {
   if (coveragePercent == null) {

@@ -56,7 +56,7 @@ export interface DiagnosticLineageEntry {
 }
 
 // Self provenance; version mirrors package.json (existing codebase style hard-codes '0.5.0').
-export const evidenceProvenance = { tool: 'checkchange', version: '0.4.1' } as const;
+export const evidenceProvenance = { tool: 'checkchange', version: '0.4.2' } as const;
 
 function sha256Hex(content: string): string {
   return createHash('sha256').update(content).digest('hex');

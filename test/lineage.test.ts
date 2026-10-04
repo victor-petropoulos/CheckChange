@@ -1,5 +1,5 @@
 import { describe, expect, test, vi, beforeEach, afterEach } from 'vitest';
-import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from 'fs';
+import { mkdtempSync, writeFileSync, readFileSync, rmSync, mkdirSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { execSync } from 'child_process';
@@ -167,7 +167,9 @@ describe('diagnostics lineage (task 3)', () => {
     const intervals = new Map<string, Array<{ start: number; end: number }>>();
     intervals.set('src/pass.ts', [{ start: 1, end: 10 }]);
 
-    const engine = '0.4.1/' + process.version;
+    // Read from package.json (same source evidence.ts uses) so version bumps need no test edit.
+    const { version } = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as { version: string };
+    const engine = version + '/' + process.version;
     const execFileSync = vi.fn((command: string, args: readonly string[]) => {
       throw new Error(`${command} ${args.join(' ')} unavailable`);
     });

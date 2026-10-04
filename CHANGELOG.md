@@ -17,6 +17,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - README: added `prepare-repo` usage section
 
+## [0.4.2] - 2026-10-04
+
+### Breaking
+- `providers[].coverageCmd` is now rejected at config load: `config: providers[<i>].coverageCmd not supported (never executed); remove the key`. The key was never executed — remove it from `checkchange.providers.json`.
+- `ProviderConfig.allowlist` removed from the type surface. It had zero readers and duplicated `REPO_ROOT_NAMES`; configs still carrying the key load unchanged.
+
+### Fixed
+- `flushConfigUpdates` tmp-write hardening (`src/providers/prepare.ts`): pid-suffixed tmp name, `flag: 'wx'` (O_EXCL) so create fails EEXIST rather than writing through a planted symlink, realpath containment re-checked after write and before rename, tmp unlinked on failure, and a `console.warn` naming the failure instead of a silent skip.
+
+### Added
+- Missing-branch tests for attribution and runner detection: `test/attribution.case.spec.ts` (16), `test/runner-detection.test.ts` (17), `test/attribution-python.test.ts` (3).
+
 ## [0.4.1] - 2026-10-03
 
 ### Fixed
