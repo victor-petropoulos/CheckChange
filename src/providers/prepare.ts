@@ -464,11 +464,44 @@ interface ConfigPin {
 }
 
 /**
+ * Containment guard, sync mirror of cache.ts isWithin(): the candidate must
+ * realpath inside root. Best-effort, not a proof — the realpath arm and the
+ * write that follows are separate operations, so a swap between them is not
+ * covered. The lexical fallback is what keeps the check usable BEFORE the
+ * config file exists (first flush into a fresh repo).
+ */
+function resolvesWithin(candidate: string, root: string): boolean {
+  let realCandidate = candidate;
+  let realRoot = root;
+  try {
+    realCandidate = fs.realpathSync(candidate);
+    realRoot = fs.realpathSync(root);
+  } catch {
+    // one of the two does not resolve yet — fall back to the lexical check
+  }
+  const rel = path.relative(realRoot, realCandidate);
+  return !rel.startsWith('..') && !path.isAbsolute(rel);
+}
+
+/** Unlink that never throws. unlink does not follow symlinks, so this frees a
+ *  tmp slot without ever touching a link target. A stale tmp costs one skipped
+ *  write, never a crash. */
+function unlinkQuiet(p: string): void {
+  try {
+    fs.unlinkSync(p);
+  } catch {
+    // best effort
+  }
+}
+
+/**
  * Flush config pins (provider install specs) to disk after a successful install.
  * Reads the existing config file (JSON.parse if present, else empty {}), merges
  * pin provider entries by language → testRunner name (updating `install` on match,
- * appending otherwise), and writes atomically via tmp file + rename.
- * Returns the config-file keys that were written.
+ * appending otherwise), and writes atomically via a pid-suffixed tmp file created
+ * with O_EXCL + rename, after a realpath containment check against cwd (the sync
+ * mirror of the hardened pattern in src/cache.ts writeEntry()). Returns the
+ * config-file keys that were written.
  */
 export function flushConfigUpdates(plan: InstallPlan[], cwd: string): string[] {
   const written = new Set<string>();
@@ -480,6 +513,9 @@ export function flushConfigUpdates(plan: InstallPlan[], cwd: string): string[] {
       const pinProviders = pinConfig.providers;
       if (!pinProviders?.length) continue;
       const configPath = path.resolve(cwd, configKey);
+      // Containment BEFORE any I/O: a symlink holding configPath (or a swapped
+      // cwd) would otherwise be read through and then clobbered by the rename.
+      if (!resolvesWithin(configPath, cwd)) continue;
       let existing: ConfigPin;
       try {
         existing = JSON.parse(fs.readFileSync(configPath, 'utf8')) as ConfigPin;
@@ -505,9 +541,32 @@ export function flushConfigUpdates(plan: InstallPlan[], cwd: string): string[] {
           existingProviders.push(pinProvider);
         }
       }
-      const tmpPath = `${configPath}.tmp`;
-      fs.writeFileSync(tmpPath, JSON.stringify(existing, null, 2));
-      fs.renameSync(tmpPath, configPath);
+      // Atomic write. The tmp name is pid-suffixed so concurrent flushes do not
+      // share a slot, and `flag: 'wx'` (O_EXCL) makes the create fail EEXIST
+      // rather than write THROUGH anything already holding that name — a planted
+      // symlink's target is therefore never modified. On any failure the name is
+      // unlinked so a later flush retries on a clean slot, the key is left out of
+      // `written`, and a console.warn names the failure — an absent JSON entry alone
+      // was not enough, since the human path prints nothing about the config write.
+      const tmpPath = `${configPath}.tmp.${process.pid}`;
+      try {
+        fs.writeFileSync(tmpPath, JSON.stringify(existing, null, 2), { flag: 'wx' });
+        // Re-check both endpoints after the write, before the rename overwrites.
+        if (!resolvesWithin(tmpPath, cwd) || !resolvesWithin(configPath, cwd)) {
+          unlinkQuiet(tmpPath);
+          continue;
+        }
+        fs.renameSync(tmpPath, configPath);
+      } catch (err) {
+        unlinkQuiet(tmpPath);
+        // Never silent: the caller derives its exit code from install.ok alone,
+        // so a swallowed failure here would leave the operator believing the
+        // provider pin was recorded when it was not.
+        console.warn(
+          `prepare-repo: could not write ${configKey} via ${tmpPath}: ${err instanceof Error ? err.message : String(err)}`,
+        );
+        continue;
+      }
       written.add(configKey);
     }
   }

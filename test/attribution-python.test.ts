@@ -4,6 +4,7 @@ import { tmpdir } from 'os';
 import { join } from 'path';
 import { parsePythonFileMethods } from '../src/complexity-providers/pythonDescriptorProvider.js';
 import { buildEvidenceOutput } from '../src/evidence.js';
+import { attachCoverage } from '../src/attribution.js';
 
 // Seed mirrors experiments/wp18-o01/seeded-CHANGE.md (mem:41224):
 //   OICP-MCP src/aicp/health.py, get_health_status CC 1 -> 2 via `if True: marker = 1`,
@@ -166,5 +167,61 @@ describe('buildEvidenceOutput on seeded python change', () => {
     expect(output.analysisStatus).toBe('SUCCESS');
     expect(output.gate).toBe('PASS');
     expect(output.completeness).toBe('COMPLETE');
+  });
+});
+
+// ---- Missing-branch characterization (Slice A) ----
+// :129 python branch + :191 catch arm via REAL parsePythonFileMethods and REAL
+// coverageForMethods (this file does not mock @barney-media/crap-typescript-core).
+// Dummy fileCoverage shape makes coverageForMethods throw → attribution.ts:191 catch → null entry.
+
+describe('attachCoverage missing branches (real parsers, no core mock)', () => {
+  let tmpDir: string;
+  let originalCwd: string;
+
+  beforeEach(() => {
+    originalCwd = process.cwd();
+    tmpDir = mkdtempSync(join(tmpdir(), 'attribution-python-branch-'));
+    process.chdir(tmpDir);
+    mkdirSync(join(tmpDir, 'src'), { recursive: true });
+    writeFileSync(join(tmpDir, 'src', 'health.py'), SEED_HEALTH_PY, 'utf8');
+  });
+
+  afterEach(() => {
+    process.chdir(originalCwd);
+    rmSync(tmpDir, { recursive: true, force: true });
+  });
+
+  test(':129 + :191 — .py path parses via parsePythonFileMethods; coverageForMethods throw → null entry', async () => {
+    const descriptors = await parsePythonFileMethods(join(tmpDir, 'src', 'health.py'));
+    expect(descriptors).toHaveLength(1);
+
+    const complexityInfo = [{
+      file: 'src/health.py',
+      method: 'get_health_status',
+      lineStart: descriptors[0]!.startLine,
+      lineEnd: descriptors[0]!.endLine,
+      cc: descriptors[0]!.complexity,
+    }];
+
+    const coverageMap = new Map();
+    coverageMap.set(join(tmpDir, 'src', 'health.py'), {
+      statements: {},
+      functions: {},
+      branches: {},
+    });
+
+    // Real coverageForMethods throws on this dummy shape (functions.filter is not a function)
+    // → attributeFile :191 catch → nullCoverageEntry. No throw escapes attachCoverage.
+    const result = await attachCoverage(complexityInfo, {
+      available: true,
+      error: false,
+      coverageMap,
+    } as never);
+
+    expect(result).toHaveLength(1);
+    expect(result[0]!.info.method).toBe('get_health_status');
+    expect(result[0]!.coveragePercent).toBeNull();
+    expect(result[0]!.coverageKind).toBeNull();
   });
 });

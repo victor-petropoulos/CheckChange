@@ -56,6 +56,21 @@ describe('builtinConfig', () => {
     expect(pytest.command).toEqual(['python3', '-m', 'pytest', '--cov', '--cov-report=xml']);
     expect(pytest.artifact).toBe('coverage.xml');
   });
+
+  it('sets no coverageCmd on any builtin provider (the tool must live by the rule it enforces)', () => {
+    expect(builtinConfig().providers.every((p) => !p.coverageCmd)).toBe(true);
+  });
+
+  it('dropped the dead allowlist field: gone from the type surface, tolerated on the wire', () => {
+    // ponytail: @ts-expect-error is the runnable proof — if `allowlist` returns to
+    // ProviderConfig this directive goes unused and `tsc --noEmit` fails on it.
+    // @ts-expect-error allowlist removed: it had zero readers and duplicated REPO_ROOT_NAMES.
+    const legacy: ProviderConfig = { version: 1, providers: [], allowlist: ['./legacy.json'] };
+    // Unknown JSON keys survive validateConfig's cast, so an existing operator config
+    // carrying "allowlist" keeps loading exactly as before.
+    expect(legacy).toHaveProperty('allowlist');
+    expect(builtinConfig()).not.toHaveProperty('allowlist');
+  });
 });
 
 describe('loadProviderConfig', () => {
@@ -317,6 +332,53 @@ describe('loadProviderConfig', () => {
     fs.writeFileSync(path.join(dir, 'checkchange.providers.json'), JSON.stringify(explicit));
     const { config: cfg } = loadProviderConfig(dir);
     expect(cfg.providers[0]!.testRunners![0]!.install).toBeUndefined();
+  });
+
+  it('REJECTS a loaded config that sets coverageCmd (was silently ignored)', () => {
+    const cfg = {
+      version: 1,
+      providers: [{ language: 'python', extensions: ['.py'], coverageCmd: 'coverage json -o {out}' }],
+    };
+    fs.writeFileSync(path.join(dir, 'checkchange.providers.json'), JSON.stringify(cfg));
+    // The old silently-ignored path no longer exists: loadProviderConfig cannot hand back a
+    // config whose coverageCmd reaches ResolvedProvider non-null, so nothing downstream can
+    // be quietly wrong. Operators get the failure at load instead of wrong coverage results.
+    expect(() => loadProviderConfig(dir))
+      .toThrow('config: providers[0].coverageCmd not supported (never executed); remove the key');
+  });
+
+  it('names the offending index when a later provider sets coverageCmd', () => {
+    const cfg = {
+      version: 1,
+      providers: [
+        { language: 'go', extensions: ['.go'] },
+        { language: 'python', extensions: ['.py'], coverageCmd: 'coverage json -o {out}' },
+      ],
+    };
+    fs.writeFileSync(path.join(dir, 'checkchange.providers.json'), JSON.stringify(cfg));
+    expect(() => loadProviderConfig(dir))
+      .toThrow('config: providers[1].coverageCmd not supported (never executed); remove the key');
+  });
+
+  it('rejects an explicit null coverageCmd too (the key must be absent, not blank)', () => {
+    const cfg = {
+      version: 1,
+      providers: [{ language: 'python', extensions: ['.py'], coverageCmd: null }],
+    };
+    fs.writeFileSync(path.join(dir, 'checkchange.providers.json'), JSON.stringify(cfg));
+    expect(() => loadProviderConfig(dir))
+      .toThrow('config: providers[0].coverageCmd not supported (never executed); remove the key');
+  });
+
+  it('accepts a config whose providers simply omit coverageCmd', () => {
+    const cfg = {
+      version: 1,
+      providers: [{ language: 'python', extensions: ['.py'], coverageFiles: ['.coverage'] }],
+    };
+    fs.writeFileSync(path.join(dir, 'checkchange.providers.json'), JSON.stringify(cfg));
+    const { config: loaded, source } = loadProviderConfig(dir);
+    expect(source).toBe('repo-root');
+    expect(deriveRegistry(loaded, source).get('.py')!.coverageCmd).toBeNull();
   });
 });
 

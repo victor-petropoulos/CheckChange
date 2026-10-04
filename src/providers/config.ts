@@ -30,7 +30,6 @@ export interface ProviderEntry {
 export interface ProviderConfig {
   version: number;
   providers: ProviderEntry[];
-  allowlist?: string[];
 }
 
 export interface ResolvedProvider {
@@ -92,11 +91,9 @@ export function builtinConfig(): ProviderConfig {
         language: 'python',
         extensions: PY_EXTENSIONS,
         coverageFiles: ['.coverage', 'coverage.xml', 'coverage.json', 'coverage/coverage-final.json'],
-        coverageCmd: 'coverage json -o {out}',
         testRunners: [PYTEST_RUNNER],
       },
     ],
-    allowlist: ['./checkchange.providers.json', './.checkchange/providers.json'],
   };
 }
 
@@ -123,6 +120,25 @@ function validateInstallField(install: unknown, i: number, j: number): void {
   if (!Array.isArray(install.packages)) throw new Error(`config: providers[${i}].testRunners[${j}].install.packages must be an array`);
 }
 
+// BEHAVIOR CHANGE: providers[].coverageCmd moves from silently-ignored to REJECTED at load.
+// It was declared (ProviderEntry.coverageCmd) and mapped (deriveRegistry) but never executed —
+// nothing in src/ spawns it. Exact error text:
+//   config: providers[<i>].coverageCmd not supported (never executed); remove the key
+// Option (a) taken: reject at validateConfig (the schema choke point for both file-based load
+// paths, :166 + :187) and strip builtinConfig's own copy, since the builtin path :189 bypasses
+// validateConfig. deriveRegistry stays a pure mapper. Any present value rejects, including an
+// explicit `coverageCmd: null` — the operator wrote the key, so tell them to delete it rather
+// than silently accept a field the tool ignores.
+// Migration: delete coverageCmd from checkchange.providers.json / .checkchange/providers.json.
+// The same change removed the dead `allowlist` field (zero readers; it duplicated
+// REPO_ROOT_NAMES below). JSON configs carrying it still load unchanged, so no migration.
+// ponytail: own function to match validateTestRunner/validateInstallField above.
+function rejectCoverageCmd(entry: Record<string, unknown>, i: number): void {
+  if (entry.coverageCmd !== undefined) {
+    throw new Error(`config: providers[${i}].coverageCmd not supported (never executed); remove the key`);
+  }
+}
+
 function validateConfig(raw: unknown): ProviderConfig {
   if (!isRecord(raw)) throw new Error('config: not an object');
   if (raw.version !== 1) throw new Error(`config: unsupported version ${String(raw.version)}`);
@@ -131,6 +147,7 @@ function validateConfig(raw: unknown): ProviderConfig {
     if (!isRecord(entry)) throw new Error(`config: providers[${i}] not an object`);
     if (typeof entry.language !== 'string') throw new Error(`config: providers[${i}].language missing`);
     if (!Array.isArray(entry.extensions)) throw new Error(`config: providers[${i}].extensions missing`);
+    rejectCoverageCmd(entry, i);
     if (entry.testRunners !== undefined) {
       if (!Array.isArray(entry.testRunners)) throw new Error(`config: providers[${i}].testRunners not an array`);
       for (const [j, runner] of entry.testRunners.entries()) {

@@ -1,7 +1,7 @@
-import { describe, expect, test, beforeEach, afterEach } from 'vitest';
+import { describe, expect, test, beforeEach, afterEach, vi } from 'vitest';
 import { flushConfigUpdates } from '../src/providers/prepare.js';
 import type { InstallPlan } from '../src/providers/prepare.js';
-import { mkdtempSync, rmSync, writeFileSync, readFileSync, existsSync, mkdirSync } from 'node:fs';
+import { mkdtempSync, rmSync, writeFileSync, readFileSync, existsSync, mkdirSync, symlinkSync, lstatSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, join, resolve } from 'node:path';
 
@@ -197,5 +197,66 @@ describe('flushConfigUpdates', () => {
     ];
     const written = flushConfigUpdates(plan, tmpDir);
     expect(written).toEqual([]);
+  });
+
+  // The three tests below lock the hardened write path (pid-suffixed tmp +
+  // flag:'wx' + realpath containment). Each names the attack it prevents.
+
+  test('symlink planted at the tmp name is never written through', () => {
+    // Both tmp spellings are occupied: the pre-hardening fixed `.tmp` name and
+    // the pid-suffixed one. Pre-hardening src wrote through `.tmp`; hardened
+    // src finds its own slot taken and skips the write entirely.
+    const outside = mkdtempSync(join(tmpdir(), 'prepare-flush-outside-'));
+    const targets = [join(outside, 'fixed.tmp'), join(outside, 'pidded.tmp')];
+    for (const t of targets) writeFileSync(t, 'SECRET-ORIGINAL');
+    const configPath = join(tmpDir, 'checkchange.providers.json');
+    symlinkSync(targets[0]!, `${configPath}.tmp`);
+    symlinkSync(targets[1]!, `${configPath}.tmp.${process.pid}`);
+
+    try {
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const written = flushConfigUpdates(pythonPinPlan(), tmpDir);
+      // No write claimed: the O_EXCL create failed, so the key is not "written".
+      expect(written).toEqual([]);
+      // M-1: the failure is NOT silent. The caller derives its exit code from
+      // install.ok, so a swallowed failure here would exit 0 with no output.
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+      expect(String(warnSpy.mock.calls[0]![0])).toContain('checkchange.providers.json');
+      warnSpy.mockRestore();
+      for (const t of targets) expect(readFileSync(t, 'utf8')).toBe('SECRET-ORIGINAL');
+      expect(existsSync(configPath)).toBe(false);
+      // best-effort unlink frees the occupied slot (unlink never follows a link).
+      expect(existsSync(`${configPath}.tmp.${process.pid}`)).toBe(false);
+    } finally {
+      rmSync(outside, { recursive: true, force: true });
+    }
+  });
+
+  test('config path escaping cwd via a symlink is rejected, nothing created', () => {
+    const outside = mkdtempSync(join(tmpdir(), 'prepare-flush-escape-'));
+    const target = join(outside, 'providers.json');
+    writeFileSync(target, 'OUTSIDE-ORIGINAL');
+    const configPath = join(tmpDir, 'checkchange.providers.json');
+    symlinkSync(target, configPath);
+
+    try {
+      expect(flushConfigUpdates(pythonPinPlan(), tmpDir)).toEqual([]);
+      // Still a symlink — not replaced by the flushed regular file.
+      expect(lstatSync(configPath).isSymbolicLink()).toBe(true);
+      expect(readFileSync(target, 'utf8')).toBe('OUTSIDE-ORIGINAL');
+      // No tmp debris left behind by the rejected write.
+      expect(existsSync(`${configPath}.tmp.${process.pid}`)).toBe(false);
+    } finally {
+      rmSync(outside, { recursive: true, force: true });
+    }
+  });
+
+  test('non-allowlist key is skipped while the allowlisted key still flushes', () => {
+    const plan = pythonPinPlan();
+    plan[0]!.configUpdates['evil.json'] = plan[0]!.configUpdates['checkchange.providers.json'];
+
+    expect(flushConfigUpdates(plan, tmpDir)).toEqual(['checkchange.providers.json']);
+    expect(existsSync(join(tmpDir, 'checkchange.providers.json'))).toBe(true);
+    expect(existsSync(join(tmpDir, 'evil.json'))).toBe(false);
   });
 });
