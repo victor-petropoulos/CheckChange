@@ -109,7 +109,7 @@ Those are evidence states, not judgments about whether the software is ultimatel
 
 The package is published on npm as `checkchange`.
 
-Current registry version: **0.4.1**
+Current registry version: **0.4.2**
 
 ### npm
 
