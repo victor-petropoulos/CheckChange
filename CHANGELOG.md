@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.4] - 2026-10-09
+
+### Fixed
+- C# primary-constructor type declarations (`record X(P)`, `record struct X(P)`, `class X(P)`)
+  are parsed as containers instead of methods. The fallback parser no longer emits a phantom
+  method for the type head, and real members of those types are now reported (commit 0bae14d).
+- Version provenance constants aligned to 0.4.4 (`src/evidence.ts`, `src/rules.ts`,
+  `src/crapCalc.ts`, `src/complexity-providers/csharpDescriptorProvider.ts`).
+
 ## [0.4.3] - 2026-10-08
 
 ### Added

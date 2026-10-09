@@ -51,6 +51,12 @@
  * - Constructors ARE reported, as functionName === the type name (so
  *   displayName is `Foo.Foo`). Rich-path naming may differ; that difference is
  *   in the pinned delta table.
+ * - Primary-constructor TYPE DECLARATIONS (`public record R(int X)`,
+ *   `public record struct S(int Y)`, `public class C(int Z)`) are containers,
+ *   not methods: their members are reported normally and no phantom descriptor
+ *   named after the type is emitted. `isMethodHead` returns null for them, so
+ *   the head reaches the CONTAINER_RE branch instead of the pushMember branch.
+ *   `record struct X` captures `X`, not `struct`.
  * - Malformed source degrades to whatever was recognised before the imbalance; a
  *   file with no recognisable method yields `[]`. Degradation is NON-THROWING
  *   but not faithful, and the deviation is worse than "stopped early": an
@@ -98,7 +104,10 @@ const STATEMENT_KEYWORDS = new Set([
   'value', 'var', 'when', 'where', 'while', 'with', 'yield',
 ]);
 
-const CONTAINER_RE = /\b(?:class|struct|interface|record|enum)\s+([A-Za-z_]\w*)/;
+// The `record (struct|class)` alternative MUST come first: C# `record struct X`
+// is a type declaration named `X`, and the plain `record` alternative would
+// otherwise match first and capture `struct` as the container name.
+const CONTAINER_RE = /\b(?:record\s+(?:struct|class)|class|struct|interface|record|enum)\s+([A-Za-z_]\w*)/;
 
 // One pass, ordered alternation. Word-boundary keywords first (so `foreach` is
 // not also counted as `for`), then the boolean operators, then `??`, then the
@@ -317,7 +326,24 @@ function signatureOf(head: string): Signature | null {
 }
 
 function isMethodHead(head: string, containerName: string | null): Signature | null {
-  const sig = signatureOf(head);
+  // A type DECLARATION head is never a method. Checked FIRST, before any `(` /
+  // `returnPart` gate, because the gate that used to catch it read the FIRST
+  // token of the head — and on `public record CtorRecord(int X)` that is
+  // `public`, which is NOT in STATEMENT_KEYWORDS (record/class/struct ARE, but
+  // they are not first). So a primary-constructor type produced a phantom
+  // method NAMED AFTER THE TYPE and, worse, the `{` caller then did
+  // `i = close + 1` past its whole body, silently dropping every real member
+  // inside. Returning null routes the head to the CONTAINER_RE branch instead,
+  // where its members are scanned normally.
+  //
+  // ponytail: reuses CONTAINER_RE rather than a second keyword regex — the
+  // guard is exactly "this head is a type declaration AND carries a parameter
+  // list", which is the primary-constructor shape. `where T : class` and
+  // `where T : class, new()` are constrained METHOD heads and do NOT match
+  // (their `class` is followed by `,`/nothing, never by an identifier).
+  const strippedHead = stripAttributes(head);
+  if (CONTAINER_RE.test(strippedHead) && strippedHead.includes('(')) return null;
+  const sig = signatureOf(strippedHead);
   if (!sig) return null;
   // Read the first token from the attribute-stripped head, not the raw one.
   const first = /[A-Za-z_]\w*/.exec(sig.head)?.[0];
