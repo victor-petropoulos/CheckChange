@@ -139,6 +139,27 @@ describe('computeGateAndCompleteness', () => {
     expect(gate).toBe('PASS');
     expect(completeness).toBe('COMPLETE');
   });
+
+  // H1 (§5 vacuous-PASS ban): a non-empty ALL-NOT_EVALUATED set evaluated NOTHING,
+  // so `hasWarn ? 'WARN' : 'PASS'` answered PASS over zero real evaluations — the
+  // bare PASS this gate exists to prevent. NOT_EVALUATED is the existing gate
+  // vocabulary (README:335, evidence.ts:679), so no new enum value is invented.
+  test('all NOT_EVALUATED (non-empty) → gate NOT_EVALUATED, completeness INCOMPLETE, NOT a bare PASS', () => {
+    const results = [makeResult('NOT_EVALUATED'), makeResult('NOT_EVALUATED')];
+    const { gate, completeness } = computeGateAndCompleteness(results);
+    expect(gate).toBe('NOT_EVALUATED');
+    expect(completeness).toBe('INCOMPLETE');
+  });
+
+  // The all-NOT_EVALUATED case must NOT swallow the cases above it: a single real
+  // evaluation keeps PASS, and a real WARN keeps WARN. Pins the boundary so a
+  // future "any NOT_EVALUATED → NOT_EVALUATED" widening cannot land silently.
+  test('one PASS among NOT_EVALUATED keeps gate PASS (only the ALL case widens)', () => {
+    const results = [makeResult('PASS'), makeResult('NOT_EVALUATED'), makeResult('NOT_EVALUATED')];
+    const { gate, completeness } = computeGateAndCompleteness(results);
+    expect(gate).toBe('PASS');
+    expect(completeness).toBe('INCOMPLETE');
+  });
 });
 
 // ---- enrichWithLanguageAndFramework ----

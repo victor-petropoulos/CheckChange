@@ -449,4 +449,41 @@ describe('resolveRunner', () => {
     const result = resolveRunner(tmpDir, deriveRegistry(config));
     expect(result.get('rust')!.command).toEqual(['second']);
   });
+
+  // Task 4r acceptance (d) deferred this to Task 5: does builtinConfig's DOTNET_RUNNER
+  // actually resolve for a repo holding a .csproj? configFiles:['*.csproj','*.sln'] is
+  // matched by matchConfigFile (runner-detection.ts:63-64 regex-escapes the pattern and
+  // readdir's the ROOT), and binaryProbes:['dotnet --version'] takes the command branch
+  // (runner-detection.ts:144-146) — a bare 'dotnet' would have taken the literal-path
+  // branch at :150-156 and could never match.
+  test('synthetic repo with a .csproj resolves the csharp dotnet runner', () => {
+    writeFileSync(join(tmpDir, 'Widget.cs'), 'namespace W { public class W { public int A(int x) => x > 0 ? 1 : 0; } }\n', 'utf8');
+    writeFileSync(join(tmpDir, 'Widget.csproj'), '<Project Sdk="Microsoft.NET.Sdk" />\n', 'utf8');
+
+    const result = resolveRunner(tmpDir, deriveRegistry(builtinConfig()));
+
+    expect(result.has('csharp')).toBe(true);
+    const runner = result.get('csharp')!;
+    expect(runner.command).toEqual(['dotnet', 'test', '--collect:XPlat Code Coverage']);
+    expect(runner.artifact).toBe('TestResults/coverage.cobertura.xml');
+    expect(runner.provenance).toContain('Widget.csproj');
+  });
+
+  // Two-sided: probeRunner (runner-detection.ts:166-168) resolves on EITHER a configFile
+  // match OR a binaryProbe hit, so the positive above is hermetic (Widget.csproj alone
+  // satisfies it) while this one must defeat BOTH halves — no config file, and no dotnet
+  // on PATH so commandProbeAvailable (runner-detection.ts:100-110) returns false. Guards
+  // against the positive passing for the wrong reason.
+  test('synthetic .cs repo with no .csproj and no dotnet on PATH does not resolve csharp', () => {
+    writeFileSync(join(tmpDir, 'Widget.cs'), 'namespace W { public class W { public int A(int x) => x; } }\n', 'utf8');
+    const prevPath = process.env.PATH;
+    process.env.PATH = tmpDir; // empty dir: `dotnet` is not resolvable
+    try {
+      const result = resolveRunner(tmpDir, deriveRegistry(builtinConfig()));
+      expect(result.has('csharp')).toBe(false);
+    } finally {
+      if (prevPath === undefined) delete process.env.PATH;
+      else process.env.PATH = prevPath;
+    }
+  });
 });

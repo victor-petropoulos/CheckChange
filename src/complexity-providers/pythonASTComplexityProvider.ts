@@ -1,7 +1,15 @@
 import { spawnSync } from 'node:child_process';
 import { basename, relative } from 'node:path';
-import type { ComplexityInfo } from '../complexity.ts';
+import type { ComplexityInfo, MeasurementProvenance } from '../complexity.ts';
 import { readCoverage, type CoverageResult } from '../coverage.js';
+
+// ponytail: `as const` is deliberately NOT used — ComplexityInfo.provenance is a
+// mutable optional field, and a readonly const would not assign cleanly.
+const PYTHON_AST_PROVENANCE = {
+  tool: 'python stdlib ast',
+  version: 'unknown',
+  mode: 'NATIVE',
+} as const satisfies MeasurementProvenance;
 
 export interface PythonASTComplexityProvider {
   extensions: string[];
@@ -152,7 +160,17 @@ if __name__ == '__main__':
               method: info.method,
               lineStart: info.lineStart,
               lineEnd: info.lineEnd,
-              cc: info.cc
+              cc: info.cc,
+              // GAP 8: these CC values come from the CPython `ast` module run in a
+              // `python3 -c` subprocess (pythonDescriptorProvider.ts:118), NOT from
+              // @barney-media/crap-typescript-core — which is what evidence reported
+              // before, a false provenance claim on every .py function. `version` is
+              // 'unknown' because the interpreter version is not probed: the script's
+              // stdout contract carries descriptors only, and widening it to carry a
+              // version is a bigger change than this. NATIVE, not FALLBACK — `ast` is
+              // a real AST parser for Python, so diagnostics.quality stays NATIVE for
+              // a .py run and the only delta is the honest tool name.
+              provenance: PYTHON_AST_PROVENANCE
             });
           }
         }

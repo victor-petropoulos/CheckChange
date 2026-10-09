@@ -135,6 +135,17 @@ function packageManagerCommand(lockfile: string | null, language: string): strin
     return ['npm', 'install', '-D'];
   }
   if (language === 'python') return ['pip', 'install'];
+  // csharp returns null ON PURPOSE. `dotnet restore` takes a PROJECT OR SOLUTION,
+  // never package names — spreading declared packages onto it is
+  // `dotnet restore Crap4DotNet`, which is MSB1009 "Project file does not exist",
+  // i.e. an install action that can NEVER succeed. Cycle 1 did exactly that (this
+  // branch returned ['dotnet','restore'] and the caller appended the packages).
+  // C# packages are .NET GLOBAL TOOLS, so buildInstallPlan emits a per-package
+  // `dotnet tool install -g <pkg>` action for each one instead. Returning null here
+  // makes MSB1009 unreachable BY CONSTRUCTION: no package id can reach a restore
+  // verb, because no restore verb is ever produced for csharp. The Roslyn vehicle
+  // id stays a csharpDescriptorProvider secret (SD-2/SD-5).
+  if (language === 'csharp') return null;
   return null;
 }
 
@@ -192,14 +203,32 @@ export function createInstallPlan(
 
     // install-lockfile: install packages via lockfile-precedence package manager
     if (packages.length > 0) {
-      const pmCmd = packageManagerCommand(lockfile, lang);
-      if (pmCmd) {
-        actions.push({
-          kind: 'install-lockfile',
-          command: [...pmCmd, ...packages],
-          packages,
-          description: `Install ${packages.join(', ')} via ${pmCmd[0]}`,
-        });
+      if (lang === 'csharp') {
+        // ONE action PER package: `dotnet tool install -g <pkg>` — the only form
+        // that installs a .NET global tool. `-g` matches the remediation the C#
+        // descriptor provider prints (csharpDescriptorProvider.ts:219), so
+        // `prepare-repo` installs exactly what the fix text tells the user to
+        // install. `packageManagerCommand` returns null for csharp, so this branch
+        // is the ONLY way a csharp install action is produced — a package id can
+        // never be appended to `dotnet restore`.
+        for (const pkg of packages) {
+          actions.push({
+            kind: 'install-lockfile',
+            command: ['dotnet', 'tool', 'install', '-g', pkg],
+            packages: [pkg],
+            description: `Install .NET global tool ${pkg} via dotnet tool install -g`,
+          });
+        }
+      } else {
+        const pmCmd = packageManagerCommand(lockfile, lang);
+        if (pmCmd) {
+          actions.push({
+            kind: 'install-lockfile',
+            command: [...pmCmd, ...packages],
+            packages,
+            description: `Install ${packages.join(', ')} via ${pmCmd[0]}`,
+          });
+        }
       }
     }
 
@@ -341,7 +370,7 @@ const INSTALL_ALLOWLIST: ReadonlySet<InstallActionKind> = new Set<InstallActionK
 ]);
 
 /** Binaries each allowlisted install kind may spawn, compared by basename. Covers every in-repo
- * command producer: packageManagerCommand -> pnpm|yarn|npm|pip, create-venv -> python3,
+ * command producer: packageManagerCommand -> pnpm|yarn|npm|pip|dotnet, create-venv -> python3,
  * install-lockfile spreads that command after its own flags, resolvePipCommand -> venv `python` | python3.
  *
  * LIMIT: gates the EXECUTABLE NAME only — never the arguments, never the script that executable
@@ -350,7 +379,7 @@ const INSTALL_ALLOWLIST: ReadonlySet<InstallActionKind> = new Set<InstallActionK
  * confinement: a passing allowlist is not proof that the spawned process is sandboxed.
  */
 const INSTALL_BINARY_ALLOWLIST: ReadonlyMap<InstallActionKind, ReadonlySet<string>> = new Map([
-  ['install-lockfile', new Set(['npm', 'pnpm', 'yarn', 'pip', 'python', 'python3'])],
+  ['install-lockfile', new Set(['npm', 'pnpm', 'yarn', 'pip', 'python', 'python3', 'dotnet'])],
   ['create-venv', new Set(['python', 'python3'])],
 ]);
 
@@ -604,6 +633,7 @@ function resolvePython(cwd: string): [string, ...string[]] {
  *  (a) Node import probe: `@barney-media/crap-typescript-core` resolvable
  *  (b) CLI version probe: `npx --no-install crap-typescript --version` exit 0
  *  (c) Python stdlib probe: venv-aware `python -c "import ast"`
+ *  (d) .NET SDK probe: `dotnet --version` exit 0
  * Returns re-detected stack, per-probe status, and aggregate `ok`.
  */
 export async function verifyInstall(
@@ -653,6 +683,23 @@ export async function verifyInstall(
       ? 'python3 not found on PATH; install Python 3 and re-run prepare-repo'
       : `${pyBin} not found; create .venv via "python3 -m venv .venv" and re-run`;
     analyzers.push({ name: 'python-stdlib-ast', status: 'unfixable', detail: guidance });
+  }
+
+  // (d) .NET SDK probe — `dotnet --version` exit 0. LANGUAGE-UNGUARDED, matching
+  // (a)/(b)/(c): all four run for every repo. Plan Task 7 item 8 forbids a language gate
+  // here — it would diverge from the sibling probes. Consequence, recorded in the task
+  // report: `ok` now depends on the .NET SDK being on PATH, exactly as it already
+  // depends on python3 for probe (c).
+  try {
+    const { stdout } = await execFileAsync('dotnet', ['--version'], { cwd, timeout: INSTALL_TIMEOUT_MS });
+    const line = (stdout as string).split('\n')[0]?.trim() ?? '';
+    analyzers.push({ name: 'dotnet-sdk', status: 'ok', detail: `exit 0: ${line}` });
+  } catch {
+    analyzers.push({
+      name: 'dotnet-sdk',
+      status: 'unfixable',
+      detail: 'dotnet not found on PATH; install the .NET SDK from https://dotnet.microsoft.com/download and re-run prepare-repo',
+    });
   }
 
   return {

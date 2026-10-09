@@ -34,7 +34,7 @@ describe('verifyInstall', () => {
     const result = await verifyInstall(stack, options);
 
     expect(result.ok).toBe(true);
-    expect(result.analyzers).toHaveLength(3);
+    expect(result.analyzers).toHaveLength(4);
     for (const a of result.analyzers) {
       expect(a.status).toBe('ok');
     }
@@ -56,7 +56,7 @@ describe('verifyInstall', () => {
     expect(result.reDetected.languages).toEqual([]);
 
     // Loose status check: each analyzer is ok or unfixable
-    expect(result.analyzers).toHaveLength(3);
+    expect(result.analyzers).toHaveLength(4);
     for (const a of result.analyzers) {
       expect(['ok', 'unfixable']).toContain(a.status);
     }

@@ -1,0 +1,147 @@
+{
+  "schemaVersion": "1.0",
+  "project": "<redacted>",
+  "timestamp": "<redacted>",
+  "threshold": 30,
+  "stats": {
+    "methodCount": 2,
+    "totalCrap": 18,
+    "averageCrap": 9,
+    "medianCrap": 9,
+    "standardDeviation": 3,
+    "crappyMethodCount": 0,
+    "crappyMethodPercent": 0,
+    "totalCrapLoad": 0
+  },
+  "methods": [
+    {
+      "namespace": "Sample",
+      "className": "Calculator",
+      "methodName": "Add",
+      "signature": "(int, int)",
+      "fullName": "Sample.Calculator.Add(int, int)",
+      "filePath": "/private/tmp/crap-fixture-src/Calculator.cs",
+      "lineNumber": 5,
+      "crap": 6,
+      "complexity": 4,
+      "coverage": 0,
+      "crapLoad": 0,
+      "isCrappy": false,
+      "severity": "moderate"
+    },
+    {
+      "namespace": "Sample",
+      "className": "Calculator",
+      "methodName": "Classify",
+      "signature": "(int)",
+      "fullName": "Sample.Calculator.Classify(int)",
+      "filePath": "/private/tmp/crap-fixture-src/Calculator.cs",
+      "lineNumber": 15,
+      "crap": 12,
+      "complexity": 5,
+      "coverage": 0,
+      "crapLoad": 0,
+      "isCrappy": false,
+      "severity": "moderate"
+    }
+  ],
+  "histogram": [
+    {
+      "range": "0-5",
+      "count": 0,
+      "percent": 0
+    },
+    {
+      "range": "5-10",
+      "count": 1,
+      "percent": 50
+    },
+    {
+      "range": "10-15",
+      "count": 1,
+      "percent": 50
+    },
+    {
+      "range": "15-20",
+      "count": 0,
+      "percent": 0
+    },
+    {
+      "range": "20-25",
+      "count": 0,
+      "percent": 0
+    },
+    {
+      "range": "25-30",
+      "count": 0,
+      "percent": 0
+    },
+    {
+      "range": "30-40",
+      "count": 0,
+      "percent": 0
+    },
+    {
+      "range": "40-50",
+      "count": 0,
+      "percent": 0
+    },
+    {
+      "range": "50-75",
+      "count": 0,
+      "percent": 0
+    },
+    {
+      "range": "75-100",
+      "count": 0,
+      "percent": 0
+    },
+    {
+      "range": "100+",
+      "count": 0,
+      "percent": 0
+    }
+  ],
+  "hierarchy": {
+    "namespaces": [
+      {
+        "name": "Sample",
+        "stats": {
+          "methodCount": 2,
+          "totalCrap": 18,
+          "averageCrap": 9,
+          "medianCrap": 9,
+          "standardDeviation": 3,
+          "crappyMethodCount": 0,
+          "crappyMethodPercent": 0,
+          "totalCrapLoad": 0
+        },
+        "classes": [
+          {
+            "name": "Calculator",
+            "stats": {
+              "methodCount": 2,
+              "totalCrap": 18,
+              "averageCrap": 9,
+              "medianCrap": 9,
+              "standardDeviation": 3,
+              "crappyMethodCount": 0,
+              "crappyMethodPercent": 0,
+              "totalCrapLoad": 0
+            },
+            "methods": [
+              "Sample.Calculator.Add(int, int)",
+              "Sample.Calculator.Classify(int)"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "warnings": [
+    {
+      "code": "UNMATCHED_METHODS",
+      "message": "2 method(s) have no coverage data (defaulting to 0.0): Sample.Calculator.Add(int, int), Sample.Calculator.Classify(int)"
+    }
+  ]
+}

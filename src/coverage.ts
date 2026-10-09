@@ -9,6 +9,7 @@ import { parseCoverageReport } from '@barney-media/crap-typescript-core';
 // Derived from the return type to avoid importing the unexported FileCoverage.
 type CoverageMap = Awaited<ReturnType<typeof parseCoverageReport>>;
 import { parseLcovContent } from './coverage-providers/lcovProvider.js';
+import { parseCoberturaContent } from './coverage-providers/coberturaProvider.js';
 import { openWithinRoot } from './fs-safety.js';
 import { providerRegistry } from './evidence.js';
 import type { TraceRun } from './execute.js';
@@ -335,6 +336,209 @@ function normalizeCoveragePaths(
   return normalized;
 }
 
+type CoverageEntry = CoverageMap extends Map<string, infer V> ? V : never;
+type StatementUnit = CoverageEntry['statements'][number];
+
+/**
+ * Union two coverage maps by file path — the seam a Cobertura artifact and an
+ * LCOV artifact feed (parseCoberturaContent + parseLcovContent).
+ *
+ * A path in only one map is carried through unchanged. A path in both has its
+ * statements concatenated and then deduped by start line, keeping the MAX hits:
+ * both formats report one statement per source line, so the same line reported
+ * twice is one statement, and the higher count is the honest one. Branch and
+ * function units are concatenated without dedupe — Cobertura never populates
+ * them, and this keeps the seam a plain union rather than a guess about which
+ * side is authoritative.
+ *
+ * KEY MATCHING IS CASE-INSENSITIVE. The parsers disagree on casing for the same
+ * file: `parseCoverageReport` (Istanbul) lowercases the whole absolute path,
+ * while `parseCoberturaContent` / `parseLcovContent` keep native case. Merging
+ * those two with a plain `Map.get(key)` silently matched nothing — one file
+ * landed in the merged map TWICE and the MAX-on-conflict rule never ran, which
+ * defeats the entire point of merging. Lookup is therefore folded to lower case;
+ * the FIRST-SEEN spelling is what the merged map emits, so a map whose keys all
+ * agree (Cobertura+LCOV, or any single format) round-trips byte-identical.
+ *
+ * ponytail: fold for LOOKUP only. Emitting the folded key would rewrite every
+ * key of a same-case merge, breaking callers that assert exact key spelling.
+ * First-seen wins, which keeps this a pure lookup change and leaves key casing
+ * as a property of whichever artifact the caller passed first.
+ *
+ * Neither input Map nor its FileCoverage values are mutated.
+ */
+export function mergeCoverageMaps(a: CoverageMap, b: CoverageMap): CoverageMap {
+  const merged: CoverageMap = new Map();
+  /** folded key -> the spelling already stored in `merged` */
+  const canonical = new Map<string, string>();
+  const add = (key: string, value: CoverageEntry): void => {
+    const folded = key.toLowerCase();
+    const seen = canonical.get(folded);
+    if (seen === undefined) {
+      canonical.set(folded, key);
+      merged.set(key, value);
+      return;
+    }
+    merged.set(seen, mergeFileCoverage(merged.get(seen)!, value));
+  };
+  for (const [key, value] of a) add(key, value);
+  for (const [key, value] of b) add(key, value);
+  return merged;
+}
+
+function mergeFileCoverage(a: CoverageEntry, b: CoverageEntry): CoverageEntry {
+  // Map preserves first-seen line order; the unit stored for a line is the max-hits one.
+  const byLine = new Map<number, StatementUnit>();
+  for (const unit of [...a.statements, ...b.statements]) {
+    const seen = byLine.get(unit.span.startLine);
+    if (seen === undefined || unit.hits > seen.hits) {
+      byLine.set(unit.span.startLine, unit);
+    }
+  }
+  return {
+    statements: [...byLine.values()],
+    branches: [...a.branches, ...b.branches],
+    functions: [...a.functions, ...b.functions]
+  };
+}
+
+const COBERTURA_BASENAME = 'coverage.cobertura.xml';
+
+// Directories the depth-3 walk must never descend into. `node_modules` is unbounded
+// in size and a plausible home for a vendored `TestResults/` (proved in
+// test/coverage-cobertura-routing.test.ts); `.git` is noise. Pruning at the depth-1
+// child keeps the "bounded by construction" claim below honest — without it the
+// widening to depth 3 would be a walk of every package tree under cwd.
+// ponytail: duplicated from src/providers/runner-detection.ts SKIP_DIRS rather than
+// imported — that set also skips dist/build/coverage, which a coverage scan must
+// NOT skip (it is looking for artifacts there), and the module is provider-private.
+const SKIP_SCAN_DIRS = new Set(['node_modules', '.git']);
+
+/** True for any `*.cobertura.xml` path, case-insensitively (Windows-authored artifacts). */
+function isCoberturaBasename(filePath: string): boolean {
+  return path.basename(filePath).toLowerCase().endsWith('.cobertura.xml');
+}
+
+/**
+ * Depth-bounded readdir scan for a `coverage.cobertura.xml` inside any per-run
+ * subdirectory of a `TestResults` directory under cwd.
+ *
+ * Bounded by construction: the `TestResults` directory name is matched at depth 1,
+ * 2 and 3 only (cwd itself, each direct child, and each grandchild), so the walk is
+ * O(entries in those dirs) with no glob dependency and no unbounded recursion.
+ * Depth 3 is required because `dotnet test` run from a REPO ROOT writes the artifact
+ * under the TEST PROJECT's directory, not the root — `test/GuardClauses.UnitTests/
+ * TestResults/<guid>/` (measured, SHA f96b823e). See `SKIP_SCAN_DIRS` for the prune
+ * that keeps `node_modules` out of the grandchild pass.
+ *
+ * Newest-mtime wins: vstest mints a fresh GUID directory per run and never prunes
+ * the old ones, so the most recently written artifact is the one that matches the
+ * working tree. Ties break on the lexicographically smaller absolute path so the
+ * result is deterministic across filesystems.
+ *
+ /**
+ * EXPORTED for the cached path: src/cache.ts calls this as its last resort so a
+ * cached C# run sees the same Coverlet `TestResults/<GUID>/` artifact an uncached
+ * run does. The cache used to document that divergence as a KNOWN LIMITATION
+ * because this function was module-private.
+ *
+ * @returns absolute path of the newest match, or null when there is none
+ */
+export function scanCoberturaUnderTestResults(cwd: string): string | null {
+  const testResultsDirs: string[] = [];
+  const addIfTestResults = (dir: string): void => {
+    try {
+      if (fs.readdirSync(dir, { withFileTypes: true }).some((e) => e.isDirectory() && e.name === 'TestResults')) {
+        testResultsDirs.push(path.join(dir, 'TestResults'));
+      }
+    } catch {
+      // unreadable directory — nothing to scan
+    }
+  };
+  addIfTestResults(cwd);
+  try {
+    for (const entry of fs.readdirSync(cwd, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const child = path.join(cwd, entry.name);
+      addIfTestResults(child);
+      // Depth 3: `dotnet test` run from a repo root writes the artifact under the
+      // TEST PROJECT's own directory, not the root —
+      // `test/GuardClauses.UnitTests/TestResults/<guid>/` (measured, SHA f96b823e)
+      // and `test/Stateless.Tests/TestResults/<guid>/` (SHA 588f1a1a). Depth 2
+      // alone missed both, so doctor reported `missing` on repos that HAVE the
+      // artifact. 3 is the measured worst case across the pinned corpus
+      // (`NCrontab.Tests/TestResults/<guid>/` is depth 2), so the bound is exactly
+      // 3 — not "until found", which would be an unbounded walk.
+      if (SKIP_SCAN_DIRS.has(entry.name)) continue;
+      try {
+        for (const grand of fs.readdirSync(child, { withFileTypes: true })) {
+          if (grand.isDirectory()) addIfTestResults(path.join(child, grand.name));
+        }
+      } catch {
+        // unreadable child directory — its grandchildren are simply not scanned
+      }
+    }
+  } catch {
+    // unreadable cwd — no scan
+  }
+
+  let newest: { file: string; mtimeMs: number } | null = null;
+  for (const resultsDir of testResultsDirs) {
+    let runDirs: fs.Dirent[];
+    try {
+      runDirs = fs.readdirSync(resultsDir, { withFileTypes: true });
+    } catch {
+      continue;
+    }
+    for (const runDir of runDirs) {
+      if (!runDir.isDirectory()) continue;
+      const file = path.join(resultsDir, runDir.name, COBERTURA_BASENAME);
+      try {
+        const { mtimeMs } = fs.statSync(file);
+        if (
+          newest === null ||
+          mtimeMs > newest.mtimeMs ||
+          (mtimeMs === newest.mtimeMs && file < newest.file)
+        ) {
+          newest = { file, mtimeMs };
+        }
+      } catch {
+        // not a cobertura artifact — skip
+      }
+    }
+  }
+  return newest?.file ?? null;
+}
+
+/**
+ * Read the coverage artifacts discoverable under `cwd`.
+ *
+ * PRECEDENCE (top wins):
+ *   1. explicit `--coverage-file` — read alone, returned as-is, never merged
+ *   2. literal `coverageFiles` candidates — EVERY readable one is parsed and
+ *      the resulting maps are REDUCED with `mergeCoverageMaps` in scan order
+ *   3. `TestResults` scan (newest mtime) — last resort, only when no literal
+ *      candidate produced a map
+ *
+ * Multi-artifact merge (WS2.1): a repo routinely emits more than one coverage
+ * format at once (Coverlet Cobertura + an Istanbul `coverage.json`, or pytest-cov
+ * + LCOV). First-success-return silently dropped every artifact after the first,
+ * so a format that is the ONLY source of coverage for a given file reported it as
+ * uncovered. Accumulate-then-reduce unions them instead, keeping MAX hits per
+ * source line (`mergeFileCoverage`), which is the honest value when two tools
+ * instrument the same line.
+ *
+ * @lineage `contentSha256` is the hash of the FIRST artifact that produced a map
+ * (scan order), NOT of the merged result. `CoverageResult` carries a single hash
+ * and `src/evidence.ts:439` consumes it as the coverage lineage input, so the
+ * merged-map lineage stays per-artifact and is NOT a digest of the union. Any
+ * future consumer needing full-merge lineage must widen `CoverageResult` (a
+ * separate, schema-touching change) rather than silently reinterpreting this one.
+ *
+ * Malformed taxonomy is unchanged: if >=1 candidate was READABLE but none parsed,
+ * this returns `{ available:true, error:true, reason:'malformed' }` exactly as
+ * before — a partial success is a success, not a malformed read.
+ */
 export async function readCoverage(cwd: string, coverageFile?: string, trace?: TraceRun, autoGenerated?: boolean): Promise<CoverageResult> {
   // 1. Explicit coverageFile provided - use it directly (existing behavior)
   if (coverageFile !== undefined && coverageFile !== null && coverageFile !== '') {
@@ -342,9 +546,12 @@ export async function readCoverage(cwd: string, coverageFile?: string, trace?: T
     return await readCoverageFile(coveragePath, cwd, true, autoGenerated);
   }
 
-  // 2. Auto-detect coverage files in precedence order with fallthrough on conversion failure
-  // Precedence: config-driven — all providers' coverageFiles deduped in builtin order
+  // 2. Auto-detect coverage files. Precedence: config-driven — all providers'
+  // coverageFiles deduped in builtin order. EVERY readable candidate is parsed;
+  // the maps are accumulated and reduced at the end (see @lineage above).
   let artifactFound = false;
+  let mergedMap: CoverageMap | null = null;
+  let mergedSha256: string | undefined;
   const registry = providerRegistry();
   const coverageCandidates = registry
     ? [...new Set([...registry.values()].flatMap((r) => r.coverageFiles))]
@@ -355,9 +562,14 @@ export async function readCoverage(cwd: string, coverageFile?: string, trace?: T
       await access(filePath, constants.R_OK);
       artifactFound = true;
       const result = await readCoverageFile(filePath, cwd, false);
-      // If conversion/read succeeded (error: false), return it
+      // Conversion/read succeeded — ACCUMULATE, never return early
       if (!result.error) {
-        return result;
+        if (result.coverageMap) {
+          mergedMap = mergedMap === null ? result.coverageMap : mergeCoverageMaps(mergedMap, result.coverageMap);
+          // First artifact that produced a map owns the reported lineage hash
+          if (mergedSha256 === undefined) mergedSha256 = result.contentSha256;
+        }
+        continue;
       }
       // Conversion/read failed - warn and continue to next candidate
       const message = `Coverage conversion failed for ${filePath}: ${result.reason}`;
@@ -372,9 +584,45 @@ export async function readCoverage(cwd: string, coverageFile?: string, trace?: T
     }
   }
 
+  // ponytail: a literal candidate produced a map — the merged result wins and the
+  // TestResults scan is NOT consulted, so the `artifactFound` short-circuit that
+  // test/coverage-cobertura-routing.test.ts:244 pins still holds. Placed before
+  // the scan (not after) because the scan's own result must never displace a map
+  // the literals already produced.
+  if (mergedMap !== null) {
+    const out: CoverageResult = { available: true, coverageMap: mergedMap, error: false };
+    if (mergedSha256 !== undefined) out.contentSha256 = mergedSha256;
+    return out;
+  }
+
+  // 2b. Scan fallback for Coverlet: `dotnet test --collect:"XPlat Code Coverage"`
+  // writes TestResults/<GUID>/coverage.cobertura.xml, where the GUID is generated
+  // per run by vstest — no literal path can name it, so the config-driven
+  // coverageFiles list above can never match. Runs only when NO literal candidate
+  // produced a MAP (the merged-map return above already left this branch for a
+  // literal hit), so the existing precedence and the malformed-taxonomy behaviour
+  // of "found but unconvertible" are untouched. The scan finds exactly ONE
+  // artifact (newest mtime), so there is nothing here to merge.
+  if (!artifactFound) {
+    const scanned = scanCoberturaUnderTestResults(cwd);
+    if (scanned !== null) {
+      artifactFound = true;
+      const result = await readCoverageFile(scanned, cwd, false);
+      if (!result.error) return result;
+      const message = `Coverage conversion failed for ${scanned}: ${result.reason}`;
+      if (trace) {
+        trace.recordWarning('coverage', message);
+      } else {
+        console.warn(message);
+      }
+    }
+  }
+
   // 3. All candidates exhausted
   if (artifactFound) {
-    // At least one artifact existed but all failed conversion
+    // At least one artifact existed but all failed conversion. Under
+    // accumulate-then-reduce this is now "every readable candidate was read and
+    // NONE produced a map" — same taxonomy, same shape as the first-success era.
     return { available: true, coverageMap: null, error: true, reason: 'malformed' };
   } else {
     // No coverage files found at all
@@ -386,6 +634,9 @@ export async function readCoverage(cwd: string, coverageFile?: string, trace?: T
  * Detect the coverage format and dispatch to the matching parser.
  *
  * Routes:
+ * - Cobertura: by basename ending `.cobertura.xml`, BEFORE the Python-JSON probe.
+ *   Coverlet and pytest-cov emit the same Cobertura schema, so the filename is the
+ *   only robust discriminator; content sniffing cannot separate them.
  * - LCOV: by extension (`.info`/`.lcov`) or content sniffing (TN:/SF:/DA: lines).
  * - Python coverage JSON (files key + meta/summary/totals): transformed to Istanbul
  *   first, unless alreadyConverted (i.e. convertPythonCoverageToJson already ran).
@@ -398,6 +649,14 @@ export async function detectCoverageFormat(
   isLcovByExt: boolean,
   alreadyConverted: boolean
 ): Promise<CoverageMap> {
+  // Cobertura first, keyed on basename: a `.cobertura.xml` artifact is Cobertura
+  // whether it came from Coverlet or pytest-cov, and it is never Istanbul JSON,
+  // so answering before the LCOV and Python-JSON probes below is what keeps it
+  // off the `coverage json` conversion path.
+  if (isCoberturaBasename(actualPath)) {
+    return parseCoberturaContent(content, cwd);
+  }
+
   // Check if LCOV by content
   let isLcov = isLcovByExt;
   if (!isLcovByExt) {
@@ -468,7 +727,12 @@ async function readCoverageFile(
   const basename = path.basename(coveragePath);
   const isLcovByExt = ext === '.info' || ext === '.lcov';
   const isPythonCoverageBinary = basename === '.coverage';
-  const isPythonCoverageXml = ext === '.xml' && basename.startsWith('coverage');
+  // Exact basename, not `startsWith('coverage')`: the prefix form also claimed
+  // `coverage.cobertura.xml`, sending a Coverlet artifact into `coverage json`
+  // conversion and returning reason 'malformed' (:548) before any format
+  // dispatch ran. `.cobertura.xml` is Cobertura; only `coverage.xml` is the
+  // pytest-cov artifact `coverage json` can read.
+  const isPythonCoverageXml = ext === '.xml' && basename === 'coverage.xml';
 
   // For Python .coverage binary or coverage.xml, try to convert to JSON first
   let actualPath = coveragePath;

@@ -10,6 +10,7 @@ import { compareFromFiles } from './delta.js';
 import { resolveRunner, detectStack, createInstallPlan, promptApproval, executeInstallPlan, flushConfigUpdates, verifyInstall, type PrepareOptions, type DetectedStack, type InstallPlan, type PromptApprovalResult, type ExecuteResult, type InstallActionResult, type VerifyReport, type VerifyAnalyzer } from './providers/index.js';
 import * as path from 'node:path';
 import { formatHelpText, formatHelpJson, formatVersion } from './help.js';
+import { probeDotnetSdk } from './complexity-providers/csharpDescriptorProvider.js';
 
 // Subcommand dispatcher (check|doctor|explain|trace|delta). Legacy check path
 // output is byte-identical to the pre-dispatcher CLI; doctor/explain/trace/delta
@@ -19,7 +20,7 @@ type Subcommand = (typeof SUBCOMMANDS)[number];
 
 // File extensions that map to a registered provider (evidence.ts registerProvider).
 // Replaced by config-derived set after initProviderConfig() in runDoctor/runCheck.
-let SUPPORTED_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.py']);
+let SUPPORTED_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.py', '.cs']);
 
 export interface CheckArgs {
   base: string | null;
@@ -223,7 +224,25 @@ interface EvidenceOutputShape {
   ruleResults: Array<{ ruleId: string; result: string }>;
   capabilities: Record<string, string>;
   coverageErrorReason?: string;
-  diagnostics?: { quality?: { complexity?: string; coverage?: string } };
+  // `lineage` is the ONLY place a provider degradation code (e.g.
+  // `csharp-analysis-failed`) reaches the CLI — it rides in the complexity stage's
+  // `inputs.degradationCodes` (src/evidence.ts), never on the per-function `source`.
+  // The CLI reads that existing key; it does not invent a new output field.
+  diagnostics?: {
+    quality?: { complexity?: string; coverage?: string };
+    lineage?: { stage: string; inputs: Record<string, unknown> }[];
+  };
+}
+
+/**
+ * H2: the degradation codes behind the complexity stage's fallback, in
+ * first-seen order. Empty for a native TypeScript run (the key is spread in only
+ * when non-empty), so the text path below stays byte-identical there.
+ */
+function degradationCodes(output: EvidenceOutputShape): string[] {
+  const entry = output.diagnostics?.lineage?.find((l) => l.stage === 'complexity');
+  const codes = entry?.inputs.degradationCodes;
+  return Array.isArray(codes) ? (codes as string[]) : [];
 }
 
 /**
@@ -278,6 +297,13 @@ export function formatOutput(
   else {
     // For WP1, we primarily want JSON, but let's output a simple summary if not JSON
     console.log(`Analysis complete. Base: ${resolvedBase}, Changed functions: ${output.changedFunctions.length}`);
+    // H2: a FALLBACK complexity stage is otherwise invisible in the text path —
+    // the run reports PASS/NOT_EVALUATED over approximate measurements. Warn on
+    // stderr (stdout stays the machine-readable summary); nothing is printed when
+    // no degradation code exists, so a native TypeScript run is unchanged.
+    for (const code of degradationCodes(output)) {
+      console.error(`Warning: complexity measurement degraded (${code}) — results are approximate`);
+    }
   }
   if (output.analysisStatus === 'FAILED') {
     if (output.coverageErrorReason === 'missing') {
@@ -367,6 +393,13 @@ function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
+// GAP 5: the .NET/Coverlet half of the coverageArtifact remediation. The command
+// is the builtin DOTNET_RUNNER command (src/providers/config.ts:94) and the
+// artifact note is honest about the GUID directory readCoverage actually scans
+// (src/coverage.ts:491) — no literal path can name it.
+const DOTNET_COVERAGE_HINT =
+  ' or `dotnet test --collect:"XPlat Code Coverage"` (C#/Coverlet — scanned at TestResults/<guid>/coverage.cobertura.xml)';
+
 /**
  * `doctor` subcommand: environment probes. Reuses existing validate/detect
  * helpers and covered read paths (readCoverage applies MAX_SIZE + path guards);
@@ -437,8 +470,13 @@ async function runDoctor(argv: string[]): Promise<void> {
   // 5. coverage artifact presence (reuse readCoverage — LCOV guards inside)
   const coverage = await readCoverage(cwd);
   let note: string;
+  // GAP 5: the Coverlet command is only meaningful when a C# runner is in scope,
+  // so the remediation stays byte-identical to the pre-C# text for a JS/TS-only
+  // repo. `rr` is resolved once and reused by BOTH the note and this condition.
+  let csharpInScope = false;
   try {
     const rr = resolveRunner(cwd, registry);
+    csharpInScope = rr.has('csharp');
     note = rr.size > 0
       ? ' Detected runners: ' + [...rr.entries()].map(([l, r]) => l + '->' + r.command.join(' ')).join('; ')
       : ' No test runner detected for this repo layout.';
@@ -450,7 +488,20 @@ async function runDoctor(argv: string[]): Promise<void> {
       ? probe('coverageArtifact', 'malformed', coverage.reason ?? '', 'coverage artifact present but could not be parsed — inspect it and regenerate a valid coverage JSON (e.g. `npx vitest run --coverage`).')
       : coverage.available
         ? probe('coverageArtifact', 'present')
-        : probe('coverageArtifact', 'missing', undefined, 'coverage artifact not found — generate one: `npx vitest run --coverage` (JS/TS) or `coverage run -m pytest && coverage json` (Python), then pass `--coverage-file <path>.`' + note),
+        : probe('coverageArtifact', 'missing', undefined, 'coverage artifact not found — generate one: `npx vitest run --coverage` (JS/TS) or `coverage run -m pytest && coverage json` (Python)' + (csharpInScope ? DOTNET_COVERAGE_HINT : '') + ', then pass `--coverage-file <path>.`' + note),
+  );
+
+  // 6. .NET SDK usability for C# (GAP 4). The CSharpDiagnostic computed by the
+  // provider has NO consumer in src/ — `describe()` was its only sink — so the
+  // fix proposal never reached the user. Reuse the provider's memoised
+  // `probeDotnetSdk()`; cli.ts spawns nothing itself (no second `dotnet
+  // --version`, which the memo at csharpDescriptorProvider.ts:132 exists to
+  // prevent). Status and fix are passed through verbatim, never re-invented.
+  const sdk = probeDotnetSdk();
+  probes.push(
+    sdk.available
+      ? probe('csharpSdk', 'ok', sdk.version ?? undefined)
+      : probe('csharpSdk', 'unfixable', sdk.diagnostic?.detail, sdk.diagnostic?.fix),
   );
 
   if (json) {

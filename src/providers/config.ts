@@ -71,6 +71,30 @@ const PYTEST_RUNNER: TestRunner = {
   artifact: 'coverage.xml',
 };
 
+// Coverlet ships in the `dotnet` SDK; the XPlat collector needs no extra package,
+// hence no `install` (no builtin runner declares one — see PYTEST/JEST/VITEST).
+// binaryProbes must be a COMMAND probe: probeRunner treats a space-free entry as a
+// literal path (`fs.accessSync(path.join(cwd, bp))`, runner-detection.ts:148-156),
+// so a bare `dotnet` could never match. Same shape as PYTEST's `python3 -m pytest`.
+// ponytail: MEASURED (dotnet 9.0.121, coverlet.collector 6.0.4) — the XPlat
+// collector always writes `TestResults/<guid>/coverage.cobertura.xml`. The GUID comes
+// from vstest, not Coverlet, and `--results-directory` pins only the PARENT, so no
+// literal can name it. Runsettings `<Output>` (relative AND absolute) and inline
+// `Output=` are SILENTLY IGNORED — verified: artifact still landed in the GUID dir.
+// Coverlet also exposes no `Output` knob at all (only `ReportFormat`). This `artifact`
+// literal is therefore permanently INERT: no consumer globs. Real discovery works
+// anyway, via two live paths — the TestResults scan in readCoverage (src/coverage.ts)
+// and an explicit `--coverage-file <path>`. Both are measured green on a real repo
+// (auto-detect, no flag, no config change). Do not "fix" this with a glob: globs are
+// inert in every coverage consumer — see Task 4 acceptance item 11.
+const DOTNET_RUNNER: TestRunner = {
+  name: 'dotnet',
+  configFiles: ['*.csproj', '*.sln'],
+  binaryProbes: ['dotnet --version'],
+  command: ['dotnet', 'test', '--collect:XPlat Code Coverage'],
+  artifact: 'TestResults/coverage.cobertura.xml',
+};
+
 export function builtinConfig(): ProviderConfig {
   return {
     version: 1,
@@ -92,6 +116,26 @@ export function builtinConfig(): ProviderConfig {
         extensions: PY_EXTENSIONS,
         coverageFiles: ['.coverage', 'coverage.xml', 'coverage.json', 'coverage/coverage-final.json'],
         testRunners: [PYTEST_RUNNER],
+      },
+      {
+        language: 'csharp',
+        extensions: ['.cs'],
+        // ponytail: no complexityCmd — createGenericCommandProvider returns null for
+        // an entry without one (genericCommand.ts:35), which is INTENDED: the csharp
+        // provider is composed by the registration branch at evidence.ts, not by a
+        // shell command. coverageFiles are LITERAL paths (acceptance item 11): both
+        // consumers path.join + access() them and silently skip a miss, so a glob
+        // entry would be inert.
+        // Deliberately EMPTY. A Coverlet artifact lands in a per-run
+        // `TestResults/<GUID>/` directory whose name vstest generates; no literal
+        // can name it, and the three plausible-looking candidates previously listed
+        // here were never observed on disk. Discovery is the automatic TestResults
+        // scan in src/coverage.ts (scanCoberturaUnderTestResults) plus an explicit
+        // `--coverage-file`. Adding unverifiable paths here would be worse than a
+        // recorded gap: an entry that misses is silently skipped, so it buys nothing
+        // and misleads the next reader about what was actually tested.
+        coverageFiles: [],
+        testRunners: [DOTNET_RUNNER],
       },
     ],
   };

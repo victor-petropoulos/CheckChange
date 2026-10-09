@@ -13,9 +13,13 @@ import { openWithinRoot } from './fs-safety.js';
 import { findAllTypeScriptFilesUnderSourceRoots, parseFileMethods } from '@barney-media/crap-typescript-core';
 import { getGitTrackedCodeFiles, complexityProvenance } from './complexity.js';
 import type { ComplexityInfo } from './complexity.js';
-import { readCoverage, coverageProvenance, type CoverageResult } from './coverage.js';
+import { readCoverage, coverageProvenance, scanCoberturaUnderTestResults, mergeCoverageMaps, type CoverageResult } from './coverage.js';
 import type { TraceRun } from './execute.js';
 import { registerProvider, providerRegistry, getProvider } from './evidence.js';
+
+// Value type of the coverage Map, derived from CoverageResult rather than
+// exported from coverage.ts (same idiom as coverage.ts:10).
+type CoverageMap = NonNullable<CoverageResult['coverageMap']>;
 
 export const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days, mtime-based (no clock in key)
 export const MAX_CACHE_TOTAL_BYTES = 500 * 1024 * 1024; // 500MB total, LRU-pruned on write-through
@@ -416,20 +420,47 @@ async function cachedReadCoveragePath(coveragePath: string, cwd: string): Promis
 }
 
 // ponytail: extracted candidate-search loop from cachedReadCoverage to reduce CRAP.
-// Iterates coverageCandidates; returns first accessible, non-error result.
+// Iterates coverageCandidates; ACCUMULATES every accessible, non-error result and
+// reduces them with mergeCoverageMaps in scan order — the same accumulate-then-reduce
+// seam the uncached readCoverage applies (src/coverage.ts, WS2.1). A repo emitting
+// more than one coverage format (Coverlet Cobertura + an Istanbul coverage.json) had
+// every artifact after the first silently dropped on this path too.
+//
+// Symmetry is trivial here because the cache is keyed PER ARTIFACT
+// (`{kind:'coverage', coverageHash}` over one file's bytes, :390-391): each component
+// is cached and invalidated independently by its own artifact hash, and the merge
+// happens in memory after the per-artifact lookup — so merging cannot serve a stale
+// union that no single artifact's hash would have invalidated.
+//
+// @lineage mirrors readCoverage: the returned `contentSha256` is the FIRST artifact
+// that produced a map (scan order), not a digest of the merged map.
+//
+// Returns null when no candidate produced a map, which is what leaves the
+// TestResults scan (and its documented residual limit below) reachable.
 async function findCoverageCandidate(candidates: string[], cwd: string): Promise<CoverageResult | null> {
+  let mergedMap: CoverageMap | null = null;
+  let mergedSha256: string | undefined;
   for (const candidate of candidates) {
     const filePath = path.join(cwd, candidate);
     try {
       await access(filePath, constants.R_OK);
       const result = await cachedReadCoveragePath(filePath, cwd);
-      if (!result.error) return result;
+      if (!result.error) {
+        if (result.coverageMap) {
+          mergedMap = mergedMap === null ? result.coverageMap : mergeCoverageMaps(mergedMap, result.coverageMap);
+          if (mergedSha256 === undefined) mergedSha256 = result.contentSha256;
+        }
+        continue;
+      }
       cacheWarnings.push(`Coverage conversion failed for ${filePath}: ${result.reason}`);
     } catch {
       // not accessible, continue
     }
   }
-  return null;
+  if (mergedMap === null) return null;
+  const out: CoverageResult = { available: true, coverageMap: mergedMap, error: false };
+  if (mergedSha256 !== undefined) out.contentSha256 = mergedSha256;
+  return out;
 }
 
 async function cachedReadCoverage(cwd: string, coverageFile?: string): Promise<CoverageResult> {
@@ -447,8 +478,33 @@ async function cachedReadCoverage(cwd: string, coverageFile?: string): Promise<C
   const coverageCandidates = registry
     ? [...new Set([...registry.values()].flatMap((r) => r.coverageFiles))]
     : ['.coverage', 'coverage.xml', 'coverage.json', 'coverage/coverage-final.json']; // builtin defaults
+  // Coverlet parity (GAP: cached C# runs reported "no coverage"). `dotnet test
+  // --collect:"XPlat Code Coverage"` writes TestResults/<GUID>/coverage.cobertura.xml,
+  // a per-run GUID no literal config candidate can name — so this scan is the ONLY
+  // way a cached C# run reaches that artifact. It runs LAST, after every literal
+  // candidate failed to produce a map, which is the same precedence the uncached
+  // path applies (`if (mergedMap !== null) return` before its scan): a readable or
+  // convertible literal candidate still wins, and `--coverage-file` still
+  // short-circuits everything above. WS2.2 made the literal side merge rather than
+  // take the first hit, so both paths now agree on the accumulated result.
+  //
+  // RESIDUAL LIMIT (deliberate, not an oversight): when the scan FINDS an artifact
+  // that then fails conversion, this returns `{ available: false }` where the
+  // uncached path returns `{ available: true, error: true, reason: 'malformed' }`.
+  // The cached path has always warned-and-continued for an unconvertible literal
+  // candidate instead of failing hard; changing that taxonomy here would alter
+  // behaviour for every language, which is a separate change with its own blast
+  // radius. The case that was actually broken — a GOOD artifact invisible to the
+  // cache — is closed.
   const found = await findCoverageCandidate(coverageCandidates, cwd);
-  return found ?? { available: false, coverageMap: null, error: false };
+  if (found) return found;
+  const scanned = scanCoberturaUnderTestResults(cwd);
+  if (scanned !== null) {
+    const result = await cachedReadCoveragePath(scanned, cwd);
+    if (!result.error) return result;
+    cacheWarnings.push(`Coverage conversion failed for ${scanned}: ${result.reason}`);
+  }
+  return { available: false, coverageMap: null, error: false };
 }
 
 export function registerCachedProviders(): void {

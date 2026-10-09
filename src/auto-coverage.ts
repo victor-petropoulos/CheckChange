@@ -66,7 +66,13 @@ export function autoCoverage(cwd: string): { generatedPath: string | null; hint:
     runner = { command: cmd!, args, artifact: path.join(cwd, first.artifact) };
   }
   if (!runner) {
-    return { generatedPath: null, hint: 'No test runner detected. Install vitest, jest, or pytest to use --auto-coverage.' };
+    // Only the string was wrong (GAP 7). `detectRunner` is NOT dead: it is the
+    // live fallback reached whenever the config-driven registry yields no runner
+    // (:59). The hint now names dotnet, which IS a real configured runner
+    // (DOTNET_RUNNER, src/providers/config.ts:90) — it was missing, and C# repos
+    // were told to install a JS/Python toolchain they do not use. It also does not
+    // promise Roslyn complexity analysis: --auto-coverage drives COVERAGE only.
+    return { generatedPath: null, hint: 'No test runner detected. Install vitest, jest, or pytest, or add a .NET project (.csproj/.sln) so `dotnet test --collect:XPlat Code Coverage` is used, to use --auto-coverage.' };
   }
 
   const fullCommand = [runner.command, ...runner.args];

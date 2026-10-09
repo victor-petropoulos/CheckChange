@@ -4,7 +4,7 @@ test/attribution.case.spec.ts(29,29): error TS2503: Cannot find namespace 'mock'
 test/attribution.case.spec.ts(75,11): error TS2739: Type '{ containerName: undefined; functionName: string; startLine: number; endLine: number; }' is missing the following properties from type 'MethodDescriptor': displayName, complexity, bodySpan, expectsStatementCoverage, expectsBranchCoverage
 test/attribution.case.spec.ts(82,27): error TS2503: Cannot find namespace 'mock'.
 test/attribution.case.spec.ts(83,29): error TS2503: Cannot find namespace 'mock'.
-test/cache.spec.ts(51,12): error TS2339: Property 'reason' does not exist on type 'CacheLookup<T>'.
+test/cache.spec.ts(56,12): error TS2339: Property 'reason' does not exist on type 'CacheLookup<T>'.
 test/contract/wp11.contract.spec.ts(165,62): error TS2345: Argument of type '{ intervals: Map<string, { start: number; end: number; }[]>; }' is not assignable to parameter of type 'GitChangeIntervals'.
 test/contract/wp11.contract.spec.ts(169,79): error TS2740: Type '{}' is missing the following properties from type 'Map<string, FileCoverage>': clear, delete, forEach, get, and 8 more.
 test/contract/wp11.contract.spec.ts(227,62): error TS2345: Argument of type '{ intervals: Map<string, { start: number; end: number; }[]>; }' is not assignable to parameter of type 'GitChangeIntervals'.
@@ -42,4 +42,4 @@ test/negatives/zero-null-missing-malformed-unavailable.test.ts(271,79): error TS
 test/negatives/zero-null-missing-malformed-unavailable.test.ts(38,79): error TS2740: Type '{}' is missing the following properties from type 'Map<string, FileCoverage>': clear, delete, forEach, get, and 8 more.
 test/negatives/zero-null-missing-malformed-unavailable.test.ts(58,79): error TS2740: Type '{}' is missing the following properties from type 'Map<string, FileCoverage>': clear, delete, forEach, get, and 8 more.
 test/quality.test.ts(161,50): error TS2345: Argument of type '{}' is not assignable to parameter of type 'Capabilities'.
-test/wp4.2.test.ts(439,34): error TS2345: Argument of type '{ file: string; method: string; lineStart: number; lineEnd: number; cc: number; }[]' is not assignable to parameter of type 'MethodEvidenceWithSource[]'.
+test/wp4.2.test.ts(442,34): error TS2345: Argument of type '{ file: string; method: string; lineStart: number; lineEnd: number; cc: number; }[]' is not assignable to parameter of type 'MethodEvidenceWithSource[]'.

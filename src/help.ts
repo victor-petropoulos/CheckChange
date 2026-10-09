@@ -47,7 +47,7 @@ Options:
   --json                   Output JSON (default: false)
   --cache                  Enable incremental caching (default: off; also CHECKCHANGE_CACHE=1 env)
   --crap-threshold <number> CRAP threshold for WARN (default: 30)
-  --coverage-file <path>   Istanbul coverage JSON file path
+  --coverage-file <path>   Coverage file: Istanbul JSON, Cobertura XML, or LCOV
   --auto-coverage          Detect test runner, generate coverage artifact, retry [experimental]
   --format <name>          Output format: github, junit, sarif (default: none)
   --provider-config <path> Path to checkchange.providers.json (overrides builtin defaults)
@@ -64,7 +64,7 @@ const CHECK: HelpEntry = {
     { name: '--json', type: 'boolean', default: false, description: 'Output JSON' },
     { name: '--cache', type: 'boolean', default: false, description: 'Enable incremental caching (CHECKCHANGE_CACHE=1)' },
     { name: '--crap-threshold', type: 'number', default: 30, description: 'CRAP threshold for WARN' },
-    { name: '--coverage-file', type: 'string', default: null, description: 'Istanbul coverage JSON file path' },
+    { name: '--coverage-file', type: 'string', default: null, description: 'Coverage file: Istanbul JSON, Cobertura XML, or LCOV' },
     { name: '--auto-coverage', type: 'boolean', default: false, description: 'Auto-generate coverage artifact [experimental]' },
     { name: '--format', type: 'string', default: null, description: 'Output format: github, junit, sarif' },
     { name: '--provider-config', type: 'string', default: null, description: 'Path to checkchange.providers.json' },
@@ -94,7 +94,8 @@ Probes (always run):
   gitRepo             current directory is a git repo
   defaultBase         origin/main or main auto-detected
   providerAvailability  changed file extensions have registered providers
-  coverageArtifact    Istanbul coverage JSON present and parseable`,
+  coverageArtifact    Istanbul JSON, Cobertura XML, or LCOV artifact present and parseable
+  csharpSdk           dotnet --version exits 0 (C# complexity is SDK-based)`,
   flags: [
     { name: '--json', type: 'boolean', default: false, description: 'Output JSON' },
     { name: '--provider-config', type: 'string', default: null, description: 'Path to checkchange.providers.json' },

@@ -4,8 +4,9 @@ import { readCoverage, type CoverageResult } from './coverage.js';
 import { attachCoverage, type AttributedComplexity } from './attribution.js';
 import { calculateCrap } from './crapCalc.js';
 import { pythonASTComplexityProvider } from './complexity-providers/pythonASTComplexityProvider.js';
+import { csharpComplexityProvider } from './complexity-providers/csharpComplexityProvider.js';
 import { gitProvenance } from './git.js';
-import { complexityProvenance, type ComplexityInfo } from './complexity.js';
+import { measurementProvenance, measurementQuality, measurementDegradations, type ComplexityInfo } from './complexity.js';
 import { coverageProvenance } from './coverage.js';
 import { attributionProvenance } from './attribution.js';
 import { crapCalcProvenance } from './crapCalc.js';
@@ -137,8 +138,11 @@ export interface DiagnosticQuality {
   // Canonical quality vocabulary (ADR-0001 terminology-reconciliation.md):
   // coverage DIRECT = measured from coverage artifact; UNAVAILABLE otherwise.
   coverage: 'DIRECT' | 'UNAVAILABLE';
-  // complexity NATIVE = native analyzer; UNAVAILABLE if the provider failed.
-  complexity: 'NATIVE' | 'UNAVAILABLE';
+  // complexity NATIVE = native analyzer; FALLBACK = an approximation of one (the
+  // ADR-0001 term, terminology-reconciliation.md:68,:112); UNAVAILABLE if the
+  // provider failed. NEITHER a csharp vehicle id nor a language branch lives here:
+  // both arrive on the measurement (ComplexityInfo.provenance).
+  complexity: 'NATIVE' | 'FALLBACK' | 'UNAVAILABLE';
   /**
    * Deterministic evidence score 0-100, closed-form arithmetic over evidence
    * values only (no model judgment). Formula:
@@ -165,6 +169,20 @@ export interface DiagnosticQuality {
 function buildQuality(params: {
   complexityCapability: string;
   coverageUsable: boolean;
+  /**
+   * GAP 9: whether the measurements themselves were native or an approximation
+   * (`measurementQuality` over the ComplexityInfo set). OPTIONAL and defaulting to
+   * `NATIVE`, because the paths that never ran a measurement pass only
+   * `complexityCapability` — for them the old `'NATIVE'` stands unchanged. Where a
+   * measurement set EXISTS, it is threaded in, so a degraded C# run can no longer
+   * publish `complexity: 'NATIVE'` over fallback CC.
+   *
+   * Deliberately NOT folded into `stageComplete.complexity` (:178): a FALLBACK stage
+   * still RAN and still completed, so its 20-point completeness weight is earned.
+   * Folding it in would silently change the public `score` for every degraded repo —
+   * a scoring change beyond this task's declared blast radius.
+   */
+  complexityQuality?: 'NATIVE' | 'FALLBACK';
   attributionComplete?: boolean;
   rulesComplete?: boolean;
   changedFunctions?: ChangedFunction[];
@@ -188,7 +206,7 @@ function buildQuality(params: {
       : null;
   const quality: DiagnosticQuality = {
     coverage: params.coverageUsable ? 'DIRECT' : 'UNAVAILABLE',
-    complexity: stageComplete.complexity ? 'NATIVE' : 'UNAVAILABLE',
+    complexity: stageComplete.complexity ? (params.complexityQuality ?? 'NATIVE') : 'UNAVAILABLE',
     score,
     stageComplete,
   };
@@ -296,7 +314,7 @@ export function initProviderConfig(explicitPath?: string, allowExternalConfig = 
   _providerRegistry = registry;
   // Derive extension priority from registry: reverse provider order so later providers
   // (e.g. python) get higher priority than earlier ones (e.g. javascript).
-  // DEFAULT_EXTENSION_PRIORITY: .py > .ts > .tsx > .js > .jsx > .mjs > .cjs > .ts
+  // DEFAULT_EXTENSION_PRIORITY: .cs > .py > .ts > .tsx > .js > .jsx > .mjs > .cjs > .ts
   const seen = new Set<string>();
   _extensionPriority = [];
   for (const entry of [...config.providers].reverse()) {
@@ -326,6 +344,12 @@ export function initProviderConfig(explicitPath?: string, allowExternalConfig = 
       registerProvider(ext, {
         collectComplexity: (...args: Parameters<typeof pythonASTComplexityProvider.collectComplexity>) =>
           pythonASTComplexityProvider.collectComplexity(...args),
+        readCoverage: (...args: Parameters<typeof readCoverage>) => readCoverage(...args),
+      });
+    } else if (resolved.language === 'csharp') {
+      registerProvider(ext, {
+        collectComplexity: (...args: Parameters<typeof csharpComplexityProvider.collectComplexity>) =>
+          csharpComplexityProvider.collectComplexity(...args),
         readCoverage: (...args: Parameters<typeof readCoverage>) => readCoverage(...args),
       });
     }
@@ -457,11 +481,20 @@ export function detectExtension(intervals: Map<string, { start: number; end: num
 }
 
 // ---- Extracted helper: gate + completeness from rule results ----
+// H1 (§5 vacuous-PASS ban, ADR 0023): `hasWarn ? 'WARN' : 'PASS'` answered PASS
+// over a set where NOTHING was evaluated — every result NOT_EVALUATED (null CRAP,
+// i.e. null coverage on the changed function). That is a bare PASS claiming a
+// clean bill of health for a run that measured nothing. Non-empty AND all
+// NOT_EVALUATED → NOT_EVALUATED: the EXISTING gate vocabulary (README:335,
+// evidence.ts:679 applyAbsentCoverageGate), so no new enum value and no schema
+// field. Deliberately narrow — one real PASS still passes, one real WARN still
+// warns, empty still passes (nothing to claim).
 export function computeGateAndCompleteness(ruleResults: RuleResult[]): { gate: string; completeness: string } {
   const hasWarn = ruleResults.some((r) => r.result === 'WARN');
   const hasNotEvaluated = ruleResults.some((r) => r.result === 'NOT_EVALUATED');
+  const allNotEvaluated = ruleResults.length > 0 && ruleResults.every((r) => r.result === 'NOT_EVALUATED');
   return {
-    gate: hasWarn ? 'WARN' : 'PASS',
+    gate: hasWarn ? 'WARN' : allNotEvaluated ? 'NOT_EVALUATED' : 'PASS',
     completeness: hasNotEvaluated ? 'INCOMPLETE' : 'COMPLETE',
   };
 }
@@ -681,7 +714,11 @@ export function mapToMethodEvidence(attributedComplexity: AttributedComplexity[]
     coverage: ac.coveragePercent,
     coverageKind: ac.coverageKind ?? 'N/A',
     analyzerStatus: (ac.coveragePercent !== null && ac.coveragePercent !== undefined ? 'passed' : 'skipped') as 'passed' | 'failed' | 'skipped',
-    source: { tool: '@barney-media/crap-typescript-core', version: '0.5.0' },
+    // GAP 8: per-language, from the measurement. The TypeScript analyzer sets no
+    // provenance, so this returns `complexityProvenance` unchanged and the .ts
+    // evidence JSON is byte-identical to before. A .cs function reports the tool
+    // that actually measured it — the Roslyn vehicle or the fallback parser.
+    source: measurementProvenance(ac.info),
   }));
 }
 
@@ -760,6 +797,7 @@ function resolveCoverageFailure(
   autoGenerated: boolean | undefined,
   base: string, gitCapability: string, complexityCapability: string, threshold: number,
   lineage: DiagnosticLineageEntry[], complexityCapabilityForQuality: string,
+  complexityQuality: 'NATIVE' | 'FALLBACK',
 ): { earlyReturn: EvidenceOutput | null; coverageCapability: string; coverageErrorReason: string | undefined; analysisStatus: string; gate: null; completeness: string } {
   let analysisStatus = 'SUCCESS';
   let gate = null;
@@ -771,7 +809,7 @@ function resolveCoverageFailure(
       analysisStatus = 'FAILED';
       completeness = 'INCOMPLETE';
       return {
-        earlyReturn: withDiagnostics(buildFailedOutput(base, gitCapability, complexityCapability, 'failed', threshold, coverageErrorReason), lineage, buildQuality({ complexityCapability: complexityCapabilityForQuality, coverageUsable: false })),
+        earlyReturn: withDiagnostics(buildFailedOutput(base, gitCapability, complexityCapability, 'failed', threshold, coverageErrorReason), lineage, buildQuality({ complexityCapability: complexityCapabilityForQuality, complexityQuality, coverageUsable: false })),
         coverageCapability: 'failed', coverageErrorReason, analysisStatus, gate, completeness
       };
     }
@@ -811,7 +849,7 @@ async function attachCoverageWithTracking(
       earlyReturn: withDiagnostics(
         buildFailedOutput(base, gitCapability, complexityCapability, coverageCapability, threshold, coverageErrorReason),
         lineage,
-        buildQuality({ complexityCapability, coverageUsable: !coverageResult.error && coverageResult.available === true })
+        buildQuality({ complexityCapability, complexityQuality: measurementQuality(complexityInfo), coverageUsable: !coverageResult.error && coverageResult.available === true })
       )
     };
   }
@@ -864,14 +902,24 @@ export async function buildEvidenceOutput(base: string, intervals: Map<string, {
         complexityInfo = [];
     }
     if (trace) trace.recordStage('complexity', Date.now() - t0Complexity, complexityCapability === 'failed' ? 'error' : 'ok');
+    // GAP 9, second half: `quality` says a stage fell back; these say WHY. Distinct
+    // provider reason codes (e.g. `csharp-analysis-failed`), provider-owned, read off
+    // the measurement. The key is spread in ONLY when non-empty, so a `.ts` run's
+    // lineage `inputs` key-set AND order are unchanged — native TypeScript sets no
+    // degradation, so `degradationCodes` is `[]` there.
+    const degradationCodes = measurementDegradations(complexityInfo);
     lineage.push({
         stage: 'complexity',
-        ...complexityProvenance,
+        ...measurementProvenance(complexityInfo[0]),
         inputs: {
             extension: detectedExtension,
             functions: complexityInfo.length,
-            // Canonical vocabulary (ADR-0001): native analyzer present => NATIVE, failed => UNAVAILABLE
-            quality: complexityCapability === 'failed' ? 'UNAVAILABLE' : 'NATIVE'
+            // Canonical vocabulary (ADR-0001): native analyzer => NATIVE, an
+            // approximation of one => FALLBACK, provider threw => UNAVAILABLE.
+            // `DEGRADED` is NOT a contract value — it stays adapter prose in
+            // csharpComplexityProvider.describe() (SD-3).
+            quality: complexityCapability === 'failed' ? 'UNAVAILABLE' : measurementQuality(complexityInfo),
+            ...(degradationCodes.length > 0 ? { degradationCodes } : {})
         }
     });
     // Vacuous-PASS ban (§5): no files in diff + no supported extensions →
@@ -904,7 +952,7 @@ export async function buildEvidenceOutput(base: string, intervals: Map<string, {
             analysisStatus: 'UNSUPPORTED',
             gate: null,
             completeness: 'INCOMPLETE'
-        }, lineage, buildQuality({ complexityCapability, coverageUsable: false }));
+        }, lineage, buildQuality({ complexityCapability, complexityQuality: measurementQuality(complexityInfo), coverageUsable: false }));
     }
 // Step 2: Read coverage
     const t0Coverage = Date.now();
@@ -939,11 +987,11 @@ export async function buildEvidenceOutput(base: string, intervals: Map<string, {
             analysisStatus: 'UNSUPPORTED',
             gate: null,
             completeness: 'NOT_APPLICABLE'
-        }, lineage, buildQuality({ complexityCapability, coverageUsable: false }));
+        }, lineage, buildQuality({ complexityCapability, complexityQuality: measurementQuality(complexityInfo), coverageUsable: false }));
         return earlyReturn;
     }
 // If coverage provider failed (malformed)
-    const covRes = resolveCoverageFailure(coverageCapability, coverageErrorReason, autoGenerated, base, gitCapability, complexityCapability, threshold, lineage, complexityCapability);
+    const covRes = resolveCoverageFailure(coverageCapability, coverageErrorReason, autoGenerated, base, gitCapability, complexityCapability, threshold, lineage, complexityCapability, measurementQuality(complexityInfo));
     if (covRes.earlyReturn) return covRes.earlyReturn;
     coverageCapability = covRes.coverageCapability;
     coverageErrorReason = covRes.coverageErrorReason;
@@ -1020,6 +1068,7 @@ export async function buildEvidenceOutput(base: string, intervals: Map<string, {
          completeness: completenessValue
      }, lineage, buildQuality({
          complexityCapability,
+         complexityQuality: measurementQuality(complexityInfo),
          coverageUsable: coverageResult.available === true && coverageResult.error === false,
          attributionComplete: true,
          rulesComplete: true,

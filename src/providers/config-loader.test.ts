@@ -10,13 +10,15 @@ function tmpDir(): string {
 }
 
 describe('builtinConfig', () => {
-  it('returns version 1 with typescript, javascript, and python providers', () => {
+  it('returns version 1 with typescript, javascript, python, and csharp providers', () => {
     const cfg = builtinConfig();
     expect(cfg.version).toBe(1);
-    expect(cfg.providers).toHaveLength(3);
+    // 4, not 3: Task 4 appends the csharp provider entry (config.ts, LAST slot).
+    expect(cfg.providers).toHaveLength(4);
     const ts = cfg.providers.find((p) => p.language === 'typescript');
     const js = cfg.providers.find((p) => p.language === 'javascript');
     const py = cfg.providers.find((p) => p.language === 'python');
+    const cs = cfg.providers.find((p) => p.language === 'csharp');
     expect(ts).toBeDefined();
     expect(ts!.extensions).toContain('.ts');
     expect(ts!.extensions).toContain('.tsx');
@@ -28,6 +30,14 @@ describe('builtinConfig', () => {
     expect(py).toBeDefined();
     expect(py!.extensions).toContain('.py');
     expect(py!.coverageFiles).toContain('.coverage');
+    expect(cs).toBeDefined();
+    expect(cs!.extensions).toEqual(['.cs']);
+    // Appended LAST so extension priority (reversed provider order) leaves .cs
+    // highest — see DEFAULT_EXTENSION_PRIORITY in src/evidence.ts.
+    expect(cfg.providers[cfg.providers.length - 1]!.language).toBe('csharp');
+    // F3 pin: csharp coverageFiles deliberately EMPTY (discovery via TestResults scan
+    // + --coverage-file only; literals inert-on-miss and unverifiable).
+    expect(cs!.coverageFiles).toEqual([]);
   });
 
   it('builtin testRunners preserve current vitest/jest/pytest behavior', () => {

@@ -1,4 +1,7 @@
 import { describe, expect, test } from 'vitest';
+import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { parseLcovContent } from '../src/coverage-providers/lcovProvider';
 
 // Statements carry a source span, not a line-number key. Look a unit up by its
@@ -142,6 +145,171 @@ test('should normalize paths correctly', () => {
      expect(coverageMap3.size).toBe(1);
      expect(coverageMap3.has('/project/src/valid.ts')).toBe(true);
    });
+
+  // ====================== WS3.1: `.cs` join + uncovered branches =================
+  // Measured uncovered in src/coverage-providers/lcovProvider.ts before this block
+  // (see .opencode/validation/csharp-depth-closeout-gaps.md): stmts 37,38,39,46,97,116,
+  // 123,126; fn anonymous_1@46; br 36,38,54,96,115,123,125. Each test below names the
+  // line it closes.
+  describe('LCOV SF-flush: a second SF: record finalizes the previous file', () => {
+    // lcovProvider.ts:36 — `if (currentFile && Object.keys(statements).length > 0)`.
+    // Reached only when a SECOND `SF:` arrives while statements are still pending, so
+    // every pre-existing single-SF test leaves this branch at count 0.
+    test('flushes the previous file when a second SF: record starts', () => {
+      const lcov = [
+        'SF:src/First.cs',
+        'DA:1,10',
+        'DA:2,5',
+        'end_of_record',
+        'SF:src/Second.cs',
+        'DA:7,3',
+        'end_of_record',
+      ].join('\n');
+
+      const coverageMap = parseLcovContent(lcov, '/project');
+
+      // First.cs was flushed BY THE MID-STREAM SF:, not by the trailing flush at :74.
+      // :46 is the arrow fn `Object.keys(statements).forEach(k => delete statements[k])`
+      // — without the reset, Second.cs would inherit First.cs's two statements.
+      expect(coverageMap.size).toBe(2);
+      expect(coverageMap.has('/project/src/First.cs')).toBe(true);
+      expect(coverageMap.has('/project/src/Second.cs')).toBe(true);
+
+      const first = coverageMap.get('/project/src/First.cs')!;
+      const second = coverageMap.get('/project/src/Second.cs')!;
+      expect(first.statements).toHaveLength(2);
+      expect(hitsFor(first.statements, 1)).toBe(10);
+      expect(hitsFor(first.statements, 2)).toBe(5);
+      // The reset is what keeps the flushed statements off the second record.
+      expect(second.statements).toHaveLength(1);
+      expect(hitsFor(second.statements, 7)).toBe(3);
+      expect(hitsFor(second.statements, 1)).toBeUndefined();
+      expect(hitsFor(second.statements, 2)).toBeUndefined();
+    });
+
+    // lcovProvider.ts:38 — `if (normalized !== null)` inside the flush. An escaping
+    // pending file must be SKIPPED (no map entry) and must not abort the record.
+    test('a flushed file that escapes cwd is dropped without aborting the record', () => {
+      const lcov = [
+        'SF:../../../etc/passwd',
+        'DA:1,10',
+        'end_of_record',
+        'SF:src/Kept.cs',
+        'DA:9,4',
+        'end_of_record',
+      ].join('\n');
+
+      const coverageMap = parseLcovContent(lcov, '/project');
+
+      // The escaping file contributes nothing; the sibling AFTER it still lands.
+      expect(coverageMap.has('/etc/passwd')).toBe(false);
+      expect(coverageMap.size).toBe(1);
+      expect(coverageMap.has('/project/src/Kept.cs')).toBe(true);
+      expect(hitsFor(coverageMap.get('/project/src/Kept.cs')!.statements, 9)).toBe(4);
+    });
+
+    // Guards the flush against a regression that would silently drop the LAST file:
+    // the mid-stream flush and the :74 trailing flush are two independent code paths,
+    // and the record above proves only that the mid-stream one ran.
+    test('a single SF: record still lands via the trailing flush', () => {
+      const coverageMap = parseLcovContent(['SF:src/Only.cs', 'DA:3,6', 'end_of_record'].join('\n'), '/project');
+
+      expect(coverageMap.size).toBe(1);
+      expect(hitsFor(coverageMap.get('/project/src/Only.cs')!.statements, 3)).toBe(6);
+    });
+  });
+
+  describe('LCOV absolute-path rebasing (normalizePath)', () => {
+    // lcovProvider.ts:115 — `if (isWithinCwd(filePath, cwd)) return filePath`. An
+    // absolute SF path already inside cwd short-circuits BEFORE the rebase loop.
+    test('an absolute SF path already inside cwd is kept verbatim', () => {
+      const coverageMap = parseLcovContent(['SF:/project/src/Inside.cs', 'DA:5,2', 'end_of_record'].join('\n'), '/project');
+
+      expect(coverageMap.size).toBe(1);
+      // Verbatim means the key is the SF path itself — no rebase, no re-resolution.
+      expect([...coverageMap.keys()]).toEqual(['/project/src/Inside.cs']);
+      expect(hitsFor(coverageMap.get('/project/src/Inside.cs')!.statements, 5)).toBe(2);
+    });
+
+    // lcovProvider.ts:125 — `if (fs.existsSync(candidate)) return candidate`. This is
+    // the rebase SUCCESS path: a foreign-root absolute path whose tail exists under cwd.
+    // Measured: for SF:/foreign/root/src/Foo.cs the loop walks
+    // i=1 cwd/foreign/root/src/Foo.cs (absent), i=2 cwd/root/src/Foo.cs (absent),
+    // i=3 cwd/src/Foo.cs (PRESENT) and returns there.
+    test('an absolute SF path from a foreign root is rebased onto cwd when the suffix exists', () => {
+      const cwd = mkdtempSync(join(tmpdir(), 'lcov-rebase-'));
+      try {
+        mkdirSync(join(cwd, 'src'), { recursive: true });
+        writeFileSync(join(cwd, 'src', 'Foo.cs'), 'namespace Foo;\n', 'utf8');
+
+        const coverageMap = parseLcovContent(
+          ['SF:/foreign/root/src/Foo.cs', 'DA:12,7', 'end_of_record'].join('\n'),
+          cwd
+        );
+
+        expect(coverageMap.size).toBe(1);
+        // The rebased candidate is keyed under cwd — this is the whole point of :125.
+        expect([...coverageMap.keys()]).toEqual([join(cwd, 'src', 'Foo.cs')]);
+        expect(hitsFor(coverageMap.get(join(cwd, 'src', 'Foo.cs'))!.statements, 12)).toBe(7);
+      } finally {
+        rmSync(cwd, { recursive: true, force: true });
+      }
+    });
+
+    // lcovProvider.ts:123 — `if (rel.startsWith('..') || path.isAbsolute(rel)) continue`.
+    // Only an ABSOLUTE SF path containing a literal `..` segment reaches the rebase
+    // loop with an escaping candidate (a relative escaping SF resolves at :110 and
+    // returns null at :112 before the loop). Measured for
+    // SF:/foreign/../etc/passwd with cwd /project: i=2 yields /etc/passwd, rel
+    // `../etc/passwd` -> this continue.
+    test('the suffix rebase skips candidates that escape cwd', () => {
+      const cwd = mkdtempSync(join(tmpdir(), 'lcov-escape-'));
+      try {
+        // Both suffixes are absent, so the loop runs to exhaustion and returns null
+        // at :132 — proving the `continue` did not `return` on the escaping candidate.
+        const coverageMap = parseLcovContent(
+          ['SF:/foreign/../etc/passwd', 'DA:1,10', 'end_of_record'].join('\n'),
+          cwd
+        );
+
+        expect(coverageMap.size).toBe(0);
+      } finally {
+        rmSync(cwd, { recursive: true, force: true });
+      }
+    });
+
+    // lcovProvider.ts:125 false arm + the :123 continue in one document. The escaping
+    // candidate is skipped AND a present-but-later suffix is found, so a regression
+    // that removed the `continue` would `return` the escaping path instead.
+    test('an escaping rebase candidate is skipped and a later valid suffix still wins', () => {
+      const cwd = mkdtempSync(join(tmpdir(), 'lcov-escape-ok-'));
+      try {
+        mkdirSync(join(cwd, 'src'), { recursive: true });
+        writeFileSync(join(cwd, 'src', 'Bar.cs'), 'namespace Bar;\n', 'utf8');
+
+        const coverageMap = parseLcovContent(
+          ['SF:/foreign/../elsewhere/src/Bar.cs', 'DA:4,1', 'end_of_record'].join('\n'),
+          cwd
+        );
+
+        expect(coverageMap.size).toBe(1);
+        expect([...coverageMap.keys()]).toEqual([join(cwd, 'src', 'Bar.cs')]);
+      } finally {
+        rmSync(cwd, { recursive: true, force: true });
+      }
+    });
+
+    // lcovProvider.ts:96 — `if (!path.isAbsolute(filePath)) filePath = path.resolve(cwd, filePath)`
+    // inside isWithinCwd. UNREACHABLE from parseLcovContent: both callers pass an
+    // already-resolved absolute path (:110 resolves relative; :115 is only reached for
+    // an absolute input). Recorded as untested in the gaps file rather than reached
+    // through an exported seam that does not exist.
+    test('a relative SF path is resolved against cwd before the join', () => {
+      const coverageMap = parseLcovContent(['SF:src/Rel.cs', 'DA:8,1', 'end_of_record'].join('\n'), '/project');
+
+      expect([...coverageMap.keys()]).toEqual(['/project/src/Rel.cs']);
+    });
+  });
 
   test('should throw error when LCOV content exceeds size limit', () => {
     const overLimit = 'x'.repeat(100 * 1024 * 1024 + 1); // 100MB + 1 byte

@@ -170,7 +170,7 @@ describe('executeInstallPlan', () => {
   });
 
   // Every in-repo producer emits one of these basenames:
-  //   packageManagerCommand (prepare.ts L131-139) -> pnpm | yarn | npm | pip
+  //   packageManagerCommand (prepare.ts L131-143) -> pnpm | yarn | npm | pip | dotnet restore
   //   create-venv         (prepare.ts L187)        -> python3
   //   install-lockfile    (prepare.ts L199)        -> [...pmCmd, ...packages]
   //   resolvePipCommand   (prepare.ts L371-378)    -> python (venv) | python3

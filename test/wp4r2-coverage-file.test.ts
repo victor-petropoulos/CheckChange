@@ -242,7 +242,8 @@ const coverageData = {
     
     // With no changed functions but coverage available, completeness remains INCOMPLETE per current implementation (coverage attribution yields null -> NOT_EVALUATED handling)
     expect(output.analysisStatus).toBe('SUCCESS');
-    expect(output.gate).toBe('PASS');
+    // No changed functions matched → rule set empty of evaluations → vacuous-PASS ban: gate is NOT_EVALUATED
+    expect(output.gate).toBe('NOT_EVALUATED');
     // Current behavior: INCOMPLETE when coverage not fully evaluated for changed funcs; keep loose
     expect(['COMPLETE','INCOMPLETE']).toContain(output.completeness);
     expect(output.capabilities.coverageArtifact).toBe('available');
@@ -327,7 +328,8 @@ test('explicit missing path does not fall back to default', async () => {
     
     const defaultOutput = await callBuildEvidence('.', undefined);
     expect(defaultOutput.analysisStatus).toBe('SUCCESS');
-    expect(defaultOutput.gate).toBe('PASS');
+    // Default coverage absent → all rules NOT_EVALUATED → vacuous-PASS ban: gate is NOT_EVALUATED
+    expect(defaultOutput.gate).toBe('NOT_EVALUATED');
     expect(defaultOutput.completeness).toBe('INCOMPLETE');
   });
 });

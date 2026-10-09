@@ -159,7 +159,7 @@ node dist/cli.js check --base main --json
 
 The repository includes an `.nvmrc` and the required pnpm version is specified in `package.json`.
 
-For repositories using the Python analysis path, Python 3 plus the relevant testing/coverage tooling may also be required.
+For repositories using the Python analysis path, Python 3 plus the relevant testing/coverage tooling may also be required. For C# repositories, the .NET SDK is optional — without it, CheckChange analyses `.cs` files via a pure-TypeScript fallback parser in degraded mode rather than failing.
 
 ---
 
@@ -264,8 +264,9 @@ The current implementation supports analysis for:
 - TypeScript
 - JavaScript
 - Python
+- C#
 
-Coverage can be supplied through the supported coverage paths, including Istanbul-compatible coverage and LCOV.
+Coverage can be supplied through the supported coverage paths, including Istanbul-compatible coverage, LCOV, and Coverlet Cobertura XML.
 
 CheckChange also supports CI-oriented output formats:
 
@@ -446,7 +447,7 @@ The main runtime requirements are:
 - pnpm 11.17.0
 - Git
 
-The supported analysis paths also use packages for TypeScript/JavaScript complexity and coverage processing, along with Python tooling where the Python analysis path is used.
+The supported analysis paths also use packages for TypeScript/JavaScript complexity and coverage processing, along with Python tooling where the Python analysis path is used. For C# analysis, the .NET SDK is optional — when present, CheckChange probes for a Roslyn-based vehicle (`dotnet-crap`, the Crap4DotNet 0.1.1 tool); if the SDK is available and the tool is installed, it serves rich cyclomatic complexity with a fallback bodySpan hybrid join when the vehicle succeeds; `csharp-analysis-failed` is emitted only when the vehicle itself fails (spawn error, no coverage artifact, unparseable payload, or no span join). When the SDK is absent, a `csharp-sdk-missing` diagnostic and fix proposal are emitted with the fallback parser.
 
 For the authoritative dependency versions and provider details, see `package.json` and the project documentation.
 

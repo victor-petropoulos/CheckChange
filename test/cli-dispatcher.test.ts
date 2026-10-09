@@ -1,6 +1,6 @@
 import { describe, expect, test, vi, beforeEach, afterEach } from 'vitest';
 import { main } from '../src/cli.js';
-import { formatVersion } from '../src/help.js';
+import { formatVersion, HELP_REGISTRY } from '../src/help.js';
 
 // Subcommand dispatcher tests (plan task 6). The check path itself is covered
 // unchanged by cli.unit.spec.ts + cli.integration.spec.ts + cli.real-git.spec.ts;
@@ -20,6 +20,21 @@ vi.mock('../src/evidence.js', () => ({ buildEvidenceOutput: vi.fn(), initProvide
 vi.mock('../src/coverage.js', () => ({ readCoverage: vi.fn() }));
 vi.mock('../src/delta.js', () => ({ compareFromFiles: vi.fn() }));
 vi.mock('../src/auto-coverage.js', () => ({ autoCoverage: vi.fn() }));
+
+// Task 8 acceptance 4: the 6th probe (`csharpSdk`) reads the provider's memoised
+// `probeDotnetSdk()`. `dotnet` is NEVER really spawned here — the stub answers the
+// SDK probe so the probe list is deterministic on a machine with or without an SDK.
+// Non-`dotnet` commands fall through to the real spawnSync.
+vi.mock('node:child_process', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('node:child_process')>();
+  return {
+    ...actual,
+    spawnSync: vi.fn((cmd: string, args: readonly string[] = []) =>
+      cmd === 'dotnet'
+        ? { pid: 0, status: 0, output: [], signal: null, stdout: '9.0.121\n', stderr: '' }
+        : (actual.spawnSync(cmd, args as string[]) as never)),
+  };
+});
 
 import * as git from '../src/git.js';
 import * as evidence from '../src/evidence.js';
@@ -92,7 +107,7 @@ describe('subcommand dispatcher (plan task 6)', () => {
     const out = JSON.parse(call[0] as string);
     expect(out.command).toBe('doctor');
     const names = out.probes.map((p: { name: string }) => p.name);
-    expect(names).toEqual(['gitExecutable', 'gitRepo', 'defaultBase', 'providerAvailability', 'coverageArtifact']);
+    expect(names).toEqual(['gitExecutable', 'gitRepo', 'defaultBase', 'providerAvailability', 'coverageArtifact', 'csharpSdk']);
     for (const field of EVIDENCE_OUTPUT_FIELDS) {
       expect(out).not.toHaveProperty(field);
     }
@@ -107,6 +122,31 @@ describe('subcommand dispatcher (plan task 6)', () => {
     expect(logSpy).toHaveBeenCalledWith('gitRepo: ok');
     expect(logSpy).toHaveBeenCalledWith('defaultBase: ok (origin/main)');
     expect(logSpy).toHaveBeenCalledWith('coverageArtifact: missing');
+    expect(logSpy).toHaveBeenCalledWith('csharpSdk: ok (9.0.121)');
+  });
+
+  // Acceptance 8: a help row that disagrees with the code's actual probe names is
+  // a FAILURE. Both directions are asserted from ONE real run: every probe the CLI
+  // emits is documented in `doctor --help`, and every name the help lists is a probe
+  // the CLI actually emits. Reading HELP_REGISTRY rather than a copy of the string
+  // means editing help.ts can no longer silently drift from cli.ts.
+  test('doctor --help probe rows and the emitted probe array agree', async () => {
+    mockHealthyEnv();
+    setArgv(['doctor', '--json']);
+    await main();
+    const out = JSON.parse(
+      ((logSpy.mock.calls as unknown[][]).find((c) => typeof c[0] === 'string' && (c[0] as string).includes('"command": "doctor"')) ?? ['{}'])[0] as string,
+    );
+    const emitted: string[] = out.probes.map((p: { name: string }) => p.name);
+
+    const head = HELP_REGISTRY.doctor.head;
+    const documented = head
+      .split('\n')
+      .map((line) => /^ {2}([A-Za-z]+)\s{2,}\S/.exec(line)?.[1])
+      .filter((n): n is string => n !== undefined);
+
+    expect(documented).toEqual(emitted);
+    expect(logSpy).toHaveBeenCalled();
   });
 
   test('doctor reports coverage artifact present when readCoverage finds one', async () => {

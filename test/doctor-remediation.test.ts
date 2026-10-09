@@ -18,6 +18,33 @@ vi.mock('../src/git.js', () => ({
 vi.mock('../src/evidence.js', () => ({ buildEvidenceOutput: vi.fn(), initProviderConfig: vi.fn() }));
 vi.mock('../src/coverage.js', () => ({ readCoverage: vi.fn() }));
 
+// Task 8 acceptance 4: the `csharpSdk` probe must be derived from the SAME
+// memoised `probeDotnetSdk()` the provider makes — not re-implemented, not
+// hardcoded. Stubbing that ONE function proves the lane is wired: a hardcoded
+// status, or a second `spawnSync` in cli.ts, fails these tests.
+//
+// `vi.hoisted` is required — `vi.mock` factories are hoisted above the
+// declarations they reference.
+const sdk = vi.hoisted(() => ({ probeDotnetSdk: vi.fn() }));
+vi.mock('../src/complexity-providers/csharpDescriptorProvider.js', () => ({
+  probeDotnetSdk: sdk.probeDotnetSdk,
+}));
+
+// The real CSharpDiagnostic for the spawn-failure shape, copied VERBATIM from
+// src/complexity-providers/csharpDescriptorProvider.ts:142-150. Asserting
+// `remediation === SDK_MISSING.fix` (not `toContain`) is what proves doctor
+// forwards the provider's machine-readable fix rather than an invented string.
+const SDK_MISSING = {
+  code: 'csharp-sdk-missing',
+  message:
+    'The .NET SDK is not usable, so C# complexity is measured with the pure-TypeScript fallback parser: ' +
+    'approximated cyclomatic complexity over comment/string-stripped source, not a Roslyn AST. ' +
+    'Generic, expression-bodied and local-function members are missed (see csharpFallbackParser.ts).',
+  fix: 'Install the .NET SDK so the `dotnet` CLI is on PATH: https://dotnet.microsoft.com/download',
+  detail: 'dotnet --version: spawn failed (ENOENT)',
+};
+const SDK_OK = { available: true, version: '9.0.121', diagnostic: null };
+
 describe('doctor remediation hints', () => {
   let savedArgv: string[];
   let logSpy: ReturnType<typeof vi.spyOn>;
@@ -47,6 +74,9 @@ describe('doctor remediation hints', () => {
     (coverage.readCoverage as ReturnType<typeof vi.fn>).mockResolvedValue({
       available: false, coverageMap: null, error: false,
     });
+    // Healthy SDK by default, so the pre-existing tests keep asserting only what
+    // they asserted before Task 8. The degraded cases override it per test.
+    sdk.probeDotnetSdk.mockReturnValue(SDK_OK);
   });
 
   afterEach(() => {
@@ -239,5 +269,112 @@ describe('doctor remediation hints', () => {
     const text = getDoctorTextLines().join('\n');
     expect(text).toContain('providerAvailability: skipped');
     expect(text).toContain('↳ no base ref was resolved — pass `--base <ref>` so changed files can be detected.');
+  });
+
+  // ---- Task 8: the 6th probe, `csharpSdk` ----
+
+  test('csharpSdk unavailable: unfixable, remediation is the SDK URL from the CSharpDiagnostic', async () => {
+    sdk.probeDotnetSdk.mockReturnValue({ available: false, version: null, diagnostic: SDK_MISSING });
+    setArgv(['doctor', '--json']);
+    await main();
+    const out = getLastDoctorOutput();
+    const probe = out.probes.find((p) => p.name === 'csharpSdk');
+    expect(probe).toBeDefined();
+    expect(probe!.status).toBe('unfixable');
+    // Verbatim pass-through of the provider's machine-readable fix, NOT an
+    // invented string, and NOT the bare URL alone.
+    expect(probe!.remediation).toBe(SDK_MISSING.fix);
+    expect(probe!.remediation).toContain('https://dotnet.microsoft.com/download');
+    expect(probe!.detail).toBe(SDK_MISSING.detail);
+    // The lane is honest: status came from the provider's own memoised probe.
+    expect(sdk.probeDotnetSdk).toHaveBeenCalled();
+  });
+
+  test('csharpSdk unavailable: the SDK URL reaches the text surface too', async () => {
+    sdk.probeDotnetSdk.mockReturnValue({ available: false, version: null, diagnostic: SDK_MISSING });
+    setArgv(['doctor']);
+    await main();
+    const text = getDoctorTextLines().join('\n');
+    expect(text).toContain('csharpSdk: unfixable (dotnet --version: spawn failed (ENOENT))');
+    expect(text).toContain('↳ Install the .NET SDK so the `dotnet` CLI is on PATH: https://dotnet.microsoft.com/download');
+  });
+
+  // Acceptance 5: a healthy SDK emits 'ok' and NO remediation key, exactly like
+  // the four sibling probes asserted at :150. This is the half that would catch a
+  // probe unconditionally emitting a hint.
+  test('csharpSdk healthy: status ok and no remediation field', async () => {
+    sdk.probeDotnetSdk.mockReturnValue(SDK_OK);
+    setArgv(['doctor', '--json']);
+    await main();
+    const out = getLastDoctorOutput();
+    const probe = out.probes.find((p) => p.name === 'csharpSdk');
+    expect(probe).toBeDefined();
+    expect(probe!.status).toBe('ok');
+    expect(probe!.detail).toBe('9.0.121');
+    expect(probe).not.toHaveProperty('remediation');
+  });
+
+  // Acceptance 7: the dotnet/Coverlet remediation is CONDITIONAL on a C# runner
+  // being in scope. Both halves are asserted against the REAL resolveRunner, and
+  // both registries are well-formed (an `extensions`-less provider makes
+  // resolveRunner throw, which would make the negative half pass for the wrong
+  // reason). The negative half is the one that fails on an unconditional append.
+  test('coverageArtifact missing: dotnet hint appears only when a csharp runner is in scope', async () => {
+    const hint = '`dotnet test --collect:"XPlat Code Coverage"`';
+    const base =
+      'coverage artifact not found — generate one: `npx vitest run --coverage` (JS/TS) or ' +
+      '`coverage run -m pytest && coverage json` (Python)';
+    const tsProvider = { language: 'typescript', source: 'native', extensions: ['.ts'], testRunners: null };
+
+    // (1) JS/TS-only registry — resolveRunner succeeds and finds no runner at all,
+    // so the hint must be ABSENT and the JS/TS+Python wording preserved verbatim.
+    (evidence.initProviderConfig as ReturnType<typeof vi.fn>).mockReturnValue({
+      config: {},
+      registry: new Map([['.ts', tsProvider]]),
+      source: 'builtin',
+    });
+    setArgv(['doctor', '--json']);
+    await main();
+    const jsOnly = getLastDoctorOutput().probes.find((p) => p.name === 'coverageArtifact');
+    expect(jsOnly!.status).toBe('missing');
+    // Proves runner detection RAN rather than threw — otherwise the negative half
+    // would be vacuous.
+    expect(jsOnly!.remediation).not.toContain('Runner detection failed');
+    expect(jsOnly!.remediation).not.toContain('dotnet');
+    expect(jsOnly!.remediation).toContain(base);
+
+    // (2) Add a csharp provider whose runner the REAL resolveRunner detects here
+    // (test/fixtures/*.cs satisfies hasSourceFiles; package.json matches
+    // configFiles) — the hint must be present.
+    (evidence.initProviderConfig as ReturnType<typeof vi.fn>).mockReturnValue({
+      config: {},
+      registry: new Map<string, unknown>([
+        ['.ts', tsProvider],
+        [
+          '.cs',
+          {
+            language: 'csharp',
+            source: 'builtin',
+            extensions: ['.cs'],
+            testRunners: [
+              {
+                name: 'dotnet',
+                configFiles: ['package.json'],
+                binaryProbes: [],
+                command: ['dotnet', 'test', '--collect:XPlat Code Coverage'],
+                artifact: 'TestResults/coverage.cobertura.xml',
+              },
+            ],
+          },
+        ],
+      ]),
+      source: 'builtin',
+    });
+    setArgv(['doctor', '--json']);
+    await main();
+    const withCsharp = getLastDoctorOutput().probes.find((p) => p.name === 'coverageArtifact');
+    expect(withCsharp!.remediation).not.toContain('Runner detection failed');
+    expect(withCsharp!.remediation).toContain(hint);
+    expect(withCsharp!.remediation).toContain(base);
   });
 });

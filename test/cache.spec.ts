@@ -18,7 +18,12 @@ import {
   runShardKey,
   getOrCompute,
   clear,
+  registerCachedProviders,
+  getCacheWarnings,
+  clearCacheWarnings,
 } from '../src/cache';
+import { initProviderConfig, getProvider } from '../src/evidence';
+import { readCoverage } from '../src/coverage';
 
 const REPO_ROOT = path.resolve(import.meta.dirname, '..');
 const TMP_BASE = path.join(REPO_ROOT, 'test', 'tmp-cache');
@@ -478,5 +483,98 @@ describe('resolveCacheRoot edge cases', () => {
     const dir = await makeTmpDir('sec-override-outside');
     const root = resolveCacheRoot('/some/other/cwd', { CHECKCHANGE_CACHE_DIR: dir });
     expect(root).toBe(dir);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// F1 (Task 9r): cached-path parity for the Coverlet TestResults scan.
+// `findCoverageCandidate` only knows LITERAL candidates, so a per-run
+// `TestResults/<GUID>/coverage.cobertura.xml` is invisible to it — cachedReadCoverage
+// must fall through to `scanCoberturaUnderTestResults` (src/cache.ts:469) and return
+// the SAME converted map the uncached path does. The scan is last-resort: literals
+// still win (cachedReadCoverage:467-468).
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe('cached coverage parity: TestResults scan (cache.ts:469)', () => {
+  const COBERTURA = `<?xml version="1.0" encoding="utf-8"?>
+<coverage line-rate="0.6" branch-rate="0" version="1.9.2" timestamp="1759012345678">
+  <sources>
+    <source>TMPDIR</source>
+  </sources>
+  <packages>
+    <package name="src" line-rate="0.6" branch-rate="0" complexity="0">
+      <classes>
+        <class name="src/Calc.cs" filename="src/Calc.cs" line-rate="0.6" branch-rate="0" complexity="0">
+          <methods/>
+          <lines>
+            <line number="6" hits="2" branch="false"/>
+            <line number="7" hits="0" branch="false"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>
+`;
+
+  /** Register real providers, then expose the cached .cs readCoverage seam. */
+  async function cachedCsReadCoverage(cwd: string) {
+    initProviderConfig();
+    registerCachedProviders();
+    const provider = getProvider('.cs');
+    if (!provider) throw new Error('.cs provider missing after registration');
+    return provider.readCoverage(cwd);
+  }
+
+  function hitsAt(map: Map<string, { statements: Array<{ span: { startLine: number }; hits: number }> }>, line: number): number | undefined {
+    for (const entry of map.values()) {
+      const unit = entry.statements.find((s) => s.span.startLine === line);
+      if (unit) return unit.hits;
+    }
+    return undefined;
+  }
+
+  test('findCoverageCandidate misses → scan returns converted map identical to uncached readCoverage', async () => {
+    const cwd = await makeTmpDir('cached-scan-parity');
+    const runDir = path.join(cwd, 'TestResults', '11111111-1111-1111-1111-111111111111');
+    await fs.mkdir(runDir, { recursive: true });
+    await fs.writeFile(path.join(runDir, 'coverage.cobertura.xml'), COBERTURA.replace('TMPDIR', cwd), 'utf8');
+    // No literal candidate (coverage.xml, coverage.json, ...) exists → the
+    // candidate loop at cache.ts:420-433 returns null; only the scan can find this.
+    expect(fsSync.existsSync(path.join(cwd, 'coverage.xml'))).toBe(false);
+
+    const cached = await cachedCsReadCoverage(cwd);
+
+    expect(cached.error).toBe(false);
+    expect(cached.coverageMap).not.toBeNull();
+    expect(cached.coverageMap!.size).toBe(1);
+    expect(hitsAt(cached.coverageMap!, 6)).toBe(2);
+    expect(hitsAt(cached.coverageMap!, 7)).toBe(0);
+
+    // Parity: the uncached path (coverage.ts:503-515, same scan) converts the
+    // same bytes into the same map.
+    const uncached = await readCoverage(cwd);
+    expect(uncached.error).toBe(false);
+    expect([...cached.coverageMap!.keys()]).toEqual([...uncached.coverageMap!.keys()]);
+    expect(hitsAt(cached.coverageMap!, 6)).toBe(hitsAt(uncached.coverageMap!, 6));
+    expect(hitsAt(cached.coverageMap!, 7)).toBe(hitsAt(uncached.coverageMap!, 7));
+  });
+
+  test('scan finds an unconvertible artifact → warning pushed at cache.ts:473, not a throw', async () => {
+    const cwd = await makeTmpDir('cached-scan-unconvertible');
+    const runDir = path.join(cwd, 'TestResults', '22222222-2222-2222-2222-222222222222');
+    await fs.mkdir(runDir, { recursive: true });
+    // Well-formed enough to be discovered by basename, malformed as Cobertura
+    // (no <coverage> root → CoberturaParseError → conversion error).
+    await fs.writeFile(path.join(runDir, 'coverage.cobertura.xml'), '<not-a-coverage-doc/>', 'utf8');
+
+    clearCacheWarnings();
+    const result = await cachedCsReadCoverage(cwd);
+
+    const warnings = getCacheWarnings();
+    expect(warnings.some((w) => w.includes('Coverage conversion failed for') && w.includes('coverage.cobertura.xml'))).toBe(true);
+    // Documented residual limitation (cache.ts:459-466): cached path degrades to
+    // the no-artifact shape instead of the uncached { available: true, error: true }.
+    expect(result).toEqual({ available: false, coverageMap: null, error: false });
   });
 });

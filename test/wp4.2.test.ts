@@ -224,7 +224,8 @@ describe('WP4.2 Composed Evidence Implementation', () => {
       30
     );
     expect(output.analysisStatus).toBe('SUCCESS');
-    expect(output.gate).toBe('PASS');
+    // Null CRAP on the changed fn → every rule NOT_EVALUATED → vacuous-PASS ban: gate is NOT_EVALUATED
+    expect(output.gate).toBe('NOT_EVALUATED');
     expect(output.completeness).toBe('INCOMPLETE');
   });
 
@@ -248,7 +249,9 @@ describe('WP4.2 Composed Evidence Implementation', () => {
       30
     );
     expect(output.analysisStatus).toBe('SUCCESS');
-    expect(output.gate).toBe('NOT_EVALUATED'); // Coverage absent → vacuous-PASS ban
+    // H1 (ADR 0023): every changed function here is NOT_EVALUATED (null CRAP), so
+    // the gate is NOT_EVALUATED — a bare PASS claimed nothing was evaluated.
+    expect(output.gate).toBe('NOT_EVALUATED');
     expect(output.completeness).toBe('INCOMPLETE');
   });
 

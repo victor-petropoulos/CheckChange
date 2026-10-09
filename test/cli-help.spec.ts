@@ -43,7 +43,7 @@ const CHECK_HELP_LIVE_FIRST_12 = [
   '  --json                   Output JSON (default: false)',
   '  --cache                  Enable incremental caching (default: off; also CHECKCHANGE_CACHE=1 env)',
   '  --crap-threshold <number> CRAP threshold for WARN (default: 30)',
-  '  --coverage-file <path>   Istanbul coverage JSON file path',
+  '  --coverage-file <path>   Coverage file: Istanbul JSON, Cobertura XML, or LCOV',
   '  --auto-coverage          Detect test runner, generate coverage artifact, retry [experimental]',
   '  --format <name>          Output format: github, junit, sarif (default: none)',
   '  --provider-config <path> Path to checkchange.providers.json (overrides builtin defaults)',
@@ -246,6 +246,55 @@ describe('INV-HELP-07/08: check --help anti-drift fixture', () => {
   });
 });
 
+// Plan 20261007T182709Z task 5 / H4 — `--coverage-file` said "Istanbul coverage JSON
+// file path" only. That is a HALF truth, not a stylistic nit: the flag reads Cobertura
+// too (src/coverage.ts:613 routes any `*.cobertura.xml` to the Cobertura parser, and
+// the Coverlet `TestResults/<guid>/coverage.cobertura.xml` fallback is what the C#
+// path depends on), so a C# user reading `--help` was told their only supported
+// format was one their toolchain cannot produce.
+//
+// Both halves are asserted, not just the addition: naming Cobertura must not drop the
+// Istanbul accuracy, and neither the text body nor the `--json` flag description may
+// drift apart (they are two independent strings in src/help.ts, so a one-sided edit
+// is the easy failure).
+describe('H4: `--coverage-file` help names every format the flag actually accepts', () => {
+  // Text body, from the live CLI — the row a user reads.
+  test('check --help `--coverage-file` row names Istanbul AND Cobertura', () => {
+    const { status, stdout } = runCli(['check', '--help']);
+    expect(status, 'exit code of `check --help`').toBe(0);
+    // Anchor on the leading indent: the Usage line also contains the flag, and a
+    // loose `includes` would assert against the synopsis instead of the Options row.
+    const row = stdout.split('\n').find((l) => l.startsWith('  --coverage-file <path>'));
+    expect(row, '--coverage-file Options row in `check --help`').toBeDefined();
+    expect(row).toContain('Istanbul');
+    expect(row, 'the row must name Cobertura too').toContain('Cobertura');
+  });
+
+  // JSON shape, from the live CLI — the same fact a wrapper reads. Asserted
+  // separately because src/help.ts carries it as a SEPARATE string literal: editing
+  // CHECK_HEAD alone would pass the row test above and leave this one lying.
+  test('check --help --json `--coverage-file` flag description names Istanbul AND Cobertura', () => {
+    const { status, stdout } = runCli(['check', '--help', '--json']);
+    expect(status, 'exit code of `check --help --json`').toBe(0);
+    const parsed = JSON.parse(stdout) as { flags: Array<{ name: string; description: string }> };
+    const flag = parsed.flags.find((f) => f.name === '--coverage-file');
+    expect(flag, '--coverage-file flag entry').toBeDefined();
+    expect(flag!.description).toContain('Istanbul');
+    expect(flag!.description, 'the description must name Cobertura too').toContain('Cobertura');
+  });
+
+  // Negative control: the widened text is specific to this flag. A blanket
+  // "mention Cobertura everywhere" edit would satisfy both rows above; this row fails
+  // if it does.
+  test('no OTHER check flag claims to take a Cobertura artifact', () => {
+    const { stdout } = runCli(['check', '--help', '--json']);
+    const parsed = JSON.parse(stdout) as { flags: Array<{ name: string; description: string }> };
+    for (const flag of parsed.flags.filter((f) => f.name !== '--coverage-file')) {
+      expect(flag.description, `${flag.name} must not name Cobertura`).not.toContain('Cobertura');
+    }
+  });
+});
+
 // Anti-drift fixtures for the WHOLE rendered body, not just check's 12 pinned lines.
 // Review ses_f1f646577ffevGTg0ps1Et6PtA finding: help.ts's overview footer shipped
 // without `--help` (spec §D:145 deviation) because no test asserted any non-check
@@ -288,7 +337,8 @@ const DOCTOR_HELP_EXACT = [
   '  gitRepo             current directory is a git repo',
   '  defaultBase         origin/main or main auto-detected',
   '  providerAvailability  changed file extensions have registered providers',
-  '  coverageArtifact    Istanbul coverage JSON present and parseable',
+  '  coverageArtifact    Istanbul JSON, Cobertura XML, or LCOV artifact present and parseable',
+  '  csharpSdk           dotnet --version exits 0 (C# complexity is SDK-based)',
   '',
   'Examples:',
   '  checkchange doctor --json',

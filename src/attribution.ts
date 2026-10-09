@@ -2,16 +2,26 @@ import { parseFileMethods } from '@barney-media/crap-typescript-core';
 import { coverageForMethods } from '@barney-media/crap-typescript-core';
 import type { MethodDescriptor } from '@barney-media/crap-typescript-core';
 import { parsePythonFileMethods } from './complexity-providers/pythonDescriptorProvider.js';
+// Language-specific descriptor parsers. `coverageForMethods` is language-
+// agnostic (it attributes by `bodySpan` containment), so a parser that emits
+// the shared MethodDescriptor shape is all the join needs per language.
+//
+// KNOWN LIMITATION (deliberate, not an oversight): the rich vehicle's output is
+// NOT consulted here. `csharpDescriptorProvider.isRichDescriptor`
+// (csharpDescriptorProvider.ts:65) does not require `bodySpan`, so a descriptor
+// set from that path can be missing the field `coverageForMethods` needs.
+// Attribution therefore always uses the fallback parser's span. Closing that
+// gap means teaching the rich vehicle to emit bodySpan, which is a larger
+// change than this fix and is tracked separately.
+import { parseCsharpFileMethods } from './complexity-providers/csharpFallbackParser.js';
 import type { CoverageResult } from './coverage.js';
 
-// We'll define the ComplexityInfo interface here (same as in complexity.ts)
-interface ComplexityInfo {
-  file: string;
-  method: string;
-  lineStart: number;
-  lineEnd: number;
-  cc: number;
-}
+// Type-only import (erased at runtime, so no import cycle with complexity.ts):
+// this file used to REDECLARE ComplexityInfo as a 5-field copy of complexity.ts's
+// interface. That copy silently dropped every field the owning module later grew
+// — first `provenance`, which mapToMethodEvidence reads to report a per-language
+// source.tool. One type, imported.
+import type { ComplexityInfo } from './complexity.js';
 
 // Provenance for the attribution lineage stage: coverageForMethods/parseFileMethods from the core package.
 export const attributionProvenance = { tool: '@barney-media/crap-typescript-core', version: '0.5.0' } as const;
@@ -128,7 +138,9 @@ async function descriptorsForFile(
   try {
     const methodDescriptors = filePath.endsWith('.py')
       ? await parsePythonFileMethods(filePath)
-      : await parseFileMethods(filePath);
+      : filePath.endsWith('.cs')
+        ? await parseCsharpFileMethods(filePath)
+        : await parseFileMethods(filePath);
     descriptorCache.set(filePath, methodDescriptors);
     return methodDescriptors;
   } catch {
