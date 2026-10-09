@@ -1,6 +1,6 @@
 import { describe, expect, test, beforeEach, afterEach, vi } from 'vitest';
 import { readCoverage, detectCoverageFormat, scanCoberturaUnderTestResults } from '../src/coverage.js';
-import { writeFileSync, mkdirSync, rmSync, mkdtempSync, utimesSync, statSync, chmodSync } from 'node:fs';
+import { writeFileSync, mkdirSync, rmSync, mkdtempSync, utimesSync, statSync, chmodSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -408,6 +408,139 @@ describe('WS3.2 case-insensitive Cobertura basename', () => {
     const result = await readCoverage(tmpDir);
 
     // Entered the conversion route (the mock refuses), so the malformed taxonomy stands.
+    expect(spawnSyncMock).toHaveBeenCalled();
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(true);
+    expect(result.reason).toBe('malformed');
+  });
+});
+
+// ================== WS4: case-insensitive literal candidate fallback ==================
+describe('WS4 case-insensitive literal candidate fallback', () => {
+  let tmpDir: string;
+  let originalCwd: string;
+
+  beforeEach(() => {
+    originalCwd = process.cwd();
+    tmpDir = mkdtempSync(join(tmpdir(), 'coverage-case-'));
+    process.chdir(tmpDir);
+    mkdirSync(join(tmpDir, 'src'), { recursive: true });
+    spawnSyncMock.mockReset();
+    spawnSyncMock.mockImplementation(() => ({ status: 1, stdout: '', stderr: 'command not found', error: null }));
+  });
+
+  afterEach(() => {
+    process.chdir(originalCwd);
+    rmSync(tmpDir, { recursive: true, force: true });
+  });
+
+  /** Istanbul JSON for one file. Parsed in-process, so no external tool is involved. */
+  function istanbulJson(file: string, lines: Array<[number, number]>): string {
+    const statementMap: Record<string, unknown> = {};
+    const s: Record<string, number> = {};
+    lines.forEach(([line, hits], i) => {
+      statementMap[String(i)] = { start: { line, column: 0 }, end: { line, column: 10 } };
+      s[String(i)] = hits;
+    });
+    return JSON.stringify({ [file]: { path: file, statementMap, s, branchMap: {}, b: {}, fnMap: {}, f: {} } });
+  }
+
+  /**
+   * Measured case-sensitivity of the tmpdir filesystem. One assertion below cannot be
+   * written once for both filesystems: a case-INSENSITIVE FS collapses `coverage.json`
+   * and `COVERAGE.JSON` into ONE file, so the second write overwrites the first.
+   * Probing keeps this suite honest on macOS-default and on Linux ext4 alike.
+   */
+  function fsIsCaseSensitive(): boolean {
+    const probe = `.case-probe-${process.pid}-TMP46`;
+    writeFileSync(join(tmpDir, probe), '');
+    const sensitive = !existsSync(join(tmpDir, probe.toLowerCase()));
+    rmSync(join(tmpDir, probe), { force: true });
+    return sensitive;
+  }
+
+  // THE FIX. A literal candidate whose `access()` missed is resolved by listing that
+  // candidate's OWN directory and matching case-insensitively (src/coverage.ts WS4), so
+  // the artifact is read from the name that is actually on disk.
+  //
+  // PORTABILITY: the assertion is the artifact's CONTENT (real hits parsed out of the
+  // map), never the path used to reach it. On a case-INSENSITIVE FS this passed before
+  // the fix (access() folds onto the on-disk file); on a case-SENSITIVE FS — Linux ext4,
+  // case-sensitive APFS — the literal misses and ONLY the fallback finds it. Identical
+  // assertion, both filesystems.
+  test('an uppercase COVERAGE.JSON variant is discovered and parsed (content proof)', async () => {
+    writeFileSync(join(tmpDir, 'COVERAGE.JSON'), istanbulJson('src/Calc.ts', [[6, 4], [7, 0]]), 'utf8');
+
+    const result = await readCoverage(tmpDir);
+
+    expect(result.available).toBe(true);
+    expect(result.error).toBe(false);
+    expect(result.coverageMap!.size).toBe(1);
+    expect(hitsAt(result.coverageMap!, 6)).toBe(4);
+    expect(hitsAt(result.coverageMap!, 7)).toBe(0);
+    // Parsed in-process: the `coverage json` route must not be involved.
+    expect(spawnSyncMock).not.toHaveBeenCalled();
+  });
+
+  // The fallback lists the candidate's OWN directory, so a candidate that lives in a
+  // subdirectory (`coverage/coverage-final.json`, config.ts:105/111/117) resolves too —
+  // the dirname comes from the candidate literal, not hardcoded to cwd.
+  test('a case-variant inside the candidate subdirectory is discovered', async () => {
+    mkdirSync(join(tmpDir, 'coverage'), { recursive: true });
+    writeFileSync(join(tmpDir, 'coverage', 'COVERAGE-FINAL.JSON'), istanbulJson('src/Nested.ts', [[4, 5]]), 'utf8');
+
+    const result = await readCoverage(tmpDir);
+
+    expect(result.error).toBe(false);
+    expect(result.coverageMap!.size).toBe(1);
+    expect(hitsAt(result.coverageMap!, 4)).toBe(5);
+  });
+
+  // Precedence unchanged: the EXACT literal still wins, and a case-variant sibling is
+  // NOT additionally read. The portable invariant is that exactly ONE artifact is read.
+  test('the exact literal still wins over a case-variant sibling (precedence)', async () => {
+    const sensitive = fsIsCaseSensitive();
+    writeFileSync(join(tmpDir, 'coverage.json'), istanbulJson('src/Exact.ts', [[6, 1]]), 'utf8');
+    writeFileSync(join(tmpDir, 'COVERAGE.JSON'), istanbulJson('src/Variant.ts', [[9, 7]]), 'utf8');
+
+    const result = await readCoverage(tmpDir);
+
+    expect(result.error).toBe(false);
+    // ONE artifact on both filesystems: the variant never joins the exact one.
+    expect(result.coverageMap!.size).toBe(1);
+    if (sensitive) {
+      // Two distinct files coexist; the exact literal wins and the variant is ignored.
+      expect(hitsAt(result.coverageMap!, 6)).toBe(1);
+      expect(hitsAt(result.coverageMap!, 9)).toBeUndefined();
+    } else {
+      // The FS folded both names into one file, so the exact literal's access() hit and
+      // read whatever the second write left. Exact-access-first is what was proven here.
+      expect(hitsAt(result.coverageMap!, 9)).toBe(7);
+      expect(hitsAt(result.coverageMap!, 6)).toBeUndefined();
+    }
+  });
+
+  // Bound: single directory, no recursion. A variant one level deeper is not found —
+  // `readdir` is called on the candidate's dirname only.
+  test('a case-variant in a SUBDIRECTORY of the candidate dir is not discovered (no recursion)', async () => {
+    mkdirSync(join(tmpDir, 'nested'), { recursive: true });
+    writeFileSync(join(tmpDir, 'nested', 'COVERAGE.JSON'), istanbulJson('src/Deep.ts', [[3, 8]]), 'utf8');
+
+    const result = await readCoverage(tmpDir);
+
+    expect(result.available).toBe(false);
+    expect(result.coverageMap).toBeNull();
+  });
+
+  // src/coverage.ts:735 `basename.toLowerCase() === 'coverage.xml'` — the READER's own
+  // routing for an uppercase basename, reached through the EXPLICIT path that bypasses
+  // discovery entirely (readCoverage resolve → readCoverageFile). An explicit path is used
+  // verbatim, so this passes on both filesystems and isolates the reader seam.
+  test('an explicit uppercase COVERAGE.XML path takes the python conversion route', async () => {
+    writeFileSync(join(tmpDir, 'COVERAGE.XML'), coverletCobertura(tmpDir, 'src/Calc.cs', [[6, 4]]), 'utf8');
+
+    const result = await readCoverage(tmpDir, 'COVERAGE.XML');
+
     expect(spawnSyncMock).toHaveBeenCalled();
     expect(result.available).toBe(true);
     expect(result.error).toBe(true);

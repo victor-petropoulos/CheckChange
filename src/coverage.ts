@@ -1,6 +1,6 @@
 import * as path from 'node:path';
 import * as fs from 'node:fs';
-import { access, constants, readFile } from 'node:fs/promises';
+import { access, constants, readFile, readdir } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { parseCoverageReport } from '@barney-media/crap-typescript-core';
@@ -557,9 +557,12 @@ export async function readCoverage(cwd: string, coverageFile?: string, trace?: T
     ? [...new Set([...registry.values()].flatMap((r) => r.coverageFiles))]
     : [...PYTHON_COVERAGE_FILES];
   for (const file of coverageCandidates) {
-    const filePath = path.join(cwd, file);
+    // WS4: the exact literal is still tried FIRST (precedence unchanged), and only a
+    // miss falls through to a case-insensitive lookup in the candidate's own directory.
+    // null = miss, skipped exactly as silently as before.
+    const filePath = await resolveReadableCandidate(cwd, file);
+    if (filePath === null) continue;
     try {
-      await access(filePath, constants.R_OK);
       artifactFound = true;
       const result = await readCoverageFile(filePath, cwd, false);
       // Conversion/read succeeded — ACCUMULATE, never return early
@@ -580,7 +583,8 @@ export async function readCoverage(cwd: string, coverageFile?: string, trace?: T
       }
       // Continue to next file in precedence
     } catch {
-      // File doesn't exist or not readable, continue to next
+      // Read/conversion threw (it normally returns a result object instead) — continue
+      // to the next candidate, same as before.
     }
   }
 
@@ -627,6 +631,50 @@ export async function readCoverage(cwd: string, coverageFile?: string, trace?: T
   } else {
     // No coverage files found at all
     return { available: false, coverageMap: null, error: false };
+  }
+}
+
+/**
+ * Resolve one literal coverage candidate to a readable path, or null on a miss.
+ *
+ * The EXACT literal is tried first and returns unchanged, so precedence is untouched: a
+ * candidate that exists keeps winning over any case-variant sibling beside it. Only on a
+ * miss do we list the candidate's OWN directory — a single `readdir`, no recursion, depth
+ * fixed at one — and take the first name matching case-insensitively.
+ *
+ * Why here and not in the config literals: `access()` is case-sensitive on Linux ext4, so
+ * an artifact emitted as `COVERAGE.XML` was invisible to discovery there while the same
+ * repo reported coverage on macOS's case-insensitive APFS. Fixing discovery (not the
+ * literal list) makes every provider's `coverageFiles` benefit, and it cannot turn a glob
+ * entry into something that works: exactly one basename is ever consulted.
+ */
+async function resolveReadableCandidate(cwd: string, file: string): Promise<string | null> {
+  const exact = path.join(cwd, file);
+  try {
+    await access(exact, constants.R_OK);
+    return exact;
+  } catch {
+    // Miss — fall through to the case-insensitive sibling lookup.
+  }
+  const dir = path.dirname(exact);
+  const wanted = path.basename(exact).toLowerCase();
+  let names: string[];
+  try {
+    names = await readdir(dir);
+  } catch {
+    // Missing/unreadable directory — a miss, skipped silently exactly as before. A cwd
+    // that is a FILE also lands here (ENOTDIR), which is the degradation the WS3.4 arms
+    // pin for the scan.
+    return null;
+  }
+  const hit = names.find((name) => name.toLowerCase() === wanted);
+  if (hit === undefined) return null;
+  const sibling = path.join(dir, hit);
+  try {
+    await access(sibling, constants.R_OK);
+    return sibling;
+  } catch {
+    return null;
   }
 }
 
@@ -732,7 +780,7 @@ async function readCoverageFile(
   // conversion and returning reason 'malformed' (:548) before any format
   // dispatch ran. `.cobertura.xml` is Cobertura; only `coverage.xml` is the
   // pytest-cov artifact `coverage json` can read.
-  const isPythonCoverageXml = ext === '.xml' && basename === 'coverage.xml';
+  const isPythonCoverageXml = ext === '.xml' && basename.toLowerCase() === 'coverage.xml';
 
   // For Python .coverage binary or coverage.xml, try to convert to JSON first
   let actualPath = coveragePath;

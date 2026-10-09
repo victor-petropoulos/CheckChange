@@ -123,9 +123,10 @@ export function builtinConfig(): ProviderConfig {
         // ponytail: no complexityCmd — createGenericCommandProvider returns null for
         // an entry without one (genericCommand.ts:35), which is INTENDED: the csharp
         // provider is composed by the registration branch at evidence.ts, not by a
-        // shell command. coverageFiles are LITERAL paths (acceptance item 11): both
-        // consumers path.join + access() them and silently skip a miss, so a glob
-        // entry would be inert.
+        // shell command. coverageFiles are LITERAL paths (acceptance item 11): discovery tries
+        // exact literal via path.join + access(), then case-insensitive readdir
+        // fallback in candidate's dirname; only misses both paths silently. Glob
+        // entries stay inert (no consumer globs them).
         // Deliberately EMPTY. A Coverlet artifact lands in a per-run
         // `TestResults/<GUID>/` directory whose name vstest generates; no literal
         // can name it, and the three plausible-looking candidates previously listed

@@ -226,10 +226,10 @@ export function vehicleRejection(): CSharpDiagnostic | null {
 }
 
 // The fallback parser is checkchange's OWN code (./csharpFallbackParser.ts), so
-// its tool is checkchange and its version is the package version — same 0.4.2
+// its tool is checkchange and its version is the package version — same 0.4.3
 // the other self-provenance consts hard-code (src/crapCalc.ts:3, src/rules.ts:4).
 const FALLBACK_TOOL = 'checkchange';
-const FALLBACK_TOOL_VERSION = '0.4.2';
+const FALLBACK_TOOL_VERSION = '0.4.3';
 
 // The vehicle's INSTALLED version is never probed: the rich path is
 // documented-unreachable (see SPAWN FORM above), so `dotnet-crap --version` is
