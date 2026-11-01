@@ -1,0 +1,63 @@
+# VACUOUS ON FIRST RUN BY CONSTRUCTION — read this before trusting a green badge.
+#
+# "Fetch base ref" below sets BASE_REF=origin/main if the fetch succeeds, ELSE HEAD~1.
+# This repo's public history starts as a SINGLE squash commit, so on the first run
+# both branches fail:
+#   * `git fetch --depth=1 origin main` -> `fatal: couldn't find remote ref main` (exit 128)
+#     because no refs/heads/main exists yet on the remote;
+#   * `git rev-parse HEAD~1`           -> `fatal: ambiguous argument 'HEAD~1': unknown
+#     revision` (exit 128), because the first commit has no parent.
+# The evidence check then reports fileCount 0, gate NOT_EVALUATED, completeness
+# INCOMPLETE — and still EXITS 0. So run 1 is a green run that evaluated nothing.
+# Real signal starts at the 2nd commit, once a base ref exists.
+#
+# This is DOCUMENTED, NOT FIXED. Do not "repair" the fallback: making the first run
+# meaningful would require inventing a base that does not exist, and any change that
+# turns the NOT_EVALUATED/INCOMPLETE state into a hard failure would make the first
+# push permanently red. The vacuity is inherent to a one-commit history, and the
+# release plan records it as an EXPECTED-ON-FIRST-RUN signal rather than a defect.
+name: ci-evidence-explicit
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.17.0
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'pnpm'
+      - name: Install Python deps
+        run: pip install lizard || true
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      - name: Typecheck tests (no new errors vs baseline)
+        run: pnpm run typecheck:test:baseline
+      - name: Fetch base ref
+        run: |
+          if git fetch --depth=1 origin main; then
+            echo "BASE_REF=origin/main" >> $GITHUB_ENV
+          else
+            echo "BASE_REF=HEAD~1" >> $GITHUB_ENV
+          fi
+      - run: pnpm exec vitest run --coverage
+      - name: Run evidence check
+        run: node dist/cli.js check --base $BASE_REF --coverage-file coverage/coverage-final.json --crap-threshold 15 --json | tee evidence.json
+      - name: Upload evidence artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-json
+          path: evidence.json
