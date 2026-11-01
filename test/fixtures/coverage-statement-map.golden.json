@@ -1,0 +1,110 @@
+{
+  "src/exec_omitted.py": {
+    "statements": [
+      {
+        "span": {
+          "startLine": 2,
+          "startColumn": 0,
+          "endLine": 2,
+          "endColumn": 0
+        },
+        "hits": 0
+      },
+      {
+        "span": {
+          "startLine": 3,
+          "startColumn": 0,
+          "endLine": 3,
+          "endColumn": 0
+        },
+        "hits": 0
+      }
+    ],
+    "branches": [],
+    "functions": []
+  },
+  "src/miss_omitted.py": {
+    "statements": [
+      {
+        "span": {
+          "startLine": 1,
+          "startColumn": 0,
+          "endLine": 1,
+          "endColumn": 0
+        },
+        "hits": 1
+      },
+      {
+        "span": {
+          "startLine": 2,
+          "startColumn": 0,
+          "endLine": 2,
+          "endColumn": 0
+        },
+        "hits": 1
+      },
+      {
+        "span": {
+          "startLine": 3,
+          "startColumn": 0,
+          "endLine": 3,
+          "endColumn": 0
+        },
+        "hits": 1
+      }
+    ],
+    "branches": [],
+    "functions": []
+  },
+  "src/dedupe_test.py": {
+    "statements": [
+      {
+        "span": {
+          "startLine": 1,
+          "startColumn": 0,
+          "endLine": 1,
+          "endColumn": 0
+        },
+        "hits": 1
+      },
+      {
+        "span": {
+          "startLine": 2,
+          "startColumn": 0,
+          "endLine": 2,
+          "endColumn": 0
+        },
+        "hits": 1
+      },
+      {
+        "span": {
+          "startLine": 3,
+          "startColumn": 0,
+          "endLine": 3,
+          "endColumn": 0
+        },
+        "hits": 0
+      },
+      {
+        "span": {
+          "startLine": 4,
+          "startColumn": 0,
+          "endLine": 4,
+          "endColumn": 0
+        },
+        "hits": 0
+      },
+      {
+        "span": {
+          "startLine": 5,
+          "startColumn": 0,
+          "endLine": 5,
+          "endColumn": 0
+        },
+        "hits": 1
+      }
+    ],
+    "branches": [],
+    "functions": []
+  }
+}
