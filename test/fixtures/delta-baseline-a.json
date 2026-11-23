@@ -1,0 +1,206 @@
+{
+  "schemaVersion": "0.5",
+  "analysis": {
+    "base": "HEAD",
+    "target": "HEAD~1"
+  },
+  "changedFunctions": [
+    {
+      "file": "src/app.ts",
+      "method": "handleOrder",
+      "lineStart": 85,
+      "lineEnd": 110,
+      "cc": 5,
+      "crap": 30,
+      "coverage": null,
+      "coverageKind": "none",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "checkchange",
+        "version": "0.4.0"
+      }
+    },
+    {
+      "file": "src/app.ts",
+      "method": "handleRefund",
+      "lineStart": 120,
+      "lineEnd": 140,
+      "cc": 8,
+      "crap": 15,
+      "coverage": 0.5,
+      "coverageKind": "lcov",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "checkchange",
+        "version": "0.4.0"
+      }
+    },
+    {
+      "file": "src/app.ts",
+      "method": "audit",
+      "lineStart": 200,
+      "lineEnd": 220,
+      "cc": 6,
+      "crap": 10,
+      "coverage": null,
+      "coverageKind": "none",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "checkchange",
+        "version": "0.4.0"
+      }
+    },
+    {
+      "file": "src/auth.ts",
+      "method": "login",
+      "lineStart": 10,
+      "lineEnd": 25,
+      "cc": 3,
+      "crap": 9.5,
+      "coverage": 1,
+      "coverageKind": "lcov",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "checkchange",
+        "version": "0.4.0"
+      }
+    },
+    {
+      "file": "src/billing.ts",
+      "method": "chargeCard",
+      "lineStart": 40,
+      "lineEnd": 60,
+      "cc": 12,
+      "crap": 300,
+      "coverage": 0,
+      "coverageKind": "lcov",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "checkchange",
+        "version": "0.4.0"
+      }
+    },
+    {
+      "file": "src/legacy.ts",
+      "method": "oldParser",
+      "lineStart": 200,
+      "lineEnd": 260,
+      "cc": 20,
+      "crap": 100,
+      "coverage": 0.8,
+      "coverageKind": "lcov",
+      "analyzerStatus": "passed",
+      "source": {
+        "tool": "checkchange",
+        "version": "0.4.0"
+      }
+    }
+  ],
+  "policy": {
+    "crapThreshold": 30
+  },
+  "ruleResults": [
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "PASS",
+      "file": "src/app.ts",
+      "method": "handleOrder",
+      "crap": 30,
+      "threshold": 30,
+      "cc": 5,
+      "coverage": null
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "WARN",
+      "file": "src/app.ts",
+      "method": "handleRefund",
+      "crap": 15,
+      "threshold": 30,
+      "cc": 8,
+      "coverage": 0.5
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "WARN",
+      "file": "src/billing.ts",
+      "method": "chargeCard",
+      "crap": 300,
+      "threshold": 30,
+      "cc": 12,
+      "coverage": 0
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "NOT_EVALUATED",
+      "file": "src/auth.ts",
+      "method": "login",
+      "crap": null,
+      "threshold": 30,
+      "cc": 3,
+      "coverage": 1
+    },
+    {
+      "ruleId": "changed-function-high-crap",
+      "result": "WARN",
+      "file": "src/legacy.ts",
+      "method": "oldParser",
+      "crap": 100,
+      "threshold": 30,
+      "cc": 20,
+      "coverage": 0.8
+    }
+  ],
+  "analysisStatus": "complete",
+  "gate": "WARN",
+  "completeness": "git+complexity+coverage+rules",
+  "diagnostics": {
+    "lineage": [
+      {
+        "stage": "git",
+        "tool": "checkchange",
+        "version": "0.4.0",
+        "inputs": {
+          "base": "HEAD",
+          "target": "HEAD~1"
+        }
+      },
+      {
+        "stage": "coverage",
+        "tool": "lcov",
+        "version": "0.1.0",
+        "inputs": {
+          "file": "/abs/secret/path/coverage-final.json"
+        }
+      }
+    ],
+    "quality": {
+      "coverage": "DIRECT",
+      "complexity": "NATIVE",
+      "score": 85,
+      "stageComplete": {
+        "git": true,
+        "complexity": true,
+        "coverage": true,
+        "attribution": true,
+        "rules": true
+      },
+      "uncoveredFunctions": [
+        {
+          "file": "src/billing.ts",
+          "method": "chargeCard",
+          "lineStart": 40,
+          "lineEnd": 60
+        }
+      ]
+    },
+    "fingerprints": {
+      "src/app.ts:handleOrder:85": "fp-handleorder-v1",
+      "src/app.ts:handleRefund:120": "fp-handlerefund-v1",
+      "src/app.ts:audit:200": "fp-audit-v1",
+      "src/auth.ts:login:10": "fp-login-v1",
+      "src/billing.ts:chargeCard:40": "fp-chargecard-v1",
+      "src/legacy.ts:oldParser:200": "fp-oldparser-v1"
+    }
+  }
+}

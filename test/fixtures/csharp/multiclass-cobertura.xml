@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<!--
+  Two+ <class> elements sharing one filename, as Coverlet emits for a C# file
+  that declares several types. Mirrors the real stateless StateMachine.cs
+  artifact: three <class>, all filename="StateMachine.cs".
+
+  The backtick-arity names (StateMachine`2, StateMachine`1) are deliberate
+  documentation that arity is NOT the join key here — the join is span-based and
+  name-blind (coverageAttribution.js buildAttributableMethods uses bodySpan when
+  functions[] is empty; the C# parser emits functions[]). Stripping the arity
+  would change nothing.
+-->
+<coverage line-rate="0.5" branch-rate="0" version="1.9">
+  <sources>
+    <source>.</source>
+  </sources>
+  <packages>
+    <package name="Stateless" line-rate="0.5">
+      <classes>
+        <class name="StateMachine`2" filename="src/StateMachine.cs" line-rate="0.5">
+          <lines>
+            <line number="10" hits="1" branch="false" />
+            <line number="11" hits="0" branch="false" />
+            <line number="12" hits="4" branch="false" />
+          </lines>
+        </class>
+        <class name="StateMachine`1" filename="src/StateMachine.cs" line-rate="0.25">
+          <lines>
+            <line number="30" hits="2" branch="false" />
+            <line number="31" hits="0" branch="false" />
+          </lines>
+        </class>
+        <class name="Transition" filename="src/StateMachine.cs" line-rate="0.5">
+          <lines>
+            <!-- Same start line as StateMachine`2:11 — MAX hits must win. -->
+            <line number="11" hits="9" branch="false" />
+            <line number="40" hits="3" branch="false" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>
